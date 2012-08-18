@@ -1,0 +1,2137 @@
+module madds
+   use precision, only: ki, ki_ql, ki_lt
+@case_with_golem@use precision_golem, only: ki_gol => ki
+@case_with_avh@use avh_olo_kinds, only: ki_avh => kindr2
+   use constants
+   use options
+   use mfunctions
+   use notfirst
+   implicit none
+
+   private
+
+   interface add4
+      module procedure add4_rm
+      module procedure add4_cm
+   end interface add4
+
+   interface add3
+      module procedure add3_rm
+      module procedure add3_cm
+   end interface add3
+
+   interface add2
+      module procedure add2_rm
+      module procedure add2_cm
+   end interface add2
+
+   interface add1
+      module procedure add1_rm
+      module procedure add1_cm
+   end interface add1
+
+   ! If s_mat is allocated the addX routines will read their invariants
+   ! from the matrix rather than to recompute them.
+   !
+   ! The matrix should be initialized as follows:
+   !
+   ! s_mat(i, j) = Vi(i-1).Vi(j-1) - msq(i) - msq(j)
+   !
+   !
+   ! Example:
+   !
+   !   box diagram in gg>tt~
+   !
+   !   g(k1) ~~~~~~*~~~~~*====== t~(k4)
+   !               S     I
+   !               S     I
+   !   g(k2) ~~~~~~*~~~~~*====== t(k3)
+   !
+   !   allocate(s_mat(4,4))
+   !   s_mat(:,:) = 0.0_ki
+   !   s_mat(1,3) = s      - 0.0_ki - 0.0_ki  ! = s
+   !   s_mat(1,4) = mT**2  - 0.0_ki - mT**2   ! = 0.0_ki
+   !   s_mat(2,4) = t      - 0.0_ki - mT**2   ! = t - mT**2
+   !   s_mat(3,4) = mT**2  - 0.0_ki - mT**2   ! = 0.0_ki
+   !   s_mat(4,4) = 0.0_ki - mT**2  - mT**2   ! = - 2.0_ki * mT**2
+   !   call samurai( .... )
+   !   deallocate(s_mat)
+
+   complex(ki), dimension(:,:), allocatable, public :: s_mat
+
+@case_with_ql@ interface
+@case_with_ql@    function qlI4(p1,p2,p3,p4,s12,s23,m1,m2,m3,m4,mu2,ep)
+@case_with_ql@       use precision, only: ki_ql
+@case_with_ql@       implicit none
+@case_with_ql@       real(ki_ql), intent(in) :: p1,p2,p3,p4,s12,s23
+@case_with_ql@       real(ki_ql), intent(in) :: m1,m2,m3,m4,mu2
+@case_with_ql@       integer, intent(in) :: ep
+@case_with_ql@       complex(ki_ql) :: qlI4
+@case_with_ql@    end function qlI4
+@case_with_ql@ end interface
+@case_with_ql@ interface
+@case_with_ql@    function qlI3(p1,p2,p3,m1,m2,m3,mu2,ep)
+@case_with_ql@       use precision, only: ki_ql
+@case_with_ql@       implicit none
+@case_with_ql@       real(ki_ql), intent(in) :: p1,p2,p3
+@case_with_ql@       real(ki_ql), intent(in) :: m1,m2,m3,mu2
+@case_with_ql@       integer, intent(in) :: ep
+@case_with_ql@       complex(ki_ql) :: qlI3
+@case_with_ql@    end function qlI3
+@case_with_ql@ end interface
+@case_with_ql@ interface
+@case_with_ql@    function qlI2(p1,m1,m2,mu2,ep)
+@case_with_ql@       use precision, only: ki_ql
+@case_with_ql@       implicit none
+@case_with_ql@       real(ki_ql), intent(in) :: p1
+@case_with_ql@       real(ki_ql), intent(in) :: m1,m2,mu2
+@case_with_ql@       integer, intent(in) :: ep
+@case_with_ql@       complex(ki_ql) :: qlI2
+@case_with_ql@    end function qlI2
+@case_with_ql@ end interface
+@case_with_ql@ interface
+@case_with_ql@    function qlI1(m1,mu2,ep)
+@case_with_ql@       use precision, only: ki_ql
+@case_with_ql@       implicit none
+@case_with_ql@       real(ki_ql), intent(in) :: m1,mu2
+@case_with_ql@       integer, intent(in) :: ep
+@case_with_ql@       complex(ki_ql) :: qlI1
+@case_with_ql@    end function qlI1
+@case_with_ql@ end interface
+
+@case_with_golem@     interface
+@case_with_golem@        function gD0(p1,p2,p3,p4,s12,s23,m1,m2,m3,m4,mu2,ep)
+@case_with_golem@           use precision_golem, only: ki
+@case_with_golem@           implicit none
+@case_with_golem@           real(ki), intent(in) :: p1,p2,p3,p4,s12,s23
+@case_with_golem@           real(ki), intent(in) :: m1,m2,m3,m4
+@case_with_golem@           real(ki), intent(in) :: mu2
+@case_with_golem@           integer, intent(in) :: ep
+@case_with_golem@           complex(ki) :: gD0
+@case_with_golem@        end function gD0
+@case_with_golem@     end interface
+@case_with_golem@     interface
+@case_with_golem@        function gC0(p1,p2,p3,m1,m2,m3,mu2,ep)
+@case_with_golem@           use precision_golem, only: ki
+@case_with_golem@           implicit none
+@case_with_golem@           real(ki), intent(in) :: p1,p2,p3
+@case_with_golem@           real(ki), intent(in) :: m1,m2,m3
+@case_with_golem@           real(ki), intent(in) :: mu2
+@case_with_golem@           integer, intent(in) :: ep
+@case_with_golem@           complex(ki) :: gC0
+@case_with_golem@        end function gC0
+@case_with_golem@     end interface
+@case_with_golem@     interface
+@case_with_golem@        function gB0(p1,m1,m2,mu2,ep)
+@case_with_golem@           use precision_golem, only: ki
+@case_with_golem@           implicit none
+@case_with_golem@           real(ki), intent(in) :: p1
+@case_with_golem@           real(ki), intent(in) :: m1,m2
+@case_with_golem@           real(ki), intent(in) :: mu2
+@case_with_golem@           integer, intent(in) :: ep
+@case_with_golem@           complex(ki) :: gB0
+@case_with_golem@        end function gB0
+@case_with_golem@     end interface
+@case_with_golem@     interface
+@case_with_golem@        function gD0C(p1,p2,p3,p4,s12,s23,m1,m2,m3,m4,mu2,ep)
+@case_with_golem@           use precision_golem, only: ki
+@case_with_golem@           implicit none
+@case_with_golem@           complex(ki), intent(in) :: p1,p2,p3,p4,s12,s23
+@case_with_golem@           complex(ki), intent(in) :: m1,m2,m3,m4
+@case_with_golem@           real(ki), intent(in) :: mu2
+@case_with_golem@           integer, intent(in) :: ep
+@case_with_golem@           complex(ki) :: gD0C
+@case_with_golem@        end function gD0C
+@case_with_golem@     end interface
+@case_with_golem@     interface
+@case_with_golem@        function gC0C(p1,p2,p3,m1,m2,m3,mu2,ep)
+@case_with_golem@           use precision_golem, only: ki
+@case_with_golem@           implicit none
+@case_with_golem@           complex(ki), intent(in) :: p1,p2,p3
+@case_with_golem@           complex(ki), intent(in) :: m1,m2,m3
+@case_with_golem@           real(ki), intent(in) :: mu2
+@case_with_golem@           integer, intent(in) :: ep
+@case_with_golem@           complex(ki) :: gC0C
+@case_with_golem@        end function gC0C
+@case_with_golem@     end interface
+@case_with_golem@     interface
+@case_with_golem@        function gB0C(p1,m1,m2,mu2,ep)
+@case_with_golem@           use precision_golem, only: ki
+@case_with_golem@           implicit none
+@case_with_golem@           complex(ki), intent(in) :: p1
+@case_with_golem@           complex(ki), intent(in) :: m1,m2
+@case_with_golem@           real(ki), intent(in) :: mu2
+@case_with_golem@           integer, intent(in) :: ep
+@case_with_golem@           complex(ki) :: gB0C
+@case_with_golem@        end function gB0C
+@case_with_golem@     end interface
+
+@case_with_lt@     interface
+@case_with_lt@        function D0(p1,p2,p3,p4,s12,s23,m1,m2,m3,m4)
+@case_with_lt@           use precision, only: ki_lt
+@case_with_lt@           implicit none
+@case_with_lt@           real(ki_lt), intent(in) :: p1,p2,p3,p4,s12,s23
+@case_with_lt@           real(ki_lt), intent(in) :: m1,m2,m3,m4
+@case_with_lt@           complex(ki_lt) :: D0
+@case_with_lt@        end function D0
+@case_with_lt@     end interface
+@case_with_lt@     interface
+@case_with_lt@        function C0(p1,p2,p3,m1,m2,m3)
+@case_with_lt@           use precision, only: ki_lt
+@case_with_lt@           implicit none
+@case_with_lt@           real(ki_lt), intent(in) :: p1,p2,p3
+@case_with_lt@           real(ki_lt), intent(in) :: m1,m2,m3
+@case_with_lt@           complex(ki_lt) :: C0
+@case_with_lt@        end function C0
+@case_with_lt@     end interface
+@case_with_lt@     interface
+@case_with_lt@        function B0(p1,m1,m2)
+@case_with_lt@           use precision, only: ki_lt
+@case_with_lt@           implicit none
+@case_with_lt@           real(ki_lt), intent(in) :: p1
+@case_with_lt@           real(ki_lt), intent(in) :: m1,m2
+@case_with_lt@           complex(ki_lt) :: B0
+@case_with_lt@        end function B0
+@case_with_lt@     end interface
+@case_with_lt@     interface
+@case_with_lt@        function B1(p1,m1,m2)
+@case_with_lt@           use precision, only: ki_lt
+@case_with_lt@           implicit none
+@case_with_lt@           real(ki_lt), intent(in) :: p1
+@case_with_lt@           real(ki_lt), intent(in) :: m1,m2
+@case_with_lt@           complex(ki_lt) :: B1
+@case_with_lt@        end function B1
+@case_with_lt@     end interface
+@case_with_lt@     interface
+@case_with_lt@        function B00(p1,m1,m2)
+@case_with_lt@           use precision, only: ki_lt
+@case_with_lt@           implicit none
+@case_with_lt@           real(ki_lt), intent(in) :: p1
+@case_with_lt@           real(ki_lt), intent(in) :: m1,m2
+@case_with_lt@           complex(ki_lt) :: B00
+@case_with_lt@        end function B00
+@case_with_lt@     end interface
+@case_with_lt@     interface
+@case_with_lt@        function B11(p1,m1,m2)
+@case_with_lt@           use precision, only: ki_lt
+@case_with_lt@           implicit none
+@case_with_lt@           real(ki_lt), intent(in) :: p1
+@case_with_lt@           real(ki_lt), intent(in) :: m1,m2
+@case_with_lt@           complex(ki_lt) :: B11
+@case_with_lt@        end function B11
+@case_with_lt@     end interface
+@case_with_lt@     interface
+@case_with_lt@        function A0(m1)
+@case_with_lt@           use precision, only: ki_lt
+@case_with_lt@           implicit none
+@case_with_lt@           real(ki_lt), intent(in) :: m1
+@case_with_lt@           complex(ki_lt) :: A0
+@case_with_lt@        end function A0
+@case_with_lt@     end interface
+@case_with_lt@     interface
+@case_with_lt@        function D0C(p1,p2,p3,p4,s12,s23,m1,m2,m3,m4)
+@case_with_lt@           use precision, only: ki_lt
+@case_with_lt@           implicit none
+@case_with_lt@           complex(ki_lt), intent(in) :: p1,p2,p3,p4,s12,s23
+@case_with_lt@           complex(ki_lt), intent(in) :: m1,m2,m3,m4
+@case_with_lt@           complex(ki_lt) :: D0C
+@case_with_lt@        end function D0C
+@case_with_lt@     end interface
+@case_with_lt@     interface
+@case_with_lt@        function C0C(p1,p2,p3,m1,m2,m3)
+@case_with_lt@           use precision, only: ki_lt
+@case_with_lt@           implicit none
+@case_with_lt@           complex(ki_lt), intent(in) :: p1,p2,p3
+@case_with_lt@           complex(ki_lt), intent(in) :: m1,m2,m3
+@case_with_lt@           complex(ki_lt) :: C0C
+@case_with_lt@        end function C0C
+@case_with_lt@     end interface
+@case_with_lt@     interface
+@case_with_lt@        function B0C(p1,m1,m2)
+@case_with_lt@           use precision, only: ki_lt
+@case_with_lt@           implicit none
+@case_with_lt@           complex(ki_lt), intent(in) :: p1
+@case_with_lt@           complex(ki_lt), intent(in) :: m1,m2
+@case_with_lt@           complex(ki_lt) :: B0C
+@case_with_lt@        end function B0C
+@case_with_lt@     end interface
+@case_with_lt@     interface
+@case_with_lt@        function B1C(p1,m1,m2)
+@case_with_lt@           use precision, only: ki_lt
+@case_with_lt@           implicit none
+@case_with_lt@           complex(ki_lt), intent(in) :: p1
+@case_with_lt@           complex(ki_lt), intent(in) :: m1,m2
+@case_with_lt@           complex(ki_lt) :: B1C
+@case_with_lt@        end function B1C
+@case_with_lt@     end interface
+@case_with_lt@     interface
+@case_with_lt@        function B00C(p1,m1,m2)
+@case_with_lt@           use precision, only: ki_lt
+@case_with_lt@           implicit none
+@case_with_lt@           complex(ki_lt), intent(in) :: p1
+@case_with_lt@           complex(ki_lt), intent(in) :: m1,m2
+@case_with_lt@           complex(ki_lt) :: B00C
+@case_with_lt@        end function B00C
+@case_with_lt@     end interface
+@case_with_lt@     interface
+@case_with_lt@        function B11C(p1,m1,m2)
+@case_with_lt@           use precision, only: ki_lt
+@case_with_lt@           implicit none
+@case_with_lt@           complex(ki_lt), intent(in) :: p1
+@case_with_lt@           complex(ki_lt), intent(in) :: m1,m2
+@case_with_lt@           complex(ki_lt) :: B11C
+@case_with_lt@        end function B11C
+@case_with_lt@     end interface
+@case_with_lt@     interface
+@case_with_lt@        function A0C(m1)
+@case_with_lt@           use precision, only: ki_lt
+@case_with_lt@           implicit none
+@case_with_lt@           complex(ki_lt), intent(in) :: m1
+@case_with_lt@           complex(ki_lt) :: A0C
+@case_with_lt@        end function A0C
+@case_with_lt@     end interface
+@case_with_lt@     interface
+@case_with_lt@        function getlambda()
+@case_with_lt@           use precision, only: ki_lt
+@case_with_lt@           implicit none
+@case_with_lt@           real(ki_lt) :: getlambda
+@case_with_lt@        end function getlambda
+@case_with_lt@     end interface
+
+   ! cache sizes depending on nleg and istop: cachedim<nleg>(<istop>)
+   ! These numbers are exactly the same as returned in calls
+   ! to cachedim
+   integer, dimension(1:1), parameter, public :: cachedim1 = (/1/)
+   integer, dimension(1:2), parameter, public :: cachedim2 = (/7,5/)
+   integer, dimension(1:3), parameter, public :: cachedim3 = (/19,16,1/)
+   integer, dimension(1:4), parameter, public :: cachedim4 = (/39,35,5,1/)
+   integer, dimension(1:4), parameter, public :: cachedim5 = (/70,65,15,5/)
+   integer, dimension(1:4), parameter, public :: cachedim6 = (/116,110,35,15/)
+   integer, dimension(1:4), parameter, public :: cachedim7 = (/182,175,70,35/)
+   integer, dimension(1:4), parameter, public :: cachedim8 = (/274,266,126,70/)
+   integer, dimension(1:4), parameter, public :: cachedim9 = &
+  & (/399,390,210,126/)
+   integer, dimension(1:4), parameter, public :: cachedim10 = &
+  & (/565,555,330,210/)
+   integer, dimension(1:4), parameter, public :: cachedim11 = &
+  & (/781,770,495,330/)
+   integer, dimension(1:4), parameter, public :: cachedim12 = &
+  & (/1057,1045,715,495/)
+
+   public :: add4, add3, add2, add1
+   public :: add4_rm, add3_rm, add2_rm, add1_rm
+   public :: add4_cm, add3_cm, add2_cm, add1_cm
+
+   public :: cachedim
+
+contains
+
+   pure subroutine cachedim(dim,nleg,istop)
+      implicit none
+      integer, intent(in) :: nleg,istop
+      integer, intent(out) :: dim
+      integer :: n4, n3, n2, n1, j1, j2, j3, j4, icut1, icut2, icut3, icut4
+
+      n1 = 0
+      n2 = 0
+      n3 = 0
+      n4 = 0
+
+      if (nleg.ge.4) then
+         goto 20
+      elseif (nleg.eq.3) then
+         goto 30
+      elseif (nleg.eq.2) then
+         goto 40
+      elseif ((nleg.eq.1).or.(nleg.le.0)) then
+         goto 50
+      endif
+
+ 20   continue
+
+      if (istop.ge.5) goto 99
+
+      n4 = nleg*(nleg-1)*(nleg-2)*(nleg-3)/24
+      if (istop.ge.4) goto 99
+
+ 30   continue
+
+      n3 = nleg*(nleg-1)*(nleg-2)/6
+      if (istop.ge.3) goto 99
+
+ 40   continue
+
+      n2 = nleg*(nleg-1)/2
+      if (istop.ge.2) goto 99
+
+ 50    continue
+
+      n1 = nleg
+
+ 99   continue
+
+      dim=n4+n3+5*n2+n1
+
+  end subroutine cachedim
+
+  subroutine add4_rm(nleg,c4,cut4,Vi,msq,tot4,tot4r,scale2,&
+        cache_flag, cache_offset, scalar_cache)
+@case_with_avh@      use avh_olo, only: olo_d0
+      implicit none
+      integer, intent(in) :: cut4,nleg
+      complex(ki), dimension(0:4), intent(in) :: c4
+      real(ki), dimension(0:nleg-1,4), intent(in) :: Vi
+      real(ki), dimension(0:nleg-1), intent(in) :: msq
+      real(ki), intent(in) :: scale2
+      complex(ki), dimension(-2:0), intent(out) :: tot4
+      complex(ki), intent(out) :: tot4r
+
+      logical, intent(in), optional :: cache_flag
+      integer, intent(inout), optional :: cache_offset
+      complex(ki), intent(inout), optional, dimension(-2:0,*) :: scalar_cache
+
+      real(ki), dimension(4):: Vi1, Vi2, Vi3, Vi21, Vi31, Vi32
+      real(ki) :: m0, m1, m2, m3, V1, V2, V3, V21, V31, V32
+      integer :: i,j1,j2,j3,j4
+      complex(ki) :: c40
+@case_with_avh@      complex(ki_avh), dimension(0:2) :: vald0
+      complex(ki) :: ctmp
+@case_with_golem@      complex(ki), dimension(-2:0) :: d0t
+      integer :: ep, cache_index
+
+      if (notfirsti.eqv.(.false.)) then
+         if (isca .eq. 2) then
+@case_with_avh@            call avh_olo_mu_set(real(sqrt(scale2),ki_avh))
+         elseif (isca .eq. 4) then
+@case_with_lt@             call setmudim(real(scale2, ki_lt))
+         endif
+         notfirsti=.true.
+      endif
+
+
+      j4=cut4/1000
+      j3=(cut4-j4*1000)/100
+      j2=(cut4-j4*1000-j3*100)/10
+      j1=cut4-j4*1000-j3*100-j2*10
+
+      m0=msq(j1)
+      m1=msq(j2)
+      m2=msq(j3)
+      m3=msq(j4)
+
+      if (allocated(s_mat)) then
+         ! s_mat(i+1, j+1) = (Vi(i,:) - Vi(j,:))**2 - msq(i) - msq(j)
+         V1  = s_mat(j2+1, j1+1) + msq(j2) + msq(j1)
+         V2  = s_mat(j3+1, j1+1) + msq(j3) + msq(j1)
+         V3  = s_mat(j4+1, j1+1) + msq(j4) + msq(j1)
+         V21 = s_mat(j3+1, j2+1) + msq(j3) + msq(j2)
+         V31 = s_mat(j4+1, j2+1) + msq(j4) + msq(j2)
+         V32 = s_mat(j4+1, j3+1) + msq(j4) + msq(j3)
+      else
+         Vi1(:)=Vi(j2,:)-Vi(j1,:)
+         Vi2(:)=Vi(j3,:)-Vi(j1,:)
+         Vi3(:)=Vi(j1,:)-Vi(j4,:)
+         Vi21(:)=Vi(j3,:)-Vi(j2,:)
+         Vi31(:)=Vi(j4,:)-Vi(j2,:)
+         Vi32(:)=Vi(j4,:)-Vi(j3,:)
+
+         V1=sdot(Vi1,Vi1)
+         V2=sdot(Vi2,Vi2)
+         V3=sdot(Vi3,Vi3)
+         V21=sdot(Vi21,Vi21)
+         V31=sdot(Vi31,Vi31)
+         V32=sdot(Vi32,Vi32)
+      end if
+
+      c40=c4(0)
+      tot4r=-c4(4)/six
+
+  1   Format(A3,I4,A1,I2,A5,D24.15,A1,D24.15,A3)
+
+      if (present(cache_flag)) cache_index = lbound(scalar_cache,2)+cache_offset
+      if     (isca.eq.1) then
+@case_with_ql@      do ep=-2,0
+@case_with_ql@         if (present(cache_flag)) then
+@case_with_ql@            if (cache_flag) then
+@case_with_ql@               ctmp = scalar_cache(ep,cache_index)
+@case_with_ql@            else
+@case_with_ql@               ctmp=qlI4(&
+@case_with_ql@               & real(V1,ki_ql),real(V21,ki_ql),real(V32,ki_ql),&
+@case_with_ql@               & real(V3,ki_ql),real(V2,ki_ql),real(V31,ki_ql),&
+@case_with_ql@               & real(m0,ki_ql),real(m1,ki_ql),real(m2,ki_ql),&
+@case_with_ql@               & real(m3,ki_ql),real(scale2,ki_ql),ep)
+@case_with_ql@               scalar_cache(ep,cache_index) = ctmp
+@case_with_ql@            end if
+@case_with_ql@         else
+@case_with_ql@            ctmp=qlI4(&
+@case_with_ql@            & real(V1,ki_ql),real(V21,ki_ql),real(V32,ki_ql),&
+@case_with_ql@            & real(V3,ki_ql),real(V2,ki_ql),real(V31,ki_ql),&
+@case_with_ql@            & real(m0,ki_ql),real(m1,ki_ql),real(m2,ki_ql),&
+@case_with_ql@            & real(m3,ki_ql),real(scale2,ki_ql),ep)
+@case_with_ql@         end if
+@case_with_ql@         tot4(ep)=c40*ctmp
+@case_with_ql@         if (verbosity.ge.2) write(iout,1) &
+@case_with_ql@     & 'I4(',cut4,',',ep,') = (',real(ctmp),',',aimag(ctmp),'  )' 
+@case_with_ql@      enddo
+@case_wout_ql@      print*, "isca=1: QCDLoop not available"
+@case_wout_ql@      stop
+      elseif (isca.eq.2) then
+@case_with_avh@         if (present(cache_flag)) then
+@case_with_avh@            if (cache_flag) then
+@case_with_avh@               vald0(0) = scalar_cache( 0,cache_index)
+@case_with_avh@               vald0(1) = scalar_cache(-1,cache_index)
+@case_with_avh@               vald0(2) = scalar_cache(-2,cache_index)
+@case_with_avh@            else
+@case_with_avh@               call olo_d0(vald0,&
+@case_with_avh@            & real(V1,ki_avh),real(V21,ki_avh),real(V32,ki_avh),&
+@case_with_avh@            & real(V3,ki_avh),real(V2,ki_avh),real(V31,ki_avh),&
+@case_with_avh@            & real(m0,ki_avh),real(m1,ki_avh),real(m2,ki_avh),&
+@case_with_avh@            & real(m3,ki_avh))
+@case_with_avh@               scalar_cache( 0,cache_index) = vald0(0)
+@case_with_avh@               scalar_cache(-1,cache_index) = vald0(1)
+@case_with_avh@               scalar_cache(-2,cache_index) = vald0(2)
+@case_with_avh@            end if
+@case_with_avh@         else
+@case_with_avh@            call olo_d0(vald0,&
+@case_with_avh@            & real(V1,ki_avh),real(V21,ki_avh),real(V32,ki_avh),&
+@case_with_avh@            & real(V3,ki_avh),real(V2,ki_avh),real(V31,ki_avh),&
+@case_with_avh@            & real(m0,ki_avh),real(m1,ki_avh),real(m2,ki_avh),&
+@case_with_avh@            & real(m3,ki_avh))
+@case_with_avh@         end if
+@case_with_avh@         do ep=-2,0
+@case_with_avh@            tot4(ep)= c40*vald0(-ep) 
+@case_with_avh@            if (verbosity.ge.2) write(iout,1) &
+@case_with_avh@            & 'I4(',cut4,',',ep,') = (',real(vald0(-ep)),',',aimag(vald0(-ep)),'  )' 
+@case_with_avh@         enddo
+@case_wout_avh@      print*, "isca=2: OneLOop not available"
+@case_wout_avh@      stop
+      elseif (isca.eq.3) then
+@case_with_golem@        call gtrunc_rm(abs(V32)+abs(V31), &
+@case_with_golem@        &   V1,V2,V3,V21,V32,V31,m0,m1,m2,m3)
+@case_with_golem@        do ep=-2,0
+@case_with_golem@           if (present(cache_flag)) then
+@case_with_golem@              if (cache_flag) then
+@case_with_golem@                 d0t(ep) = scalar_cache(ep,cache_index)
+@case_with_golem@              else
+@case_with_golem@                 d0t(ep)=gD0(real(V1,ki_gol),real(V21,ki_gol),&
+@case_with_golem@                 &        real(V32,ki_gol),real(V3,ki_gol),&
+@case_with_golem@                 &        real(V2,ki_gol),real(V31,ki_gol),&
+@case_with_golem@                 &        real(m0,ki_gol),real(m1,ki_gol),&
+@case_with_golem@                 &        real(m2,ki_gol),real(m3,ki_gol),&
+@case_with_golem@                 &        real(scale2,ki_gol),ep)
+@case_with_golem@                 scalar_cache(ep,cache_index) = d0t(ep)
+@case_with_golem@              end if
+@case_with_golem@           else
+@case_with_golem@              d0t(ep)=gD0(real(V1,ki_gol),real(V21,ki_gol),&
+@case_with_golem@              &        real(V32,ki_gol),real(V3,ki_gol),&
+@case_with_golem@              &        real(V2,ki_gol),real(V31,ki_gol),&
+@case_with_golem@              &        real(m0,ki_gol),real(m1,ki_gol),&
+@case_with_golem@              &        real(m2,ki_gol),real(m3,ki_gol),&
+@case_with_golem@              &        real(scale2,ki_gol),ep)
+@case_with_golem@           end if
+@case_with_golem@        end do
+@case_with_golem@        !d0t( 0) = d0t(0) + log(scale2) * (d0t(-1) &
+@case_with_golem@        !      & + 0.5_ki * log(scale2) * d0t(-2))
+@case_with_golem@        !d0t(-1) = d0t(-1) + log(scale2) * d0t(-2)
+@case_with_golem@        if (verbosity.ge.2) then
+@case_with_golem@           do ep=-2,0
+@case_with_golem@              write(iout,1) 'I4(',cut4,',',ep,&
+@case_with_golem@              & ') = (',real(d0t(ep)),',',aimag(d0t(ep)),'  )' 
+@case_with_golem@           end do
+@case_with_golem@        end if
+@case_with_golem@        tot4(:) = d0t(:) * c40
+@case_wout_golem@        print*, "isca=3: Golem95 not available"
+@case_wout_golem@        stop
+      elseif (isca.eq.4) then
+@case_with_lt@        tot4(-2) = 0
+@case_with_lt@        tot4(-1) = 0
+@case_with_lt@        tot4(0)  = 0
+@case_with_lt@        ep = -dim(0, int(getlambda()))
+@case_with_lt@        if (present(cache_flag)) then
+@case_with_lt@           if (cache_flag) then
+@case_with_lt@              ctmp = scalar_cache(ep,cache_index)
+@case_with_lt@           else
+@case_with_lt@              call gtrunc_rm(abs(V32)+abs(V31), &
+@case_with_lt@              &   V1,V2,V3,V21,V32,V31,m0,m1,m2,m3)
+@case_with_lt@              ctmp=D0(&
+@case_with_lt@              & real(V1,ki_lt),real(V21,ki_lt),real(V32,ki_lt),&
+@case_with_lt@              & real(V3,ki_lt),real(V2,ki_lt),real(V31,ki_lt),&
+@case_with_lt@              & real(m0,ki_lt),real(m1,ki_lt),real(m2,ki_lt),&
+@case_with_lt@              & real(m3,ki_lt))
+@case_with_lt@              scalar_cache(ep,cache_index) = ctmp
+@case_with_lt@           end if
+@case_with_lt@        else
+@case_with_lt@           call gtrunc_rm(abs(V32)+abs(V31), &
+@case_with_lt@           &   V1,V2,V3,V21,V32,V31,m0,m1,m2,m3)
+@case_with_lt@           ctmp=D0(&
+@case_with_lt@           & real(V1,ki_lt),real(V21,ki_lt),real(V32,ki_lt),&
+@case_with_lt@           & real(V3,ki_lt),real(V2,ki_lt),real(V31,ki_lt),&
+@case_with_lt@           & real(m0,ki_lt),real(m1,ki_lt),real(m2,ki_lt),&
+@case_with_lt@           & real(m3,ki_lt))
+@case_with_lt@        end if
+@case_with_lt@        tot4(ep)=c40*ctmp
+@case_with_lt@        if (verbosity.ge.2) write(iout,1) &
+@case_with_lt@     & 'I4(',cut4,',',ep,') = (',real(ctmp),',',aimag(ctmp),'  )' 
+@case_wout_lt@         print*, "isca=4: LoopTools not available"
+@case_wout_lt@         stop
+      else
+         print*, 'error in add4'
+         stop
+      endif
+      if (present(cache_flag)) cache_offset = cache_offset + 1
+      tot4(0)=tot4(0) + tot4r
+  end subroutine add4_rm
+
+  subroutine add3_rm(nleg,c3,cut3,Vi,msq,tot3,tot3r,scale2,&
+        cache_flag, cache_offset, scalar_cache)
+@case_with_avh@      use avh_olo, only: olo_c0
+      implicit none
+
+      integer, intent(in) :: nleg, cut3
+      complex(ki), dimension(0:9), intent(in) :: c3
+      real(ki), dimension(0:nleg-1,4) ::Vi
+      real(ki), dimension(0:nleg-1):: msq
+      complex(ki), dimension(-2:0), intent(out) :: tot3
+      complex(ki), intent(out) :: tot3r
+      real(ki), intent(in) :: scale2
+
+      logical, intent(in), optional :: cache_flag
+      integer, intent(inout), optional :: cache_offset
+      complex(ki), intent(inout), optional, dimension(-2:0,*) :: scalar_cache
+
+      integer :: j1,j2,j3
+      real(ki) :: m0, m1, m2, V1, V2, V3
+      real(ki), dimension(4):: Vi1, Vi2, Vi3
+      complex(ki) :: c30
+@case_with_avh@      complex(ki_avh), dimension(0:2) :: valc0
+      complex(ki) :: ctmp
+@case_with_golem@      complex(ki), dimension(-2:0) :: c0t
+      integer :: ep, cache_index
+
+      if (notfirsti.eqv.(.false.)) then
+         if (isca .eq. 2) then
+@case_with_avh@            call avh_olo_mu_set(real(sqrt(scale2),ki_avh))
+         elseif (isca .eq. 4) then
+@case_with_lt@             call setmudim(real(scale2, ki_lt))
+         endif
+         notfirsti=.true.
+      endif
+
+
+      j3=cut3/100
+      j2=(cut3-j3*100)/10
+      j1=cut3-j3*100-j2*10
+
+      m0=msq(j1)
+      m1=msq(j2)
+      m2=msq(j3)
+
+      if (allocated(s_mat)) then
+         ! s_mat(i+1, j+1) = (Vi(i,:) - Vi(j,:))**2 - msq(i) - msq(j)
+         V1 = s_mat(j2+1, j1+1) + msq(j2) + msq(j1)
+         V2 = s_mat(j3+1, j2+1) + msq(j3) + msq(j2)
+         V3 = s_mat(j3+1, j1+1) + msq(j3) + msq(j1)
+      else
+         Vi1(:)=Vi(j2,:)-Vi(j1,:)
+         Vi2(:)=Vi(j3,:)-Vi(j2,:)
+         Vi3(:)=Vi(j1,:)-Vi(j3,:)
+
+         V1=sdot(Vi1,Vi1)
+         V2=sdot(Vi2,Vi2)
+         V3=sdot(Vi3,Vi3)
+      end if
+
+      c30=c3(0)
+
+      tot3r=+c3(7)/two
+
+  1  Format(A3,I3,A1,I2,A5,D24.15,A1,D24.15,A3)
+
+      if (present(cache_flag)) cache_index = lbound(scalar_cache,2)+cache_offset
+      if (isca.eq.1) then
+@case_with_ql@      do ep=-2,0
+@case_with_ql@         if (present(cache_flag)) then
+@case_with_ql@            if (cache_flag) then
+@case_with_ql@               ctmp = scalar_cache(ep,cache_index)
+@case_with_ql@            else
+@case_with_ql@               ctmp=qlI3(&
+@case_with_ql@                  real(V1,ki_ql),real(V2,ki_ql),real(V3,ki_ql),&
+@case_with_ql@                  & real(m0,ki_ql),real(m1,ki_ql),real(m2,ki_ql),&
+@case_with_ql@                  & real(scale2,ki_ql),ep)
+@case_with_ql@               scalar_cache(ep,cache_index) = ctmp
+@case_with_ql@            end if
+@case_with_ql@         else
+@case_with_ql@            ctmp=qlI3(&
+@case_with_ql@               real(V1,ki_ql),real(V2,ki_ql),real(V3,ki_ql),&
+@case_with_ql@               & real(m0,ki_ql),real(m1,ki_ql),real(m2,ki_ql),&
+@case_with_ql@               & real(scale2,ki_ql),ep)
+@case_with_ql@         end if
+@case_with_ql@         tot3(ep)=c30*ctmp 
+@case_with_ql@         if (verbosity.ge.2) write(iout,1) &
+@case_with_ql@         &'I3(',cut3,',',ep,') = (',real(ctmp),&
+@case_with_ql@         &',',aimag(ctmp),'  )' 
+@case_with_ql@      enddo
+@case_wout_ql@      print*, "isca=1: QCDLoop not available"
+@case_wout_ql@      stop
+      elseif  (isca.eq.2) then
+@case_with_avh@          if (present(cache_flag)) then
+@case_with_avh@             if (cache_flag) then
+@case_with_avh@                valc0(0) = scalar_cache( 0,cache_index)
+@case_with_avh@                valc0(1) = scalar_cache(-1,cache_index)
+@case_with_avh@                valc0(2) = scalar_cache(-2,cache_index)
+@case_with_avh@             else
+@case_with_avh@                call olo_c0(valc0,&
+@case_with_avh@             & real(V1,ki_avh),real(V2,ki_avh),real(V3,ki_avh),&
+@case_with_avh@             & real(m0,ki_avh),real(m1,ki_avh),real(m2,ki_avh))
+@case_with_avh@                scalar_cache( 0,cache_index) = valc0(0)
+@case_with_avh@                scalar_cache(-1,cache_index) = valc0(1)
+@case_with_avh@                scalar_cache(-2,cache_index) = valc0(2)
+@case_with_avh@             end if
+@case_with_avh@          else
+@case_with_avh@             call olo_c0(valc0,&
+@case_with_avh@             & real(V1,ki_avh),real(V2,ki_avh),real(V3,ki_avh),&
+@case_with_avh@             & real(m0,ki_avh),real(m1,ki_avh),real(m2,ki_avh))
+@case_with_avh@          end if
+@case_with_avh@          do ep=-2,0
+@case_with_avh@             tot3(ep)= c30*valc0(-ep) 
+@case_with_avh@             if (verbosity.ge.2) write(iout,1) &
+@case_with_avh@     &'I3(',cut3,',',ep,') = (',real(valc0(-ep)),',',aimag(valc0(-ep)),'  )' 
+@case_with_avh@          enddo
+@case_wout_avh@      print*, "isca=2: OneLOop not available"
+@case_wout_avh@      stop
+      elseif (isca.eq.3) then
+@case_with_golem@        call gtrunc_rm(abs(V1)+abs(V2)+abs(V3), &
+@case_with_golem@        &                V1,V2,V3,m0,m1,m2)
+@case_with_golem@        do ep=-2,0
+@case_with_golem@           if (present(cache_flag)) then
+@case_with_golem@              if (cache_flag) then
+@case_with_golem@                 c0t(ep) = scalar_cache(ep,cache_index)
+@case_with_golem@              else
+@case_with_golem@                 c0t(ep)=gC0(real(V1,ki_gol),real(V2,ki_gol),&
+@case_with_golem@                 &        real(V3,ki_gol),real(m0,ki_gol),&
+@case_with_golem@                 &        real(m1,ki_gol),real(m2,ki_gol),&
+@case_with_golem@                 &        real(scale2,ki_gol),ep)
+@case_with_golem@                 scalar_cache(ep,cache_index) = c0t(ep)
+@case_with_golem@              end if
+@case_with_golem@           else
+@case_with_golem@              c0t(ep)=gC0(real(V1,ki_gol),real(V2,ki_gol),&
+@case_with_golem@              &        real(V3,ki_gol),real(m0,ki_gol),&
+@case_with_golem@              &        real(m1,ki_gol),real(m2,ki_gol),&
+@case_with_golem@              &        real(scale2,ki_gol),ep)
+@case_with_golem@           end if
+@case_with_golem@        end do
+@case_with_golem@        !c0t( 0) = c0t(0) + log(scale2) * (c0t(-1) &
+@case_with_golem@        !      & + 0.5_ki * log(scale2) * c0t(-2))
+@case_with_golem@        !c0t(-1) = c0t(-1) + log(scale2) * c0t(-2)
+@case_with_golem@        if (verbosity.ge.2) then
+@case_with_golem@           do ep=-2,0
+@case_with_golem@              write(iout,1) 'I3(',cut3,',',ep,&
+@case_with_golem@             & ') = (',real(c0t(ep)),',',aimag(c0t(ep)),'  )' 
+@case_with_golem@           end do
+@case_with_golem@        end if
+@case_with_golem@        tot3(:) = c0t(:) * c30
+@case_wout_golem@        print*, "isca=3: Golem95 not available"
+@case_wout_golem@        stop
+      elseif (isca.eq.4) then
+@case_with_lt@        tot3(-2) = 0
+@case_with_lt@        tot3(-1) = 0
+@case_with_lt@        tot3( 0) = 0
+@case_with_lt@        call gtrunc_rm(abs(V1)+abs(V2)+abs(V3), &
+@case_with_lt@        &  V1,V2,V3,m0,m1,m2)
+@case_with_lt@        ep = -dim(0, int(getlambda()))
+@case_with_lt@        if (present(cache_flag)) then
+@case_with_lt@           if (cache_flag) then
+@case_with_lt@              ctmp = scalar_cache(ep,cache_index)
+@case_with_lt@           else
+@case_with_lt@              ctmp=C0(&
+@case_with_lt@              &  real(V1,ki_lt),real(V2,ki_lt),real(V3,ki_lt),&
+@case_with_lt@              &  real(m0,ki_lt),real(m1,ki_lt),real(m2,ki_lt))
+@case_with_lt@              scalar_cache(ep,cache_index) = ctmp
+@case_with_lt@           end if
+@case_with_lt@        else
+@case_with_lt@           ctmp=C0(&
+@case_with_lt@           &  real(V1,ki_lt),real(V2,ki_lt),real(V3,ki_lt),&
+@case_with_lt@           &  real(m0,ki_lt),real(m1,ki_lt),real(m2,ki_lt))
+@case_with_lt@        end if
+@case_with_lt@        tot3(ep)=c30*ctmp 
+@case_with_lt@        if (verbosity.ge.2) write(iout,1) &
+@case_with_lt@       &'I3(',cut3,',',ep,') = (',real(ctmp),',',aimag(ctmp),'  )'
+@case_wout_lt@         print*, "isca=4: LoopTools not available"
+@case_wout_lt@         stop
+      else
+         print*, 'error in add3'
+         stop
+      endif
+      tot3(0)=tot3(0) + tot3r
+      if (present(cache_flag)) cache_offset = cache_offset + 1
+  end subroutine add3_rm
+
+  subroutine add2_rm(nleg,c2,cut2,k1,k2,msq,tot2,tot2r,scale2, &
+        cache_flag, cache_offset, scalar_cache)
+@case_with_avh@      use avh_olo, only: olo_b11
+      implicit none
+
+      integer, intent(in) :: nleg, cut2
+      complex(ki), dimension(0:9), intent(in) :: c2
+      real(ki), dimension(4), intent(in) :: k1, k2
+      real(ki), dimension(0:nleg-1), intent(in) :: msq
+      complex(ki), dimension(-2:0), intent(out) :: tot2
+      complex(ki), intent(out) :: tot2r
+      real(ki), intent(in) :: scale2
+
+      logical, intent(in), optional :: cache_flag
+      integer, intent(inout), optional :: cache_offset
+      complex(ki), intent(inout), optional, dimension(-2:0,*) :: scalar_cache
+
+      real(ki) :: m0, m1, K11, K12, B06
+      integer :: ep, cache_index
+      integer :: i1,i2
+      complex(ki), dimension(-2:0) :: J0, J1, J00, J01, J11 
+@case_with_avh@      complex(ki_avh), dimension(0:2) :: scf2, scf1, scf0, scf 
+@case_with_avh@      complex(ki) :: xbb, xb0, xb00
+@case_with_avh@      real(ki) :: bkv
+@case_with_avh@      integer :: i
+
+      if (notfirsti.eqv.(.false.)) then
+         if (isca .eq. 2) then
+@case_with_avh@            call avh_olo_mu_set(real(sqrt(scale2),ki_avh))
+         elseif (isca .eq. 4) then
+@case_with_lt@             call setmudim(real(scale2, ki_lt))
+         endif
+         notfirsti=.true.
+      endif
+
+      i2=cut2/10
+      i1=cut2-i2*10
+
+      m0=msq(i1)
+      m1=msq(i2)
+
+      if (allocated(s_mat)) then
+         K11 = s_mat(i2+1, i1+1) + msq(i1) + msq(i2)
+      else
+         K11 = sdot(K1,K1)
+      end if
+      K12=sdot(K1,K2)
+
+
+      B06=-(K11-three*(m0+m1))/six
+
+      tot2r= + B06*c2(9)
+
+      if (present(cache_flag)) cache_index = lbound(scalar_cache,2)+cache_offset
+      if (isca.eq.1) then
+@case_with_ql@      if (present(cache_flag)) then
+@case_with_ql@         if (cache_flag) then
+@case_with_ql@            J0(:)  = scalar_cache(:,cache_index+0)
+@case_with_ql@            J1(:)  = scalar_cache(:,cache_index+1)
+@case_with_ql@            J01(:) = scalar_cache(:,cache_index+2)
+@case_with_ql@            J11(:) = scalar_cache(:,cache_index+3)
+@case_with_ql@            J00(:) = scalar_cache(:,cache_index+4)
+@case_with_ql@         else
+@case_with_ql@            do ep=-2,0
+@case_with_ql@               J00(ep) = qlI2(&
+@case_with_ql@           &     real(K11,ki_ql),real(m0,ki_ql),real(m0,ki_ql),&
+@case_with_ql@           &     real(scale2,ki_ql),ep)
+@case_with_ql@               J11(ep) = qlI2(&
+@case_with_ql@           &     real(K11,ki_ql),real(m1,ki_ql),real(m1,ki_ql),&
+@case_with_ql@           &     real(scale2,ki_ql),ep)
+@case_with_ql@               J01(ep)=qlI2(&
+@case_with_ql@           &     real(K11,ki_ql),real(m0,ki_ql),real(m1,ki_ql),&
+@case_with_ql@           &     real(scale2,ki_ql),ep)
+@case_with_ql@               J0(ep) = qlI1(real(m0,ki_ql),real(scale2,ki_ql),ep)
+@case_with_ql@               J1(ep) = qlI1(real(m1,ki_ql),real(scale2,ki_ql),ep)
+@case_with_ql@            end do
+@case_with_ql@            scalar_cache(:,cache_index+0) = J0(:)
+@case_with_ql@            scalar_cache(:,cache_index+1) = J1(:)
+@case_with_ql@            scalar_cache(:,cache_index+2) = J01(:)
+@case_with_ql@            scalar_cache(:,cache_index+3) = J11(:)
+@case_with_ql@            scalar_cache(:,cache_index+4) = J00(:)
+@case_with_ql@         end if
+@case_with_ql@      else
+@case_with_ql@         do ep=-2,0
+@case_with_ql@            J00(ep) = qlI2(&
+@case_with_ql@           &     real(K11,ki_ql),real(m0,ki_ql),real(m0,ki_ql),&
+@case_with_ql@           &     real(scale2,ki_ql),ep)
+@case_with_ql@            J11(ep) = qlI2(&
+@case_with_ql@           &     real(K11,ki_ql),real(m1,ki_ql),real(m1,ki_ql),&
+@case_with_ql@           &     real(scale2,ki_ql),ep)
+@case_with_ql@            J01(ep)=qlI2(&
+@case_with_ql@           &     real(K11,ki_ql),real(m0,ki_ql),real(m1,ki_ql),&
+@case_with_ql@           &     real(scale2,ki_ql),ep)
+@case_with_ql@            J0(ep) = qlI1(real(m0,ki_ql),real(scale2,ki_ql),ep)
+@case_with_ql@            J1(ep) = qlI1(real(m1,ki_ql),real(scale2,ki_ql),ep)
+@case_with_ql@         end do
+@case_with_ql@      end if
+@case_with_ql@      ! The remaining steps come in another if-statement
+@case_wout_ql@      print*, "isca=1: QCDLoop not available"
+@case_wout_ql@      stop
+       elseif  (isca.eq.2) then
+@case_with_avh@         xbb=c2(0)
+@case_with_avh@         xb0=c2(1)
+@case_with_avh@         xb00=c2(2)
+@case_with_avh@         bkv=K12
+@case_with_avh@         if (present(cache_flag)) then
+@case_with_avh@            if (cache_flag) then
+@case_with_avh@               scf(:)  = scalar_cache(:,cache_index+0)
+@case_with_avh@               scf0(:) = scalar_cache(:,cache_index+1)
+@case_with_avh@               scf1(:) = scalar_cache(:,cache_index+2)
+@case_with_avh@               scf2(:) = scalar_cache(:,cache_index+3)
+@case_with_avh@            else
+@case_with_avh@               call olo_b11(scf2,scf0,scf1,scf,&
+@case_with_avh@              & real(K11,ki_avh),real(m0,ki_avh),real(m1,ki_avh))
+@case_with_avh@               scalar_cache(:,cache_index+0) = scf(:)
+@case_with_avh@               scalar_cache(:,cache_index+1) = scf0(:)
+@case_with_avh@               scalar_cache(:,cache_index+2) = scf1(:)
+@case_with_avh@               scalar_cache(:,cache_index+3) = scf2(:)
+@case_with_avh@            end if
+@case_with_avh@         else
+@case_with_avh@            call olo_b11(scf2,scf0,scf1,scf,&
+@case_with_avh@           & real(K11,ki_avh),real(m0,ki_avh),real(m1,ki_avh))
+@case_with_avh@         end if
+@case_with_avh@         tot2(0)=xbb*scf(0)+xb0*bkv*scf1(0)+xb00*bkv*bkv*scf2(0)
+@case_with_avh@         tot2(0)=tot2(0)+ B06*c2(9)
+@case_with_avh@         tot2(-1)=xbb*scf(1)+xb0*bkv*scf1(1)+xb00*bkv*bkv*scf2(1)
+@case_with_avh@         tot2(-2)=xbb*scf(2)+xb0*bkv*scf1(2)+xb00*bkv*bkv*scf2(2)
+@case_with_avh@          if (verbosity.ge.2) then
+@case_with_avh@             do i=0,2
+@case_with_avh@                write(iout,903) 'B_0 (',cut2,',',-i,') = ',scf(i)
+@case_with_avh@                write(iout,903) 'B_1 (',cut2,',',-i,') =',scf1(i)
+@case_with_avh@                write(iout,903) 'B_11(',cut2,',',-i,') =',scf2(i)
+@case_with_avh@             enddo
+@case_with_avh@          endif
+@case_wout_avh@      print*, "isca=2: OneLOop not available"
+@case_wout_avh@      stop
+      elseif (isca.eq.3) then
+@case_with_golem@        if (present(cache_flag)) then
+@case_with_golem@           if (cache_flag) then
+@case_with_golem@              J0(:)  = scalar_cache(:,cache_index+0)
+@case_with_golem@              J1(:)  = scalar_cache(:,cache_index+1)
+@case_with_golem@              J01(:) = scalar_cache(:,cache_index+2)
+@case_with_golem@              J11(:) = scalar_cache(:,cache_index+3)
+@case_with_golem@              J00(:) = scalar_cache(:,cache_index+4)
+@case_with_golem@           else
+@case_with_golem@              call gtrunc_rm(abs(K11)+1.0_ki, K11,m0,m1)
+@case_with_golem@              do ep=-2,0
+@case_with_golem@                 J00(ep)= gB0(real(K11,ki_gol),&
+@case_with_golem@             &           real(m0,ki_gol),real(m0,ki_gol),&
+@case_with_golem@             &           real(scale2,ki_gol),ep)
+@case_with_golem@                 J11(ep)= gB0(real(K11,ki_gol),&
+@case_with_golem@             &           real(m1,ki_gol),real(m1,ki_gol),&
+@case_with_golem@             &           real(scale2,ki_gol),ep)
+@case_with_golem@                 J01(ep)= gB0(real(K11,ki_gol),&
+@case_with_golem@             &           real(m0,ki_gol),real(m1,ki_gol),&
+@case_with_golem@             &           real(scale2,ki_gol),ep)
+@case_with_golem@                 J0(ep) = gA0(real(m0,ki_gol),&
+@case_with_golem@             &           real(scale2,ki_gol),ep)
+@case_with_golem@                 J1(ep) = gA0(real(m1,ki_gol),&
+@case_with_golem@             &           real(scale2,ki_gol),ep)
+@case_with_golem@              end do
+@case_with_golem@              scalar_cache(:,cache_index+0) = J0(:)
+@case_with_golem@              scalar_cache(:,cache_index+1) = J1(:)
+@case_with_golem@              scalar_cache(:,cache_index+2) = J01(:)
+@case_with_golem@              scalar_cache(:,cache_index+3) = J11(:)
+@case_with_golem@              scalar_cache(:,cache_index+4) = J00(:)
+@case_with_golem@           end if
+@case_with_golem@        else
+@case_with_golem@           call gtrunc_rm(abs(K11)+1.0_ki, K11,m0,m1)
+@case_with_golem@           do ep=-2,0
+@case_with_golem@              J00(ep)= gB0(real(K11,ki_gol),&
+@case_with_golem@          &           real(m0,ki_gol),real(m0,ki_gol),&
+@case_with_golem@          &           real(scale2,ki_gol),ep)
+@case_with_golem@              J11(ep)= gB0(real(K11,ki_gol),&
+@case_with_golem@          &           real(m1,ki_gol),real(m1,ki_gol),&
+@case_with_golem@          &           real(scale2,ki_gol),ep)
+@case_with_golem@              J01(ep)= gB0(real(K11,ki_gol),&
+@case_with_golem@          &           real(m0,ki_gol),real(m1,ki_gol),&
+@case_with_golem@          &           real(scale2,ki_gol),ep)
+@case_with_golem@              J0(ep) = gA0(real(m0,ki_gol),&
+@case_with_golem@          &           real(scale2,ki_gol),ep)
+@case_with_golem@              J1(ep) = gA0(real(m1,ki_gol),&
+@case_with_golem@          &           real(scale2,ki_gol),ep)
+@case_with_golem@           end do
+@case_with_golem@        end if
+@case_wout_golem@        print*, "isca=3: Golem95 not available"
+@case_wout_golem@        stop
+      elseif (isca.eq.4) then
+@case_with_lt@        ep = -dim(0, int(getlambda()))
+@case_with_lt@        J00(:) = 0.0_ki_lt
+@case_with_lt@        J11(:) = 0.0_ki_lt
+@case_with_lt@        J0(:) = 0.0_ki_lt
+@case_with_lt@        J1(:) = 0.0_ki_lt
+@case_with_lt@        if (present(cache_flag)) then
+@case_with_lt@           if (cache_flag) then
+@case_with_lt@              J0(:)  = scalar_cache(:,cache_index+0)
+@case_with_lt@              J1(:)  = scalar_cache(:,cache_index+1)
+@case_with_lt@              J01(:) = scalar_cache(:,cache_index+2)
+@case_with_lt@              J11(:) = scalar_cache(:,cache_index+3)
+@case_with_lt@              J00(:) = scalar_cache(:,cache_index+4)
+@case_with_lt@           else
+@case_with_lt@              call gtrunc_rm(abs(K11)+1.0_ki, K11,m0,m1)
+@case_with_lt@              J00(ep) = B0(real(K11,ki_lt),&
+@case_with_lt@             &             real(m0,ki_lt),real(m0,ki_lt))
+@case_with_lt@              J11(ep) = B0(real(K11,ki_lt),&
+@case_with_lt@             &             real(m1,ki_lt),real(m1,ki_lt))
+@case_with_lt@              J01(ep) = B0(real(K11,ki_lt),&
+@case_with_lt@             &             real(m0,ki_lt),real(m1,ki_lt))
+@case_with_lt@              J0(ep)  = A0(real(m0,ki_lt))
+@case_with_lt@              J1(ep)  = A0(real(m1,ki_lt))
+@case_with_lt@              scalar_cache(:,cache_index+0) = J0(:)
+@case_with_lt@              scalar_cache(:,cache_index+1) = J1(:)
+@case_with_lt@              scalar_cache(:,cache_index+2) = J01(:)
+@case_with_lt@              scalar_cache(:,cache_index+3) = J11(:)
+@case_with_lt@              scalar_cache(:,cache_index+4) = J00(:)
+@case_with_lt@           end if
+@case_with_lt@        else
+@case_with_lt@           call gtrunc_rm(abs(K11)+1.0_ki, K11,m0,m1)
+@case_with_lt@           J00(ep) = B0(real(K11,ki_lt),&
+@case_with_lt@          &             real(m0,ki_lt),real(m0,ki_lt))
+@case_with_lt@           J11(ep) = B0(real(K11,ki_lt),&
+@case_with_lt@          &             real(m1,ki_lt),real(m1,ki_lt))
+@case_with_lt@           J01(ep) = B0(real(K11,ki_lt),&
+@case_with_lt@          &             real(m0,ki_lt),real(m1,ki_lt))
+@case_with_lt@           J0(ep)  = A0(real(m0,ki_lt))
+@case_with_lt@           J1(ep)  = A0(real(m1,ki_lt))
+@case_with_lt@        end if
+@case_wout_lt@        print*, "isca=4: LoopTools not available"
+@case_wout_lt@        stop
+       else
+          print*, 'error in add2'
+          stop
+       endif
+
+       if (isca.eq.1 .or. isca.eq.3 .or. isca.eq.4) then
+          if (abs(K11).gt.zip1) then
+             do ep=-2,0
+                tot2(ep)=-(K12*(two*K12*(m0 - m1)*c2(2) +  &
+        &         K11*(-three*c2(1) + two*K12*c2(2)))*J0(ep))/(six*K11**2) &
+        &         + ((two*K12**2*(m0 - m1)**2*c2(2) +  &
+        &         K11*K12*(-three*m0*c2(1) + three*m1*c2(1) +  &
+        &         two*K12*m0*c2(2) - four*K12*m1*c2(2)) +  &
+        &         K11**2*(6*c2(0) + K12*(-three*c2(1) + two*K12*c2(2))))* &
+        &         J01(ep))/(six*K11**2) +  &
+        &         (K12*(two*K12*(m0 - m1)*c2(2) +  &
+        &         K11*(-three*c2(1) + four*K12*c2(2)))*J1(ep))/(six*K11**2)
+             enddo
+             tot2(0)=tot2(0)+(K12**2*c2(2))/18.0_ki &
+        &       - (K12**2*m0*c2(2))/(six*K11) -  &
+        &       (K12**2*m1*c2(2))/(six*K11) + B06*c2(9)
+          else
+             if (m1.eq.m0) then
+                do ep=-2,0
+                   tot2(ep)=(c2(0) + (K12*(-three*c2(1) &
+        &                    + two*K12*c2(2)))/six)*J00(ep)
+                enddo
+                tot2(0)=tot2(0)+B06*c2(9)
+             else
+                do ep=-2,0
+                   tot2(ep)=(K12*m0**2*(-three*m0*c2(1) + three*m1*c2(1) &
+        &              + two*K12*m0*c2(2))* &
+        &              J00(ep))/(six*(m0 - m1)**3) + c2(0)*J01(ep) -  &
+        &              (K12*m1*(m0*m1*(9*c2(1) - 6*K12*c2(2)) -  &
+        &              6*m0**2*(c2(1) - K12*c2(2)) +  &
+        &              m1**2*(-three*c2(1) + two*K12*c2(2)))*J11(ep))/ &
+        &              (six*(m0 - m1)**3)
+                enddo
+                tot2(0)=tot2(0) + (-three*K12*m0*c2(1))/(four*(m0 - m1)) +  &
+        &           (K12*m1*c2(1))/(four*m0 - four*m1) +  &
+        &           (11.0_ki*K12**2*m0**2*c2(2))/(18.0_ki*(m0 - m1)**2) -  &
+        &           (7.0_ki*K12**2*m0*m1*c2(2))/(18.0_ki*(m0 - m1)**2) +  &
+        &           (K12**2*m1**2*c2(2))/(9.0_ki*(m0 - m1)**2) + B06*c2(9)
+             endif
+          endif
+          if (verbosity.ge.2) then
+             do ep=0,2
+                write(iout,903) 'B0 (',cut2,',',-ep,') = ',J0(-ep)
+                write(iout,903) 'B1 (',cut2,',',-ep,') =',J1(-ep)
+                write(iout,903) 'B00(',cut2,',',-ep,') =',J00(-ep)
+                write(iout,903) 'B11(',cut2,',',-ep,') =',J11(-ep)
+             end do
+          endif
+       end if
+       if (present(cache_flag)) cache_offset = cache_offset + 5
+
+ 903   format(a5,I2,a1,I2,a4,2(D24.15))
+
+  end subroutine add2_rm
+
+  subroutine add1_rm(nleg,c1,cut1,msq,tot1,scale2, &
+        cache_flag, cache_offset, scalar_cache)
+@case_with_avh@      use avh_olo, only: olo_a0
+      implicit none 
+      integer, intent(in) :: nleg, cut1
+      complex(ki), dimension(0:4), intent(in) :: c1
+      real(ki), dimension(0:nleg-1), intent(in) :: msq
+      complex(ki), dimension(-2:0), intent(out) :: tot1
+      real(ki), intent(in) :: scale2
+
+      logical, intent(in), optional :: cache_flag
+      integer, intent(inout), optional :: cache_offset
+      complex(ki), intent(inout), optional, dimension(-2:0,*) :: scalar_cache
+
+      integer ::j1
+      real(ki) :: m0
+@case_with_avh@      complex(ki_avh), dimension(0:2) :: vala0
+      complex(ki) :: ctmp
+      integer :: ep, cache_index
+
+      if (notfirsti.eqv.(.false.)) then
+         if (isca .eq. 2) then
+@case_with_avh@            call avh_olo_mu_set(real(sqrt(scale2),ki_avh))
+         elseif (isca .eq. 4) then
+@case_with_lt@             call setmudim(real(scale2, ki_lt))
+         endif
+         notfirsti=.true.
+      endif
+
+      j1=cut1
+
+      m0=msq(j1)
+
+  1   Format(A3,I2,A1,I2,A5,D24.15,A1,D24.15,A3)
+
+      if (present(cache_flag)) cache_index = lbound(scalar_cache,2)+cache_offset
+      if      (isca.eq.1) then
+@case_with_ql@      do ep=-2,0
+@case_with_ql@         if (present(cache_flag)) then
+@case_with_ql@            if (cache_flag) then
+@case_with_ql@               ctmp = scalar_cache(ep,cache_index)
+@case_with_ql@            else
+@case_with_ql@               ctmp = qlI1(real(m0,ki_ql),real(scale2,ki_ql),ep)
+@case_with_ql@               scalar_cache(ep,cache_index) = ctmp
+@case_with_ql@            end if
+@case_with_ql@         else
+@case_with_ql@            ctmp = qlI1(real(m0,ki_ql),real(scale2,ki_ql),ep)
+@case_with_ql@         end if
+@case_with_ql@         tot1(ep)=c1(0)*ctmp
+@case_with_ql@         if (verbosity.ge.2) write(iout,1) &
+@case_with_ql@     & 'I1(',cut1,',',ep,') = (',real(ctmp),',',aimag(ctmp),'  )' 
+@case_with_ql@      enddo
+@case_wout_ql@      print*, "isca=1: QCDLoop not available"
+@case_wout_ql@      stop
+      elseif  (isca.eq.2) then         
+@case_with_avh@      if (present(cache_flag)) then
+@case_with_avh@         if (cache_flag) then
+@case_with_avh@            vala0(0) = scalar_cache( 0,cache_index)
+@case_with_avh@            vala0(1) = scalar_cache(-1,cache_index)
+@case_with_avh@            vala0(2) = scalar_cache(-2,cache_index)
+@case_with_avh@         else
+@case_with_avh@            call olo_a0(vala0,real(m0,ki_avh))
+@case_with_avh@            scalar_cache( 0,cache_index) = vala0(0)
+@case_with_avh@            scalar_cache(-1,cache_index) = vala0(1)
+@case_with_avh@            scalar_cache(-2,cache_index) = vala0(2)
+@case_with_avh@         end if
+@case_with_avh@      else
+@case_with_avh@         call olo_a0(vala0,real(m0,ki_avh))
+@case_with_avh@      end if
+@case_with_avh@      do ep=-2,0
+@case_with_avh@         tot1(ep)= c1(0)*vala0(-ep) 
+@case_with_avh@         if (verbosity.ge.2) write(iout,1) &
+@case_with_avh@          & 'I1(',cut1,',',ep,') = (',&
+@case_with_avh@          & real(vala0(-ep)),',',aimag(vala0(-ep)),'  )' 
+@case_with_avh@      enddo
+@case_wout_avh@      print*, "isca=2: OneLOop not available"
+@case_wout_avh@      stop
+      elseif (isca.eq.3) then
+@case_with_golem@      if (verbosity.ge.2) write(iout,1) &
+@case_with_golem@       & 'I1(',cut1,',',-2,') = (',0.0_ki,',',0.0_ki,'  )' 
+@case_with_golem@      tot1(-2) = (0.0_ki,0.0_ki)
+@case_with_golem@      if (present(cache_flag)) then
+@case_with_golem@         if (cache_flag) then
+@case_with_golem@            do ep=-1,0
+@case_with_golem@               ctmp = scalar_cache(ep,cache_index)
+@case_with_golem@               tot1(ep) = c1(0)*ctmp
+@case_with_golem@               if (verbosity.ge.2) write(iout,1) &
+@case_with_golem@                 & 'I1(',cut1,',',ep,') = (',&
+@case_with_golem@                 & real(ctmp),',',aimag(ctmp),'  )' 
+@case_with_golem@            enddo
+@case_with_golem@         else
+@case_with_golem@            scalar_cache(-2,cache_index) = czip
+@case_with_golem@            call gtrunc_rm(1.0_ki, m0)
+@case_with_golem@            do ep=-1,0
+@case_with_golem@               ctmp = gA0(real(m0,ki_gol),&
+@case_with_golem@              &        real(scale2,ki_gol),ep)
+@case_with_golem@               scalar_cache(ep,cache_index) = ctmp
+@case_with_golem@               tot1(ep) = c1(0)*ctmp
+@case_with_golem@               if (verbosity.ge.2) write(iout,1) &
+@case_with_golem@                 & 'I1(',cut1,',',ep,') = (',&
+@case_with_golem@                 & real(ctmp),',',aimag(ctmp),'  )' 
+@case_with_golem@            enddo
+@case_with_golem@         end if
+@case_with_golem@      else
+@case_with_golem@         call gtrunc_rm(1.0_ki, m0)
+@case_with_golem@         do ep=-1,0
+@case_with_golem@            ctmp = gA0(real(m0,ki_gol),&
+@case_with_golem@           &        real(scale2,ki_gol),ep)
+@case_with_golem@            tot1(ep) = c1(0)*ctmp
+@case_with_golem@            if (verbosity.ge.2) write(iout,1) &
+@case_with_golem@              & 'I1(',cut1,',',ep,') = (',&
+@case_with_golem@              & real(ctmp),',',aimag(ctmp),'  )' 
+@case_with_golem@         enddo
+@case_with_golem@      end if
+@case_wout_golem@      print*, "isca=3: Golem95 not available"
+@case_wout_golem@      stop
+      elseif (isca.eq.4) then
+@case_with_lt@      tot1(-2) = 0
+@case_with_lt@      tot1(-1) = 0
+@case_with_lt@      tot1( 0) = 0
+@case_with_lt@      ep = -dim(0, int(getlambda()))
+@case_with_lt@      if (present(cache_flag)) then
+@case_with_lt@         if (cache_flag) then
+@case_with_lt@            ctmp = scalar_cache(ep,cache_index)
+@case_with_lt@         else
+@case_with_lt@            ctmp = A0(real(m0,ki_lt))
+@case_with_lt@            scalar_cache(ep,cache_index) = ctmp
+@case_with_lt@         end if
+@case_with_lt@      else
+@case_with_lt@         ctmp = A0(real(m0,ki_lt))
+@case_with_lt@      end if
+@case_with_lt@      tot1(ep)=c1(0)*ctmp
+@case_with_lt@      if (verbosity.ge.2) write(iout,1) &
+@case_with_lt@     & 'I1(',cut1,',',ep,') = (',real(ctmp),',',aimag(ctmp),'  )' 
+@case_wout_lt@         print*, "isca=4: LoopTools not available"
+@case_wout_lt@         stop
+      else
+         print*, 'error in add1'
+         stop
+      endif
+
+      if (present(cache_flag)) cache_offset = cache_offset + 1
+  end subroutine add1_rm
+
+  subroutine add4_cm(nleg,c4,cut4,Vi,msq,tot4,tot4r,scale2,&
+        cache_flag, cache_offset, scalar_cache)
+@case_with_avh@      use avh_olo, only: olo_d0
+      implicit none
+      integer, intent(in) :: cut4,nleg
+      complex(ki), dimension(0:4), intent(in) :: c4
+      real(ki), dimension(0:nleg-1,4), intent(in) :: Vi
+      complex(ki), dimension(0:nleg-1), intent(in) :: msq
+      real(ki), intent(in) :: scale2
+      complex(ki), dimension(-2:0), intent(out) :: tot4
+      complex(ki), intent(out) :: tot4r
+
+      logical, intent(in), optional :: cache_flag
+      integer, intent(inout), optional :: cache_offset
+      complex(ki), intent(inout), optional, dimension(-2:0,*) :: scalar_cache
+
+      integer :: i,j1,j2,j3,j4
+
+      real(ki) :: V1, V2, V3, V21, V31, V32
+      complex(ki) :: m0, m1, m2, m3
+      real(ki), dimension(4):: Vi1, Vi2, Vi3, Vi21, Vi31, Vi32
+      complex(ki) :: c40
+@case_with_avh@      complex(ki_avh), dimension(0:2) :: vald0
+      complex(ki) :: ctmp
+@case_with_golem@      complex(ki), dimension(-2:0) :: d0t
+      integer :: ep, cache_index
+
+      if (notfirsti.eqv.(.false.)) then
+         if (isca .eq. 2) then
+@case_with_avh@            call avh_olo_mu_set(real(sqrt(scale2),ki_avh))
+         elseif (isca .eq. 4) then
+@case_with_lt@             call setmudim(real(scale2, ki_lt))
+         endif
+         notfirsti=.true.
+      endif
+
+      j4=cut4/1000
+      j3=(cut4-j4*1000)/100
+      j2=(cut4-j4*1000-j3*100)/10
+      j1=cut4-j4*1000-j3*100-j2*10
+
+      m0=msq(j1)
+      m1=msq(j2)
+      m2=msq(j3)
+      m3=msq(j4)
+
+      if (allocated(s_mat)) then
+         ! s_mat(i+1, j+1) = (Vi(i,:) - Vi(j,:))**2 - msq(i) - msq(j)
+         V1  = s_mat(j2+1, j1+1) + msq(j2) + msq(j1)
+         V2  = s_mat(j3+1, j1+1) + msq(j3) + msq(j1)
+         V3  = s_mat(j4+1, j1+1) + msq(j4) + msq(j1)
+         V21 = s_mat(j3+1, j2+1) + msq(j3) + msq(j2)
+         V31 = s_mat(j4+1, j2+1) + msq(j4) + msq(j2)
+         V32 = s_mat(j4+1, j3+1) + msq(j4) + msq(j3)
+      else
+         Vi1(:)=Vi(j2,:)-Vi(j1,:)
+         Vi2(:)=Vi(j3,:)-Vi(j1,:)
+         Vi3(:)=Vi(j1,:)-Vi(j4,:)
+         Vi21(:)=Vi(j3,:)-Vi(j2,:)
+         Vi31(:)=Vi(j4,:)-Vi(j2,:)
+         Vi32(:)=Vi(j4,:)-Vi(j3,:)
+
+         V1=sdot(Vi1,Vi1)
+         V2=sdot(Vi2,Vi2)
+         V3=sdot(Vi3,Vi3)
+         V21=sdot(Vi21,Vi21)
+         V31=sdot(Vi31,Vi31)
+         V32=sdot(Vi32,Vi32)
+      end if
+
+      c40=c4(0)
+      tot4r=-c4(4)/six
+
+  1  Format(A3,I4,A1,I2,A5,D24.15,A1,D24.15,A3)
+
+      if (present(cache_flag)) cache_index = lbound(scalar_cache,2)+cache_offset
+      if     (isca.eq.1) then
+@case_with_ql@      print*, "isca=1: QCDLoop does not support complex masses."
+@case_wout_ql@      print*, "isca=1: QCDLoop not available"
+         stop
+      elseif (isca.eq.2) then
+@case_with_avh@         if (present(cache_flag)) then
+@case_with_avh@            if (cache_flag) then
+@case_with_avh@               vald0(0) = scalar_cache( 0,cache_index)
+@case_with_avh@               vald0(1) = scalar_cache(-1,cache_index)
+@case_with_avh@               vald0(2) = scalar_cache(-2,cache_index)
+@case_with_avh@            else
+@case_with_avh@               call olo_d0(vald0,&
+@case_with_avh@              &      cmplx(V1,0.0_ki_avh,ki_avh), &
+@case_with_avh@              &      cmplx(V21,0.0_ki_avh,ki_avh), &
+@case_with_avh@              &      cmplx(V32,0.0_ki_avh,ki_avh), &
+@case_with_avh@              &      cmplx(V3,0.0_ki_avh,ki_avh), &
+@case_with_avh@              &      cmplx(V2,0.0_ki_avh,ki_avh), &
+@case_with_avh@              &      cmplx(V31,0.0_ki_avh,ki_avh), &
+@case_with_avh@              &      cmplx(real(m0,ki_avh),aimag(m0),ki_avh),&
+@case_with_avh@              &      cmplx(real(m1,ki_avh),aimag(m1),ki_avh),&
+@case_with_avh@              &      cmplx(real(m2,ki_avh),aimag(m2),ki_avh),&
+@case_with_avh@              &      cmplx(real(m3,ki_avh),aimag(m3),ki_avh))
+@case_with_avh@               scalar_cache( 0,cache_index) = vald0(0)
+@case_with_avh@               scalar_cache(-1,cache_index) = vald0(1)
+@case_with_avh@               scalar_cache(-2,cache_index) = vald0(2)
+@case_with_avh@            end if
+@case_with_avh@         else
+@case_with_avh@            call olo_d0(vald0,&
+@case_with_avh@           &      cmplx(V1,0.0_ki_avh,ki_avh), &
+@case_with_avh@           &      cmplx(V21,0.0_ki_avh,ki_avh), &
+@case_with_avh@           &      cmplx(V32,0.0_ki_avh,ki_avh), &
+@case_with_avh@           &      cmplx(V3,0.0_ki_avh,ki_avh), &
+@case_with_avh@           &      cmplx(V2,0.0_ki_avh,ki_avh), &
+@case_with_avh@           &      cmplx(V31,0.0_ki_avh,ki_avh), &
+@case_with_avh@           &      cmplx(real(m0,ki_avh),aimag(m0),ki_avh),&
+@case_with_avh@           &      cmplx(real(m1,ki_avh),aimag(m1),ki_avh),&
+@case_with_avh@           &      cmplx(real(m2,ki_avh),aimag(m2),ki_avh),&
+@case_with_avh@           &      cmplx(real(m3,ki_avh),aimag(m3),ki_avh))
+@case_with_avh@         end if
+@case_with_avh@         do ep=-2,0
+@case_with_avh@            tot4(ep)= c40*vald0(-ep) 
+@case_with_avh@            if (verbosity.ge.2) write(iout,1) &
+@case_with_avh@            & 'I4(',cut4,',',ep,') = (',real(vald0(-ep)),',',&
+@case_with_avh@            & aimag(vald0(-ep)),'  )' 
+@case_with_avh@         enddo
+@case_wout_avh@      print*, "isca=2: OneLOop not available"
+@case_wout_avh@      stop
+      elseif (isca.eq.3) then
+@case_with_golem@        call gtrunc_rm(abs(V32)+abs(V31), V1,V2,V3,V21,V32,V31)
+@case_with_golem@        call gtrunc_cm(abs(V32)+abs(V31), m0,m1,m2,m3)
+@case_with_golem@        do ep=-2,0
+@case_with_golem@           if (present(cache_flag)) then
+@case_with_golem@              if (cache_flag) then
+@case_with_golem@                 d0t(ep) = scalar_cache(ep,cache_index)
+@case_with_golem@              else
+@case_with_golem@                 d0t(ep)=gD0C(&
+@case_with_golem@                &        cmplx(V1,0.0_ki_gol,ki_gol), &
+@case_with_golem@                &        cmplx(V21,0.0_ki_gol,ki_gol), &
+@case_with_golem@                &        cmplx(V32,0.0_ki_gol,ki_gol), &
+@case_with_golem@                &        cmplx(V3,0.0_ki_gol,ki_gol), &
+@case_with_golem@                &        cmplx(V2,0.0_ki_gol,ki_gol), &
+@case_with_golem@                &        cmplx(V31,0.0_ki_gol,ki_gol), &
+@case_with_golem@                &        cmplx(real(m0,ki_gol),aimag(m0),ki_gol),&
+@case_with_golem@                &        cmplx(real(m1,ki_gol),aimag(m1),ki_gol),&
+@case_with_golem@                &        cmplx(real(m2,ki_gol),aimag(m2),ki_gol),&
+@case_with_golem@                &        cmplx(real(m3,ki_gol),aimag(m3),ki_gol),&
+@case_with_golem@                &        real(scale2,ki_gol),ep)
+@case_with_golem@                 scalar_cache(ep,cache_index) = d0t(ep)
+@case_with_golem@              end if
+@case_with_golem@           else
+@case_with_golem@              d0t(ep)=gD0C(&
+@case_with_golem@             &        cmplx(V1,0.0_ki_gol,ki_gol), &
+@case_with_golem@             &        cmplx(V21,0.0_ki_gol,ki_gol), &
+@case_with_golem@             &        cmplx(V32,0.0_ki_gol,ki_gol), &
+@case_with_golem@             &        cmplx(V3,0.0_ki_gol,ki_gol), &
+@case_with_golem@             &        cmplx(V2,0.0_ki_gol,ki_gol), &
+@case_with_golem@             &        cmplx(V31,0.0_ki_gol,ki_gol), &
+@case_with_golem@             &        cmplx(real(m0,ki_gol),aimag(m0),ki_gol),&
+@case_with_golem@             &        cmplx(real(m1,ki_gol),aimag(m1),ki_gol),&
+@case_with_golem@             &        cmplx(real(m2,ki_gol),aimag(m2),ki_gol),&
+@case_with_golem@             &        cmplx(real(m3,ki_gol),aimag(m3),ki_gol),&
+@case_with_golem@             &        real(scale2,ki_gol),ep)
+@case_with_golem@           end if
+@case_with_golem@        end do
+@case_with_golem@        !d0t( 0) = d0t(0) + log(scale2) * (d0t(-1) &
+@case_with_golem@        !      & + 0.5_ki * log(scale2) * d0t(-2))
+@case_with_golem@        !d0t(-1) = d0t(-1) + log(scale2) * d0t(-2)
+@case_with_golem@        if (verbosity.ge.2) then
+@case_with_golem@           do ep=-2,0
+@case_with_golem@              write(iout,1) 'I4(',cut4,',',ep,&
+@case_with_golem@              & ') = (',real(d0t(ep)),',',aimag(d0t(ep)),'  )' 
+@case_with_golem@           end do
+@case_with_golem@        end if
+@case_with_golem@        tot4(:) = d0t(:) * c40
+@case_wout_golem@        print*, "isca=3: Golem95 not available"
+@case_wout_golem@        stop
+      elseif (isca.eq.4) then
+@case_with_lt@        tot4(-2) = 0
+@case_with_lt@        tot4(-1) = 0
+@case_with_lt@        tot4(0) = 0
+@case_with_lt@        ep = -dim(0, int(getlambda()))
+@case_with_lt@        if (present(cache_flag)) then
+@case_with_lt@           if (cache_flag) then
+@case_with_lt@              ctmp = scalar_cache(ep,cache_index)
+@case_with_lt@           else
+@case_with_lt@              call gtrunc_rm(abs(V32)+abs(V31), V1,V2,V3,V21,V32,V31)
+@case_with_lt@              call gtrunc_cm(abs(V32)+abs(V31), m0,m1,m2,m3)
+@case_with_lt@              ctmp=D0C(&
+@case_with_lt@             &       cmplx(V1,0.0_ki_lt,ki_lt), &
+@case_with_lt@             &       cmplx(V21,0.0_ki_lt,ki_lt), &
+@case_with_lt@             &       cmplx(V32,0.0_ki_lt,ki_lt), &
+@case_with_lt@             &       cmplx(V3,0.0_ki_lt,ki_lt), &
+@case_with_lt@             &       cmplx(V2,0.0_ki_lt,ki_lt), &
+@case_with_lt@             &       cmplx(V31,0.0_ki_lt,ki_lt), &
+@case_with_lt@             &       cmplx(real(m0,ki_lt),aimag(m0),ki_lt),&
+@case_with_lt@             &       cmplx(real(m1,ki_lt),aimag(m1),ki_lt),&
+@case_with_lt@             &       cmplx(real(m2,ki_lt),aimag(m2),ki_lt),&
+@case_with_lt@             &       cmplx(real(m3,ki_lt),aimag(m3),ki_lt))
+@case_with_lt@              scalar_cache(ep,cache_index) = ctmp
+@case_with_lt@           end if
+@case_with_lt@        else
+@case_with_lt@           call gtrunc_rm(abs(V32)+abs(V31), V1,V2,V3,V21,V32,V31)
+@case_with_lt@           call gtrunc_cm(abs(V32)+abs(V31), m0,m1,m2,m3)
+@case_with_lt@           ctmp=D0C(&
+@case_with_lt@          &       cmplx(V1,0.0_ki_lt,ki_lt), &
+@case_with_lt@          &       cmplx(V21,0.0_ki_lt,ki_lt), &
+@case_with_lt@          &       cmplx(V32,0.0_ki_lt,ki_lt), &
+@case_with_lt@          &       cmplx(V3,0.0_ki_lt,ki_lt), &
+@case_with_lt@          &       cmplx(V2,0.0_ki_lt,ki_lt), &
+@case_with_lt@          &       cmplx(V31,0.0_ki_lt,ki_lt), &
+@case_with_lt@          &       cmplx(real(m0,ki_lt),aimag(m0),ki_lt),&
+@case_with_lt@          &       cmplx(real(m1,ki_lt),aimag(m1),ki_lt),&
+@case_with_lt@          &       cmplx(real(m2,ki_lt),aimag(m2),ki_lt),&
+@case_with_lt@          &       cmplx(real(m3,ki_lt),aimag(m3),ki_lt))
+@case_with_lt@        end if
+@case_with_lt@        tot4(ep)=c40*ctmp
+@case_with_lt@        if (verbosity.ge.2) write(iout,1) &
+@case_with_lt@     & 'I4(',cut4,',',ep,') = (',real(ctmp),',',aimag(ctmp),'  )' 
+@case_wout_lt@         print*, "isca=4: LoopTools not available"
+@case_wout_lt@         stop
+      else
+         print*, 'error in add4'
+         stop
+      endif
+      if (present(cache_flag)) cache_offset = cache_offset + 1
+      tot4(0)=tot4(0) + tot4r
+  end subroutine add4_cm
+
+  subroutine add3_cm(nleg,c3,cut3,Vi,msq,tot3,tot3r,scale2,&
+        cache_flag, cache_offset, scalar_cache)
+@case_with_avh@      use avh_olo, only: olo_c0
+      implicit none
+
+      integer, intent(in) :: nleg, cut3
+      complex(ki), dimension(0:9), intent(in) :: c3
+      real(ki), dimension(0:nleg-1,4) ::Vi
+      complex(ki), dimension(0:nleg-1):: msq
+      complex(ki), dimension(-2:0), intent(out) :: tot3
+      complex(ki), intent(out) :: tot3r
+      real(ki), intent(in) :: scale2
+
+      logical, intent(in), optional :: cache_flag
+      integer, intent(inout), optional :: cache_offset
+      complex(ki), intent(inout), optional, dimension(-2:0,*) :: scalar_cache
+
+      integer :: i,j1,j2,j3
+      real(ki) :: V1, V2, V3
+      complex(ki) :: m0, m1, m2
+      real(ki), dimension(4):: Vi1, Vi2, Vi3
+      complex(ki) :: c30
+@case_with_avh@      complex(ki_avh), dimension(0:2) :: valc0
+      complex(ki) :: ctmp
+@case_with_golem@      complex(ki), dimension(-2:0) :: c0t
+      integer :: ep, cache_index
+
+      if (notfirsti.eqv.(.false.)) then
+         if (isca .eq. 2) then
+@case_with_avh@            call avh_olo_mu_set(real(sqrt(scale2),ki_avh))
+         elseif (isca .eq. 4) then
+@case_with_lt@             call setmudim(real(scale2, ki_lt))
+         endif
+         notfirsti=.true.
+      endif
+
+      j3=cut3/100
+      j2=(cut3-j3*100)/10
+      j1=cut3-j3*100-j2*10
+
+      m0=msq(j1)
+      m1=msq(j2)
+      m2=msq(j3)
+
+      if (allocated(s_mat)) then
+         ! s_mat(i+1, j+1) = (Vi(i,:) - Vi(j,:))**2 - msq(i) - msq(j)
+         V1 = s_mat(j2+1, j1+1) + msq(j2) + msq(j1)
+         V2 = s_mat(j3+1, j2+1) + msq(j3) + msq(j2)
+         V3 = s_mat(j3+1, j1+1) + msq(j3) + msq(j1)
+      else
+         Vi1(:)=Vi(j2,:)-Vi(j1,:)
+         Vi2(:)=Vi(j3,:)-Vi(j2,:)
+         Vi3(:)=Vi(j1,:)-Vi(j3,:)
+
+         V1=sdot(Vi1,Vi1)
+         V2=sdot(Vi2,Vi2)
+         V3=sdot(Vi3,Vi3)
+      end if
+
+      c30=c3(0)
+
+      tot3r=+c3(7)/two
+
+  1   Format(A3,I3,A1,I2,A5,D24.15,A1,D24.15,A3)
+
+      if (present(cache_flag)) cache_index = lbound(scalar_cache,2)+cache_offset
+      if (isca.eq.1) then
+@case_with_ql@      print*, "isca=1: QCDLoop does not support complex masses."
+@case_wout_ql@      print*, "isca=1: QCDLoop not available"
+         stop
+      elseif  (isca.eq.2) then
+@case_with_avh@          if (present(cache_flag)) then
+@case_with_avh@             if (cache_flag) then
+@case_with_avh@                valc0(0) = scalar_cache( 0,cache_index)
+@case_with_avh@                valc0(1) = scalar_cache(-1,cache_index)
+@case_with_avh@                valc0(2) = scalar_cache(-2,cache_index)
+@case_with_avh@             else
+@case_with_avh@                call olo_c0(valc0,&
+@case_with_avh@               &      cmplx(V1,0.0_ki_avh,ki_avh), &
+@case_with_avh@               &      cmplx(V2,0.0_ki_avh,ki_avh), &
+@case_with_avh@               &      cmplx(V3,0.0_ki_avh,ki_avh), &
+@case_with_avh@               &      cmplx(real(m0,ki_avh),aimag(m0),ki_avh),&
+@case_with_avh@               &      cmplx(real(m1,ki_avh),aimag(m1),ki_avh),&
+@case_with_avh@               &      cmplx(real(m2,ki_avh),aimag(m2),ki_avh))
+@case_with_avh@                scalar_cache( 0,cache_index) = valc0(0)
+@case_with_avh@                scalar_cache(-1,cache_index) = valc0(1)
+@case_with_avh@                scalar_cache(-2,cache_index) = valc0(2)
+@case_with_avh@             end if
+@case_with_avh@          else
+@case_with_avh@             call olo_c0(valc0,&
+@case_with_avh@            &      cmplx(V1,0.0_ki_avh,ki_avh), &
+@case_with_avh@            &      cmplx(V2,0.0_ki_avh,ki_avh), &
+@case_with_avh@            &      cmplx(V3,0.0_ki_avh,ki_avh), &
+@case_with_avh@            &      cmplx(real(m0,ki_avh),aimag(m0),ki_avh),&
+@case_with_avh@            &      cmplx(real(m1,ki_avh),aimag(m1),ki_avh),&
+@case_with_avh@            &      cmplx(real(m2,ki_avh),aimag(m2),ki_avh))
+@case_with_avh@          end if
+@case_with_avh@          do ep=-2,0
+@case_with_avh@             tot3(ep)= c30*valc0(-ep) 
+@case_with_avh@             if (verbosity.ge.2) write(iout,1) &
+@case_with_avh@     &'I3(',cut3,',',ep,') = (',real(valc0(-ep)),',',aimag(valc0(-ep)),'  )' 
+@case_with_avh@          enddo
+@case_wout_avh@      print*, "isca=2: OneLOop not available"
+@case_wout_avh@      stop
+      elseif (isca.eq.3) then
+@case_with_golem@        call gtrunc_rm(abs(V1)+abs(V2)+abs(V3), V1,V2,V3)
+@case_with_golem@        call gtrunc_cm(abs(V1)+abs(V2)+abs(V3), m0,m1,m2)
+@case_with_golem@        do ep=-2,0
+@case_with_golem@           if (present(cache_flag)) then
+@case_with_golem@              if (cache_flag) then
+@case_with_golem@                 c0t(ep) = scalar_cache(ep,cache_index)
+@case_with_golem@              else
+@case_with_golem@                 c0t(ep)=gC0C(&
+@case_with_golem@                &        cmplx(V1,0.0_ki_gol,ki_gol), &
+@case_with_golem@                &        cmplx(V2,0.0_ki_gol,ki_gol), &
+@case_with_golem@                &        cmplx(V3,0.0_ki_gol,ki_gol), &
+@case_with_golem@                &        cmplx(real(m0,ki_gol),aimag(m0),ki_gol),&
+@case_with_golem@                &        cmplx(real(m1,ki_gol),aimag(m1),ki_gol),&
+@case_with_golem@                &        cmplx(real(m2,ki_gol),aimag(m2),ki_gol),&
+@case_with_golem@                &        real(scale2,ki_gol),ep)
+@case_with_golem@                 scalar_cache(ep,cache_index) = c0t(ep)
+@case_with_golem@              end if
+@case_with_golem@           else
+@case_with_golem@              c0t(ep)=gC0C(&
+@case_with_golem@             &        cmplx(V1,0.0_ki_gol,ki_gol), &
+@case_with_golem@             &        cmplx(V2,0.0_ki_gol,ki_gol), &
+@case_with_golem@             &        cmplx(V3,0.0_ki_gol,ki_gol), &
+@case_with_golem@             &        cmplx(real(m0,ki_gol),aimag(m0),ki_gol),&
+@case_with_golem@             &        cmplx(real(m1,ki_gol),aimag(m1),ki_gol),&
+@case_with_golem@             &        cmplx(real(m2,ki_gol),aimag(m2),ki_gol),&
+@case_with_golem@             &        real(scale2,ki_gol),ep)
+@case_with_golem@           end if
+@case_with_golem@        end do
+@case_with_golem@        !c0t( 0) = c0t(0) + log(scale2) * (c0t(-1) &
+@case_with_golem@        !      & + 0.5_ki * log(scale2) * c0t(-2))
+@case_with_golem@        !c0t(-1) = c0t(-1) + log(scale2) * c0t(-2)
+@case_with_golem@        do ep=-2,0
+@case_with_golem@           if (verbosity.ge.2) write(iout,1) 'I3(',cut3,',',ep,&
+@case_with_golem@             & ') = (',real(c0t(ep)),',',aimag(c0t(ep)),'  )' 
+@case_with_golem@        end do
+@case_with_golem@        tot3(:) = c0t(:) * c30
+@case_wout_golem@        print*, "isca=3: Golem95 not available"
+@case_wout_golem@        stop
+      elseif (isca.eq.4) then
+@case_with_lt@        tot3(-2) = 0
+@case_with_lt@        tot3(-1) = 0
+@case_with_lt@        tot3(0) = 0
+@case_with_lt@        call gtrunc_rm(abs(V1)+abs(V2)+abs(V3), V1,V2,V3)
+@case_with_lt@        call gtrunc_cm(abs(V1)+abs(V2)+abs(V3), m0,m1,m2)
+@case_with_lt@        ep = -dim(0, int(getlambda()))
+@case_with_lt@        if (present(cache_flag)) then
+@case_with_lt@           if (cache_flag) then
+@case_with_lt@              ctmp = scalar_cache(ep,cache_index)
+@case_with_lt@           else
+@case_with_lt@              ctmp=C0C(&
+@case_with_lt@             &       cmplx(V1,0.0_ki_lt,ki_lt), &
+@case_with_lt@             &       cmplx(V2,0.0_ki_lt,ki_lt), &
+@case_with_lt@             &       cmplx(V3,0.0_ki_lt,ki_lt), &
+@case_with_lt@             &       cmplx(real(m0,ki_lt),aimag(m0),ki_lt),&
+@case_with_lt@             &       cmplx(real(m1,ki_lt),aimag(m1),ki_lt),&
+@case_with_lt@             &       cmplx(real(m2,ki_lt),aimag(m2),ki_lt))
+@case_with_lt@              scalar_cache(ep,cache_index) = ctmp
+@case_with_lt@           end if
+@case_with_lt@        else
+@case_with_lt@           ctmp=C0C(&
+@case_with_lt@          &       cmplx(V1,0.0_ki_lt,ki_lt), &
+@case_with_lt@          &       cmplx(V2,0.0_ki_lt,ki_lt), &
+@case_with_lt@          &       cmplx(V3,0.0_ki_lt,ki_lt), &
+@case_with_lt@          &       cmplx(real(m0,ki_lt),aimag(m0),ki_lt),&
+@case_with_lt@          &       cmplx(real(m1,ki_lt),aimag(m1),ki_lt),&
+@case_with_lt@          &       cmplx(real(m2,ki_lt),aimag(m2),ki_lt))
+@case_with_lt@        end if
+@case_with_lt@        tot3(ep)=c30*ctmp 
+@case_with_lt@        if (verbosity.ge.2) write(iout,1) &
+@case_with_lt@       &'I3(',cut3,',',ep,') = (',real(ctmp),',',aimag(ctmp),'  )'
+@case_wout_lt@         print*, "isca=4: LoopTools not available"
+@case_wout_lt@         stop
+      else
+         print*, 'error in add3'
+         stop
+      endif
+      tot3(0)=tot3(0) + tot3r
+      if (present(cache_flag)) cache_offset = cache_offset + 1
+  end subroutine add3_cm
+
+  subroutine add2_cm(nleg,c2,cut2,k1,k2,msq,tot2,tot2r,scale2,&
+        cache_flag, cache_offset, scalar_cache)
+@case_with_avh@      use avh_olo, only: olo_b11
+      implicit none
+
+      integer, intent(in) :: nleg, cut2
+      complex(ki), dimension(0:9), intent(in) :: c2
+      real(ki), dimension(4), intent(in) :: k1, k2
+      complex(ki), dimension(0:nleg-1), intent(in) :: msq
+      complex(ki), dimension(-2:0), intent(out) :: tot2
+      complex(ki), intent(out) :: tot2r
+      real(ki), intent(in) :: scale2
+
+      logical, intent(in), optional :: cache_flag
+      integer, intent(inout), optional :: cache_offset
+      complex(ki), intent(inout), optional, dimension(-2:0,*) :: scalar_cache
+
+      integer :: i1,i2
+      real(ki) :: K11, K12
+      complex(ki) :: B06
+      complex(ki) :: m0, m1
+      integer :: ep, cache_index
+
+      complex(ki), dimension(-2:0) :: J0, J1, J00, J01, J11 
+@case_with_avh@      complex(ki_avh), dimension(0:2) :: scf2, scf1, scf0, scf 
+@case_with_avh@      complex(ki) :: xbb, xb0, xb00
+@case_with_avh@      real(ki) :: bkv
+@case_with_avh@      integer :: i
+
+      if (notfirsti.eqv.(.false.)) then
+         if (isca .eq. 2) then
+@case_with_avh@            call avh_olo_mu_set(real(sqrt(scale2),ki_avh))
+         elseif (isca .eq. 4) then
+@case_with_lt@             call setmudim(real(scale2, ki_lt))
+         endif
+         notfirsti=.true.
+      endif
+
+      i2=cut2/10
+      i1=cut2-i2*10
+
+      m0=msq(i1)
+      m1=msq(i2)
+
+      if (allocated(s_mat)) then
+         K11 = s_mat(i2+1, i1+1) + msq(i1) + msq(i2)
+      else
+         K11 = sdot(K1,K1)
+      end if
+      K12=sdot(K1,K2)
+
+      B06=-(K11-three*(m0+m1))/six
+
+      tot2r= + B06*c2(9)
+
+      if (present(cache_flag)) cache_index = lbound(scalar_cache,2)+cache_offset
+      if (isca.eq.1) then
+@case_with_ql@      print*, "isca=1: QCDLoop does not support complex masses."
+@case_wout_ql@      print*, "isca=1: QCDLoop not available"
+          stop
+       elseif  (isca.eq.2) then
+@case_with_avh@         xbb=c2(0)
+@case_with_avh@         xb0=c2(1)
+@case_with_avh@         xb00=c2(2)
+@case_with_avh@         bkv=K12
+@case_with_avh@         if (present(cache_flag)) then
+@case_with_avh@            if (cache_flag) then
+@case_with_avh@               scf(:)  = scalar_cache(:,cache_index+0)
+@case_with_avh@               scf0(:) = scalar_cache(:,cache_index+1)
+@case_with_avh@               scf1(:) = scalar_cache(:,cache_index+2)
+@case_with_avh@               scf2(:) = scalar_cache(:,cache_index+3)
+@case_with_avh@            else
+@case_with_avh@               call olo_b11(scf2,scf0,scf1,scf,&
+@case_with_avh@              &             cmplx(K11,0.0_ki_avh,ki_avh), &
+@case_with_avh@              &             cmplx(real(m0,ki_avh),aimag(m0),ki_avh),&
+@case_with_avh@              &             cmplx(real(m1,ki_avh),aimag(m1),ki_avh))
+@case_with_avh@               scalar_cache(:,cache_index+0) = scf(:)
+@case_with_avh@               scalar_cache(:,cache_index+1) = scf0(:)
+@case_with_avh@               scalar_cache(:,cache_index+2) = scf1(:)
+@case_with_avh@               scalar_cache(:,cache_index+3) = scf2(:)
+@case_with_avh@            end if
+@case_with_avh@         else
+@case_with_avh@            call olo_b11(scf2,scf0,scf1,scf,&
+@case_with_avh@           &             cmplx(K11,0.0_ki_avh,ki_avh), &
+@case_with_avh@           &             cmplx(real(m0,ki_avh),aimag(m0),ki_avh),&
+@case_with_avh@           &             cmplx(real(m1,ki_avh),aimag(m1),ki_avh))
+@case_with_avh@         end if
+@case_with_avh@         tot2(0)=xbb*scf(0)+xb0*bkv*scf1(0)+xb00*bkv*bkv*scf2(0)
+@case_with_avh@         tot2(0)=tot2(0)+ B06*c2(9)
+@case_with_avh@         tot2(-1)=xbb*scf(1)+xb0*bkv*scf1(1)+xb00*bkv*bkv*scf2(1)
+@case_with_avh@         tot2(-2)=xbb*scf(2)+xb0*bkv*scf1(2)+xb00*bkv*bkv*scf2(2)
+@case_with_avh@          if (verbosity.ge.2) then
+@case_with_avh@             do i=0,2
+@case_with_avh@                write(iout,903) 'B_0 (',cut2,',',-i,') = ',scf(i)
+@case_with_avh@                write(iout,903) 'B_1 (',cut2,',',-i,') =',scf1(i)
+@case_with_avh@                write(iout,903) 'B_11(',cut2,',',-i,') =',scf2(i)
+@case_with_avh@             enddo
+@case_with_avh@          endif
+@case_wout_avh@      print*, "isca=2: OneLOop not available"
+@case_wout_avh@      stop
+      elseif (isca.eq.3) then
+@case_with_golem@        if (present(cache_flag)) then
+@case_with_golem@           if (cache_flag) then
+@case_with_golem@              J0(:)  = scalar_cache(:,cache_index+0)
+@case_with_golem@              J1(:)  = scalar_cache(:,cache_index+1)
+@case_with_golem@              J01(:) = scalar_cache(:,cache_index+2)
+@case_with_golem@              J11(:) = scalar_cache(:,cache_index+3)
+@case_with_golem@              J00(:) = scalar_cache(:,cache_index+4)
+@case_with_golem@           else
+@case_with_golem@              call gtrunc_rm(abs(K11)+1.0_ki, K11)
+@case_with_golem@              call gtrunc_cm(abs(K11)+1.0_ki, m0,m1)
+@case_with_golem@              do ep=-2,0
+@case_with_golem@                 J00(ep)= gB0C(&
+@case_with_golem@                &   cmplx(K11,0.0_ki_gol,ki_gol), &
+@case_with_golem@                &   cmplx(real(m0,ki_gol),aimag(m0),ki_gol),&
+@case_with_golem@                &   cmplx(real(m0,ki_gol),aimag(m0),ki_gol),&
+@case_with_golem@                &   real(scale2,ki_gol),ep)
+@case_with_golem@                 J11(ep)= gB0C(&
+@case_with_golem@                &   cmplx(K11,0.0_ki_gol,ki_gol), &
+@case_with_golem@                &   cmplx(real(m1,ki_gol),aimag(m1),ki_gol),&
+@case_with_golem@                &   cmplx(real(m1,ki_gol),aimag(m1),ki_gol),&
+@case_with_golem@                &   real(scale2,ki_gol),ep)
+@case_with_golem@                 J01(ep)= gB0C(&
+@case_with_golem@                &   cmplx(K11,0.0_ki_gol,ki_gol), &
+@case_with_golem@                &   cmplx(real(m0,ki_gol),aimag(m0),ki_gol),&
+@case_with_golem@                &   cmplx(real(m1,ki_gol),aimag(m1),ki_gol),&
+@case_with_golem@                &   real(scale2,ki_gol),ep)
+@case_with_golem@                 J0(ep) = gA0C(&
+@case_with_golem@                &   cmplx(real(m0,ki_gol),aimag(m0),ki_gol),&
+@case_with_golem@                &   real(scale2,ki_gol),ep)
+@case_with_golem@                 J1(ep) = gA0C(&
+@case_with_golem@                &   cmplx(real(m1,ki_gol),aimag(m1),ki_gol),&
+@case_with_golem@                &   real(scale2,ki_gol),ep)
+@case_with_golem@              end do
+@case_with_golem@              scalar_cache(:,cache_index+0) = J0(:)
+@case_with_golem@              scalar_cache(:,cache_index+1) = J1(:)
+@case_with_golem@              scalar_cache(:,cache_index+2) = J01(:)
+@case_with_golem@              scalar_cache(:,cache_index+3) = J11(:)
+@case_with_golem@              scalar_cache(:,cache_index+4) = J00(:)
+@case_with_golem@           end if
+@case_with_golem@        else
+@case_with_golem@           call gtrunc_rm(abs(K11)+1.0_ki, K11)
+@case_with_golem@           call gtrunc_cm(abs(K11)+1.0_ki, m0,m1)
+@case_with_golem@           do ep=-2,0
+@case_with_golem@              J00(ep)= gB0C(&
+@case_with_golem@             &   cmplx(K11,0.0_ki_gol,ki_gol), &
+@case_with_golem@             &   cmplx(real(m0,ki_gol),aimag(m0),ki_gol),&
+@case_with_golem@             &   cmplx(real(m0,ki_gol),aimag(m0),ki_gol),&
+@case_with_golem@             &   real(scale2,ki_gol),ep)
+@case_with_golem@              J11(ep)= gB0C(&
+@case_with_golem@             &   cmplx(K11,0.0_ki_gol,ki_gol), &
+@case_with_golem@             &   cmplx(real(m1,ki_gol),aimag(m1),ki_gol),&
+@case_with_golem@             &   cmplx(real(m1,ki_gol),aimag(m1),ki_gol),&
+@case_with_golem@             &   real(scale2,ki_gol),ep)
+@case_with_golem@              J01(ep)= gB0C(&
+@case_with_golem@             &   cmplx(K11,0.0_ki_gol,ki_gol), &
+@case_with_golem@             &   cmplx(real(m0,ki_gol),aimag(m0),ki_gol),&
+@case_with_golem@             &   cmplx(real(m1,ki_gol),aimag(m1),ki_gol),&
+@case_with_golem@             &   real(scale2,ki_gol),ep)
+@case_with_golem@              J0(ep) = gA0C(&
+@case_with_golem@             &   cmplx(real(m0,ki_gol),aimag(m0),ki_gol),&
+@case_with_golem@             &   real(scale2,ki_gol),ep)
+@case_with_golem@              J1(ep) = gA0C(&
+@case_with_golem@             &   cmplx(real(m1,ki_gol),aimag(m1),ki_gol),&
+@case_with_golem@             &   real(scale2,ki_gol),ep)
+@case_with_golem@           end do
+@case_with_golem@        end if
+@case_wout_golem@        print*, "isca=3: Golem95 not available"
+@case_wout_golem@        stop
+      elseif (isca.eq.4) then
+@case_with_lt@        J00(:) = 0.0_ki_lt
+@case_with_lt@        J11(:) = 0.0_ki_lt
+@case_with_lt@        J0(:) = 0.0_ki_lt
+@case_with_lt@        J1(:) = 0.0_ki_lt
+@case_with_lt@        ep = -dim(0, int(getlambda()))
+@case_with_lt@        if (present(cache_flag)) then
+@case_with_lt@           if (cache_flag) then
+@case_with_lt@              J0(:)  = scalar_cache(:,cache_index+0)
+@case_with_lt@              J1(:)  = scalar_cache(:,cache_index+1)
+@case_with_lt@              J01(:) = scalar_cache(:,cache_index+2)
+@case_with_lt@              J11(:) = scalar_cache(:,cache_index+3)
+@case_with_lt@              J00(:) = scalar_cache(:,cache_index+4)
+@case_with_lt@           else
+@case_with_lt@              call gtrunc_rm(abs(K11)+1.0_ki, K11)
+@case_with_lt@              call gtrunc_cm(abs(K11)+1.0_ki, m0,m1)
+@case_with_lt@              J00(ep) = B0C(&
+@case_with_lt@             &   cmplx(K11,0.0_ki_lt,ki_lt), &
+@case_with_lt@             &   cmplx(real(m0,ki_lt),aimag(m0),ki_lt),&
+@case_with_lt@             &   cmplx(real(m0,ki_lt),aimag(m0),ki_lt))
+@case_with_lt@              J11(ep) = B0C(&
+@case_with_lt@             &   cmplx(K11,0.0_ki_lt,ki_lt), &
+@case_with_lt@             &   cmplx(real(m1,ki_lt),aimag(m1),ki_lt),&
+@case_with_lt@             &   cmplx(real(m1,ki_lt),aimag(m1),ki_lt))
+@case_with_lt@              J01(ep) = B0C(&
+@case_with_lt@             &   cmplx(K11,0.0_ki_lt,ki_lt), &
+@case_with_lt@             &   cmplx(real(m0,ki_lt),aimag(m0),ki_lt),&
+@case_with_lt@             &   cmplx(real(m1,ki_lt),aimag(m1),ki_lt))
+@case_with_lt@              J0(ep)  = A0C(&
+@case_with_lt@             &   cmplx(real(m0,ki_lt),aimag(m0),ki_lt))
+@case_with_lt@              J1(ep)  = A0C(&
+@case_with_lt@             &   cmplx(real(m1,ki_lt),aimag(m1),ki_lt))
+@case_with_lt@              scalar_cache(:,cache_index+0) = J0(:)
+@case_with_lt@              scalar_cache(:,cache_index+1) = J1(:)
+@case_with_lt@              scalar_cache(:,cache_index+2) = J01(:)
+@case_with_lt@              scalar_cache(:,cache_index+3) = J11(:)
+@case_with_lt@              scalar_cache(:,cache_index+4) = J00(:)
+@case_with_lt@           end if
+@case_with_lt@        else
+@case_with_lt@           call gtrunc_rm(abs(K11)+1.0_ki, K11)
+@case_with_lt@           call gtrunc_cm(abs(K11)+1.0_ki, m0,m1)
+@case_with_lt@           J00(ep) = B0C(&
+@case_with_lt@          &           cmplx(K11,0.0_ki_lt,ki_lt), &
+@case_with_lt@          &           cmplx(real(m0,ki_lt),aimag(m0),ki_lt),&
+@case_with_lt@          &           cmplx(real(m0,ki_lt),aimag(m0),ki_lt))
+@case_with_lt@           J11(ep) = B0C(&
+@case_with_lt@          &           cmplx(K11,0.0_ki_lt,ki_lt), &
+@case_with_lt@          &           cmplx(real(m1,ki_lt),aimag(m1),ki_lt),&
+@case_with_lt@          &           cmplx(real(m1,ki_lt),aimag(m1),ki_lt))
+@case_with_lt@           J01(ep) = B0C(&
+@case_with_lt@          &           cmplx(K11,0.0_ki_lt,ki_lt), &
+@case_with_lt@          &           cmplx(real(m0,ki_lt),aimag(m0),ki_lt),&
+@case_with_lt@          &           cmplx(real(m1,ki_lt),aimag(m1),ki_lt))
+@case_with_lt@           J0(ep)  = A0C(&
+@case_with_lt@          &           cmplx(real(m0,ki_lt),aimag(m0),ki_lt))
+@case_with_lt@           J1(ep)  = A0C(&
+@case_with_lt@          &           cmplx(real(m1,ki_lt),aimag(m1),ki_lt))
+@case_with_lt@        end if
+@case_wout_lt@        print*, "isca=4: LoopTools not available"
+@case_wout_lt@        stop
+       else
+          print*, 'error in add2'
+          stop
+       endif
+
+       if (isca.eq.1 .or. isca.eq.3 .or. isca.eq.4) then
+          if (abs(K11).gt.zip1) then
+             do ep=-2,0
+                tot2(ep)=-(K12*(two*K12*(m0 - m1)*c2(2) +  &
+        &         K11*(-three*c2(1) + two*K12*c2(2)))*J0(ep))/(six*K11**2) &
+        &         + ((two*K12**2*(m0 - m1)**2*c2(2) +  &
+        &         K11*K12*(-three*m0*c2(1) + three*m1*c2(1) +  &
+        &         two*K12*m0*c2(2) - four*K12*m1*c2(2)) +  &
+        &         K11**2*(6*c2(0) + K12*(-three*c2(1) + two*K12*c2(2))))* &
+        &         J01(ep))/(six*K11**2) +  &
+        &         (K12*(two*K12*(m0 - m1)*c2(2) +  &
+        &         K11*(-three*c2(1) + four*K12*c2(2)))*J1(ep))/(six*K11**2)
+             enddo
+             tot2(0)=tot2(0)+(K12**2*c2(2))/18.0_ki &
+        &       - (K12**2*m0*c2(2))/(six*K11) -  &
+        &       (K12**2*m1*c2(2))/(six*K11) + B06*c2(9)
+          else
+             if (m1.eq.m0) then
+                do ep=-2,0
+                   tot2(ep)=(c2(0) + (K12*(-three*c2(1) &
+        &                    + two*K12*c2(2)))/six)*J00(ep)
+                enddo
+                tot2(0)=tot2(0)+B06*c2(9)
+             else
+                do ep=-2,0
+                   tot2(ep)=(K12*m0**2*(-three*m0*c2(1) + three*m1*c2(1) &
+        &              + two*K12*m0*c2(2))* &
+        &              J00(ep))/(six*(m0 - m1)**3) + c2(0)*J01(ep) -  &
+        &              (K12*m1*(m0*m1*(9*c2(1) - 6*K12*c2(2)) -  &
+        &              6*m0**2*(c2(1) - K12*c2(2)) +  &
+        &              m1**2*(-three*c2(1) + two*K12*c2(2)))*J11(ep))/ &
+        &              (six*(m0 - m1)**3)
+                enddo
+                tot2(0)=tot2(0) + (-three*K12*m0*c2(1))/(four*(m0 - m1)) +  &
+        &           (K12*m1*c2(1))/(four*m0 - four*m1) +  &
+        &           (11.0_ki*K12**2*m0**2*c2(2))/(18.0_ki*(m0 - m1)**2) -  &
+        &           (7.0_ki*K12**2*m0*m1*c2(2))/(18.0_ki*(m0 - m1)**2) +  &
+        &           (K12**2*m1**2*c2(2))/(9.0_ki*(m0 - m1)**2) + B06*c2(9)
+             endif
+          endif
+          if (verbosity.ge.2) then
+             do ep=0,2
+                write(iout,903) 'B0 (',cut2,',',-ep,') = ',J0(-ep)
+                write(iout,903) 'B1 (',cut2,',',-ep,') =',J1(-ep)
+                write(iout,903) 'B00(',cut2,',',-ep,') =',J00(-ep)
+                write(iout,903) 'B11(',cut2,',',-ep,') =',J11(-ep)
+             end do
+          endif
+       end if
+       if (present(cache_flag)) cache_offset = cache_offset + 5
+
+ 903   format(a5,I2,a1,I2,a4,2(D24.15))
+  end subroutine add2_cm
+
+  subroutine add1_cm(nleg,c1,cut1,msq,tot1,scale2,&
+        cache_flag, cache_offset, scalar_cache)
+@case_with_avh@      use avh_olo, only: olo_a0
+      implicit none
+      integer, intent(in) :: nleg, cut1
+      complex(ki), dimension(0:4), intent(in) :: c1
+      complex(ki), dimension(0:nleg-1), intent(in) :: msq
+      complex(ki), dimension(-2:0), intent(out) :: tot1
+      real(ki), intent(in) :: scale2
+
+      logical, intent(in), optional :: cache_flag
+      integer, intent(inout), optional :: cache_offset
+      complex(ki), intent(inout), optional, dimension(-2:0,*) :: scalar_cache
+
+
+      integer ::j1
+      complex(ki) :: m0
+@case_with_avh@      complex(ki_avh), dimension(0:2) :: vala0
+      complex(ki) :: ctmp
+      integer :: ep, cache_index
+
+      if (notfirsti.eqv.(.false.)) then
+         if (isca .eq. 2) then
+@case_with_avh@            call avh_olo_mu_set(real(sqrt(scale2),ki_avh))
+         elseif (isca .eq. 4) then
+@case_with_lt@             call setmudim(real(scale2, ki_lt))
+         endif
+         notfirsti=.true.
+      endif
+
+      j1=cut1
+
+      m0=msq(j1)
+
+  1   Format(A3,I2,A1,I2,A5,D24.15,A1,D24.15,A3)
+
+      if (present(cache_flag)) cache_index = lbound(scalar_cache,2)+cache_offset
+      if      (isca.eq.1) then
+@case_with_ql@      print*, "isca=1: QCDLoop does not support complex masses."
+@case_wout_ql@      print*, "isca=1: QCDLoop not available"
+         stop
+      elseif  (isca.eq.2) then         
+@case_with_avh@      if (present(cache_flag)) then
+@case_with_avh@         if (cache_flag) then
+@case_with_avh@            vala0(0) = scalar_cache( 0,cache_index)
+@case_with_avh@            vala0(1) = scalar_cache(-1,cache_index)
+@case_with_avh@            vala0(2) = scalar_cache(-2,cache_index)
+@case_with_avh@         else
+@case_with_avh@            call olo_a0(vala0,&
+@case_with_avh@           &     cmplx(real(m0,ki_avh),aimag(m0),ki_avh))
+@case_with_avh@            scalar_cache( 0,cache_index) = vala0(0)
+@case_with_avh@            scalar_cache(-1,cache_index) = vala0(1)
+@case_with_avh@            scalar_cache(-2,cache_index) = vala0(2)
+@case_with_avh@         end if
+@case_with_avh@      else
+@case_with_avh@         call olo_a0(vala0,&
+@case_with_avh@           & cmplx(real(m0,ki_avh),aimag(m0),ki_avh))
+@case_with_avh@      end if
+@case_with_avh@      do ep=-2,0
+@case_with_avh@         tot1(ep)= c1(0)*vala0(-ep) 
+@case_with_avh@         if (verbosity.ge.2) write(iout,1) &
+@case_with_avh@        & 'I1(',cut1,',',ep,') = (',real(vala0(-ep)),',',&
+@case_with_avh@        & aimag(vala0(-ep)),'  )' 
+@case_with_avh@      enddo
+@case_wout_avh@      print*, "isca=2: OneLOop not available"
+@case_wout_avh@      stop
+      elseif (isca.eq.3) then
+@case_with_golem@      tot1(-2) = (0.0_ki,0.0_ki)
+@case_with_golem@      if (verbosity.ge.2) write(iout,1) &
+@case_with_golem@     & 'I1(',cut1,',',-2,') = (',0.0_ki,',',0.0_ki,'  )' 
+@case_with_golem@      if (present(cache_flag)) then
+@case_with_golem@         if (cache_flag) then
+@case_with_golem@            do ep=-1,0
+@case_with_golem@               ctmp = scalar_cache(ep,cache_index)
+@case_with_golem@               tot1(ep) = c1(0)*ctmp
+@case_with_golem@               if (verbosity.ge.2) write(iout,1) &
+@case_with_golem@                 & 'I1(',cut1,',',ep,') = (',&
+@case_with_golem@                 & real(ctmp),',',aimag(ctmp),'  )' 
+@case_with_golem@            enddo
+@case_with_golem@         else
+@case_with_golem@            scalar_cache(-2,cache_index) = czip
+@case_with_golem@            call gtrunc_cm(1.0_ki, m0)
+@case_with_golem@            do ep=-1,0
+@case_with_golem@               ctmp = gA0C(&
+@case_with_golem@              & cmplx(real(m0,ki_gol),aimag(m0),ki_gol),&
+@case_with_golem@              &        real(scale2,ki_gol),ep)
+@case_with_golem@               scalar_cache(ep,cache_index) = ctmp
+@case_with_golem@               tot1(ep) = c1(0)*ctmp
+@case_with_golem@               if (verbosity.ge.2) write(iout,1) &
+@case_with_golem@                 & 'I1(',cut1,',',ep,') = (',&
+@case_with_golem@                 & real(ctmp),',',aimag(ctmp),'  )' 
+@case_with_golem@            enddo
+@case_with_golem@         end if
+@case_with_golem@      else
+@case_with_golem@         call gtrunc_cm(1.0_ki, m0)
+@case_with_golem@         do ep=-1,0
+@case_with_golem@            ctmp = gA0C(&
+@case_with_golem@           & cmplx(real(m0,ki_gol),aimag(m0),ki_gol),&
+@case_with_golem@           &        real(scale2,ki_gol),ep)
+@case_with_golem@            tot1(ep) = c1(0)*ctmp
+@case_with_golem@            if (verbosity.ge.2) write(iout,1) &
+@case_with_golem@              & 'I1(',cut1,',',ep,') = (',&
+@case_with_golem@              & real(ctmp),',',aimag(ctmp),'  )' 
+@case_with_golem@         enddo
+@case_with_golem@      end if
+@case_wout_golem@      print*, "isca=3: Golem95 not available"
+@case_wout_golem@      stop
+      elseif (isca.eq.4) then
+@case_with_lt@      tot1(-2) = 0
+@case_with_lt@      tot1(-1) = 0
+@case_with_lt@      tot1(0) = 0
+@case_with_lt@      ep = -dim(0, int(getlambda()))
+@case_with_lt@      if (present(cache_flag)) then
+@case_with_lt@         if (cache_flag) then
+@case_with_lt@            ctmp = scalar_cache(ep,cache_index)
+@case_with_lt@         else
+@case_with_lt@            ctmp = A0C(cmplx(real(m0,ki_lt),aimag(m0),ki_lt))
+@case_with_lt@            scalar_cache(ep,cache_index) = ctmp
+@case_with_lt@         end if
+@case_with_lt@      else
+@case_with_lt@         ctmp = A0C(cmplx(real(m0,ki_lt),aimag(m0),ki_lt))
+@case_with_lt@      end if
+@case_with_lt@      tot1(ep)=c1(0)*ctmp
+@case_with_lt@      if (verbosity.ge.2) write(iout,1) &
+@case_with_lt@     & 'I1(',cut1,',',ep,') = (',real(ctmp),',',aimag(ctmp),'  )' 
+@case_wout_lt@      print*, "isca=4: LoopTools not available"
+@case_wout_lt@      stop
+      else
+         print*, 'error in add1'
+         stop
+      endif
+      if (present(cache_flag)) cache_offset = cache_offset + 1
+  end subroutine add1_cm
+
+@case_with_golem@function gA0(m0,mu2,ep)
+@case_with_golem@   implicit none
+@case_with_golem@   real(ki_gol), intent(in) :: m0, mu2
+@case_with_golem@   integer, intent(in) :: ep
+@case_with_golem@   complex(ki_gol) :: gA0
+@case_with_golem@   if(ep.eq.(-2) .or. m0.eq.0.0_ki_gol) then
+@case_with_golem@      gA0 = (0.0_ki_gol, 0.0_ki_gol)
+@case_with_golem@   elseif(ep.eq.(-1)) then
+@case_with_golem@      gA0 = m0 * gB0(0.0_ki_gol,m0,m0,mu2,-1)
+@case_with_golem@   else
+@case_with_golem@      gA0 = m0 * (gB0(0.0_ki_gol,m0,m0,mu2,0) &
+@case_with_golem@          &    +  gB0(0.0_ki_gol,m0,m0,mu2,-1))
+@case_with_golem@   end if
+@case_with_golem@end function gA0
+@case_with_golem@function gA0C(m0,mu2,ep)
+@case_with_golem@   implicit none
+@case_with_golem@   complex(ki_gol), intent(in) :: m0
+@case_with_golem@   real(ki_gol), intent(in) :: mu2
+@case_with_golem@   integer, intent(in) :: ep
+@case_with_golem@   complex(ki_gol) :: gA0C
+@case_with_golem@   if(ep.eq.(-2) .or. m0.eq.(0.0_ki_gol,0.0_ki_gol)) then
+@case_with_golem@      gA0C = (0.0_ki_gol, 0.0_ki_gol)
+@case_with_golem@   elseif(ep.eq.(-1)) then
+@case_with_golem@      gA0C = m0 * gB0C((0.0_ki_gol,0.0_ki_gol),m0,m0,mu2,-1)
+@case_with_golem@   else
+@case_with_golem@      gA0C = m0 * (gB0C((0.0_ki_gol,0.0_ki_gol),m0,m0,mu2,0) &
+@case_with_golem@          &    +  gB0C((0.0_ki_gol,0.0_ki_gol),m0,m0,mu2,-1))
+@case_with_golem@   end if
+@case_with_golem@end function gA0C
+
+@case_with_golem@pure subroutine gtrunc_rm(ref,s1,s2,s3,s4,s5,s6,s7,s8,s9,s10)
+@case_with_golem@   implicit none
+@case_with_golem@   real(ki), intent(in) :: ref
+@case_with_golem@   real(ki), intent(inout), optional :: s1,s2,s3,s4,s5,s6,s7,s8,s9,s10
+@case_with_golem@   real(ki), parameter :: small = 1.0E-08_ki
+@case_with_golem@   if(present(s1)) then
+@case_with_golem@      if(abs(s1/ref) .lt. small) s1 = 0.0_ki
+@case_with_golem@   end if
+@case_with_golem@   if(present(s2)) then
+@case_with_golem@      if(abs(s2/ref) .lt. small) s2 = 0.0_ki
+@case_with_golem@   end if
+@case_with_golem@   if(present(s3)) then
+@case_with_golem@      if(abs(s3/ref) .lt. small) s3 = 0.0_ki
+@case_with_golem@   end if
+@case_with_golem@   if(present(s4)) then
+@case_with_golem@      if(abs(s4/ref) .lt. small) s4 = 0.0_ki
+@case_with_golem@   end if
+@case_with_golem@   if(present(s5)) then
+@case_with_golem@      if(abs(s5/ref) .lt. small) s5 = 0.0_ki
+@case_with_golem@   end if
+@case_with_golem@   if(present(s6)) then
+@case_with_golem@      if(abs(s6/ref) .lt. small) s6 = 0.0_ki
+@case_with_golem@   end if
+@case_with_golem@   if(present(s7)) then
+@case_with_golem@      if(abs(s7/ref) .lt. small) s7 = 0.0_ki
+@case_with_golem@   end if
+@case_with_golem@   if(present(s8)) then
+@case_with_golem@      if(abs(s8/ref) .lt. small) s8 = 0.0_ki
+@case_with_golem@   end if
+@case_with_golem@   if(present(s9)) then
+@case_with_golem@      if(abs(s9/ref) .lt. small) s9 = 0.0_ki
+@case_with_golem@   end if
+@case_with_golem@   if(present(s10)) then
+@case_with_golem@      if(abs(s10/ref) .lt. small) s10 = 0.0_ki
+@case_with_golem@   end if
+@case_with_golem@end  subroutine gtrunc_rm
+@case_with_golem@pure subroutine gtrunc_cm(ref,s1,s2,s3,s4,s5,s6,s7,s8,s9,s10)
+@case_with_golem@   implicit none
+@case_with_golem@   real(ki), intent(in) :: ref
+@case_with_golem@   complex(ki), intent(inout), optional :: s1,s2,s3,s4,s5,s6,s7,s8,s9,s10
+@case_with_golem@   real(ki), parameter :: small = 1.0E-08_ki
+@case_with_golem@   if(present(s1)) then
+@case_with_golem@      if(abs(s1/ref) .lt. small) s1 = (0.0_ki, 0.0_ki)
+@case_with_golem@   end if
+@case_with_golem@   if(present(s2)) then
+@case_with_golem@      if(abs(s2/ref) .lt. small) s2 = (0.0_ki, 0.0_ki)
+@case_with_golem@   end if
+@case_with_golem@   if(present(s3)) then
+@case_with_golem@      if(abs(s3/ref) .lt. small) s3 = (0.0_ki, 0.0_ki)
+@case_with_golem@   end if
+@case_with_golem@   if(present(s4)) then
+@case_with_golem@      if(abs(s4/ref) .lt. small) s4 = (0.0_ki, 0.0_ki)
+@case_with_golem@   end if
+@case_with_golem@   if(present(s5)) then
+@case_with_golem@      if(abs(s5/ref) .lt. small) s5 = (0.0_ki, 0.0_ki)
+@case_with_golem@   end if
+@case_with_golem@   if(present(s6)) then
+@case_with_golem@      if(abs(s6/ref) .lt. small) s6 = (0.0_ki, 0.0_ki)
+@case_with_golem@   end if
+@case_with_golem@   if(present(s7)) then
+@case_with_golem@      if(abs(s7/ref) .lt. small) s7 = (0.0_ki, 0.0_ki)
+@case_with_golem@   end if
+@case_with_golem@   if(present(s8)) then
+@case_with_golem@      if(abs(s8/ref) .lt. small) s8 = (0.0_ki, 0.0_ki)
+@case_with_golem@   end if
+@case_with_golem@   if(present(s9)) then
+@case_with_golem@      if(abs(s9/ref) .lt. small) s9 = (0.0_ki, 0.0_ki)
+@case_with_golem@   end if
+@case_with_golem@   if(present(s10)) then
+@case_with_golem@      if(abs(s10/ref) .lt. small) s10 = (0.0_ki, 0.0_ki)
+@case_with_golem@   end if
+@case_with_golem@end  subroutine gtrunc_cm
+
+end module madds
+

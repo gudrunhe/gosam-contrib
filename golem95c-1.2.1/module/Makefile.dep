@@ -1,0 +1,28 @@
+# Module dependencies
+cache.o: sortie_erreur.o
+cache.lo: sortie_erreur.lo
+cache.obj: sortie_erreur.obj
+equal.o: constante.o parametre.o sortie_erreur.o
+equal.lo: constante.lo parametre.lo sortie_erreur.lo
+equal.obj: constante.obj parametre.obj sortie_erreur.obj
+form_factor_type.o: constante.o
+form_factor_type.lo: constante.lo
+form_factor_type.obj: constante.obj
+s_matrix_type.o: constante.o equal.o sortie_erreur.o
+s_matrix_type.lo: constante.lo equal.lo sortie_erreur.lo
+s_matrix_type.obj: constante.obj equal.obj sortie_erreur.obj
+sortie_erreur.o: array.o parametre.o
+sortie_erreur.lo: array.lo parametre.lo
+sortie_erreur.obj: array.obj parametre.obj
+spinor.o: constante.o
+spinor.lo: constante.lo
+spinor.obj: constante.obj
+translate.o: sortie_erreur.o
+translate.lo: sortie_erreur.lo
+translate.obj: sortie_erreur.obj
+z_log.o: constante.o equal.o sortie_erreur.o
+z_log.lo: constante.lo equal.lo sortie_erreur.lo
+z_log.obj: constante.obj equal.obj sortie_erreur.obj
+zdilog.o: constante.o equal.o sortie_erreur.o z_log.o
+zdilog.lo: constante.lo equal.lo sortie_erreur.lo z_log.lo
+zdilog.obj: constante.obj equal.obj sortie_erreur.obj z_log.obj

@@ -1,0 +1,25 @@
+# Module dependencies
+function_3p1m.o: mod_h0.o
+function_3p1m.lo: mod_h0.lo
+function_3p1m.obj: mod_h0.obj
+function_3p1m_1mi.o: mod_he.o
+function_3p1m_1mi.lo: mod_he.lo
+function_3p1m_1mi.obj: mod_he.obj
+function_3p1m_2mi.o: mod_gn.o
+function_3p1m_2mi.lo: mod_gn.lo
+function_3p1m_2mi.obj: mod_gn.obj
+function_3p2m.o: mod_h0.o mod_he.o mod_hf.o
+function_3p2m.lo: mod_h0.lo mod_he.lo mod_hf.lo
+function_3p2m.obj: mod_h0.obj mod_he.obj mod_hf.obj
+function_3p2m_1mi.o: mod_he.o mod_hf.o
+function_3p2m_1mi.lo: mod_he.lo mod_hf.lo
+function_3p2m_1mi.obj: mod_he.obj mod_hf.obj
+generic_function_3p.o: function_3p0m_1mi.o function_3p1m.o function_3p1m_1mi.o \
+	function_3p1m_2mi.o function_3p2m.o function_3p2m_1mi.o \
+	function_3p3m.o function_3p_finite.o
+generic_function_3p.lo: function_3p0m_1mi.lo function_3p1m.lo \
+	function_3p1m_1mi.lo function_3p1m_2mi.lo function_3p2m.lo \
+	function_3p2m_1mi.lo function_3p3m.lo function_3p_finite.lo
+generic_function_3p.obj: function_3p0m_1mi.obj function_3p1m.obj \
+	function_3p1m_1mi.obj function_3p1m_2mi.obj function_3p2m.obj \
+	function_3p2m_1mi.obj function_3p3m.obj function_3p_finite.obj

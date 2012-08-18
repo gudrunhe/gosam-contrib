@@ -1,0 +1,15 @@
+prefix=@prefix@
+exec_prefix=@exec_prefix@
+libdir=@libdir@
+includedir=@includedir@/@PACKAGE@
+version=@SAMURAIVERSION@
+
+Cflags: -I${includedir}
+
+Name: samurai
+Version: @SAMURAIVERSION@
+Description: Samurai: Scattering Amplitudes from Unitarity-based
+             Reduction Algorithms at the Integrand level
+URL: https://samurai.web.cern.ch/samurai/
+
+Libs: -L${libdir} -lsamurai

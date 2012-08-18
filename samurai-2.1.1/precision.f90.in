@@ -1,0 +1,9 @@
+module precision
+   implicit none
+
+   integer, parameter :: ki=@fortran_real_kind@
+   integer, parameter :: ki_ql=kind(1.d0)
+   integer, parameter :: ki_lt=kind(1.d0)
+
+end module precision
+

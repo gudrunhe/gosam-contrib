@@ -1,0 +1,4 @@
+# Module dependencies
+mod_numeric.o: mod_adapt_gauss.o
+mod_numeric.lo: mod_adapt_gauss.lo
+mod_numeric.obj: mod_adapt_gauss.obj

@@ -1,0 +1,42 @@
+# Module dependencies
+avh_olo_box.o: avh_olo_func.o avh_olo_kinds.o avh_olo_units.o
+avh_olo_box.lo: avh_olo_func.lo avh_olo_kinds.lo avh_olo_units.lo
+avh_olo_box.obj: avh_olo_func.obj avh_olo_kinds.obj avh_olo_units.obj
+avh_olo_boxc.o: avh_olo_box.o avh_olo_func.o avh_olo_kinds.o avh_olo_units.o
+avh_olo_boxc.lo: avh_olo_box.lo avh_olo_func.lo avh_olo_kinds.lo \
+	avh_olo_units.lo
+avh_olo_boxc.obj: avh_olo_box.obj avh_olo_func.obj avh_olo_kinds.obj \
+	avh_olo_units.obj
+avh_olo_bub.o: avh_olo_func.o avh_olo_kinds.o avh_olo_units.o
+avh_olo_bub.lo: avh_olo_func.lo avh_olo_kinds.lo avh_olo_units.lo
+avh_olo_bub.obj: avh_olo_func.obj avh_olo_kinds.obj avh_olo_units.obj
+avh_olo_func.o: avh_olo_kinds.o avh_olo_units.o
+avh_olo_func.lo: avh_olo_kinds.lo avh_olo_units.lo
+avh_olo_func.obj: avh_olo_kinds.obj avh_olo_units.obj
+avh_olo_kinds.o: avh_olo_xkind.o
+avh_olo_kinds.lo: avh_olo_xkind.lo
+avh_olo_kinds.obj: avh_olo_xkind.obj
+avh_olo_main.o: avh_olo_box.o avh_olo_boxc.o avh_olo_bub.o avh_olo_func.o \
+	avh_olo_kinds.o avh_olo_print.o avh_olo_tri.o avh_olo_units.o \
+	avh_olo_a0_a.h90 avh_olo_a0_b.h90 avh_olo_b0_a.h90 avh_olo_b0_b.h90 \
+	avh_olo_b11_a.h90 avh_olo_b11_b.h90 avh_olo_c0_a.h90 avh_olo_c0_b.h90 \
+	avh_olo_d0_a.h90 avh_olo_d0_b.h90
+avh_olo_main.lo: avh_olo_box.lo avh_olo_boxc.lo avh_olo_bub.lo avh_olo_func.lo \
+	avh_olo_kinds.lo avh_olo_print.lo avh_olo_tri.lo avh_olo_units.lo \
+	avh_olo_a0_a.h90 avh_olo_a0_b.h90 avh_olo_b0_a.h90 avh_olo_b0_b.h90 \
+	avh_olo_b11_a.h90 avh_olo_b11_b.h90 avh_olo_c0_a.h90 avh_olo_c0_b.h90 \
+	avh_olo_d0_a.h90 avh_olo_d0_b.h90
+avh_olo_main.obj: avh_olo_box.obj avh_olo_boxc.obj avh_olo_bub.obj \
+	avh_olo_func.obj avh_olo_kinds.obj avh_olo_print.obj avh_olo_tri.obj \
+	avh_olo_units.obj avh_olo_a0_a.h90 avh_olo_a0_b.h90 avh_olo_b0_a.h90 \
+	avh_olo_b0_b.h90 avh_olo_b11_a.h90 avh_olo_b11_b.h90 avh_olo_c0_a.h90 \
+	avh_olo_c0_b.h90 avh_olo_d0_a.h90 avh_olo_d0_b.h90
+avh_olo_print.o: avh_olo_kinds.o
+avh_olo_print.lo: avh_olo_kinds.lo
+avh_olo_print.obj: avh_olo_kinds.obj
+avh_olo_tri.o: avh_olo_func.o avh_olo_kinds.o avh_olo_units.o
+avh_olo_tri.lo: avh_olo_func.lo avh_olo_kinds.lo avh_olo_units.lo
+avh_olo_tri.obj: avh_olo_func.obj avh_olo_kinds.obj avh_olo_units.obj
+avh_olo_wrp01.o: avh_olo_main.o
+avh_olo_wrp01.lo: avh_olo_main.lo
+avh_olo_wrp01.obj: avh_olo_main.obj

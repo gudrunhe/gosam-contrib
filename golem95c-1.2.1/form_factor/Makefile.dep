@@ -1,0 +1,4 @@
+# Module dependencies
+form_factor_6p.o: form_factor_5p.o
+form_factor_6p.lo: form_factor_5p.lo
+form_factor_6p.obj: form_factor_5p.obj

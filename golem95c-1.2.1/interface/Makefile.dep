@@ -1,0 +1,19 @@
+# Module dependencies
+gb0.o: tool_lt_to_golem.o
+gb0.lo: tool_lt_to_golem.lo
+gb0.obj: tool_lt_to_golem.obj
+gc0.o: tool_lt_to_golem.o
+gc0.lo: tool_lt_to_golem.lo
+gc0.obj: tool_lt_to_golem.obj
+gd0.o: tool_lt_to_golem.o
+gd0.lo: tool_lt_to_golem.lo
+gd0.obj: tool_lt_to_golem.obj
+ge0.o: tool_lt_to_golem.o
+ge0.lo: tool_lt_to_golem.lo
+ge0.obj: tool_lt_to_golem.obj
+gf0.o: tool_lt_to_golem.o
+gf0.lo: tool_lt_to_golem.lo
+gf0.obj: tool_lt_to_golem.obj
+tens_comb.o: tens_rec.o
+tens_comb.lo: tens_rec.lo
+tens_comb.obj: tens_rec.obj

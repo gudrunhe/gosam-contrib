@@ -1,0 +1,44 @@
+!!
+!! Copyright (C) 2011 Andreas van Hameren. 
+!!
+!! This file is part of OneLOop-2.2.1.
+!!
+!! OneLOop-2.2.1 is free software: you can redistribute it and/or modify
+!! it under the terms of the GNU General Public License as published by
+!! the Free Software Foundation, either version 3 of the License, or
+!! (at your option) any later version.
+!!
+!! OneLOop-2.2.1 is distributed in the hope that it will be useful,
+!! but WITHOUT ANY WARRANTY; without even the implied warranty of
+!! MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+!! GNU General Public License for more details.
+!!
+!! You should have received a copy of the GNU General Public License
+!! along with OneLOop-2.2.1.  If not, see <http://www.gnu.org/licenses/>.
+!!
+  mulocal2 = mulocal*mulocal
+!
+  if (nonzerothrs) then
+    thrs = onshellthrs
+    if (app.lt.thrs) app = R0P0
+    if (am1.lt.thrs) am1 = R0P0
+    if (am2.lt.thrs) am2 = R0P0
+  elseif (wunit.gt.0) then
+    thrs = onshellthrs*max(app,am1,am2,mulocal2)
+    if (R0P0.lt.app.and.app.lt.thrs) write(wunit,*) warning
+    if (R0P0.lt.am1.and.am1.lt.thrs) write(wunit,*) warning
+    if (R0P0.lt.am2.and.am2.lt.thrs) write(wunit,*) warning
+  endif
+!
+  call bub0( rslt ,ss,r1,r2 ,app,am1,am2 ,mulocal2 )
+!
+  if (punit.gt.0) then
+    if (nonzerothrs) write(punit,*) 'onshell:',trim(myprint(onshellthrs))
+    write(punit,*) 'muscale:',trim(myprint(mulocal))
+    write(punit,*) ' pp:',trim(myprint(pp))
+    write(punit,*) ' m1:',trim(myprint(m1))
+    write(punit,*) ' m2:',trim(myprint(m2))
+    write(punit,*) 'b0(2):',trim(myprint(rslt(2)))
+    write(punit,*) 'b0(1):',trim(myprint(rslt(1)))
+    write(punit,*) 'b0(0):',trim(myprint(rslt(0)))
+  endif

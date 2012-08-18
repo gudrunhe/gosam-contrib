@@ -1,0 +1,36 @@
+#================================================
+$prefix=@prefix@
+$exec_prefix=@exec_prefix@
+$libdir=@libdir@
+$pkgincludedir=@includedir@/@PACKAGE@
+#================================================
+
+#---#[ FF:
+@conf_with_ff@+z0099.extensions=gosam-contrib_libff
+@conf_with_ff@+gosam-contrib_libff.ldflags=-L${libdir} -lff
+@conf_with_ff@+gosam-contrib_libff.fcflags=-I${pkgincludedir}
+#---#] FF:
+#---#[ QCDLoop:
+@conf_with_ql@+z0095.extensions=gosam-contrib_libql
+@conf_with_ql@+gosam-contrib_libql.ldflags=-L${libdir} -lqcdloop
+@conf_with_ql@+gosam-contrib_libql.fcflags=-I${pkgincludedir}
+#---#] QCDLoop:
+#---#[ avh_olo:
+@conf_with_olo@+z0094.extensions=gosam-contrib_libolo
+@conf_with_olo@+gosam-contrib_libolo.ldflags=-L${libdir} -lavh_olo
+@conf_with_olo@+gosam-contrib_libolo.fcflags=-I${pkgincludedir}
+#---#] avh_olo:
+#---#[ Golem95C:
+@conf_with_golem95@golem95.fcflags=-I${pkgincludedir}
+@conf_with_golem95@golem95.ldflags=-L${libdir} -lgolem
+#---#] Golem95C:
+#---#[ Samurai:
+@conf_with_samurai@samurai.fcflags=-I${pkgincludedir}
+@conf_with_samurai@samurai.ldflags=-L${libdir} -lsamurai
+@conf_with_samurai@samurai.version=2.1.1
+#---#] Samurai:
+#---#[ Fortran Compiler:
++z0005.extensions=gosam-contrib_fc
++gosam-contrib_fc.fcflags=@FCFLAGS@
+fc.bin=@FC@
+#---#] Fortran Compiler:

@@ -1,0 +1,40 @@
+!!
+!! Copyright (C) 2011 Andreas van Hameren. 
+!!
+!! This file is part of OneLOop-2.2.1.
+!!
+!! OneLOop-2.2.1 is free software: you can redistribute it and/or modify
+!! it under the terms of the GNU General Public License as published by
+!! the Free Software Foundation, either version 3 of the License, or
+!! (at your option) any later version.
+!!
+!! OneLOop-2.2.1 is distributed in the hope that it will be useful,
+!! but WITHOUT ANY WARRANTY; without even the implied warranty of
+!! MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+!! GNU General Public License for more details.
+!!
+!! You should have received a copy of the GNU General Public License
+!! along with OneLOop-2.2.1.  If not, see <http://www.gnu.org/licenses/>.
+!!
+  complex(kindc2) :: ss(6),rr(4)
+  real(kindr2) :: smax,ap(6),am(4),as(6),ar(4),s1r2,s2r2,s2r3,s3r4,s4r4
+  real(kindr2) :: mulocal,mulocal2,small,thrs
+  integer :: icase,ii
+  logical :: useboxc
+  complex(kindc2) ,parameter :: const=C1P0*TWOPI*TWOPI/48
+  character(25+99) ,parameter :: warning=&
+                 'WARNING from OneLOop d0: '//warnonshell
+  if (intro) call hello
+!
+  pp(1) = p1
+  pp(2) = p2
+  pp(3) = p3
+  pp(4) = p4
+  pp(5) = p12
+  pp(6) = p23
+  mm(1) = m1
+  mm(2) = m2
+  mm(3) = m3
+  mm(4) = m4
+!
+  smax = R0P0
