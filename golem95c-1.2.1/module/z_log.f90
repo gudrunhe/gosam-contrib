@@ -388,7 +388,7 @@ module logarithme
     !
     ! USAGE
     !
-    !  complex = eta(x,y)
+    !  complex = eta(x,y,z)
     !
     ! DESCRIPTION
     !
@@ -399,6 +399,7 @@ module logarithme
     !
     !  * x -- a complex (type ki)
     !  * y -- a complex (type ki)
+    !  * z -- optional, a complex (type ki) : product x*y
     !
     ! SIDE EFFECTS
     !
@@ -415,28 +416,145 @@ module logarithme
     !
     !*****
     !
-    function eta(z1,z2)
+    !function eta(z1,z2)
+      !!
+      !complex(ki), intent(in) :: z1,z2
+      !complex(ki) :: eta
+      !!
+      !real(ki) :: im1,im2,imt
+      !complex(ki) :: z1n,z2n
+      !real(ki) :: r_max
+      !!
+      !r_max = max(abs(z1),abs(z2))
+      !z1n = z1/r_max
+      !z2n = z2/r_max
+      !im1 = aimag(z1n)
+      !im2 = aimag(z2n)
+      !imt = aimag(z1n*z2n)
+      !!
+      !write(*,*) 'in eta :',imt
+      !!write(*,*) 'in eta 1 :',z1n,z2n
+      !!mettre imt = 0 si trop petit !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+      !!
+      !!if (abs(imt) < epsilon(1._ki)) imt = 0._ki
+      !!
+      !eta = eta_mod(real(z1n,ki),im1,real(z2n,ki),im2,imt)
+      !!
+    !end function eta
+    function eta(z1,z2,z1_z2)
       !
       complex(ki), intent(in) :: z1,z2
+      complex(ki), intent(in),optional :: z1_z2
       complex(ki) :: eta
       !
       real(ki) :: im1,im2,imt
+      real(ki) :: re1,re2
       !
       im1 = aimag(z1)
       im2 = aimag(z2)
-      imt = aimag(z1*z2)
+      if (present(z1_z2)) then
+        !
+        imt = aimag(z1_z2)
+        !
+      else
+        !
+        imt = aimag(z1*z2)
+        !
+      end if
+      re1 = real(z1,ki)
+      re2 = real(z2,ki)
+      !
+      !write(*,*) 'in eta :',imt
+      !write(*,*) 'in eta 1 :',z1n,z2n
+      !mettre imt = 0 si trop petit !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+      !
+      !if (abs(imt) < epsilon(1._ki)) imt = 0._ki
       !
       if ( (im1 >= 0._ki) .and. (im2 >= 0._ki) .and. (imt < 0._ki) ) then
+        !
         eta = -2._ki*i_*pi
+        !
       else if ( (im1 < 0._ki) .and. (im2 < 0._ki) .and. (imt >= 0._ki) ) then
+        !
         eta = 2._ki*i_*pi
+        !
       else if ( (im1 == 0._ki) .and. (im2 == 0._ki) &
-                  &.and. (real(z1,ki) > 0._ki) .and. (real(z2,ki) > 0._ki) ) then
+                  &.and. (re1 > 0._ki) .and. (re2 > 0._ki) ) then
+        !
         eta = -2._ki*i_*pi
+        !
       else
+        !
         eta = 0._ki
+        !
       end if
       !
     end function eta
+    !
+    !
+    !****f* src/module/logarithme/eta_mod
+    ! NAME
+    !
+    !  Function eta_mod
+    !
+    ! USAGE
+    !
+    !  complex = eta_mod(im1,im2,imt)
+    !
+    ! DESCRIPTION
+    !
+    !  It computes the function eta defined by
+    !  eta(x,y) - ln(x*y) - ln(x) - ln(y)
+    !  the argument are Re(x), Im(x), Re(y), Im(y) and Im(x*y)
+    !
+    ! INPUTS
+    !
+    !  * re1 -- a real (type ki)
+    !  * im2 -- a complex (type ki)
+    !  * re2 -- a real (type ki)
+    !  * im2 -- a complex (type ki)
+    !  * imt -- a complex (type ki)
+    !
+    ! SIDE EFFECTS
+    !
+    !  No side effect
+    !
+    ! RETURN VALUE
+    !
+    !  This function returns a complex (type ki)
+    !
+    ! NOTES
+    !  
+    !
+    !
+    !
+    !*****
+    !
+    !function eta_mod(re1,im1,re2,im2,imt)
+      !!
+      !real(ki), intent(in) :: re1,im1,re2,im2,imt
+      !complex(ki) :: eta_mod
+      !!
+      !!write(*,*) 'eta_mod :',re1,im1,re2,im2,imt
+      !if ( (im1 >= 0._ki) .and. (im2 >= 0._ki) .and. (imt < 0._ki) ) then
+        !!
+        !eta_mod = -2._ki*i_*pi
+        !!
+      !else if ( (im1 < 0._ki) .and. (im2 < 0._ki) .and. (imt >= 0._ki) ) then
+        !!
+        !eta_mod = 2._ki*i_*pi
+        !!
+      !else if ( (im1 == 0._ki) .and. (im2 == 0._ki) &
+                  !&.and. (re1 > 0._ki) .and. (re2 > 0._ki) ) then
+        !!
+        !eta_mod = -2._ki*i_*pi
+        !!
+      !else
+        !!
+        !eta_mod = 0._ki
+        !!
+      !end if
+      !!
+    !end function eta_mod
     !
 end module logarithme

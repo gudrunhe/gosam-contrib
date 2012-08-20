@@ -23,8 +23,8 @@
 !  This module exports the functions:
 !  * f3p_finite, C0  -- functions for the computation of IR finite 
 !  three-point functions with/without Feynman parameters in n, n+2 dimensions
-!  * f3p_finite_c -- a function which computes the same thing as f3p_finite, only 
-!    the format of the return values is different
+!  * f3p_finite_c -- a function which computes the same thing as f3p_finite,  
+!    only the format of the return values is different
 !
 ! USES
 !
@@ -215,6 +215,7 @@ contains
     real(ki) :: lamb, detS3
     real(ki) :: plus_grand
     real(ki) :: norma
+    real(ki) :: s1p,s2p,s3p,m1p,m2p,m3p
     !complex(ki) :: resto,abserro
     !
     par = (/par1,par2,par3/)
@@ -229,20 +230,22 @@ contains
     ! s_mat_real are used as arguments
     !
     plus_grand = 1._ki
-    ! if (rat_or_tot_par%tot_selected) then
+      if (rat_or_tot_par%tot_selected) then
     !
-    !  plus_grand = maxval(array=abs(s_mat_real))
+      plus_grand = maxval(array=abs(s_mat_real))
+!      plus_grand = 1._ki
     !
-    ! else if (rat_or_tot_par%rat_selected) then
+      else if (rat_or_tot_par%rat_selected) then
     !
-    !   plus_grand = 1._ki
+       plus_grand = 1._ki
     !
-    ! end if
+      end if
     !
     !
     s_mat_real = s_mat_real/plus_grand
     !
     s_mat_p_loc = assign_s_matrix(s_mat_real)
+    !
     call prepare_s_matrix_local(s_mat_p_loc,s)
     !
     detS3 = -(s_mat_real(1, 3)**2*s_mat_real(2, 2)) + 2*s_mat_real(1, 2)*s_mat_real(1, 3)*s_mat_real(2, 3) -  &
@@ -273,11 +276,23 @@ contains
     invs_real(3,2) = invs_real(2,3)
     invs_real(3,3) = (-s_mat_real(1, 2)**2 + s_mat_real(1, 1)*s_mat_real(2, 2))/detS3
     !
-    lamb = 2._ki*s_mat_real(1,3)*s_mat_real(2,3)+2._ki*s_mat_real(1,2)*s_mat_real(2,3)&
-         +2._ki*s_mat_real(1,3)*s_mat_real(1,2)-s_mat_real(1,3)*s_mat_real(1,3)-s_mat_real(1,2)*s_mat_real(1,2)&
-         -s_mat_real(2,3)*s_mat_real(2,3)
+!    lamb = 2._ki*s_mat_real(1,3)*s_mat_real(2,3)+2._ki*s_mat_real(1,2)*s_mat_real(2,3)&
+!         +2._ki*s_mat_real(1,3)*s_mat_real(1,2)-s_mat_real(1,3)*s_mat_real(1,3)-s_mat_real(1,2)*s_mat_real(1,2)&
+!         -s_mat_real(2,3)*s_mat_real(2,3)
+    !
+      lamb = (-s_mat_real(1, 2)**2 - s_mat_real(1, 3)**2 + s_mat_real(1, 1)*s_mat_real(2, 2) - &
+         &   2*s_mat_real(1, 3)*(s_mat_real(2, 2) - s_mat_real(2, 3)) - 2*s_mat_real(1, 1)*s_mat_real(2, 3) - &
+         &   s_mat_real(2, 3)**2 + 2*s_mat_real(1, 2)*(s_mat_real(1, 3) + s_mat_real(2, 3) - s_mat_real(3, 3)) + &
+         &   s_mat_real(1, 1)*s_mat_real(3, 3) + s_mat_real(2, 2)*s_mat_real(3, 3))
     !
     nb_par = count(mask=par/=0)
+    !
+    m1p = -s_mat_real(1,1)/2._ki
+    m2p = -s_mat_real(2,2)/2._ki
+    m3p = -s_mat_real(3,3)/2._ki
+    s1p = s_mat_real(1,3) - (s_mat_real(1,1)+s_mat_real(3,3))/2._ki
+    s2p = s_mat_real(1,2) - (s_mat_real(1,1)+s_mat_real(2,2))/2._ki
+    s3p = s_mat_real(2,3) - (s_mat_real(2,2)+s_mat_real(3,3))/2._ki
     !
     if (nb_par == 0) then
        !
@@ -287,11 +302,22 @@ contains
        !
        norma = -1._ki/6._ki
        !
+    else if (nb_par == 2) then
+       !
+       ! Different normalisations: depends on whether the feynman parameters are equal or not 
+       ! Use the fact that the two parameters will be par2 and par3
+       if (par2==par3) then
+          norma = -1._ki/12._ki
+       else   
+          norma = -1._ki/24._ki
+       endif
+       !
     else
        !
-       norma = 0._ki
+       norma =  -1._ki/24._ki
        !
     end if
+    
     !
     ! memory allocation to save time in the recursion
     !
@@ -330,14 +356,17 @@ contains
        !
        if (dim == "ndi") then
           !
-          f3p_finite_rarg(3:4)= a3pC0i_rarg(s1,s2,s3,m1,m2,m3,par1,par2,par3)
-          !
+ !         f3p_finite_rarg(3:4)= a3pC0i_rarg(s1,s2,s3,m1,m2,m3,par1,par2,par3)
+	  f3p_finite_rarg(3:4)= a3pC0i_rarg(s1p,s2p,s3p,m1p,m2p,m3p,par1,par2,par3)&
+           &/plus_grand
+	  	  !
        else if (dim == "n+2") then
           !
-          f3p_finite_rarg = a3pC0i_np2_rarg(s1,s2,s3,m1,m2,m3,par1,par2,par3)
-          ! f3p_finite(3) = f3p_finite(3)-log(plus_grand)*norma
+!          f3p_finite_rarg = a3pC0i_np2_rarg(s1,s2,s3,m1,m2,m3,par1,par2,par3)
+         f3p_finite_rarg = a3pC0i_np2_rarg(s1p,s2p,s3p,m1p,m2p,m3p,par1,par2,par3)
+         f3p_finite_rarg(3) = f3p_finite_rarg(3)-log(plus_grand)*norma
+!          
 	  ! mu2_scale_par is already contained in the bubbles, 
-	  ! scaling of s_mat_real  does not enter here
           !
        end if
        !
@@ -412,7 +441,10 @@ contains
     !complex(ki) :: resto,abserro
     complex(ki) :: temp0
     complex(ki), dimension(2) :: temp
+    real(ki) :: s1rp,s2rp,s3rp
+    complex(ki) :: m1p,m2p,m3p
     !
+!    write(6,*) '******** debug   f3p_finite_carg *************** '
     par = (/par1,par2,par3/)
     !
     s1 = cmplx(s1r, 0._ki,ki)
@@ -428,22 +460,30 @@ contains
     ! this can't be done if partly invariants instead of 
     ! s_mat_complex are used as arguments
     !
-    plus_grand = 1._ki
-    ! if (rat_or_tot_par%tot_selected) then
+    !plus_grand = 1._ki
+      if (rat_or_tot_par%tot_selected) then
     !
-    !  plus_grand = maxval(array=abs(s_mat_complex))
+      plus_grand = maxval(array=abs(s_mat_complex))
     !
-    ! else if (rat_or_tot_par%rat_selected) then
+      else if (rat_or_tot_par%rat_selected) then
     !
-    !   plus_grand = 1._ki
+       plus_grand = 1._ki
     !
-    ! end if
+      end if
     !
     s_mat_complex = s_mat_complex/plus_grand
     !
     s_mat_real = real(s_mat_complex,ki)
     !
+    m1p = m1/plus_grand
+    m2p = m2/plus_grand
+    m3p = m3/plus_grand
+    s1rp = s1r/plus_grand
+    s2rp = s2r/plus_grand
+    s3rp = s3r/plus_grand
+    !
     s_mat_p_loc = assign_s_matrix(s_mat_complex,s_mat_real)
+    !
     call prepare_s_matrix_local(s_mat_p_loc, s)
     !
     detS3 = -(s_mat_complex(1, 3)**2*s_mat_complex(2, 2)) + 2*s_mat_complex(1, 2)*s_mat_complex(1, 3)*s_mat_complex(2, 3) -  &
@@ -474,9 +514,10 @@ contains
     invs_complex(3,2) = invs_complex(2,3)
     invs_complex(3,3) = (-s_mat_complex(1, 2)**2 + s_mat_complex(1, 1)*s_mat_complex(2, 2))/detS3
     !
-    lamb = 2._ki*s_mat_complex(1,3)*s_mat_complex(2,3)+2._ki*s_mat_complex(1,2)*s_mat_complex(2,3)&
-         +2._ki*s_mat_complex(1,3)*s_mat_complex(1,2)-s_mat_complex(1,3)*s_mat_complex(1,3)-s_mat_complex(1,2)*s_mat_complex(1,2)&
-         -s_mat_complex(2,3)*s_mat_complex(2,3)
+    lamb = (-s_mat_complex(1, 2)**2 - s_mat_complex(1, 3)**2 + s_mat_complex(1, 1)*s_mat_complex(2, 2) - &
+         &   2*s_mat_complex(1, 3)*(s_mat_complex(2, 2) - s_mat_complex(2, 3)) - 2*s_mat_complex(1, 1)*s_mat_complex(2, 3) - &
+         &   s_mat_complex(2, 3)**2 + 2*s_mat_complex(1, 2)*(s_mat_complex(1, 3) + s_mat_complex(2, 3) - s_mat_complex(3, 3)) + &
+         &   s_mat_complex(1, 1)*s_mat_complex(3, 3) + s_mat_complex(2, 2)*s_mat_complex(3, 3))
     !
     nb_par = count(mask=par/=0)
     !
@@ -488,9 +529,19 @@ contains
        !
        norma = -1._ki/6._ki
        !
+    else if (nb_par == 2) then
+       !
+       ! Different normalisations: depends on whether the feynman parameters are equal or not 
+       ! Use the fact that the two parameters will be par2 and par3
+       if (par2==par3) then
+          norma = -1._ki/12._ki
+       else   
+          norma = -1._ki/24._ki
+       endif
+       !
     else
        !
-       norma = 0._ki
+       norma = -1._ki/24._ki
        !
     end if
     !
@@ -527,20 +578,21 @@ contains
        !
        if (dim == "ndi") then
           !
-          temp0 = a3pC0i_carg(s1r,s2r,s3r,m1,m2,m3,par1,par2,par3)
-          f3p_finite_carg(3) = real(temp0,ki)
-          f3p_finite_carg(4) = aimag(temp0)
+!          temp0 = a3pC0i_carg(s1r,s2r,s3r,m1,m2,m3,par1,par2,par3)
+          temp0 = a3pC0i_carg(s1rp,s2rp,s3rp,m1p,m2p,m3p,par1,par2,par3)
+          f3p_finite_carg(3) = real(temp0,ki)/plus_grand
+          f3p_finite_carg(4) = aimag(temp0)/plus_grand
           !
        else if (dim == "n+2") then
           !
-          temp = a3pC0i_np2_carg(s1r,s2r,s3r,m1,m2,m3,par1,par2,par3)
+!          temp = a3pC0i_np2_carg(s1r,s2r,s3r,m1,m2,m3,par1,par2,par3)
+          temp = a3pC0i_np2_carg(s1rp,s2rp,s3rp,m1p,m2p,m3p,par1,par2,par3)
           f3p_finite_carg(1) = real(temp(1),ki)
           f3p_finite_carg(2) = aimag(temp(1))
           f3p_finite_carg(3) = real(temp(2),ki)
           f3p_finite_carg(4) = aimag(temp(2))
-          ! f3p_finite(3) = f3p_finite(3)-log(plus_grand)*norma
+          f3p_finite_carg(3) = f3p_finite_carg(3)-log(plus_grand)*norma
 	  ! mu2_scale_par is already contained in the bubbles, 
-	  ! scaling of s_mat_complex  does not enter here
           !
        end if
        !
@@ -604,10 +656,7 @@ contains
   !
   ! EXAMPLE
   !
-  !
-  !
-  !*****
-  function f3p_finite_c(dim,s1,s2,s3,m1,m2,m3,par1,par2,par3)
+   function f3p_finite_c(dim,s1,s2,s3,m1,m2,m3,par1,par2,par3)
     !
     use translate
     implicit none
@@ -624,6 +673,9 @@ contains
     !
   end function f3p_finite_c
   !
+ !
+  !
+  !*****
   !****if* src/integral/three_point/function_3pC0i/a3pC0i
   ! NAME
   !
@@ -846,6 +898,7 @@ contains
        !
        res_3pC0i_rarg(1) = -temp3(3) + temp1(3) + temp2(3)
        res_3pC0i_rarg(2) = -temp3(4) + temp1(4) + temp2(4)
+       !
        !
     end if
     !
@@ -1138,7 +1191,7 @@ contains
              end if
              !
              temp1 = temp1 + b_real(j)*truc1
-             !
+           !
           end if
           !
           j = j+1
@@ -1599,7 +1652,7 @@ contains
     s1r = s1
     s2r = s2
     s3r = s3
-    !
+   !
 !    if (equal_real(s1r,zero) ) s1r = 0._ki
 !    if (equal_real(s2r,zero) ) s2r = 0._ki
 !    if (equal_real(s3r,zero) ) s3r = 0._ki   

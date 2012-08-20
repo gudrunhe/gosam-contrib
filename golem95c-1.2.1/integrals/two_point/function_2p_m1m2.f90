@@ -76,6 +76,8 @@ module function_2p_m1m2
      !
   end interface
   !
+  real(ki) :: grand_glob = huge(1._ki)
+  !
   public :: f2p_m1m2, i2sm1m2, i2sm1, i2sm1m2_old
   !
 contains
@@ -451,49 +453,208 @@ contains
     !
   end function i2sm1m2_old
   !
+  ! Direct computation of I2
+  ! We have to compute \int^1_0 dx \ln(s x^2+x (-s+m1-m2)+m2-i \lambda)
+  ! \ln(s x^2+x (-s+m1-m2)+m2-i \lambda) = \ln(s - i \lamda) + \ln(x - x_1) + x - x_2) + \eta(-x_1,-x_2)
+  ! where x_1 and x_2 are the roots of the quadratic form
+  ! Note that in the case of real masses, the eta function is 0 because x_1 and x_2 are complex conjugate
+  ! (this is not the case when m1 and m2 are complex!!!!)
+  ! \int^1_0 dx \ln(x-x_i) = (1-x_i) \ln(1-x_i) + x_i \ln(-x_i)
+  ! When a mass is zero, x_1 (x_2) goes to 1 (0) but this formula is well behaved numerically
+  ! because x*log(x) --> 0 when x-->0 even in Fortran .....
+  !
   function i2sm1m2_r(s,m1,m2)
     !
     real(ki), intent(in) :: s,m1,m2
     real(ki), dimension(4) :: i2sm1m2_r
-    real(ki) :: delta, smm
-    complex(ki) :: xlog1, xlog2, x1, x2, sqrtd, lm1, lm2
-    complex(ki) :: i2fin
     !
-    delta = s**2+m2**2+m1**2-2._ki*s*m2-2._ki*s*m1-2._ki*m2*m1    
-    !    
-    smm = -s+m1+m2
-    lm1 = cmplx(log(m1/mu2_scale_par),0._ki,ki)
-    lm2 = cmplx(log(m2/mu2_scale_par),0._ki,ki)
+    real(ki) :: delta, x1_r,x2_r
+    complex(ki) :: x1_c,x2_c
+    complex(ki) :: i2fin,part
+    real(ki) :: sm,rap1,rap2,rapm
+    real(ki) :: sq_ab,delta_t
+    !real(ki), dimension(4) :: old_i2
     !
-    if (equal_real(delta,zero) ) then 
-       !
-       sqrtd = czero
-       xlog1 = czero !!! this is set to zero to allow a faster evaluation
-       xlog2 = czero
-       !
-    else if (delta .gt. 0._ki) then
-       !
-       sqrtd = cmplx(sqrt(delta),0._ki,ki)
-       x1 = cmplx(smm,0._ki,ki) + sqrtd   ! Im r1 = +i*eps 
-       x2 = cmplx(smm,0._ki,ki) - sqrtd   ! Im r2 = -i*eps 
-       xlog1 = z_log(x1,1._ki)
-       xlog2 = z_log(x2,-1._ki)
-       !
-    else !if (delta .lt. 0._ki) then
-       !
-       sqrtd = cmplx(0._ki,sqrt(-delta),ki)
-       x1 = cmplx(smm,0._ki,ki) + sqrtd
-       x2 = cmplx(smm,0._ki,ki) - sqrtd
-       xlog1 = z_log(x1,1._ki)
-       xlog2 = z_log(x2,-1._ki)
-       !
+    delta = s*s+m1*m1+m2*m2-2._ki*s*m1-2._ki*s*m2-2._ki*m1*m2
+    sm = sign(un,m1-m2)
+    !
+    if (equal_real(m1,0._ki) ) then
+      !
+      rap1 = grand_glob*sign(un,s)
+      !
+    else
+      !
+      rap1 = s/m1
+      !
     end if
     !
-    ! ***** to be checked ! **************************
+    if (equal_real(m2,0._ki) ) then
+      !
+      rap2 = grand_glob*sign(un,s)
+      !
+    else
+      !
+      rap2 = s/m2
+      !
+    end if
     !
-    i2fin = 2._ki+( (smm - cmplx(2._ki*m1,0._ki,ki) )*lm1 + &
-         &          (smm - cmplx(2._ki*m2,0._ki,ki) )*lm2 + &
-         &                               sqrtd*(xlog1-xlog2) )/2._ki/s
+    if (equal_real(s,0._ki) .and. .not.(equal_real(abs(m1-m2),0._ki)) ) then
+      !
+      rapm = grand_glob*sign(un,s)
+      !
+    else
+      !
+      rapm = (m1-m2)/s
+      !
+    end if
+    !write(*,*) 'test i2sm1m2_r rap :',s,m1,m2,delta
+    delta_t = abs(s)*(1._ki+rapm*rapm)-2._ki*sign(un,s)*(m1+m2)
+    sq_ab = sqrt(abs(s))
+    !
+    !
+    ! no eta function in this case for x1 and x2 are complex conjugate
+    !
+    if (delta >= 0._ki) then
+      !
+      ! careful treatment of s -->0 (only in the case delta > 0)
+      ! we have to distinguish the case where |s| << m1,|m1-m2| (or |s| << m2,|m1-m2|)
+      ! and the case |s|,|m1-m2| << m1,m2
+      !
+      !write(*,*) 'test i2sm1m2_r rap :',rap1,rap2,rapm,sm
+      if ( (abs(rap1) <= 1.e-4_ki) .or. (abs(rap2) <= 1.e-4_ki) ) then
+        !
+        ! Case |s|,|m1-m2| << m1,m2 
+        ! In this case both x1 and x2 --> infinity when s-->0
+        !
+        if ( abs(rapm) <= 1.e-4_ki) then
+          !
+          if (sq_ab > grand_glob) then
+            !
+            x1_r = sign(un,s)*grand_glob
+            x2_r = -sign(un,s)*grand_glob
+            !
+          else
+            !
+            x1_r = (1._ki-rapm)/2._ki + sign(un,s)*sqrt(delta_t)/2._ki/sq_ab
+            x2_r = (1._ki-rapm)/2._ki - sign(un,s)*sqrt(delta_t)/2._ki/sq_ab
+            !
+          end if
+          !
+          if (sm > 0._ki) then
+            !
+            part = z_log(m1/mu2_scale_par,-1._ki)-q(1,1._ki/x1_r,-1._ki)-q(1,1._ki/x2_r,1._ki)
+            !
+          else if (sm <= 0._ki) then
+            !
+            part = z_log(m2/mu2_scale_par,-1._ki)-q(1,1._ki/(1._ki-x1_r),-1._ki)-q(1,1._ki/(1._ki-x2_r),1._ki)
+            !
+          end if
+          !
+        else ! case where |s| << m1,|m1-m2| (or |s| << m2,|m1-m2|)
+          !
+          if (sm > 0._ki) then
+            !
+            x1_r = -2._ki*m2/(-s+m1-m2+sqrt(delta))
+            !
+            if (abs((m1-m2)/s) > grand_glob) then
+              !
+              x2_r = -grand_glob
+              !
+            else
+              !
+              x2_r = ( -(-s+m1-m2) - sqrt(delta) )/2._ki/s ! -i_*lambda
+              !
+            end if
+            !
+    !write(*,*) 'test i2sm1m2_r :',s,m1,m2,x1_r,x2_r
+            part = z_log(m1/mu2_scale_par,-1._ki)-x1_r*z_log((1._ki-x1_r)/(-x1_r),1._ki)-q(1,1._ki/x2_r,1._ki)
+    !write(*,*) 'test i2sm1m2_r :',z_log(s/mu2_scale_par,-1._ki)+(1._ki-x1_r)*z_log(1._ki-x1_r,-1._ki)+x1_r*z_log(-x1_r,-1._ki) &
+          !& + (1._ki-x2_r)*z_log(1._ki-x2_r,1._ki)+x2_r*z_log(-x2_r,1._ki),part
+            !
+          else if (sm <= 0._ki) then
+            !
+            x2_r = 2._ki*m2/(s-m1+m2+sqrt(delta))
+            !
+            if (abs((m1-m2)/s) > grand_glob) then
+              !
+              x1_r = grand_glob
+              !
+            else
+              !
+              x1_r = ( -(-s+m1-m2) + sqrt(delta) )/2._ki/s ! i_*lambda
+              !
+            end if
+            !
+            part = z_log(m2/mu2_scale_par,-1._ki)-q(1,1._ki/(1._ki-x1_r),-1._ki)+(1._ki-x2_r)*z_log((1._ki-x2_r)/(-x2_r),-1._ki)
+            !
+          end if
+          !
+        end if
+        !
+      else ! Case where |s| is large
+        !
+        x1_r = ( -(-s+m1-m2) + sqrt(delta) )/2._ki/s ! +i_*lambda
+        x2_r = ( -(-s+m1-m2) - sqrt(delta) )/2._ki/s ! -i_*lambda
+        !
+        part = z_log(s/mu2_scale_par,-1._ki) &
+          & + (1._ki-x1_r)*z_log(1._ki-x1_r,-1._ki)+x1_r*z_log(-x1_r,-1._ki) &
+          & + (1._ki-x2_r)*z_log(1._ki-x2_r,1._ki)+x2_r*z_log(-x2_r,1._ki)
+        !
+      end if
+      !
+    else
+      !
+      !
+      ! Case |s|,|m1-m2| << m1,m2 
+      ! In this case both x1 and x2 --> infinity when s-->0
+      !
+      if ( (abs(rapm) <= 1.e-4_ki) .and. ( (abs(rap1) <= 1.e-4_ki) .or. (abs(rap2) <= 1.e-4_ki) ) ) then
+        !
+        if (sq_ab > grand_glob) then
+          !
+          x1_c = i_*grand_glob
+          x2_c = -i_*grand_glob
+          !
+        else
+          !
+          x1_c = (1._ki-rapm)/2._ki + i_*sqrt(abs(delta_t))/2._ki/sq_ab
+          x2_c = (1._ki-rapm)/2._ki - i_*sqrt(abs(delta_t))/2._ki/sq_ab
+          !
+        end if
+        !
+        if (sm > 0._ki) then
+          !
+          part = z_log(m1/mu2_scale_par,-1._ki)-q(1,1._ki/x1_c,-1._ki)-q(1,1._ki/x2_c,1._ki)
+          !
+        else if (sm <= 0._ki) then
+          !
+          part = z_log(m2/mu2_scale_par,-1._ki)-q(1,1._ki/(1._ki-x1_c),-1._ki)-q(1,1._ki/(1._ki-x2_c),1._ki)
+          !
+        end if
+        !
+      else
+        ! we don't care which is x_1 and x_2, they play a symetric role in the formula
+        !
+        x1_c = ( -(-s+m1-m2) + i_*sqrt(abs(delta)) )/2._ki/s
+        x2_c = ( -(-s+m1-m2) - i_*sqrt(abs(delta)) )/2._ki/s
+        !
+        part = z_log(s/mu2_scale_par,-1._ki) &
+          & + (1._ki-x1_c)*log(1._ki-x1_c)+x1_c*log(-x1_c) &
+          & + (1._ki-x2_c)*log(1._ki-x2_c)+x2_c*log(-x2_c)
+      !part = z_log(m1/mu2_scale_par,-1._ki)-q(1,1._ki/x1_c,-1._ki)-q(1,1._ki/x2_c,1._ki)
+        !write(*,*) 'test i2sm1m2 r cc :',part,z_log(m1/mu2_scale_par,-1._ki)-q(1,1._ki/x1_c,-1._ki)-q(1,1._ki/x2_c,1._ki)
+        !
+      end if
+      !
+    end if
+    !
+    !i2fin = 2._ki - (z_log(s/mu2_scale_par,-1._ki) + part)
+    i2fin = 2._ki - part
+    !
+    !write(*,*) 'test i2sm1m2_r :',s,m1,m2,x1_c,x2_c
+    !write(*,*) 'test i2sm1m2_r :',s,m1,m2,x1_r,x2_r
+    !old_i2 = i2sm1m2_rp(s,m1,m2)
+    !write(*,*) 'old formula r :',old_i2
     !
     ! *************************************************
     !
@@ -514,15 +675,325 @@ contains
     !
   end function i2sm1m2_r
   !
+  !function i2sm1m2_r(s,m1,m2)
+  function i2sm1m2_rp(s,m1,m2)
+    !
+    real(ki), intent(in) :: s,m1,m2
+    !real(ki), dimension(4) :: i2sm1m2_r
+    real(ki), dimension(4) :: i2sm1m2_rp
+    real(ki) :: delta, smm
+    complex(ki) :: xlog1, xlog2, x1, x2, sqrtd, lm1, lm2
+    complex(ki) :: i2fin
+    logical :: m1greaterm2
+    !
+    ! for m1>=m2, divide the roots x1 and x2 by m1, and vice-versa.
+    if(m1>=m2) then 
+       m1greaterm2=.true.
+    elseif (m1<m2) then
+       m1greaterm2=.false.
+    endif
+
+    delta = s**2+m2**2+m1**2-2._ki*s*m2-2._ki*s*m1-2._ki*m2*m1    
+    !    
+    smm = -s+m1+m2
+    lm1 = cmplx(log(m1/mu2_scale_par),0._ki,ki)
+    lm2 = cmplx(log(m2/mu2_scale_par),0._ki,ki)
+    !
+    if (equal_real(delta,zero) ) then 
+       !
+       sqrtd = czero
+       if(m1greaterm2) then
+          x1 = ( cmplx(smm,0._ki,ki) + sqrtd )/m1  ! Im r1 = +i*eps 
+          x2 = (  cmplx(smm,0._ki,ki) - sqrtd )/m1    ! Im r2 = -i*eps 
+       else
+          x1 = ( cmplx(smm,0._ki,ki) + sqrtd )/m2
+          x2 = (  cmplx(smm,0._ki,ki) - sqrtd )/m2 
+       endif
+       xlog1 = czero !!! this is set to zero to allow a faster evaluation
+       xlog2 = czero
+       !
+    else if (delta .gt. 0._ki) then
+       !
+       sqrtd = cmplx(sqrt(delta),0._ki,ki)
+       if(m1greaterm2) then
+          x1 = ( cmplx(smm,0._ki,ki) + sqrtd )/m1  ! Im r1 = +i*eps 
+          x2 = (  cmplx(smm,0._ki,ki) - sqrtd )/m1    ! Im r2 = -i*eps 
+       else
+          x1 = ( cmplx(smm,0._ki,ki) + sqrtd )/m2
+          x2 = (  cmplx(smm,0._ki,ki) - sqrtd )/m2 
+       endif
+       xlog1 = z_log(x1,1._ki)
+       xlog2 = z_log(x2,-1._ki)
+       !
+    else !if (delta .lt. 0._ki) then
+       !
+       sqrtd = cmplx(0._ki,sqrt(-delta),ki)
+       if(m1greaterm2) then
+          x1 = ( cmplx(smm,0._ki,ki) + sqrtd )/m1  ! Im r1 = +i*eps 
+          x2 = (  cmplx(smm,0._ki,ki) - sqrtd )/m1    ! Im r2 = -i*eps 
+       else
+          x1 = ( cmplx(smm,0._ki,ki) + sqrtd )/m2
+          x2 = (  cmplx(smm,0._ki,ki) - sqrtd )/m2 
+       endif
+       xlog1 = z_log(x1,1._ki)
+       xlog2 = z_log(x2,-1._ki)
+       !
+    end if
+    !
+    ! ***** to be checked ! **************************
+    !
+    !first limb only for non-small m1, second only non-small m2
+    if(m1greaterm2) then
+       i2fin = 2._ki + ( -2._ki*cmplx(m1,0._ki,ki)*lm1  -2._ki*cmplx(m2,0._ki,ki)*lm2 &
+            & + x1*cmplx(m1,0._ki,ki)*lm1 + x2*cmplx(m1,0._ki,ki)*lm2 &      
+            & - sqrtd*log(4._ki) + 2*sqrtd*xlog1  )/2._ki/s
+    else
+       i2fin = 2._ki + ( -2._ki*cmplx(m1,0._ki,ki)*lm1  -2._ki*cmplx(m2,0._ki,ki)*lm2 &
+            & + x1*cmplx(m2,0._ki,ki)*lm2 + x2*cmplx(m2,0._ki,ki)*lm1 &      
+            & - sqrtd*log(4._ki) + 2*sqrtd*xlog1  )/2._ki/s
+    endif
+
+    !!
+    !! *************************************************
+    !!
+    !i2sm1m2_r(1) = 1._ki
+    !i2sm1m2_r(2) = 0._ki
+    !!
+    !if (rat_or_tot_par%rat_selected) then
+       !!
+       !i2sm1m2_r(3) = 2._ki
+       !i2sm1m2_r(4) = 0._ki
+       !!
+    !else !if (rat_or_tot_par%tot_selected) then
+       !!
+       !i2sm1m2_r(3) = real(i2fin,ki)
+       !i2sm1m2_r(4) = aimag(i2fin)
+       !!
+    !end if
+    !
+    ! *************************************************
+    !
+    i2sm1m2_rp(1) = 1._ki
+    i2sm1m2_rp(2) = 0._ki
+    !
+    if (rat_or_tot_par%rat_selected) then
+       !
+       i2sm1m2_rp(3) = 2._ki
+       i2sm1m2_rp(4) = 0._ki
+       !
+    else !if (rat_or_tot_par%tot_selected) then
+       !
+       i2sm1m2_rp(3) = real(i2fin,ki)
+       i2sm1m2_rp(4) = aimag(i2fin)
+       !
+    end if
+    !
+  !end function i2sm1m2_r
+  end function i2sm1m2_rp
+  !
   function i2sm1m2_c(s,m1,m2)
     !
     real(ki), intent(in) :: s
-    complex(ki) , intent(in) :: m1, m2
+    complex(ki), intent(in) :: m1,m2
     complex(ki), dimension(2) :: i2sm1m2_c
+    !
+    complex(ki) :: delta,x1,x2
+    complex(ki) :: i2fin,part
+    real(ki) :: sm,rap1,rap2,rapm
+    real(ki) :: m1_r,m2_r,sq_ab
+    complex(ki) :: delta_t
+    real(ki) :: lambda
+    !complex(ki), dimension(2) :: old_i2
+    !
+    delta = s*s+m1*m1+m2*m2-2._ki*s*m1-2._ki*s*m2-2._ki*m1*m2
+    !
+    m1_r = abs(m1)
+    m2_r = abs(m2)
+    sm = sign(un,m1_r-m2_r)
+    lambda = epsilon(1._ki)
+
+    !
+    if (equal_real(m1_r,0._ki) ) then
+      !
+      rap1 = grand_glob*sign(un,s)
+      !
+    else
+      !
+      rap1 = s/m1_r
+      !
+    end if
+    !
+    if (equal_real(m2_r,0._ki) ) then
+      !
+      rap2 = grand_glob*sign(un,s)
+      !
+    else
+      !
+      rap2 = s/m2_r
+      !
+    end if
+    !
+    if (equal_real(s,0._ki) .and. .not.(equal_real(abs(m1-m2),0._ki)) ) then
+      !
+      rapm = grand_glob*sign(un,s)*(m1-m2)/abs(m1-m2)
+      !
+    else
+      !
+      rapm = (m1-m2)/s
+      !
+    end if
+    !
+    delta_t = abs(s)*(1._ki+rapm*rapm)-2._ki*sign(un,s)*(m1+m2)
+    sq_ab = sqrt(abs(s))
+    !
+      !
+      ! careful treatment of s -->0 (only in the case delta > 0)
+      ! we have to distinguish the case where |s| << m1,|m1-m2| (or |s| << m2,|m1-m2|)
+      ! and the case |s|,|m1-m2| << m1,m2
+      !
+      !write(*,*) 'test i2sm1m2_r rap :',rap1,rap2,rapm,sm
+      if ( (abs(rap1) <= 1.e-4_ki) .or. (abs(rap2) <= 1.e-4_ki) ) then
+       !
+        ! Case |s|,|m1-m2| << m1,m2 
+        ! In this case both x1 and x2 --> infinity when s-->0
+        !
+        if ( abs(rapm) <= 1.e-4_ki) then
+          !
+         if (sq_ab > grand_glob) then
+            !
+            x1 = sign(un,s)*grand_glob*sqrt(delta_t)/abs(sqrt(delta_t))
+            x2 = -sign(un,s)*grand_glob*sqrt(delta_t)/abs(sqrt(delta_t))
+            !
+          else
+            !
+            x1 = (1._ki-rapm)/2._ki + sign(un,s)*sqrt(delta_t)/2._ki/sq_ab
+            x2 = (1._ki-rapm)/2._ki - sign(un,s)*sqrt(delta_t)/2._ki/sq_ab
+            !
+          end if
+          !
+          if (sm > 0._ki) then
+            !
+            !part = z_log(m1/mu2_scale_par,-1._ki)-q(1,1._ki/x1,-1._ki)-q(1,1._ki/x2,1._ki) &
+              !& - eta(1._ki-x1,1._ki-x2)
+            part = z_log(m1/mu2_scale_par,-1._ki)-q(1,1._ki/x1,-1._ki)-q(1,1._ki/x2,1._ki) &
+              & - eta(1._ki-x1,1._ki-x2,(m1-i_*lambda)/s) + eta(-x1,-x2,(m2-i_*lambda)/s)
+            !
+          else if (sm <= 0._ki) then
+            !
+            !part = z_log(m2/mu2_scale_par,-1._ki)-q(1,1._ki/(1._ki-x1),-1._ki)-q(1,1._ki/(1._ki-x2),1._ki) &
+              !& - eta(-x1,-x2)
+            part = z_log(m2/mu2_scale_par,-1._ki)-q(1,1._ki/(1._ki-x1),-1._ki)-q(1,1._ki/(1._ki-x2),1._ki)
+            !
+          end if
+
+          !
+        else ! case where |s| << m1,|m1-m2| (or |s| << m2,|m1-m2|)
+          !
+          if (sm > 0._ki) then
+            !
+            x1 = -2._ki*m2/(-s+m1-m2+sqrt(delta))
+            !
+            if (abs((m1-m2)/s) > grand_glob) then
+              !
+              x2 = -grand_glob*(-s+m1-m2)/abs(-s+m1-m2)
+              !
+            else
+              !
+              x2 = ( -(-s+m1-m2) - sqrt(delta) )/2._ki/s ! -i_*lambda
+              !
+            end if
+            !
+            !part = log(m1/mu2_scale_par) - x1*log((1._ki-x1)/(-x1)) - q(1,1._ki/x2,1._ki) &
+              !& - eta(1._ki-x1,1._ki-x2)
+            part = log(m1/mu2_scale_par) - x1*log((1._ki-x1)/(-x1)) - q(1,1._ki/x2,1._ki) &
+              & - eta(1._ki-x1,1._ki-x2,(m1-i_*lambda)/s) + eta(-x1,-x2,(m2-i_*lambda)/s)
+            !
+          else if (sm <= 0._ki) then
+            !
+            x2 = 2._ki*m2/(s-m1+m2+sqrt(delta))
+            !
+            if (abs((m1-m2)/s) > grand_glob) then
+              !
+              x1 = grand_glob*(-s+m1-m2)/abs(-s+m1-m2)
+              !
+            else
+              !
+              x1 = ( -(-s+m1-m2) + sqrt(delta) )/2._ki/s ! i_*lambda
+              !
+            end if
+            !
+            !part = log(m2/mu2_scale_par) - q(1,1._ki/(1._ki-x1),-1._ki) + (1._ki-x2)*log((1._ki-x2)/(-x2)) &
+              !& - eta(-x1,-x2)
+            part = log(m2/mu2_scale_par) - q(1,1._ki/(1._ki-x1),-1._ki) + (1._ki-x2)*log((1._ki-x2)/(-x2))
+            !
+          end if
+          !
+
+        end if
+        !
+      else ! Case where |s| is large
+        !
+        x1 = ( -(-s+m1-m2) + sqrt(delta) )/2._ki/s ! +i_*lambda
+        x2 = ( -(-s+m1-m2) - sqrt(delta) )/2._ki/s ! -i_*lambda
+        !
+!        part = z_log(s/mu2_scale_par) & 
+!          & + (1._ki-x1)*log(1._ki-x1)+x1*log(-x1) &
+!          & + (1._ki-x2)*log(1._ki-x2)+x2*log(-x2)
+        !part = z_log(s/mu2_scale_par,-1._ki) &
+          !& + (1._ki-x1)*log(1._ki-x1) + x1*log(-x1) &
+          !& + (1._ki-x2)*log(1._ki-x2) + x2*log(-x2) + eta(-x1,-x2)
+        part = z_log(s/mu2_scale_par,-1._ki) &
+          & + (1._ki-x1)*log(1._ki-x1) + x1*log(-x1) &
+          & + (1._ki-x2)*log(1._ki-x2) + x2*log(-x2) &
+          & + eta(-x1,-x2,(m2-i_*lambda)/s)
+
+       !write(*,*) 'test eta mod :',eta_mod(real(-x1,ki),aimag(-x1),real(-x2,ki),aimag(-x2),aimag((m2-i_*epsilon(1._ki))/s) )
+       !write(*,*) 'test eta :',eta(-x1,-x2,(m2-i_*lambda)/s)
+        !
+      end if
+      !
+    !
+    !i2fin = 2._ki - (z_log(s/mu2_scale_par,-1._ki) + part)
+    i2fin = 2._ki - part
+    !
+    !write(*,*) 'test i2sm1m2_c :',s,m1,m2,x1,x2
+    !old_i2 = i2sm1m2_cp(s,m1,m2)
+    !write(*,*) 'old formula c :',old_i2
+    !
+    ! *************************************************
+    !
+    i2sm1m2_c(1) = 1._ki
+    !
+
+    if (rat_or_tot_par%rat_selected) then
+       !
+       i2sm1m2_c(2) = 2._ki
+       !
+    else !if (rat_or_tot_par%tot_selected) then
+       !
+       i2sm1m2_c(2) = i2fin
+       !
+    end if
+    !
+  end function i2sm1m2_c
+  !
+  !function i2sm1m2_c(s,m1,m2)
+  function i2sm1m2_cp(s,m1,m2)
+    !
+    real(ki), intent(in) :: s
+    complex(ki) , intent(in) :: m1, m2
+    !complex(ki), dimension(2) :: i2sm1m2_c
+    complex(ki), dimension(2) :: i2sm1m2_cp
     real(ki) :: sig
     complex(ki) :: delta, smm, sc
-    complex(ki) :: i2fin, xlog1, xlog2, x1, x2, sqrtd, lm1, lm2
+    complex(ki) :: i2finprevious, i2fin, xlog1, xlog2, x1, x2, sqrtd, lm1, lm2
+    logical :: usebothforms,useonlynewform,m1greaterm2
     !
+    usebothforms=.false.
+    useonlynewform=.true.
+
+    if(usebothforms.or..not.useonlynewform) then
+
     sc = cmplx(s,zero,ki)
     !
     smm = -sc+m1+m2
@@ -549,29 +1020,118 @@ contains
     !
     xlog1 = z_log(x1, 1._ki) !!! If im-part vanishes, the real part is always positive! (for real s).
     xlog2 = z_log(x2,-1._ki) !!! eps-prescription checked for maximal complex s,
-                             !!! (si=-(Sqrt[m1gam1]+Sqrt[m2gam2])^2!
+!!! (si=-(Sqrt[m1gam1]+Sqrt[m2gam2])^2!
     !                        !!! in case of real masses, the right branch is taken!!
     !
     ! *** This needs to be checked ***
     !
     i2fin = 2._ki + ( (smm-2._ki*m1)*lm1 + &
          &  (smm-2._ki*m2)*lm2 + sqrtd*(xlog1-xlog2) )/2._ki/sc
+
+    if(usebothforms) i2finprevious=i2fin
     !
-    ! *************************************************
+!    write(6,*) " i2fin previous is ",i2finprevious
+    
+    endif !either use both or (not use new)
+
+
+    if(usebothforms.or.useonlynewform) then
+
+    ! for abs(m1)>=abs(m2), divide the roots x1 and x2 by m1, and vice-versa.
+    ! for similar masses, the change will make little difference, so in terms of this change we don't need to worry too much about the border region (although it is not tested).
+    if(abs(m1)>=abs(m2)) then 
+       m1greaterm2=.true.
+    elseif (abs(m1)<abs(m2)) then
+       m1greaterm2=.false.
+    endif
+
+    sc = cmplx(s,zero,ki)
     !
-    i2sm1m2_c(1) = 1._ki
+    smm = -sc+m1+m2
+    ! delta = sc**2+m2**2+m1**2-2._ki*sc*m2-2._ki*sc*m1-2._ki*m2*m1
+    delta = smm*smm - 4._ki * m1*m2
     !
-    if (rat_or_tot_par%rat_selected) then
+    lm1 = z_log(m1/mu2_scale_par,-1._ki)
+    lm2 = z_log(m2/mu2_scale_par,-1._ki)
+    !
+    if ( (equal_real(aimag(delta),zero) .and. (real(delta,ki) .lt. zero) ) ) then 
        !
-       i2sm1m2_c(2) = 2._ki
+       sig = sign(un,s)
+       sqrtd = (sig*i_)*sqrt(-delta)
        !
-    else !if (rat_or_tot_par%tot_selected) then
+    else
        !
-       i2sm1m2_c(2) = i2fin
+       sqrtd = sqrt(delta)
        !
     end if
     !
-  end function i2sm1m2_c
+       if(m1greaterm2) then
+    x1 = (smm + sqrtd)/m1 
+    x2 = (smm - sqrtd)/m1
+    else
+    x1 = (smm + sqrtd)/m2 
+    x2 = (smm - sqrtd)/m2
+    endif !m1>m2
+
+    !
+    !
+    xlog1 = z_log(x1, 1._ki) !!! If im-part vanishes, the real part is always positive! (for real s).
+    xlog2 = z_log(x2,-1._ki) !!! eps-prescription checked for maximal complex s,
+!!! (si=-(Sqrt[m1gam1]+Sqrt[m2gam2])^2!
+    !                        !!! in case of real masses, the right branch is taken!!
+
+
+
+    !
+    ! *** This needs to be checked ***
+    !
+    !first limb only for non-small m1, second only non-small m2
+    if(m1greaterm2) then
+       i2fin = 2._ki + ( -2._ki*m1*lm1  -2._ki*m2*lm2 &
+            & + x1*m1*lm1 + x2*m1*lm2 &      
+            & - sqrtd*log(4._ki) + 2*sqrtd*xlog1  )/2._ki/sc
+    else
+       i2fin = 2._ki + ( -2._ki*m1*lm1  -2._ki*m2*lm2 &
+            & + x1*m2*lm2 + x2*m2*lm1 &      
+            & - sqrtd*log(4._ki) + 2*sqrtd*xlog1  )/2._ki/sc
+    endif
+
+ 
+    endif ! either useboth or usenew
+
+    if(usebothforms) write(6,*) "i2fin previous-new ",i2finprevious-i2fin
+
+    !! *************************************************
+    !!
+    !i2sm1m2_c(1) = 1._ki
+    !!
+
+    !if (rat_or_tot_par%rat_selected) then
+       !!
+       !i2sm1m2_c(2) = 2._ki
+       !!
+    !else !if (rat_or_tot_par%tot_selected) then
+       !!
+       !i2sm1m2_c(2) = i2fin
+       !!
+    !end if
+    ! *************************************************
+    !
+    i2sm1m2_cp(1) = 1._ki
+    !
+
+    if (rat_or_tot_par%rat_selected) then
+       !
+       i2sm1m2_cp(2) = 2._ki
+       !
+    else !if (rat_or_tot_par%tot_selected) then
+       !
+       i2sm1m2_cp(2) = i2fin
+       !
+    end if
+    !
+  !end function i2sm1m2_c
+  end function i2sm1m2_cp
   !
   !
   !
