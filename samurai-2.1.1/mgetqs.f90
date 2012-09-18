@@ -89,11 +89,12 @@ contains
       x4 = ( MP3v3*var2-MP3v2*var3)/den
 
       tmu2=two*MP12*(x1*x2-x3*x4)-msq(j1)
-      if (aimag(tmu2)/real(tmu2).lt.1e-10_ki) then
-      mu2=real(tmu2,ki)*cone
-      else
+! CHANGED 9.8.2012 NG/GH     
+!      if (aimag(tmu2)/real(tmu2).lt.1e-10_ki) then
+!      mu2=real(tmu2,ki)*cone
+!      else
       mu2=tmu2
-      endif
+!      endif
       q5(:)=-p0(:)+x1*e1(:)+x2*e2(:)+x3*e3(:)+x4*e4(:)
    end subroutine getq5_cm
 
