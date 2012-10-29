@@ -105,7 +105,7 @@ module inverse_matrice
     !
     ! USAGE
     !
-    !  call inverse(mat,inv_mat,error,pinch1,pinch2)
+    !  call inverse(mat,inv_mat,error,pinch1,pinch2,pinch3,pinch4,pinch5)
     !
     ! DESCRIPTION
     !

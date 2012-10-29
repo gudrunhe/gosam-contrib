@@ -30,6 +30,7 @@
 !  * form_factor_4p (src/form_factor/form_factor_4p.f90)
 !  * form_factor_5p (src/form_factor/form_factor_5p.f90)
 !  * form_factor_6p (src/form_factor/form_factor_6p.f90)
+!  * form_factor_higher_ranks (src/higherrank/form_factor_higher_ranks.f90)
 !  * tens_rec (src/interface/tens_rec.f90)
 !
 !*****
@@ -48,14 +49,15 @@ use form_factor_4p, only: a40, a41, a42, b42, a43, b43, a44, b44, c44
 use form_factor_5p, only: a50, a51, a52, b52, a53, b53, a54, b54, c54, a55, &
    & b55, c55
 use form_factor_6p, only: a60, a61, a62, a63, a64, a65, a66
+use form_factor_higher_ranks
 use tens_rec, only: coeff_type_1, reconstruct1, coeff_type_2, reconstruct2, &
    & coeff_type_3, reconstruct3, coeff_type_4, reconstruct4, coeff_type_5, &
-   & reconstruct5, coeff_type_6, reconstruct6
+   & reconstruct5, coeff_type_6, reconstruct6, coeff_type_7, reconstruct7
 implicit none
 private :: ki, b_ref, unpackb, packb, pminus, form_factor
 private :: coeff_type_1, reconstruct1, coeff_type_2, reconstruct2, &
    & coeff_type_3, reconstruct3, coeff_type_4, reconstruct4, coeff_type_5, &
-   & reconstruct5, coeff_type_6, reconstruct6
+   & reconstruct5, coeff_type_6, reconstruct6, coeff_type_7, reconstruct7
 private :: a10
 private :: a20, a21, a22, b22
 private :: a30, a31, a32, b32, a33, b33
@@ -182,12 +184,13 @@ function     evaluate_b(numeval, momenta, b_set, rank) result(amp)
    type(form_factor) :: amp
    integer :: N, r
    complex(ki) :: coeffs0
-   type(coeff_type_1) :: coeffs1
+   type(coeff_type_1) :: coeffs1, coeffs1x
    type(coeff_type_2) :: coeffs2, coeffs2x
-   type(coeff_type_3) :: coeffs3
-   type(coeff_type_4) :: coeffs4
-   type(coeff_type_5) :: coeffs5
-   type(coeff_type_6) :: coeffs6
+   type(coeff_type_3) :: coeffs3, coeffs3x
+   type(coeff_type_4) :: coeffs4, coeffs4x
+   type(coeff_type_5) :: coeffs5, coeffs5x
+   type(coeff_type_6) :: coeffs6, coeffs6x
+   type(coeff_type_7) :: coeffs7, coeffs7x
    N = size(momenta,1) - countb(b_set)
    if (present(rank)) then
       r = rank
@@ -203,6 +206,10 @@ function     evaluate_b(numeval, momenta, b_set, rank) result(amp)
          stop
       case(1)
          call reconstruct1(numeval, coeffs1)
+         print*, "Tadpoles not implemented yet"
+         stop
+      case(2)
+         call reconstruct2(numeval, coeffs2, coeffs0)
          print*, "Tadpoles not implemented yet"
          stop
       case default
@@ -221,6 +228,10 @@ function     evaluate_b(numeval, momenta, b_set, rank) result(amp)
          call reconstruct2(numeval, coeffs2, coeffs0)
          amp = contract2_2(coeffs2,momenta,b_set)
          amp = amp + contract2_2s1(coeffs0,momenta,b_set)
+      case(3)
+         call reconstruct3(numeval, coeffs3, coeffs1)
+         amp = contract2_3(coeffs3,momenta,b_set)
+         amp = amp + contract2_3s1(coeffs1,momenta,b_set)
       case default
          print*, "Not yet implemented: N, r = ", 2, r
          stop
@@ -241,6 +252,11 @@ function     evaluate_b(numeval, momenta, b_set, rank) result(amp)
          call reconstruct3(numeval, coeffs3, coeffs1)
          amp = contract3_3(coeffs3,momenta,b_set)
          amp = amp + contract3_3s1(coeffs1,momenta,b_set)
+      case(4)
+         call reconstruct4(numeval, coeffs4, coeffs2, coeffs2x)
+         amp = contract3_4(coeffs4,momenta,b_set)
+         amp = amp + contract3_4s1(coeffs2,momenta,b_set)
+         amp = amp + contract3_4s2(coeffs2x,momenta,b_set)
       case default
          print*, "Not yet implemented: N, r = ", 3, r
          stop
@@ -266,6 +282,11 @@ function     evaluate_b(numeval, momenta, b_set, rank) result(amp)
          amp = contract4_4(coeffs4,momenta,b_set)
          amp = amp + contract4_4s1(coeffs2,momenta,b_set)
          amp = amp + contract4_4s2(coeffs2x,momenta,b_set)
+      case(5)
+         call reconstruct5(numeval, coeffs5, coeffs3, coeffs3x)
+         amp = contract4_5(coeffs5,momenta,b_set)
+         amp = amp + contract4_5s1(coeffs3,momenta,b_set)
+         amp = amp + contract4_5s2(coeffs3x,momenta,b_set)
       case default
          print*, "Not yet implemented: N, r = ", 4, r
          stop
@@ -374,6 +395,102 @@ function     contract1_1(coeffs, momenta, b_set) result(amp)
    l1 = unpinched(1)
    amp = coeffs%c0 * a10(b_set)
 end function contract1_1
+!****f* src/interface/tens_comb/contract1_2
+! NAME
+!
+! Function contract1_2
+!
+! USAGE
+!
+!  amp = contract1_2(coeffs, momenta, b_set)
+!
+! DESCRIPTION
+!
+!  Contracts the 1-point rank 2 tensor integral
+!  with its coefficients.
+!
+! INPUTS
+!
+!  * coeffs  -- coefficients of type(coeff_type_2)
+!  * momenta -- real array of dimension(:,3) containing the
+!               momenta r_i of the loop propagators
+!  * b_set   -- the set of pinched propagators as integer number (bit-set)
+!
+! RETURN VALUE
+!
+!  The result of contracting the tensor integral with its coefficient.
+!
+! SIDE EFFECTS
+!
+!  None
+!
+! EXAMPLE
+!
+!
+!*****
+function     contract1_2(coeffs, momenta, b_set) result(amp)
+   ! generated by: write_function_contract
+   implicit none
+   type(coeff_type_2), intent(in) :: coeffs
+   real(ki), dimension(:,0:), intent(in) :: momenta
+   integer, intent(in) :: b_set
+   type(form_factor) :: amp
+   ! generated by: write_contract_simple
+   real(ki), dimension(1,0:3) :: mom1
+   real(ki), dimension(2,0:3) :: mom2
+   integer :: l1
+   integer, dimension(1) :: unpinched
+   unpinched = unpackb(pminus(b_ref, b_set), 1)
+   l1 = unpinched(1)
+   amp = coeffs%c0 * a10(b_set)
+end function contract1_2
+!****f* src/interface/tens_comb/contract1_2s1
+! NAME
+!
+! Function contract1_2s1
+!
+! USAGE
+!
+!  amp = contract1_2s1(coeffs, momenta, b_set)
+!
+! DESCRIPTION
+!
+!  Contracts the 1-point rank 2 tensor integral
+!  with (mu^2)^1 in the numerator with its coefficients.
+!
+! INPUTS
+!
+!  * coeffs  -- coefficients of type(complex(ki))
+!  * momenta -- real array of dimension(:,3) containing the
+!               momenta r_i of the loop propagators
+!  * b_set   -- the set of pinched propagators as integer number (bit-set)
+!
+! RETURN VALUE
+!
+!  The result of contracting the tensor integral with its coefficient.
+!
+! SIDE EFFECTS
+!
+!  None
+!
+! EXAMPLE
+!
+!
+!*****
+function     contract1_2s1(coeffs, momenta, b_set) result(amp)
+   ! generated by: write_function_contract
+   implicit none
+   complex(ki), intent(in) :: coeffs
+   real(ki), dimension(:,0:), intent(in) :: momenta
+   integer, intent(in) :: b_set
+   type(form_factor) :: amp
+   ! generated by: write_contract_simple
+   integer :: l1
+   integer, dimension(1) :: unpinched
+   unpinched = unpackb(pminus(b_ref, b_set), 1)
+   l1 = unpinched(1)
+   amp = 0.0_ki
+end function contract1_2s1
 !****f* src/interface/tens_comb/contract2_1
 ! NAME
 !
@@ -540,6 +657,135 @@ function     contract2_2s1(coeffs, momenta, b_set) result(amp)
    amp%b = 2.0_ki*amp%a
    amp%a = 0.0_ki
 end function contract2_2s1
+!****f* src/interface/tens_comb/contract2_3
+! NAME
+!
+! Function contract2_3
+!
+! USAGE
+!
+!  amp = contract2_3(coeffs, momenta, b_set)
+!
+! DESCRIPTION
+!
+!  Contracts the 2-point rank 3 tensor integral
+!  with its coefficients.
+!
+! INPUTS
+!
+!  * coeffs  -- coefficients of type(coeff_type_3)
+!  * momenta -- real array of dimension(:,3) containing the
+!               momenta r_i of the loop propagators
+!  * b_set   -- the set of pinched propagators as integer number (bit-set)
+!
+! RETURN VALUE
+!
+!  The result of contracting the tensor integral with its coefficient.
+!
+! SIDE EFFECTS
+!
+!  None
+!
+! EXAMPLE
+!
+!
+!*****
+function     contract2_3(coeffs, momenta, b_set) result(amp)
+   ! generated by: write_function_contract
+   implicit none
+   type(coeff_type_3), intent(in) :: coeffs
+   real(ki), dimension(:,0:), intent(in) :: momenta
+   integer, intent(in) :: b_set
+   type(form_factor) :: amp
+   ! generated by: write_contract_simple
+   real(ki), dimension(1,0:3) :: mom1
+   real(ki), dimension(2,0:3) :: mom2
+   real(ki), dimension(3,0:3) :: mom3
+   integer :: l1, l2
+   integer, dimension(2) :: unpinched
+   unpinched = unpackb(pminus(b_ref, b_set), 2)
+   l1 = unpinched(1)
+   l2 = unpinched(2)
+   amp = coeffs%c0 * a20(b_set)
+   mom1 = momenta((/l1/),:)
+   amp = amp + contract_a_tensor_3(coeffs, mom1) * a21(l1, b_set)
+   mom1 = momenta((/l2/),:)
+   amp = amp + contract_a_tensor_3(coeffs, mom1) * a21(l2, b_set)
+   mom2 = momenta((/l1,l1/),:)
+   amp = amp + contract_a_tensor_3(coeffs, mom2) * a22(l1, l1, b_set)
+   mom2 = momenta((/l1,l2/),:)
+   amp = amp + 2.0_ki * contract_a_tensor_3(coeffs, mom2) * a22(l1, l2, b_set)
+   mom2 = momenta((/l2,l2/),:)
+   amp = amp + contract_a_tensor_3(coeffs, mom2) * a22(l2, l2, b_set)
+   amp = amp + contract_b_tensor_3(coeffs) * b22(b_set)
+   mom3 = momenta((/l1,l1,l1/),:)
+   amp = amp + contract_a_tensor_3(coeffs, mom3) * a23(l1, l1, l1, b_set)
+   mom3 = momenta((/l1,l1,l2/),:)
+   amp = amp + 3.0_ki * contract_a_tensor_3(coeffs, mom3) &
+   &  * a23(l1, l1, l2, b_set)
+   mom3 = momenta((/l1,l2,l2/),:)
+   amp = amp + 3.0_ki * contract_a_tensor_3(coeffs, mom3) &
+   &  * a23(l1, l2, l2, b_set)
+   mom3 = momenta((/l2,l2,l2/),:)
+   amp = amp + contract_a_tensor_3(coeffs, mom3) * a23(l2, l2, l2, b_set)
+   mom1 = momenta((/l1/),:)
+   amp = amp + contract_b_tensor_3(coeffs, mom1) * b23(l1, b_set)
+   mom1 = momenta((/l2/),:)
+   amp = amp + contract_b_tensor_3(coeffs, mom1) * b23(l2, b_set)
+end function contract2_3
+!****f* src/interface/tens_comb/contract2_3s1
+! NAME
+!
+! Function contract2_3s1
+!
+! USAGE
+!
+!  amp = contract2_3s1(coeffs, momenta, b_set)
+!
+! DESCRIPTION
+!
+!  Contracts the 2-point rank 3 tensor integral
+!  with (mu^2)^1 in the numerator with its coefficients.
+!
+! INPUTS
+!
+!  * coeffs  -- coefficients of type(coeff_type_1)
+!  * momenta -- real array of dimension(:,3) containing the
+!               momenta r_i of the loop propagators
+!  * b_set   -- the set of pinched propagators as integer number (bit-set)
+!
+! RETURN VALUE
+!
+!  The result of contracting the tensor integral with its coefficient.
+!
+! SIDE EFFECTS
+!
+!  None
+!
+! EXAMPLE
+!
+!
+!*****
+function     contract2_3s1(coeffs, momenta, b_set) result(amp)
+   ! generated by: write_function_contract
+   implicit none
+   type(coeff_type_1), intent(in) :: coeffs
+   real(ki), dimension(:,0:), intent(in) :: momenta
+   integer, intent(in) :: b_set
+   type(form_factor) :: amp
+   ! generated by: write_contract_simple
+   real(ki), dimension(1,0:3) :: mom1
+   integer :: l1, l2
+   integer, dimension(2) :: unpinched
+   unpinched = unpackb(pminus(b_ref, b_set), 2)
+   l1 = unpinched(1)
+   l2 = unpinched(2)
+   amp = coeffs%c0 * b22(b_set)
+   ! multiply by 2*epsilon
+   amp%c = 2.0_ki*amp%b
+   amp%b = 2.0_ki*amp%a
+   amp%a = 0.0_ki
+end function contract2_3s1
 !****f* src/interface/tens_comb/contract3_1
 ! NAME
 !
@@ -883,6 +1129,276 @@ function     contract3_3s1(coeffs, momenta, b_set) result(amp)
    amp%b = 2.0_ki*amp%a
    amp%a = 0.0_ki
 end function contract3_3s1
+!****f* src/interface/tens_comb/contract3_4
+! NAME
+!
+! Function contract3_4
+!
+! USAGE
+!
+!  amp = contract3_4(coeffs, momenta, b_set)
+!
+! DESCRIPTION
+!
+!  Contracts the 3-point rank 4 tensor integral
+!  with its coefficients.
+!
+! INPUTS
+!
+!  * coeffs  -- coefficients of type(coeff_type_4)
+!  * momenta -- real array of dimension(:,3) containing the
+!               momenta r_i of the loop propagators
+!  * b_set   -- the set of pinched propagators as integer number (bit-set)
+!
+! RETURN VALUE
+!
+!  The result of contracting the tensor integral with its coefficient.
+!
+! SIDE EFFECTS
+!
+!  None
+!
+! EXAMPLE
+!
+!
+!*****
+function     contract3_4(coeffs, momenta, b_set) result(amp)
+   ! generated by: write_function_contract
+   implicit none
+   type(coeff_type_4), intent(in) :: coeffs
+   real(ki), dimension(:,0:), intent(in) :: momenta
+   integer, intent(in) :: b_set
+   type(form_factor) :: amp
+   ! generated by: write_contract_simple
+   real(ki), dimension(1,0:3) :: mom1
+   real(ki), dimension(2,0:3) :: mom2
+   real(ki), dimension(3,0:3) :: mom3
+   real(ki), dimension(4,0:3) :: mom4
+   integer :: l1, l2, l3
+   integer, dimension(3) :: unpinched
+   unpinched = unpackb(pminus(b_ref, b_set), 3)
+   l1 = unpinched(1)
+   l2 = unpinched(2)
+   l3 = unpinched(3)
+   amp = coeffs%c0 * a30(b_set)
+   mom1 = momenta((/l1/),:)
+   amp = amp + contract_a_tensor_4(coeffs, mom1) * a31(l1, b_set)
+   mom1 = momenta((/l2/),:)
+   amp = amp + contract_a_tensor_4(coeffs, mom1) * a31(l2, b_set)
+   mom1 = momenta((/l3/),:)
+   amp = amp + contract_a_tensor_4(coeffs, mom1) * a31(l3, b_set)
+   mom2 = momenta((/l1,l1/),:)
+   amp = amp + contract_a_tensor_4(coeffs, mom2) * a32(l1, l1, b_set)
+   mom2 = momenta((/l1,l2/),:)
+   amp = amp + 2.0_ki * contract_a_tensor_4(coeffs, mom2) * a32(l1, l2, b_set)
+   mom2 = momenta((/l1,l3/),:)
+   amp = amp + 2.0_ki * contract_a_tensor_4(coeffs, mom2) * a32(l1, l3, b_set)
+   mom2 = momenta((/l2,l2/),:)
+   amp = amp + contract_a_tensor_4(coeffs, mom2) * a32(l2, l2, b_set)
+   mom2 = momenta((/l2,l3/),:)
+   amp = amp + 2.0_ki * contract_a_tensor_4(coeffs, mom2) * a32(l2, l3, b_set)
+   mom2 = momenta((/l3,l3/),:)
+   amp = amp + contract_a_tensor_4(coeffs, mom2) * a32(l3, l3, b_set)
+   amp = amp + contract_b_tensor_4(coeffs) * b32(b_set)
+   mom3 = momenta((/l1,l1,l1/),:)
+   amp = amp + contract_a_tensor_4(coeffs, mom3) * a33(l1, l1, l1, b_set)
+   mom3 = momenta((/l1,l1,l2/),:)
+   amp = amp + 3.0_ki * contract_a_tensor_4(coeffs, mom3) &
+   &  * a33(l1, l1, l2, b_set)
+   mom3 = momenta((/l1,l1,l3/),:)
+   amp = amp + 3.0_ki * contract_a_tensor_4(coeffs, mom3) &
+   &  * a33(l1, l1, l3, b_set)
+   mom3 = momenta((/l1,l2,l2/),:)
+   amp = amp + 3.0_ki * contract_a_tensor_4(coeffs, mom3) &
+   &  * a33(l1, l2, l2, b_set)
+   mom3 = momenta((/l1,l2,l3/),:)
+   amp = amp + 6.0_ki * contract_a_tensor_4(coeffs, mom3) &
+   &  * a33(l1, l2, l3, b_set)
+   mom3 = momenta((/l1,l3,l3/),:)
+   amp = amp + 3.0_ki * contract_a_tensor_4(coeffs, mom3) &
+   &  * a33(l1, l3, l3, b_set)
+   mom3 = momenta((/l2,l2,l2/),:)
+   amp = amp + contract_a_tensor_4(coeffs, mom3) * a33(l2, l2, l2, b_set)
+   mom3 = momenta((/l2,l2,l3/),:)
+   amp = amp + 3.0_ki * contract_a_tensor_4(coeffs, mom3) &
+   &  * a33(l2, l2, l3, b_set)
+   mom3 = momenta((/l2,l3,l3/),:)
+   amp = amp + 3.0_ki * contract_a_tensor_4(coeffs, mom3) &
+   &  * a33(l2, l3, l3, b_set)
+   mom3 = momenta((/l3,l3,l3/),:)
+   amp = amp + contract_a_tensor_4(coeffs, mom3) * a33(l3, l3, l3, b_set)
+   mom1 = momenta((/l1/),:)
+   amp = amp + contract_b_tensor_4(coeffs, mom1) * b33(l1, b_set)
+   mom1 = momenta((/l2/),:)
+   amp = amp + contract_b_tensor_4(coeffs, mom1) * b33(l2, b_set)
+   mom1 = momenta((/l3/),:)
+   amp = amp + contract_b_tensor_4(coeffs, mom1) * b33(l3, b_set)
+   mom4 = momenta((/l1,l1,l1,l1/),:)
+   amp = amp + contract_a_tensor_4(coeffs, mom4) * a34(l1, l1, l1, l1, b_set)
+   mom4 = momenta((/l1,l1,l1,l2/),:)
+   amp = amp + 4.0_ki * contract_a_tensor_4(coeffs, mom4) &
+   &  * a34(l1, l1, l1, l2, b_set)
+   mom4 = momenta((/l1,l1,l1,l3/),:)
+   amp = amp + 4.0_ki * contract_a_tensor_4(coeffs, mom4) &
+   &  * a34(l1, l1, l1, l3, b_set)
+   mom4 = momenta((/l1,l1,l2,l2/),:)
+   amp = amp + 6.0_ki * contract_a_tensor_4(coeffs, mom4) &
+   &  * a34(l1, l1, l2, l2, b_set)
+   mom4 = momenta((/l1,l1,l2,l3/),:)
+   amp = amp + 12.0_ki * contract_a_tensor_4(coeffs, mom4) &
+   &  * a34(l1, l1, l2, l3, b_set)
+   mom4 = momenta((/l1,l1,l3,l3/),:)
+   amp = amp + 6.0_ki * contract_a_tensor_4(coeffs, mom4) &
+   &  * a34(l1, l1, l3, l3, b_set)
+   mom4 = momenta((/l1,l2,l2,l2/),:)
+   amp = amp + 4.0_ki * contract_a_tensor_4(coeffs, mom4) &
+   &  * a34(l1, l2, l2, l2, b_set)
+   mom4 = momenta((/l1,l2,l2,l3/),:)
+   amp = amp + 12.0_ki * contract_a_tensor_4(coeffs, mom4) &
+   &  * a34(l1, l2, l2, l3, b_set)
+   mom4 = momenta((/l1,l2,l3,l3/),:)
+   amp = amp + 12.0_ki * contract_a_tensor_4(coeffs, mom4) &
+   &  * a34(l1, l2, l3, l3, b_set)
+   mom4 = momenta((/l1,l3,l3,l3/),:)
+   amp = amp + 4.0_ki * contract_a_tensor_4(coeffs, mom4) &
+   &  * a34(l1, l3, l3, l3, b_set)
+   mom4 = momenta((/l2,l2,l2,l2/),:)
+   amp = amp + contract_a_tensor_4(coeffs, mom4) * a34(l2, l2, l2, l2, b_set)
+   mom4 = momenta((/l2,l2,l2,l3/),:)
+   amp = amp + 4.0_ki * contract_a_tensor_4(coeffs, mom4) &
+   &  * a34(l2, l2, l2, l3, b_set)
+   mom4 = momenta((/l2,l2,l3,l3/),:)
+   amp = amp + 6.0_ki * contract_a_tensor_4(coeffs, mom4) &
+   &  * a34(l2, l2, l3, l3, b_set)
+   mom4 = momenta((/l2,l3,l3,l3/),:)
+   amp = amp + 4.0_ki * contract_a_tensor_4(coeffs, mom4) &
+   &  * a34(l2, l3, l3, l3, b_set)
+   mom4 = momenta((/l3,l3,l3,l3/),:)
+   amp = amp + contract_a_tensor_4(coeffs, mom4) * a34(l3, l3, l3, l3, b_set)
+   mom2 = momenta((/l1,l1/),:)
+   amp = amp + contract_b_tensor_4(coeffs, mom2) * b34(l1, l1, b_set)
+   mom2 = momenta((/l1,l2/),:)
+   amp = amp + 2.0_ki * contract_b_tensor_4(coeffs, mom2) * b34(l1, l2, b_set)
+   mom2 = momenta((/l1,l3/),:)
+   amp = amp + 2.0_ki * contract_b_tensor_4(coeffs, mom2) * b34(l1, l3, b_set)
+   mom2 = momenta((/l2,l2/),:)
+   amp = amp + contract_b_tensor_4(coeffs, mom2) * b34(l2, l2, b_set)
+   mom2 = momenta((/l2,l3/),:)
+   amp = amp + 2.0_ki * contract_b_tensor_4(coeffs, mom2) * b34(l2, l3, b_set)
+   mom2 = momenta((/l3,l3/),:)
+   amp = amp + contract_b_tensor_4(coeffs, mom2) * b34(l3, l3, b_set)
+   amp = amp + contract_c_tensor_4(coeffs) * c34(b_set)
+end function contract3_4
+!****f* src/interface/tens_comb/contract3_4s1
+! NAME
+!
+! Function contract3_4s1
+!
+! USAGE
+!
+!  amp = contract3_4s1(coeffs, momenta, b_set)
+!
+! DESCRIPTION
+!
+!  Contracts the 3-point rank 4 tensor integral
+!  with (mu^2)^1 in the numerator with its coefficients.
+!
+! INPUTS
+!
+!  * coeffs  -- coefficients of type(coeff_type_2)
+!  * momenta -- real array of dimension(:,3) containing the
+!               momenta r_i of the loop propagators
+!  * b_set   -- the set of pinched propagators as integer number (bit-set)
+!
+! RETURN VALUE
+!
+!  The result of contracting the tensor integral with its coefficient.
+!
+! SIDE EFFECTS
+!
+!  None
+!
+! EXAMPLE
+!
+!
+!*****
+function     contract3_4s1(coeffs, momenta, b_set) result(amp)
+   ! generated by: write_function_contract
+   implicit none
+   type(coeff_type_2), intent(in) :: coeffs
+   real(ki), dimension(:,0:), intent(in) :: momenta
+   integer, intent(in) :: b_set
+   type(form_factor) :: amp
+   ! generated by: write_contract_simple
+   real(ki), dimension(1,0:3) :: mom1
+   real(ki), dimension(2,0:3) :: mom2
+   integer :: l1, l2, l3
+   integer, dimension(3) :: unpinched
+   unpinched = unpackb(pminus(b_ref, b_set), 3)
+   l1 = unpinched(1)
+   l2 = unpinched(2)
+   l3 = unpinched(3)
+   amp = coeffs%c0 * b32(b_set)
+   mom1 = momenta((/l1/),:)
+   amp = amp + contract_a_tensor_2(coeffs, mom1) * b33(l1, b_set)
+   mom1 = momenta((/l2/),:)
+   amp = amp + contract_a_tensor_2(coeffs, mom1) * b33(l2, b_set)
+   mom1 = momenta((/l3/),:)
+   amp = amp + contract_a_tensor_2(coeffs, mom1) * b33(l3, b_set)
+   ! multiply by 2*epsilon
+   amp%c = 2.0_ki*amp%b
+   amp%b = 2.0_ki*amp%a
+   amp%a = 0.0_ki
+end function contract3_4s1
+!****f* src/interface/tens_comb/contract3_4s2
+! NAME
+!
+! Function contract3_4s2
+!
+! USAGE
+!
+!  amp = contract3_4s2(coeffs, momenta, b_set)
+!
+! DESCRIPTION
+!
+!  Contracts the 3-point rank 4 tensor integral
+!  with (mu^2)^2 in the numerator with its coefficients.
+!
+! INPUTS
+!
+!  * coeffs  -- coefficients of type(coeff_type_2)
+!  * momenta -- real array of dimension(:,3) containing the
+!               momenta r_i of the loop propagators
+!  * b_set   -- the set of pinched propagators as integer number (bit-set)
+!
+! RETURN VALUE
+!
+!  The result of contracting the tensor integral with its coefficient.
+!
+! SIDE EFFECTS
+!
+!  None
+!
+! EXAMPLE
+!
+!
+!*****
+function     contract3_4s2(coeffs, momenta, b_set) result(amp)
+   ! generated by: write_function_contract
+   implicit none
+   type(coeff_type_2), intent(in) :: coeffs
+   real(ki), dimension(:,0:), intent(in) :: momenta
+   integer, intent(in) :: b_set
+   type(form_factor) :: amp
+   ! generated by: write_contract_simple
+   integer :: l1, l2, l3
+   integer, dimension(3) :: unpinched
+   unpinched = unpackb(pminus(b_ref, b_set), 3)
+   l1 = unpinched(1)
+   l2 = unpinched(2)
+   l3 = unpinched(3)
+   amp = 0.0_ki
+end function contract3_4s2
 !****f* src/interface/tens_comb/contract4_1
 ! NAME
 !
@@ -1649,6 +2165,620 @@ function     contract4_4s2(coeffs, momenta, b_set) result(amp)
    amp%b = -4.0_ki*amp%a
    amp%a = 0.0_ki
 end function contract4_4s2
+!****f* src/interface/tens_comb/contract4_5
+! NAME
+!
+! Function contract4_5
+!
+! USAGE
+!
+!  amp = contract4_5(coeffs, momenta, b_set)
+!
+! DESCRIPTION
+!
+!  Contracts the 4-point rank 5 tensor integral
+!  with its coefficients.
+!
+! INPUTS
+!
+!  * coeffs  -- coefficients of type(coeff_type_5)
+!  * momenta -- real array of dimension(:,3) containing the
+!               momenta r_i of the loop propagators
+!  * b_set   -- the set of pinched propagators as integer number (bit-set)
+!
+! RETURN VALUE
+!
+!  The result of contracting the tensor integral with its coefficient.
+!
+! SIDE EFFECTS
+!
+!  None
+!
+! EXAMPLE
+!
+!
+!*****
+function     contract4_5(coeffs, momenta, b_set) result(amp)
+   ! generated by: write_function_contract
+   implicit none
+   type(coeff_type_5), intent(in) :: coeffs
+   real(ki), dimension(:,0:), intent(in) :: momenta
+   integer, intent(in) :: b_set
+   type(form_factor) :: amp
+   ! generated by: write_contract_simple
+   real(ki), dimension(1,0:3) :: mom1
+   real(ki), dimension(2,0:3) :: mom2
+   real(ki), dimension(3,0:3) :: mom3
+   real(ki), dimension(4,0:3) :: mom4
+   real(ki), dimension(5,0:3) :: mom5
+   integer :: l1, l2, l3, l4
+   integer, dimension(4) :: unpinched
+   unpinched = unpackb(pminus(b_ref, b_set), 4)
+   l1 = unpinched(1)
+   l2 = unpinched(2)
+   l3 = unpinched(3)
+   l4 = unpinched(4)
+   amp = coeffs%c0 * a40(b_set)
+   mom1 = momenta((/l1/),:)
+   amp = amp + contract_a_tensor_5(coeffs, mom1) * a41(l1, b_set)
+   mom1 = momenta((/l2/),:)
+   amp = amp + contract_a_tensor_5(coeffs, mom1) * a41(l2, b_set)
+   mom1 = momenta((/l3/),:)
+   amp = amp + contract_a_tensor_5(coeffs, mom1) * a41(l3, b_set)
+   mom1 = momenta((/l4/),:)
+   amp = amp + contract_a_tensor_5(coeffs, mom1) * a41(l4, b_set)
+   mom2 = momenta((/l1,l1/),:)
+   amp = amp + contract_a_tensor_5(coeffs, mom2) * a42(l1, l1, b_set)
+   mom2 = momenta((/l1,l2/),:)
+   amp = amp + 2.0_ki * contract_a_tensor_5(coeffs, mom2) * a42(l1, l2, b_set)
+   mom2 = momenta((/l1,l3/),:)
+   amp = amp + 2.0_ki * contract_a_tensor_5(coeffs, mom2) * a42(l1, l3, b_set)
+   mom2 = momenta((/l1,l4/),:)
+   amp = amp + 2.0_ki * contract_a_tensor_5(coeffs, mom2) * a42(l1, l4, b_set)
+   mom2 = momenta((/l2,l2/),:)
+   amp = amp + contract_a_tensor_5(coeffs, mom2) * a42(l2, l2, b_set)
+   mom2 = momenta((/l2,l3/),:)
+   amp = amp + 2.0_ki * contract_a_tensor_5(coeffs, mom2) * a42(l2, l3, b_set)
+   mom2 = momenta((/l2,l4/),:)
+   amp = amp + 2.0_ki * contract_a_tensor_5(coeffs, mom2) * a42(l2, l4, b_set)
+   mom2 = momenta((/l3,l3/),:)
+   amp = amp + contract_a_tensor_5(coeffs, mom2) * a42(l3, l3, b_set)
+   mom2 = momenta((/l3,l4/),:)
+   amp = amp + 2.0_ki * contract_a_tensor_5(coeffs, mom2) * a42(l3, l4, b_set)
+   mom2 = momenta((/l4,l4/),:)
+   amp = amp + contract_a_tensor_5(coeffs, mom2) * a42(l4, l4, b_set)
+   amp = amp + contract_b_tensor_5(coeffs) * b42(b_set)
+   mom3 = momenta((/l1,l1,l1/),:)
+   amp = amp + contract_a_tensor_5(coeffs, mom3) * a43(l1, l1, l1, b_set)
+   mom3 = momenta((/l1,l1,l2/),:)
+   amp = amp + 3.0_ki * contract_a_tensor_5(coeffs, mom3) &
+   &  * a43(l1, l1, l2, b_set)
+   mom3 = momenta((/l1,l1,l3/),:)
+   amp = amp + 3.0_ki * contract_a_tensor_5(coeffs, mom3) &
+   &  * a43(l1, l1, l3, b_set)
+   mom3 = momenta((/l1,l1,l4/),:)
+   amp = amp + 3.0_ki * contract_a_tensor_5(coeffs, mom3) &
+   &  * a43(l1, l1, l4, b_set)
+   mom3 = momenta((/l1,l2,l2/),:)
+   amp = amp + 3.0_ki * contract_a_tensor_5(coeffs, mom3) &
+   &  * a43(l1, l2, l2, b_set)
+   mom3 = momenta((/l1,l2,l3/),:)
+   amp = amp + 6.0_ki * contract_a_tensor_5(coeffs, mom3) &
+   &  * a43(l1, l2, l3, b_set)
+   mom3 = momenta((/l1,l2,l4/),:)
+   amp = amp + 6.0_ki * contract_a_tensor_5(coeffs, mom3) &
+   &  * a43(l1, l2, l4, b_set)
+   mom3 = momenta((/l1,l3,l3/),:)
+   amp = amp + 3.0_ki * contract_a_tensor_5(coeffs, mom3) &
+   &  * a43(l1, l3, l3, b_set)
+   mom3 = momenta((/l1,l3,l4/),:)
+   amp = amp + 6.0_ki * contract_a_tensor_5(coeffs, mom3) &
+   &  * a43(l1, l3, l4, b_set)
+   mom3 = momenta((/l1,l4,l4/),:)
+   amp = amp + 3.0_ki * contract_a_tensor_5(coeffs, mom3) &
+   &  * a43(l1, l4, l4, b_set)
+   mom3 = momenta((/l2,l2,l2/),:)
+   amp = amp + contract_a_tensor_5(coeffs, mom3) * a43(l2, l2, l2, b_set)
+   mom3 = momenta((/l2,l2,l3/),:)
+   amp = amp + 3.0_ki * contract_a_tensor_5(coeffs, mom3) &
+   &  * a43(l2, l2, l3, b_set)
+   mom3 = momenta((/l2,l2,l4/),:)
+   amp = amp + 3.0_ki * contract_a_tensor_5(coeffs, mom3) &
+   &  * a43(l2, l2, l4, b_set)
+   mom3 = momenta((/l2,l3,l3/),:)
+   amp = amp + 3.0_ki * contract_a_tensor_5(coeffs, mom3) &
+   &  * a43(l2, l3, l3, b_set)
+   mom3 = momenta((/l2,l3,l4/),:)
+   amp = amp + 6.0_ki * contract_a_tensor_5(coeffs, mom3) &
+   &  * a43(l2, l3, l4, b_set)
+   mom3 = momenta((/l2,l4,l4/),:)
+   amp = amp + 3.0_ki * contract_a_tensor_5(coeffs, mom3) &
+   &  * a43(l2, l4, l4, b_set)
+   mom3 = momenta((/l3,l3,l3/),:)
+   amp = amp + contract_a_tensor_5(coeffs, mom3) * a43(l3, l3, l3, b_set)
+   mom3 = momenta((/l3,l3,l4/),:)
+   amp = amp + 3.0_ki * contract_a_tensor_5(coeffs, mom3) &
+   &  * a43(l3, l3, l4, b_set)
+   mom3 = momenta((/l3,l4,l4/),:)
+   amp = amp + 3.0_ki * contract_a_tensor_5(coeffs, mom3) &
+   &  * a43(l3, l4, l4, b_set)
+   mom3 = momenta((/l4,l4,l4/),:)
+   amp = amp + contract_a_tensor_5(coeffs, mom3) * a43(l4, l4, l4, b_set)
+   mom1 = momenta((/l1/),:)
+   amp = amp + contract_b_tensor_5(coeffs, mom1) * b43(l1, b_set)
+   mom1 = momenta((/l2/),:)
+   amp = amp + contract_b_tensor_5(coeffs, mom1) * b43(l2, b_set)
+   mom1 = momenta((/l3/),:)
+   amp = amp + contract_b_tensor_5(coeffs, mom1) * b43(l3, b_set)
+   mom1 = momenta((/l4/),:)
+   amp = amp + contract_b_tensor_5(coeffs, mom1) * b43(l4, b_set)
+   mom4 = momenta((/l1,l1,l1,l1/),:)
+   amp = amp + contract_a_tensor_5(coeffs, mom4) * a44(l1, l1, l1, l1, b_set)
+   mom4 = momenta((/l1,l1,l1,l2/),:)
+   amp = amp + 4.0_ki * contract_a_tensor_5(coeffs, mom4) &
+   &  * a44(l1, l1, l1, l2, b_set)
+   mom4 = momenta((/l1,l1,l1,l3/),:)
+   amp = amp + 4.0_ki * contract_a_tensor_5(coeffs, mom4) &
+   &  * a44(l1, l1, l1, l3, b_set)
+   mom4 = momenta((/l1,l1,l1,l4/),:)
+   amp = amp + 4.0_ki * contract_a_tensor_5(coeffs, mom4) &
+   &  * a44(l1, l1, l1, l4, b_set)
+   mom4 = momenta((/l1,l1,l2,l2/),:)
+   amp = amp + 6.0_ki * contract_a_tensor_5(coeffs, mom4) &
+   &  * a44(l1, l1, l2, l2, b_set)
+   mom4 = momenta((/l1,l1,l2,l3/),:)
+   amp = amp + 12.0_ki * contract_a_tensor_5(coeffs, mom4) &
+   &  * a44(l1, l1, l2, l3, b_set)
+   mom4 = momenta((/l1,l1,l2,l4/),:)
+   amp = amp + 12.0_ki * contract_a_tensor_5(coeffs, mom4) &
+   &  * a44(l1, l1, l2, l4, b_set)
+   mom4 = momenta((/l1,l1,l3,l3/),:)
+   amp = amp + 6.0_ki * contract_a_tensor_5(coeffs, mom4) &
+   &  * a44(l1, l1, l3, l3, b_set)
+   mom4 = momenta((/l1,l1,l3,l4/),:)
+   amp = amp + 12.0_ki * contract_a_tensor_5(coeffs, mom4) &
+   &  * a44(l1, l1, l3, l4, b_set)
+   mom4 = momenta((/l1,l1,l4,l4/),:)
+   amp = amp + 6.0_ki * contract_a_tensor_5(coeffs, mom4) &
+   &  * a44(l1, l1, l4, l4, b_set)
+   mom4 = momenta((/l1,l2,l2,l2/),:)
+   amp = amp + 4.0_ki * contract_a_tensor_5(coeffs, mom4) &
+   &  * a44(l1, l2, l2, l2, b_set)
+   mom4 = momenta((/l1,l2,l2,l3/),:)
+   amp = amp + 12.0_ki * contract_a_tensor_5(coeffs, mom4) &
+   &  * a44(l1, l2, l2, l3, b_set)
+   mom4 = momenta((/l1,l2,l2,l4/),:)
+   amp = amp + 12.0_ki * contract_a_tensor_5(coeffs, mom4) &
+   &  * a44(l1, l2, l2, l4, b_set)
+   mom4 = momenta((/l1,l2,l3,l3/),:)
+   amp = amp + 12.0_ki * contract_a_tensor_5(coeffs, mom4) &
+   &  * a44(l1, l2, l3, l3, b_set)
+   mom4 = momenta((/l1,l2,l3,l4/),:)
+   amp = amp + 24.0_ki * contract_a_tensor_5(coeffs, mom4) &
+   &  * a44(l1, l2, l3, l4, b_set)
+   mom4 = momenta((/l1,l2,l4,l4/),:)
+   amp = amp + 12.0_ki * contract_a_tensor_5(coeffs, mom4) &
+   &  * a44(l1, l2, l4, l4, b_set)
+   mom4 = momenta((/l1,l3,l3,l3/),:)
+   amp = amp + 4.0_ki * contract_a_tensor_5(coeffs, mom4) &
+   &  * a44(l1, l3, l3, l3, b_set)
+   mom4 = momenta((/l1,l3,l3,l4/),:)
+   amp = amp + 12.0_ki * contract_a_tensor_5(coeffs, mom4) &
+   &  * a44(l1, l3, l3, l4, b_set)
+   mom4 = momenta((/l1,l3,l4,l4/),:)
+   amp = amp + 12.0_ki * contract_a_tensor_5(coeffs, mom4) &
+   &  * a44(l1, l3, l4, l4, b_set)
+   mom4 = momenta((/l1,l4,l4,l4/),:)
+   amp = amp + 4.0_ki * contract_a_tensor_5(coeffs, mom4) &
+   &  * a44(l1, l4, l4, l4, b_set)
+   mom4 = momenta((/l2,l2,l2,l2/),:)
+   amp = amp + contract_a_tensor_5(coeffs, mom4) * a44(l2, l2, l2, l2, b_set)
+   mom4 = momenta((/l2,l2,l2,l3/),:)
+   amp = amp + 4.0_ki * contract_a_tensor_5(coeffs, mom4) &
+   &  * a44(l2, l2, l2, l3, b_set)
+   mom4 = momenta((/l2,l2,l2,l4/),:)
+   amp = amp + 4.0_ki * contract_a_tensor_5(coeffs, mom4) &
+   &  * a44(l2, l2, l2, l4, b_set)
+   mom4 = momenta((/l2,l2,l3,l3/),:)
+   amp = amp + 6.0_ki * contract_a_tensor_5(coeffs, mom4) &
+   &  * a44(l2, l2, l3, l3, b_set)
+   mom4 = momenta((/l2,l2,l3,l4/),:)
+   amp = amp + 12.0_ki * contract_a_tensor_5(coeffs, mom4) &
+   &  * a44(l2, l2, l3, l4, b_set)
+   mom4 = momenta((/l2,l2,l4,l4/),:)
+   amp = amp + 6.0_ki * contract_a_tensor_5(coeffs, mom4) &
+   &  * a44(l2, l2, l4, l4, b_set)
+   mom4 = momenta((/l2,l3,l3,l3/),:)
+   amp = amp + 4.0_ki * contract_a_tensor_5(coeffs, mom4) &
+   &  * a44(l2, l3, l3, l3, b_set)
+   mom4 = momenta((/l2,l3,l3,l4/),:)
+   amp = amp + 12.0_ki * contract_a_tensor_5(coeffs, mom4) &
+   &  * a44(l2, l3, l3, l4, b_set)
+   mom4 = momenta((/l2,l3,l4,l4/),:)
+   amp = amp + 12.0_ki * contract_a_tensor_5(coeffs, mom4) &
+   &  * a44(l2, l3, l4, l4, b_set)
+   mom4 = momenta((/l2,l4,l4,l4/),:)
+   amp = amp + 4.0_ki * contract_a_tensor_5(coeffs, mom4) &
+   &  * a44(l2, l4, l4, l4, b_set)
+   mom4 = momenta((/l3,l3,l3,l3/),:)
+   amp = amp + contract_a_tensor_5(coeffs, mom4) * a44(l3, l3, l3, l3, b_set)
+   mom4 = momenta((/l3,l3,l3,l4/),:)
+   amp = amp + 4.0_ki * contract_a_tensor_5(coeffs, mom4) &
+   &  * a44(l3, l3, l3, l4, b_set)
+   mom4 = momenta((/l3,l3,l4,l4/),:)
+   amp = amp + 6.0_ki * contract_a_tensor_5(coeffs, mom4) &
+   &  * a44(l3, l3, l4, l4, b_set)
+   mom4 = momenta((/l3,l4,l4,l4/),:)
+   amp = amp + 4.0_ki * contract_a_tensor_5(coeffs, mom4) &
+   &  * a44(l3, l4, l4, l4, b_set)
+   mom4 = momenta((/l4,l4,l4,l4/),:)
+   amp = amp + contract_a_tensor_5(coeffs, mom4) * a44(l4, l4, l4, l4, b_set)
+   mom2 = momenta((/l1,l1/),:)
+   amp = amp + contract_b_tensor_5(coeffs, mom2) * b44(l1, l1, b_set)
+   mom2 = momenta((/l1,l2/),:)
+   amp = amp + 2.0_ki * contract_b_tensor_5(coeffs, mom2) * b44(l1, l2, b_set)
+   mom2 = momenta((/l1,l3/),:)
+   amp = amp + 2.0_ki * contract_b_tensor_5(coeffs, mom2) * b44(l1, l3, b_set)
+   mom2 = momenta((/l1,l4/),:)
+   amp = amp + 2.0_ki * contract_b_tensor_5(coeffs, mom2) * b44(l1, l4, b_set)
+   mom2 = momenta((/l2,l2/),:)
+   amp = amp + contract_b_tensor_5(coeffs, mom2) * b44(l2, l2, b_set)
+   mom2 = momenta((/l2,l3/),:)
+   amp = amp + 2.0_ki * contract_b_tensor_5(coeffs, mom2) * b44(l2, l3, b_set)
+   mom2 = momenta((/l2,l4/),:)
+   amp = amp + 2.0_ki * contract_b_tensor_5(coeffs, mom2) * b44(l2, l4, b_set)
+   mom2 = momenta((/l3,l3/),:)
+   amp = amp + contract_b_tensor_5(coeffs, mom2) * b44(l3, l3, b_set)
+   mom2 = momenta((/l3,l4/),:)
+   amp = amp + 2.0_ki * contract_b_tensor_5(coeffs, mom2) * b44(l3, l4, b_set)
+   mom2 = momenta((/l4,l4/),:)
+   amp = amp + contract_b_tensor_5(coeffs, mom2) * b44(l4, l4, b_set)
+   amp = amp + contract_c_tensor_5(coeffs) * c44(b_set)
+   mom5 = momenta((/l1,l1,l1,l1,l1/),:)
+   amp = amp + contract_a_tensor_5(coeffs, mom5) &
+   &  * a45(l1, l1, l1, l1, l1, b_set)
+   mom5 = momenta((/l1,l1,l1,l1,l2/),:)
+   amp = amp + 5.0_ki * contract_a_tensor_5(coeffs, mom5) &
+   &  * a45(l1, l1, l1, l1, l2, b_set)
+   mom5 = momenta((/l1,l1,l1,l1,l3/),:)
+   amp = amp + 5.0_ki * contract_a_tensor_5(coeffs, mom5) &
+   &  * a45(l1, l1, l1, l1, l3, b_set)
+   mom5 = momenta((/l1,l1,l1,l1,l4/),:)
+   amp = amp + 5.0_ki * contract_a_tensor_5(coeffs, mom5) &
+   &  * a45(l1, l1, l1, l1, l4, b_set)
+   mom5 = momenta((/l1,l1,l1,l2,l2/),:)
+   amp = amp + 10.0_ki * contract_a_tensor_5(coeffs, mom5) &
+   &  * a45(l1, l1, l1, l2, l2, b_set)
+   mom5 = momenta((/l1,l1,l1,l2,l3/),:)
+   amp = amp + 20.0_ki * contract_a_tensor_5(coeffs, mom5) &
+   &  * a45(l1, l1, l1, l2, l3, b_set)
+   mom5 = momenta((/l1,l1,l1,l2,l4/),:)
+   amp = amp + 20.0_ki * contract_a_tensor_5(coeffs, mom5) &
+   &  * a45(l1, l1, l1, l2, l4, b_set)
+   mom5 = momenta((/l1,l1,l1,l3,l3/),:)
+   amp = amp + 10.0_ki * contract_a_tensor_5(coeffs, mom5) &
+   &  * a45(l1, l1, l1, l3, l3, b_set)
+   mom5 = momenta((/l1,l1,l1,l3,l4/),:)
+   amp = amp + 20.0_ki * contract_a_tensor_5(coeffs, mom5) &
+   &  * a45(l1, l1, l1, l3, l4, b_set)
+   mom5 = momenta((/l1,l1,l1,l4,l4/),:)
+   amp = amp + 10.0_ki * contract_a_tensor_5(coeffs, mom5) &
+   &  * a45(l1, l1, l1, l4, l4, b_set)
+   mom5 = momenta((/l1,l1,l2,l2,l2/),:)
+   amp = amp + 10.0_ki * contract_a_tensor_5(coeffs, mom5) &
+   &  * a45(l1, l1, l2, l2, l2, b_set)
+   mom5 = momenta((/l1,l1,l2,l2,l3/),:)
+   amp = amp + 30.0_ki * contract_a_tensor_5(coeffs, mom5) &
+   &  * a45(l1, l1, l2, l2, l3, b_set)
+   mom5 = momenta((/l1,l1,l2,l2,l4/),:)
+   amp = amp + 30.0_ki * contract_a_tensor_5(coeffs, mom5) &
+   &  * a45(l1, l1, l2, l2, l4, b_set)
+   mom5 = momenta((/l1,l1,l2,l3,l3/),:)
+   amp = amp + 30.0_ki * contract_a_tensor_5(coeffs, mom5) &
+   &  * a45(l1, l1, l2, l3, l3, b_set)
+   mom5 = momenta((/l1,l1,l2,l3,l4/),:)
+   amp = amp + 60.0_ki * contract_a_tensor_5(coeffs, mom5) &
+   &  * a45(l1, l1, l2, l3, l4, b_set)
+   mom5 = momenta((/l1,l1,l2,l4,l4/),:)
+   amp = amp + 30.0_ki * contract_a_tensor_5(coeffs, mom5) &
+   &  * a45(l1, l1, l2, l4, l4, b_set)
+   mom5 = momenta((/l1,l1,l3,l3,l3/),:)
+   amp = amp + 10.0_ki * contract_a_tensor_5(coeffs, mom5) &
+   &  * a45(l1, l1, l3, l3, l3, b_set)
+   mom5 = momenta((/l1,l1,l3,l3,l4/),:)
+   amp = amp + 30.0_ki * contract_a_tensor_5(coeffs, mom5) &
+   &  * a45(l1, l1, l3, l3, l4, b_set)
+   mom5 = momenta((/l1,l1,l3,l4,l4/),:)
+   amp = amp + 30.0_ki * contract_a_tensor_5(coeffs, mom5) &
+   &  * a45(l1, l1, l3, l4, l4, b_set)
+   mom5 = momenta((/l1,l1,l4,l4,l4/),:)
+   amp = amp + 10.0_ki * contract_a_tensor_5(coeffs, mom5) &
+   &  * a45(l1, l1, l4, l4, l4, b_set)
+   mom5 = momenta((/l1,l2,l2,l2,l2/),:)
+   amp = amp + 5.0_ki * contract_a_tensor_5(coeffs, mom5) &
+   &  * a45(l1, l2, l2, l2, l2, b_set)
+   mom5 = momenta((/l1,l2,l2,l2,l3/),:)
+   amp = amp + 20.0_ki * contract_a_tensor_5(coeffs, mom5) &
+   &  * a45(l1, l2, l2, l2, l3, b_set)
+   mom5 = momenta((/l1,l2,l2,l2,l4/),:)
+   amp = amp + 20.0_ki * contract_a_tensor_5(coeffs, mom5) &
+   &  * a45(l1, l2, l2, l2, l4, b_set)
+   mom5 = momenta((/l1,l2,l2,l3,l3/),:)
+   amp = amp + 30.0_ki * contract_a_tensor_5(coeffs, mom5) &
+   &  * a45(l1, l2, l2, l3, l3, b_set)
+   mom5 = momenta((/l1,l2,l2,l3,l4/),:)
+   amp = amp + 60.0_ki * contract_a_tensor_5(coeffs, mom5) &
+   &  * a45(l1, l2, l2, l3, l4, b_set)
+   mom5 = momenta((/l1,l2,l2,l4,l4/),:)
+   amp = amp + 30.0_ki * contract_a_tensor_5(coeffs, mom5) &
+   &  * a45(l1, l2, l2, l4, l4, b_set)
+   mom5 = momenta((/l1,l2,l3,l3,l3/),:)
+   amp = amp + 20.0_ki * contract_a_tensor_5(coeffs, mom5) &
+   &  * a45(l1, l2, l3, l3, l3, b_set)
+   mom5 = momenta((/l1,l2,l3,l3,l4/),:)
+   amp = amp + 60.0_ki * contract_a_tensor_5(coeffs, mom5) &
+   &  * a45(l1, l2, l3, l3, l4, b_set)
+   mom5 = momenta((/l1,l2,l3,l4,l4/),:)
+   amp = amp + 60.0_ki * contract_a_tensor_5(coeffs, mom5) &
+   &  * a45(l1, l2, l3, l4, l4, b_set)
+   mom5 = momenta((/l1,l2,l4,l4,l4/),:)
+   amp = amp + 20.0_ki * contract_a_tensor_5(coeffs, mom5) &
+   &  * a45(l1, l2, l4, l4, l4, b_set)
+   mom5 = momenta((/l1,l3,l3,l3,l3/),:)
+   amp = amp + 5.0_ki * contract_a_tensor_5(coeffs, mom5) &
+   &  * a45(l1, l3, l3, l3, l3, b_set)
+   mom5 = momenta((/l1,l3,l3,l3,l4/),:)
+   amp = amp + 20.0_ki * contract_a_tensor_5(coeffs, mom5) &
+   &  * a45(l1, l3, l3, l3, l4, b_set)
+   mom5 = momenta((/l1,l3,l3,l4,l4/),:)
+   amp = amp + 30.0_ki * contract_a_tensor_5(coeffs, mom5) &
+   &  * a45(l1, l3, l3, l4, l4, b_set)
+   mom5 = momenta((/l1,l3,l4,l4,l4/),:)
+   amp = amp + 20.0_ki * contract_a_tensor_5(coeffs, mom5) &
+   &  * a45(l1, l3, l4, l4, l4, b_set)
+   mom5 = momenta((/l1,l4,l4,l4,l4/),:)
+   amp = amp + 5.0_ki * contract_a_tensor_5(coeffs, mom5) &
+   &  * a45(l1, l4, l4, l4, l4, b_set)
+   mom5 = momenta((/l2,l2,l2,l2,l2/),:)
+   amp = amp + contract_a_tensor_5(coeffs, mom5) &
+   &  * a45(l2, l2, l2, l2, l2, b_set)
+   mom5 = momenta((/l2,l2,l2,l2,l3/),:)
+   amp = amp + 5.0_ki * contract_a_tensor_5(coeffs, mom5) &
+   &  * a45(l2, l2, l2, l2, l3, b_set)
+   mom5 = momenta((/l2,l2,l2,l2,l4/),:)
+   amp = amp + 5.0_ki * contract_a_tensor_5(coeffs, mom5) &
+   &  * a45(l2, l2, l2, l2, l4, b_set)
+   mom5 = momenta((/l2,l2,l2,l3,l3/),:)
+   amp = amp + 10.0_ki * contract_a_tensor_5(coeffs, mom5) &
+   &  * a45(l2, l2, l2, l3, l3, b_set)
+   mom5 = momenta((/l2,l2,l2,l3,l4/),:)
+   amp = amp + 20.0_ki * contract_a_tensor_5(coeffs, mom5) &
+   &  * a45(l2, l2, l2, l3, l4, b_set)
+   mom5 = momenta((/l2,l2,l2,l4,l4/),:)
+   amp = amp + 10.0_ki * contract_a_tensor_5(coeffs, mom5) &
+   &  * a45(l2, l2, l2, l4, l4, b_set)
+   mom5 = momenta((/l2,l2,l3,l3,l3/),:)
+   amp = amp + 10.0_ki * contract_a_tensor_5(coeffs, mom5) &
+   &  * a45(l2, l2, l3, l3, l3, b_set)
+   mom5 = momenta((/l2,l2,l3,l3,l4/),:)
+   amp = amp + 30.0_ki * contract_a_tensor_5(coeffs, mom5) &
+   &  * a45(l2, l2, l3, l3, l4, b_set)
+   mom5 = momenta((/l2,l2,l3,l4,l4/),:)
+   amp = amp + 30.0_ki * contract_a_tensor_5(coeffs, mom5) &
+   &  * a45(l2, l2, l3, l4, l4, b_set)
+   mom5 = momenta((/l2,l2,l4,l4,l4/),:)
+   amp = amp + 10.0_ki * contract_a_tensor_5(coeffs, mom5) &
+   &  * a45(l2, l2, l4, l4, l4, b_set)
+   mom5 = momenta((/l2,l3,l3,l3,l3/),:)
+   amp = amp + 5.0_ki * contract_a_tensor_5(coeffs, mom5) &
+   &  * a45(l2, l3, l3, l3, l3, b_set)
+   mom5 = momenta((/l2,l3,l3,l3,l4/),:)
+   amp = amp + 20.0_ki * contract_a_tensor_5(coeffs, mom5) &
+   &  * a45(l2, l3, l3, l3, l4, b_set)
+   mom5 = momenta((/l2,l3,l3,l4,l4/),:)
+   amp = amp + 30.0_ki * contract_a_tensor_5(coeffs, mom5) &
+   &  * a45(l2, l3, l3, l4, l4, b_set)
+   mom5 = momenta((/l2,l3,l4,l4,l4/),:)
+   amp = amp + 20.0_ki * contract_a_tensor_5(coeffs, mom5) &
+   &  * a45(l2, l3, l4, l4, l4, b_set)
+   mom5 = momenta((/l2,l4,l4,l4,l4/),:)
+   amp = amp + 5.0_ki * contract_a_tensor_5(coeffs, mom5) &
+   &  * a45(l2, l4, l4, l4, l4, b_set)
+   mom5 = momenta((/l3,l3,l3,l3,l3/),:)
+   amp = amp + contract_a_tensor_5(coeffs, mom5) &
+   &  * a45(l3, l3, l3, l3, l3, b_set)
+   mom5 = momenta((/l3,l3,l3,l3,l4/),:)
+   amp = amp + 5.0_ki * contract_a_tensor_5(coeffs, mom5) &
+   &  * a45(l3, l3, l3, l3, l4, b_set)
+   mom5 = momenta((/l3,l3,l3,l4,l4/),:)
+   amp = amp + 10.0_ki * contract_a_tensor_5(coeffs, mom5) &
+   &  * a45(l3, l3, l3, l4, l4, b_set)
+   mom5 = momenta((/l3,l3,l4,l4,l4/),:)
+   amp = amp + 10.0_ki * contract_a_tensor_5(coeffs, mom5) &
+   &  * a45(l3, l3, l4, l4, l4, b_set)
+   mom5 = momenta((/l3,l4,l4,l4,l4/),:)
+   amp = amp + 5.0_ki * contract_a_tensor_5(coeffs, mom5) &
+   &  * a45(l3, l4, l4, l4, l4, b_set)
+   mom5 = momenta((/l4,l4,l4,l4,l4/),:)
+   amp = amp + contract_a_tensor_5(coeffs, mom5) &
+   &  * a45(l4, l4, l4, l4, l4, b_set)
+   mom3 = momenta((/l1,l1,l1/),:)
+   amp = amp + contract_b_tensor_5(coeffs, mom3) * b45(l1, l1, l1, b_set)
+   mom3 = momenta((/l1,l1,l2/),:)
+   amp = amp + 3.0_ki * contract_b_tensor_5(coeffs, mom3) &
+   &  * b45(l1, l1, l2, b_set)
+   mom3 = momenta((/l1,l1,l3/),:)
+   amp = amp + 3.0_ki * contract_b_tensor_5(coeffs, mom3) &
+   &  * b45(l1, l1, l3, b_set)
+   mom3 = momenta((/l1,l1,l4/),:)
+   amp = amp + 3.0_ki * contract_b_tensor_5(coeffs, mom3) &
+   &  * b45(l1, l1, l4, b_set)
+   mom3 = momenta((/l1,l2,l2/),:)
+   amp = amp + 3.0_ki * contract_b_tensor_5(coeffs, mom3) &
+   &  * b45(l1, l2, l2, b_set)
+   mom3 = momenta((/l1,l2,l3/),:)
+   amp = amp + 6.0_ki * contract_b_tensor_5(coeffs, mom3) &
+   &  * b45(l1, l2, l3, b_set)
+   mom3 = momenta((/l1,l2,l4/),:)
+   amp = amp + 6.0_ki * contract_b_tensor_5(coeffs, mom3) &
+   &  * b45(l1, l2, l4, b_set)
+   mom3 = momenta((/l1,l3,l3/),:)
+   amp = amp + 3.0_ki * contract_b_tensor_5(coeffs, mom3) &
+   &  * b45(l1, l3, l3, b_set)
+   mom3 = momenta((/l1,l3,l4/),:)
+   amp = amp + 6.0_ki * contract_b_tensor_5(coeffs, mom3) &
+   &  * b45(l1, l3, l4, b_set)
+   mom3 = momenta((/l1,l4,l4/),:)
+   amp = amp + 3.0_ki * contract_b_tensor_5(coeffs, mom3) &
+   &  * b45(l1, l4, l4, b_set)
+   mom3 = momenta((/l2,l2,l2/),:)
+   amp = amp + contract_b_tensor_5(coeffs, mom3) * b45(l2, l2, l2, b_set)
+   mom3 = momenta((/l2,l2,l3/),:)
+   amp = amp + 3.0_ki * contract_b_tensor_5(coeffs, mom3) &
+   &  * b45(l2, l2, l3, b_set)
+   mom3 = momenta((/l2,l2,l4/),:)
+   amp = amp + 3.0_ki * contract_b_tensor_5(coeffs, mom3) &
+   &  * b45(l2, l2, l4, b_set)
+   mom3 = momenta((/l2,l3,l3/),:)
+   amp = amp + 3.0_ki * contract_b_tensor_5(coeffs, mom3) &
+   &  * b45(l2, l3, l3, b_set)
+   mom3 = momenta((/l2,l3,l4/),:)
+   amp = amp + 6.0_ki * contract_b_tensor_5(coeffs, mom3) &
+   &  * b45(l2, l3, l4, b_set)
+   mom3 = momenta((/l2,l4,l4/),:)
+   amp = amp + 3.0_ki * contract_b_tensor_5(coeffs, mom3) &
+   &  * b45(l2, l4, l4, b_set)
+   mom3 = momenta((/l3,l3,l3/),:)
+   amp = amp + contract_b_tensor_5(coeffs, mom3) * b45(l3, l3, l3, b_set)
+   mom3 = momenta((/l3,l3,l4/),:)
+   amp = amp + 3.0_ki * contract_b_tensor_5(coeffs, mom3) &
+   &  * b45(l3, l3, l4, b_set)
+   mom3 = momenta((/l3,l4,l4/),:)
+   amp = amp + 3.0_ki * contract_b_tensor_5(coeffs, mom3) &
+   &  * b45(l3, l4, l4, b_set)
+   mom3 = momenta((/l4,l4,l4/),:)
+   amp = amp + contract_b_tensor_5(coeffs, mom3) * b45(l4, l4, l4, b_set)
+   mom1 = momenta((/l1/),:)
+   amp = amp + contract_c_tensor_5(coeffs, mom1) * c45(l1, b_set)
+   mom1 = momenta((/l2/),:)
+   amp = amp + contract_c_tensor_5(coeffs, mom1) * c45(l2, b_set)
+   mom1 = momenta((/l3/),:)
+   amp = amp + contract_c_tensor_5(coeffs, mom1) * c45(l3, b_set)
+   mom1 = momenta((/l4/),:)
+   amp = amp + contract_c_tensor_5(coeffs, mom1) * c45(l4, b_set)
+end function contract4_5
+!****f* src/interface/tens_comb/contract4_5s1
+! NAME
+!
+! Function contract4_5s1
+!
+! USAGE
+!
+!  amp = contract4_5s1(coeffs, momenta, b_set)
+!
+! DESCRIPTION
+!
+!  Contracts the 4-point rank 5 tensor integral
+!  with (mu^2)^1 in the numerator with its coefficients.
+!
+! INPUTS
+!
+!  * coeffs  -- coefficients of type(coeff_type_3)
+!  * momenta -- real array of dimension(:,3) containing the
+!               momenta r_i of the loop propagators
+!  * b_set   -- the set of pinched propagators as integer number (bit-set)
+!
+! RETURN VALUE
+!
+!  The result of contracting the tensor integral with its coefficient.
+!
+! SIDE EFFECTS
+!
+!  None
+!
+! EXAMPLE
+!
+!
+!*****
+function     contract4_5s1(coeffs, momenta, b_set) result(amp)
+   ! generated by: write_function_contract
+   implicit none
+   type(coeff_type_3), intent(in) :: coeffs
+   real(ki), dimension(:,0:), intent(in) :: momenta
+   integer, intent(in) :: b_set
+   type(form_factor) :: amp
+   ! generated by: write_contract_simple
+   real(ki), dimension(1,0:3) :: mom1
+   real(ki), dimension(2,0:3) :: mom2
+   real(ki), dimension(3,0:3) :: mom3
+   integer :: l1, l2, l3, l4
+   integer, dimension(4) :: unpinched
+   unpinched = unpackb(pminus(b_ref, b_set), 4)
+   l1 = unpinched(1)
+   l2 = unpinched(2)
+   l3 = unpinched(3)
+   l4 = unpinched(4)
+   amp = contract_b_tensor_3(coeffs) * c44(b_set)
+   ! multiply by 2*epsilon
+   amp%c = 2.0_ki*amp%b
+   amp%b = 2.0_ki*amp%a
+   amp%a = 0.0_ki
+end function contract4_5s1
+!****f* src/interface/tens_comb/contract4_5s2
+! NAME
+!
+! Function contract4_5s2
+!
+! USAGE
+!
+!  amp = contract4_5s2(coeffs, momenta, b_set)
+!
+! DESCRIPTION
+!
+!  Contracts the 4-point rank 5 tensor integral
+!  with (mu^2)^2 in the numerator with its coefficients.
+!
+! INPUTS
+!
+!  * coeffs  -- coefficients of type(coeff_type_3)
+!  * momenta -- real array of dimension(:,3) containing the
+!               momenta r_i of the loop propagators
+!  * b_set   -- the set of pinched propagators as integer number (bit-set)
+!
+! RETURN VALUE
+!
+!  The result of contracting the tensor integral with its coefficient.
+!
+! SIDE EFFECTS
+!
+!  None
+!
+! EXAMPLE
+!
+!
+!*****
+function     contract4_5s2(coeffs, momenta, b_set) result(amp)
+   ! generated by: write_function_contract
+   implicit none
+   type(coeff_type_3), intent(in) :: coeffs
+   real(ki), dimension(:,0:), intent(in) :: momenta
+   integer, intent(in) :: b_set
+   type(form_factor) :: amp
+   ! generated by: write_contract_simple
+   real(ki), dimension(1,0:3) :: mom1
+   integer :: l1, l2, l3, l4
+   integer, dimension(4) :: unpinched
+   unpinched = unpackb(pminus(b_ref, b_set), 4)
+   l1 = unpinched(1)
+   l2 = unpinched(2)
+   l3 = unpinched(3)
+   l4 = unpinched(4)
+   amp = coeffs%c0 * c44(b_set)
+   ! multiply by -4*(epsilon-epsilon^2)
+   amp%c = -4.0_ki*(amp%b-amp%a)
+   amp%b = -4.0_ki*amp%a
+   amp%a = 0.0_ki
+end function contract4_5s2
 !****f* src/interface/tens_comb/contract5_1
 ! NAME
 !

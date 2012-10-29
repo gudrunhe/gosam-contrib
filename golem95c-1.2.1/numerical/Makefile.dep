@@ -1,4 +1,6 @@
 # Module dependencies
-mod_numeric.o: mod_adapt_gauss.o
+adapt_gauss.mod: mod_adapt_gauss.f90 mod_adapt_gauss.$(OBJEXT)
 mod_numeric.lo: mod_adapt_gauss.lo
-mod_numeric.obj: mod_adapt_gauss.obj
+mod_numeric.$(OBJEXT): mod_adapt_gauss.$(OBJEXT)
+numerical_evaluation.mod: mod_numeric.f90 mod_numeric.$(OBJEXT) \
+	mod_adapt_gauss.$(OBJEXT)

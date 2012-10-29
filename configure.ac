@@ -329,6 +329,7 @@ AC_CONFIG_FILES([\
         golem95c-1.2.1/integrals/three_point/Makefile \
         golem95c-1.2.1/integrals/four_point/Makefile \
         golem95c-1.2.1/integrals/four_point/generic_function_4p.f90 \
+        golem95c-1.2.1/higherrank/Makefile \
         golem95c-1.2.1/interface/Makefile \
         golem95c-1.2.1/numerical/Makefile \
         golem95c-1.2.1/kinematic/Makefile \

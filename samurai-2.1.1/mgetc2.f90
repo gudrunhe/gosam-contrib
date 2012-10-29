@@ -17,468 +17,191 @@ module mgetc2
 
 contains
 
-   subroutine getc2_rm(numeval,nleg,rank,c2,cut2,q2,qt,Vi,msq)
-      use mglobal, only: Fp,Fz,Fm,F1z,KB,mu2g,KK,MP12,mu2t,&
-                       & resit,denst,mu2test
-      implicit none
-      integer, intent(in) :: nleg,rank,cut2
-      complex(ki), dimension(0:9), intent(out) :: c2
-      complex(ki), dimension(10,4), intent(in) :: q2
-      complex(ki), dimension(4), intent(in) :: qt
-      real(ki), dimension(0:nleg-1), intent(in) :: msq
-      real(ki), dimension(0:nleg-1,4), intent(in) :: Vi
+subroutine getc2_rm(numeval,nleg,rank,c2,cut2,q2,qt,Vi,msq)
+	use mglobal, only: Fp,Fz,Fm,F1z,KB,KK, &
+	& mu2g,MP12,mu2t,resit,denst,mu2test,mu2vec2,FL2,x1s1,x1s2,y1,y2,y3
+	implicit none
+! PARAMETERS=======================================================================!
+	! external parameters
+		integer,		            intent(in ) :: nleg,rank,cut2
+		complex(ki), dimension(20,4),       intent(in ) :: q2
+		complex(ki), dimension(4),          intent(in ) :: qt
+		real(ki),    dimension(0:nleg-1),   intent(in ) :: msq
+		real(ki),    dimension(0:nleg-1,4), intent(in ) :: Vi
+		complex(ki), dimension(0:19),       intent(out) :: c2
+	! internal parameters
+		integer 		     :: i,m,n,j1,j2,i1,i2,i3,i4,i5,nold
+		integer 		     :: dicut5,dicut4,dicut3,mx,diff,nsol,nloops
+		complex(ki), dimension(20)   :: dens2,dens3,dens4,dens5,xneval
+		complex(ki), dimension(20)   :: resi5,resi4,resi3,known
+		complex(ki), dimension(20)   :: mu2vec
+		complex(ki), dimension(0:19) :: f2
+		complex(ki) 		     :: dens3t,dens4t,dens5t
+		logical 		     :: evalres
+	! haggies
+		complex(ki) :: t1
+		complex(ki) :: t2
+		complex(ki) :: t3
+		complex(ki) :: t4
+		complex(ki) :: t5
+		complex(ki) :: t6
+		complex(ki) :: t7
+		complex(ki) :: t8
+		complex(ki) :: t9
+		complex(ki) :: t10
+		complex(ki) :: t11
+		complex(ki) :: t12
+		complex(ki) :: t13
+		complex(ki) :: t14
+		complex(ki) :: t15
+		complex(ki) :: t16
+		complex(ki) :: t17
+		complex(ki) :: t18
+		complex(ki) :: t19
+		complex(ki) :: t20
+		complex(ki) :: t21
+		complex(ki) :: t22
+		complex(ki) :: t23
+		complex(ki) :: t24
+		complex(ki) :: t25
+		complex(ki) :: t26
+		complex(ki) :: t27
+		complex(ki) :: t28
+		complex(ki) :: t29
+		complex(ki) :: t30
+		complex(ki) :: t31
+		complex(ki) :: t32
+		complex(ki) :: t33
+		complex(ki) :: t34
+		complex(ki) :: t35
+		complex(ki) :: t36
+		complex(ki) :: t37
+		complex(ki) :: t38
+		complex(ki) :: t39
+		complex(ki) :: t40
+		complex(ki) :: t41
+		complex(ki) :: t42
+		complex(ki) :: t43
+		complex(ki) :: t44
+		complex(ki) :: t45
+! INTERFACE========================================================================!
+	interface
+	function numeval(ncut, Q, mu2)
+		use precision
+		implicit none
+		integer, 		   intent(in) :: ncut
+		complex(ki), dimension(4), intent(in) :: Q
+		complex(ki), 		   intent(in) :: mu2
+		complex(ki) 			      :: numeval
+	end function numeval
+	end interface
+! INITIALIZATION===================================================================!
+	! mu2
+	mu2test(2) = mu2t(2)
+	! cuts
+	j2         = cut2/10
+	j1         = cut2-j2*10
+	! ---
+	resi3(:)   = czip
+	resi4(:)   = czip
+	resi5(:)   = czip
+	known(:)   = czip
+	xneval(:)  = czip
+	dens2(:)   = cone
+	! for lnntest
+	resit(2)   = czip
+	denst(2)   = cone
+	! for simplified sampling
+	diff = nleg-rank
+! CALCULATING THE MU2 VECTOR AND NSOL==============================================!
+	! initialize to czip
+	do n=1,20
+		mu2vec(n)=czip
+	enddo
+	if 	(diff .ge. 2) then ! rank0:  1 coefficients
+		nsol=1
+	elseif 	(diff .eq. 1) then ! rank1:  4 coefficients
+		nsol=4
+	elseif 	(diff .eq. 0) then ! rank2: 10 coefficients
+		nsol=10
+		mu2vec(10) = mu2g(2)
+	elseif 	(diff .eq.-1) then ! rank3: 20 coefficients
+            	nsol=20
+		do n=1,16
+			mu2vec(n)=czip
+		enddo
+		do n=17,20
+			mu2vec(n)=mu2g(2)
+		enddo
+	else
+		print *, 'error in mgetc2.f90'
+	endif
+! SIMPLIFIED SAMPLING==============================================================!
+! STANDARD DECOMPOSITION===========================================================!
+	if (nleg.eq.5) then
+		do n=1,nsol
+			resi5(n)=Res5(1,mu2vec(n))
+		enddo
+		resit(2)=Res5(1,mu2t(2))
+	elseif (nleg.eq.4) then
+		do n=1,nsol
+			resi4(n)=Res4(1,q2(n,:),mu2vec(n))
+		enddo
+		resit(2)=Res4(1,qt,mu2t(2))
+	elseif (nleg.eq.3) then
+		do n=1,nsol
+			resi3(n)=Res3(1,q2(n,:),mu2vec(n))
+		enddo
+		resit(2)=Res3(1,qt,mu2t(2))
+	elseif (nleg.eq.2) then
+		continue
+	else
+	! 5plecut contribution-----------------------------------------------------!
+			nloops = 5
+			call HResL2(resi5,	nsol,nloops,nleg,cut2,q2,qt,Vi,msq,mu2vec)
+	endif
+	! 4plecut contribution-----------------------------------------------------!
+	if((nleg .ne. 4) .and. (nleg .ne. 3) .and. (nleg .ne. 2)) then
+			nloops = 4
+			call HResL2(resi4,	nsol,nloops,nleg,cut2,q2,qt,Vi,msq,mu2vec)
+	endif
+	! 3plecut contribution-----------------------------------------------------!
+	if((nleg .ne. 3) .and. (nleg .ne. 2)) then
+			nloops = 3
+			call HResL2(resi3,	nsol,nloops,nleg,cut2,q2,qt,Vi,msq,mu2vec)
+	endif
+	!--------------------------------------------------------------------------!
+	if(nleg .ne. 2) then
+		do i=0,nleg-1
+			if ((i.ne.j1).and.(i.ne.j2)) then
+				do n=1,nsol
+				dens2(n)=dens2(n)*denevalmu2(nleg,i,q2(n,:),Vi,msq,mu2vec(n))
+				enddo
+				denst(2)=denst(2)*denevalmu2(nleg,i,qt,Vi,msq,mu2t(2))
+			endif
 
-      integer :: i,m,n,j1,j2,i1,i2,i3,i4,i5
-      integer :: dicut5,dicut4,dicut3,mx,diff,nsol
-      complex(ki), dimension(10) :: dens2,dens3,dens4,dens5,xneval
-      complex(ki), dimension(10) :: resi5,resi4,resi3,known
-      complex(ki), dimension(0:9) :: f2
-      complex(ki) :: dens3t,dens4t,dens5t
-      logical evalres
-      !real(ki) :: Fppow2, Fppow3, Fppow4
-      !real(ki) :: Fzpow2, Fzpow3, Fzpow4, Fzpow5, Fzpow6, tmp1
-      !---#[ HAGGIES:
-      complex(ki) :: t1
-      complex(ki) :: t2
-      complex(ki) :: t3
-      complex(ki) :: t4
-      complex(ki) :: t5
-      complex(ki) :: t6
-      complex(ki) :: t7
-      complex(ki) :: t8
-      complex(ki) :: t9
-      complex(ki) :: t10
-      complex(ki) :: t11
-      complex(ki) :: t12
-      complex(ki) :: t13
-      complex(ki) :: t14
-      complex(ki) :: t15
-      complex(ki) :: t16
-      complex(ki) :: t17
-      complex(ki) :: t18
-      complex(ki) :: t19
-      complex(ki) :: t20
-      complex(ki) :: t21
-      complex(ki) :: t22
-      complex(ki) :: t23
-      complex(ki) :: t24
-      complex(ki) :: t25
-      complex(ki) :: t26
-      complex(ki) :: t27
-      complex(ki) :: t28
-      complex(ki) :: t29
-      complex(ki) :: t30
-      complex(ki) :: t31
-      complex(ki) :: t32
-      complex(ki) :: t33
-      complex(ki) :: t34
-      complex(ki) :: t35
-      complex(ki) :: t36
-      complex(ki) :: t37
-      complex(ki) :: t38
-      complex(ki) :: t39
-      complex(ki) :: t40
-      complex(ki) :: t41
-      complex(ki) :: t42
-      complex(ki) :: t43
-      complex(ki) :: t44
-      complex(ki) :: t45
-      !---#] HAGGIES:
-      complex(ki), dimension(10) :: mu2vec
+		enddo
+	endif
+! CALCULATING THE POLYNOMIALS======================================================!
+	do n=1,nsol
+		xneval(n)=numeval(cut2,q2(n,:),mu2vec(n))
+	enddo
 
-      interface
-         function     numeval(ncut, Q, mu2)
-            use precision
-            implicit none
-            integer, intent(in) :: ncut
-            complex(ki), dimension(4), intent(in) :: Q
-            complex(ki), intent(in) :: mu2
-            complex(ki) :: numeval
-          end function numeval
-      end interface
-
-      mu2test(2) = mu2t(2)
-     
-      j2=cut2/10
-      j1=cut2-j2*10
-
-      resi3(:)=czip
-      resi4(:)=czip
-      resi5(:)=czip
-      known(:)=czip
-      xneval(:)=czip
-      dens2(:)=cone
-
-!---  for lnntest
-      resit(2)=czip
-      denst(2)=cone
-
-
-!---  for simplified sampling
-      diff = nleg-rank
-      
-      if (diff.eq.2) then
-         !---#[ simplified sampling -- only c2(0):
-         if     (nleg.eq.5) then
-            resi5(1)=res5(1,czip)
-            resit(2)=res5(1,mu2t(2))
-            goto 11
-         elseif (nleg.eq.4) then
-            resi4(1)=Res4(1,q2(1,:),czip)    
-            resit(2)   =res4(1,qt,mu2t(2))
-            goto 21
-         elseif (nleg.eq.3) then
-            resi3(1)=Res3(1,q2(1,:),czip)
-            resit(2)=Res3(1,qt,mu2t(2))
-            goto 31
-         elseif (nleg.eq.2) then
-            goto 36
-         else
-            !---#[ Contributo dei pentuple cuts:
-            dicut5=1
-            do i5=4,nleg-1
-               do i4=3,i5-1
-                  do i3=2,i4-1
-                     do i2=1,i3-1
-                        do i1=0,i2-1
-                           dens5(1)=cone
-                           dens5t=cone
-                           evalres=.false.
-                           loop_10: do i=0,nleg-1
-                              if ((i.ne.i1).and.(i.ne.i2).and.(i.ne.i3)&
-                                      &  .and.(i.ne.i4).and.(i.ne.i5)) then
-                                 if ((i.eq.j1).or.(i.eq.j2)) then
-                                    dens5(1)=czip
-                                    dens5t=czip
-                                    evalres=.false.
-                                    exit loop_10
-                                 else
-                                    dens5(1)=dens5(1)&
-                                       &*denevalmu2(nleg,i,q2(1,:),Vi,msq,czip)
-                                    dens5t=dens5t&
-                                       &*denevalmu2(nleg,i,qt,Vi,msq,mu2t(2))
-                                    evalres=.true.
-                                 endif
-                              endif
-                           enddo loop_10
-
-                           if (evalres) then
-                              resi5(1)=resi5(1)+dens5(1)*res5(dicut5,czip)
-                              resit(2)=resit(2)+dens5t*res5(dicut5,mu2t(2))
-                           endif
-
-                           dicut5=dicut5+1
-                        enddo
-                     enddo
-                  enddo
-               enddo
-            enddo
-            !---#] Contributo dei pentuple cuts:
-         endif
-
- 11      continue
-
-         !---#[ Contributo dei quadruple cuts:
-         dicut4=1
-         do i4=3,nleg-1
-            do i3=2,i4-1
-               do i2=1,i3-1
-                  do i1=0,i2-1
-                     dens4(1)=cone
-                     dens4t=cone
-   
-                     evalres=.false.
-         
-                     loop_20: do i=0,nleg-1
-                        if ((i.ne.i1).and.(i.ne.i2).and.&
-                                 &(i.ne.i3).and.(i.ne.i4)) then
-                           if ((i.eq.j1).or.(i.eq.j2)) then
-                              dens4(1)=czip
-                              dens4t=czip
-                              evalres=.false.
-                              exit loop_20
-                           else
-                              dens4(1)=dens4(1)*denevalmu2(nleg,i,q2(1,:),&
-                                        &Vi,msq,czip)
-                              dens4t=dens4t*denevalmu2(nleg,i,qt,Vi,msq,mu2t(2))
-                              evalres=.true.
-                           endif
-                        endif
-                     enddo loop_20
-   
-   
-                     if (evalres) then
-                        resi4(1)=resi4(1)+dens4(1)*Res4(dicut4,q2(1,:),czip)    
-                        resit(2)=resit(2)+dens4t*Res4(dicut4,qt,mu2t(2))    
-                     endif
-   
-                     dicut4=dicut4+1
-                  enddo
-               enddo
-            enddo
-         enddo
-         !---#] Contributo dei quadruple cuts:
-
- 21      continue
-
-         !---#[ Contributo dei Triple cuts:
-         dicut3=1
-         do i3=2,nleg-1
-            do i2=1,i3-1
-               do i1=0,i2-1
-   
-                  dens3(1)=cone
-                  dens3t=cone
-                  evalres=.false.
-         
-                  loop_30: do i=0,nleg-1
-                     if ((i.ne.i1).and.(i.ne.i2).and.(i.ne.i3)) then
-                        if ((i.eq.j1).or.(i.eq.j2)) then
-                           dens3(1)=czip
-                           dens3t=czip
-                           evalres=.false.
-                           exit loop_30
-                        else
-                           dens3(1)=dens3(1)*denevalmu2(nleg,i,q2(1,:),&
-                                  &Vi,msq,czip)
-                           dens3t=dens3t*denevalmu2(nleg,i,qt,Vi,msq,mu2t(2))
-                           evalres=.true.
-                        endif
-                     endif
-                  enddo loop_30
-   
-                  if (evalres) then
-                     resi3(1)=resi3(1)+dens3(1)*Res3(dicut3,q2(1,:),czip)
-                     resit(2)=resit(2)+dens3t*Res3(dicut3,qt,mu2t(2))
-                  endif
-   
-                  dicut3=dicut3+1
-               enddo
-            enddo
-         enddo
-         !---#] Contributo dei Triple cuts:
-
- 31      continue
-
-         do i=0,nleg-1
-            if ((i.ne.j1).and.(i.ne.j2)) then
-               dens2(1)=dens2(1)*denevalmu2(nleg,i,q2(1,:),Vi,msq,czip)
-               denst(2)=denst(2)*denevalmu2(nleg,i,qt,Vi,msq,mu2t(2))
-            endif
-         enddo
-
- 36      continue
-   
-         xneval(1)=numeval(cut2,q2(1,:),czip)
-       
-         if     (imeth.eq.'diag') then
-            known(1)=(xneval(1)-resi5(1)-resi4(1)-resi3(1))/dens2(1)
-         elseif (imeth.eq.'tree') then
-            known(1)=xneval(1)-(resi5(1)+resi4(1)+resi3(1))/dens2(1)
-         endif
-        
-         c2(0)=known(1)
-         do m=1,9
-            c2(m)=czip
-         enddo
-   
-         !---#] simplified sampling -- only c2(0):
-      else
-         !---#[ Decomposizione standard:
-         if (diff.eq.1) then
-            ! rank1 c-system: 4 coefficients
-            mu2vec=(/czip,czip,czip,czip,czip,czip,czip,czip,czip,czip/)
-            nsol=4
-            
-         else
-           ! traditional system
-            mu2vec=(/czip,czip,czip,czip,czip,czip,czip,czip,czip,mu2g(2)/)
-            nsol=10
-         endif
-       
-         if     (nleg.eq.5) then
-            do n=1,nsol
-               resi5(n)=Res5(1,mu2vec(n))
-            enddo
-            resit(2)=Res5(1,mu2t(2))
-            goto 111
-         elseif (nleg.eq.4) then
-            do n=1,nsol
-               resi4(n)=Res4(1,q2(n,:),mu2vec(n))
-            enddo
-            resit(2)=Res4(1,qt,mu2t(2))
-            goto 121
-         elseif (nleg.eq.3) then
-            do n=1,nsol
-               resi3(n)=Res3(1,q2(n,:),mu2vec(n))
-            enddo
-            resit(2)=Res3(1,qt,mu2t(2))
-            goto 131
-         elseif (nleg.eq.2) then
-            goto 136
-         else
-            !---#[ Contributo dei pentuple cuts:
-            dicut5=1
-            do i5=4,nleg-1
-               do i4=3,i5-1
-                  do i3=2,i4-1
-                     do i2=1,i3-1
-                        do i1=0,i2-1
-                           dens5(:)=cone
-                           dens5t=cone
-                           evalres=.false.
-            
-                           loop_110: do i=0,nleg-1
-                              if ((i.ne.i1).and.(i.ne.i2) &
-                                & .and.(i.ne.i3).and.(i.ne.i4).and.(i.ne.i5)) then
-                                 if ((i.eq.j1).or.(i.eq.j2)) then
-                                    dens5(:)=czip
-                                    dens5t=czip
-                                    evalres=.false.
-                                    exit loop_110
-                                 else
-                                    do n=1,nsol
-                                       dens5(n)=dens5(n)*denevalmu2(nleg,i,&
-                                              &q2(n,:),Vi,msq,mu2vec(n))
-                                    enddo
-                                    dens5t=dens5t*denevalmu2(nleg,i,qt,Vi,msq,&
-                                             &mu2t(2))
-                                    evalres=.true.
-                                 endif
-                              endif
-                           enddo loop_110
-      
-                           if (evalres) then
-                              do n=1,nsol
-                                 resi5(n)=resi5(n)+dens5(n)*res5(dicut5,mu2vec(n))
-                              enddo
-                              resit(2)=resit(2)+dens5t*res5(dicut5,mu2t(2))
-                           endif
-      
-                           dicut5=dicut5+1
-                        enddo
-                     enddo
-                  enddo
-               enddo
-            enddo
-            !---#] Contributo dei pentuple cuts:
-         endif
-
- 111     continue
-
-         !---#[ Contributo dei quadruple cuts:
-         dicut4=1
-         do i4=3,nleg-1
-             do i3=2,i4-1
-                do i2=1,i3-1
-                   do i1=0,i2-1
-                      dens4(:)=cone
-                      dens4t=cone
-                      evalres=.false.
-            
-                      loop_120: do i=0,nleg-1
-                         if ((i.ne.i1).and.(i.ne.i2).and.(i.ne.i3).and.&
-                                  &(i.ne.i4)) then
-                            if ((i.eq.j1).or.(i.eq.j2)) then
-                               dens4(:)=czip
-                               dens4t=czip
-                               evalres=.false.
-                               exit loop_120
-                            else
-                               do n=1,nsol
-                                  dens4(n)=dens4(n)*denevalmu2(nleg,i,&
-                                      &q2(n,:),Vi,msq,mu2vec(n))
-                               enddo
-                               dens4t=dens4t*denevalmu2(nleg,i,qt,Vi,msq,&
-                                      &mu2t(2))
-                               evalres=.true.
-                            endif
-                         endif
-                      enddo loop_120
-      
-                      if (evalres) then
-                         do n=1,nsol
-                            resi4(n)=resi4(n)+dens4(n)*Res4(dicut4,q2(n,:),&
-                                &mu2vec(n))
-                         enddo
-                         resit(2)=resit(2)+dens4t*Res4(dicut4,qt,mu2t(2))
-                      endif
-      
-                      dicut4=dicut4+1
-                   enddo
-                enddo
-             enddo
-          enddo
-         !---#] Contributo dei quadruple cuts:
-
- 121     continue
-
-          !---#[ Contributo dei Triple cuts:
-          dicut3=1
-          loop_dicut3: do i3=2,nleg-1
-             do i2=1,i3-1
-                do i1=0,i2-1
-                   dens3(:)=cone
-                   dens3t=cone
-                   evalres=.false.
-                   loop_130: do i=0,nleg-1
-                      if ((i.ne.i1).and.(i.ne.i2).and.(i.ne.i3)) then
-                         if ((i.eq.j1).or.(i.eq.j2)) then
-                            dens3(:)=czip
-                            dens3t=czip
-                            evalres=.false.
-                            exit loop_130
-                         else
-                            do n=1,nsol
-                               dens3(n)=dens3(n)&
-                               & *denevalmu2(nleg,i,q2(n,:),Vi,msq,mu2vec(n))
-                            enddo
-                            dens3t=dens3t*denevalmu2(nleg,i,qt,Vi,msq,mu2t(2))
-                            evalres=.true.
-                         endif
-                      endif
-                   enddo loop_130
-   
-                   if (evalres) then
-                      do n=1,nsol
-                         resi3(n)=resi3(n)+dens3(n)*Res3(dicut3,q2(n,:),&
-                            &mu2vec(n))
-                      enddo
-                      resit(2)=resit(2)+dens3t*Res3(dicut3,qt,mu2t(2))
-                   endif
-   
-                   dicut3=dicut3+1
-                enddo
-             enddo
-          enddo loop_dicut3
-          !---#] Contributo dei Triple cuts:
-
- 131     continue
-   
-         do i=0,nleg-1
-            if ((i.ne.j1).and.(i.ne.j2)) then
-               do n=1,nsol
-                  dens2(n)=dens2(n)*denevalmu2(nleg,i,q2(n,:),Vi,msq,mu2vec(n))
-               enddo
-               denst(2)=denst(2)*denevalmu2(nleg,i,qt,Vi,msq,mu2t(2))
-            endif
-         enddo
-
- 136     continue
-
-         do n=1,nsol
-            xneval(n)=numeval(cut2,q2(n,:),mu2vec(n))
-         enddo
-
-         if     (imeth.eq.'diag') then
-            known(:)=(xneval(:)-resi5(:)-resi4(:)-resi3(:))/dens2(:)
-         elseif (imeth.eq.'tree') then
-            known(:)=xneval(:)-(resi5(:)+resi4(:)+resi3(:))/dens2(:)
-         endif
-
-         if (diff.eq.1) then
-            ! rank1 c-system: 4 coefficients
-        
+	if     (imeth.eq.'diag') then
+		do n=1,nsol
+			known(n)=(xneval(n)-resi5(n)-resi4(n)-resi3(n))/dens2(n)
+		enddo
+	elseif (imeth.eq.'tree') then
+		do n=1,nsol
+			known(n)=xneval(n)-(resi5(n)+resi4(n)+resi3(n))/dens2(n)
+		enddo
+	endif
+	select case(diff)
+! RANK 0===========================================================================!
+	case(2)
+		c2(0)=known(1)
+! RANK 1===========================================================================!
+	case(1)
             do m=0,1
                f2(m)=effe(known,1,2,m)
             enddo
@@ -487,25 +210,14 @@ contains
                mx=m-2
                f2(m)=effe(known,3,2,mx)
             enddo
-  
-            !---#[ getc2_S1:
-            !----#[ original code:
-!           c2(0) = f2(0)
-!           c2(1) = (-f2(0) + f2(2))/(KB*MP12(2))
-!           c2(3) = (KK(2)*(f2(1) - Fz*f2(3)))/((-one + Fp*Fz)*MP12(2))
-!           c2(5) = (-(Fp*MP12(2)*c2(3)) - KK(2)*f2(3))/(KK(2)**2*MP12(2))
-            !----#] original code:
-            !----#[ HAGGIES:
             t1 = f2(0)
             c2(0) = t1
             c2(1) = ((f2(2)-t1)/(KB*MP12(2)))
             t1 = f2(3)
             c2(3) = ((f2(1)-t1*Fz)/((Fp*Fz-one)*MP12(2))*KK(2))
             c2(5) = ((-(Fp*MP12(2)*c2(3)+t1*KK(2)))/(KK(2)*KK(2)*MP12(2)))
-            !----#] HAGGIES:
-            !---#] getc2_S1:
-         else
-            ! traditional system
+! RANK 2===========================================================================!
+	case(0)
             do m=0,2
               f2(m)=effe(known,1,3,m)
             enddo
@@ -520,71 +232,6 @@ contains
             f2(7)=known(8)
             f2(8)=known(9)
             f2(9)=known(10)
-  
-            !---#[ getc2_S2:
-            !----#[ original code:
-!           !--- coefficienti
-!           Fppow2 = Fp*Fp
-!           Fppow3 = Fppow2*Fp
-!           Fppow4 = Fppow3*Fp
-!           Fzpow2 = Fz*Fz
-!           Fzpow3 = Fzpow2*Fz
-!           Fzpow4 = Fzpow3*Fz
-!           Fzpow5 = Fzpow4*Fz
-!           Fzpow6 = Fzpow5*Fz
-!           tmp1 = one - Fppow2
-!  c2(2) = (0.5_ki*(Fppow3*((one + Fzpow4)*f2(0) + f2(1) - f2(3) + Fz*&
-!    &(Fz*(f2(1) + (one + Fzpow2)*f2(2) + Fz*(-Fz*f2(3) - f2(4))) - f2(4)))&
-!    &+ Fppow4*(-f2(0) - Fzpow2*f2(1) - Fzpow4*f2(2) + f2(3) + Fzpow3*f2(4))&
-!    &+ Fm**2*(tmp1*f2(0) + tmp1*Fzpow2*f2(1) + tmp1*Fzpow4*f2(2) + (-tmp1)&
-!    &*f2(3) + (-tmp1)*Fzpow3*f2(4)) + two*((-one - Fzpow2 - Fzpow4 + Fzpow6)&
-!    &*f2(0) + (-one - Fzpow4)*f2(1) - f2(2) + Fz*(-Fz*f2(2) + Fz*f2(3)&
-!    &+ Fzpow3*f2(3) + f2(4) + Fzpow4*f2(4))) + f2(5) + f2(6) + Fm*((one&
-!    &+ Fzpow4 + Fzpow3*two + Fppow2*(-one - Fzpow4 - Fzpow3*two))*f2(0)&
-!    &+ (one + Fzpow2 + Fzpow5*two + Fppow2*(-one - Fzpow2 - Fzpow5*two))*f2(1)&
-!    &+ tmp1*Fzpow2*f2(2) + (-tmp1)*f2(3) + Fzpow4*(tmp1*f2(2) + (-tmp1)*f2(3))&
-!    &- two*f2(4) + Fppow2*two*f2(4) - tmp1*Fzpow3*(two*f2(3) + f2(4)) + Fz&
-!    &*(tmp1*two*f2(2) - tmp1*f2(4)) - f2(5) - Fp*f2(6) + Fzpow6*(f2(5) + Fp&
-!    &*f2(6) - f2(7)) + f2(7)) + Fp*((-one - Fzpow4)*f2(0) - f2(1) + f2(3)&
-!    &+ f2(5) - f2(7) + Fz*(f2(4) + Fz*(-f2(1) - (one + Fzpow2)*f2(2) + Fz&
-!    &*(Fz*f2(3) + f2(4) + Fzpow3*(-f2(5) + f2(7)))))) + Fzpow6*(-f2(5) - f2(6)&
-!    &- f2(8)) + f2(8) + Fppow2*((three + Fzpow2*(one + Fzpow2 - Fzpow4)*two)&
-!    &*f2(0) + two*f2(1) + two*f2(2) - f2(3) + Fzpow4*(two*f2(1) + f2(2) - two&
-!    &*f2(3)) + Fzpow2*(f2(1) + two*f2(2) - two*f2(3)) - Fzpow3*f2(4) - Fz*two&
-!    &*f2(4) - Fzpow5*two*f2(4) - f2(5) - f2(8) + Fzpow6*(f2(5) + f2(8)))))/&
-!    &((-tmp1)*(-one + Fzpow6)*MP12(2)**2)
-!  c2(7) = (KK(2)*(f2(2) + Fppow2*(-(Fzpow4*f2(1)) - f2(2) + Fzpow2*(-f2(0)&
-!    &+ f2(3)) + Fzpow5*f2(4)) + Fppow3*(-((one + Fzpow4)*f2(0))&
-!    &- (one + Fzpow2)*(f2(1) + Fzpow2*f2(2)) + (one + Fzpow4)*f2(3) &
-!    &+ (Fz + Fzpow3)*f2(4)) - f2(6) + Fzpow2*(f2(0) - f2(3) +&
-!    &Fzpow2*(f2(1) + Fz*(-f2(4) + Fz*f2(6)))) +&
-!    &Fp*((one + Fzpow4)*f2(0) + f2(1) - f2(3) - f2(5) +&
-!    &Fz*(Fz*(f2(1) + f2(2)) + Fzpow3*(f2(2) - f2(3)) -&
-!    &f2(4) - Fzpow2*f2(4) + Fzpow5*(f2(5) - f2(7))) +&
-!    &f2(7))))/((-tmp1)*(-one + Fzpow6)*MP12(2)**2)
-!  c2(8) = ((-tmp1)*(one + Fzpow3 + Fzpow4)*f2(0) +&
-!    &(-tmp1)*(one + Fzpow2 + Fzpow5)*f2(1) + (-tmp1)*Fzpow2*f2(2) +&
-!    &(-tmp1)*Fzpow4*(f2(2) - f2(3)) + f2(3) + (-tmp1)*Fz*(f2(2) - f2(4))&
-!    &+ f2(4) - (-tmp1)*Fzpow3*(f2(3) + f2(4)) + f2(5) +&
-!    &Fp*(-(Fp*(f2(3) + f2(4))) + f2(6)) - Fzpow6*(f2(5) + Fp*f2(6) - f2(7))&
-!    &- f2(7))/ ((-tmp1)*(-one + Fzpow6)*KK(2)*MP12(2)**2)
-!  c2(4) = -((KK(2)**2*(f2(1) + Fzpow2*f2(2) + Fzpow4*(f2(0) - f2(3)) -&
-!    &Fz*f2(4)))/((-one + Fzpow6)*MP12(2)**2))
-!  c2(5) = (Fzpow3*f2(0) + Fzpow5*f2(1) + Fz*f2(2) - Fzpow3*f2(3) -&
-!    &f2(4))/(KK(2)*MP12(2) - Fzpow6*KK(2)*MP12(2))
-!  c2(3) = (KK(2)*(f2(2) + Fzpow2*(f2(0) - f2(3) + Fzpow2*(f2(1)&
-!  - Fz*f2(4)))))/((-one + Fzpow6)*MP12(2))
-!  c2(6) = (f2(0) - f2(3) + Fzpow2*(f2(1) + Fz*(Fz*f2(2) - f2(4))))/&
-!    &((-one + Fzpow6)*KK(2)**2*MP12(2)**2)
-!  c2(0) = f2(0)
-!  c2(9) = (KK(2)*MP12(2)*c2(3) - MP12(2)**2*c2(4)&
-!    &+ F1z*KK(2)**3*MP12(2)*c2(5) - F1z**2*KK(2)**4*MP12(2)**2*c2(6) &
-!    &+ KK(2)**2*(-c2(0) + f2(9)))/(KK(2)**2*mu2g(2))
-!  c2(1) = -(c2(3)/KK(2)) - Fm*KK(2)*c2(5) + (MP12(2)*(c2(4) + KK(2)*(c2(7)&
-!    &+ KK(2)*(c2(2) + Fm*KK(2)*(Fm*KK(2)*c2(6) + c2(8))))))/KK(2)**2&
-!    &+ (c2(0) - f2(8))/MP12(2)
-            !----#] original code:
-            !----#[ HAGGIES:
             t1 = (1.0_ki)+Fp
             t2 = Fz*Fz
             t3 = t2*Fz
@@ -666,26 +313,1179 @@ contains
             t2 = Fm*KK(2)
             c2(1) = ((c2(0)-t19)/MP12(2)+(c2(4)+(c2(7)+(c2(2)+(c2(8)+t2*c2(6))&
             &*Fm*KK(2))*KK(2))*KK(2))/t1*MP12(2)-(c2(3)/KK(2)+t2*c2(5)))
-            !----#] HAGGIES:
-            !---#] getc2_S2:
-         endif
-         !---#] Decomposizione standard:
-      endif
+! RANK 3===========================================================================!
+	case(-1)
 
-      if (diff.ge.1) then
-         c2(2)=czip
-         c2(4)=czip
-         c2(6)=czip
-         c2(7)=czip
-         c2(8)=czip
-         c2(9)=czip
-         if (diff.ge.2) then
-            c2(1)=czip
-            c2(3)=czip
-            c2(5)=czip
-         endif             
-      endif
-   end subroutine getc2_rm
+	nold = 0
+	!Fstep=1~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~!
+		!F(0,0)=0                                              !
+		if(abs(FL2(1)).lt. 1.0e-1_ki) then ! if(F(Fstep=1)==0) !
+			call DFT2(4,	nold,known,f2)		       !
+			call DFT2(3,	nold,known,f2)		       !
+		!------------------------------------------------------!
+		!F(0,0)/=0                                             !
+		else						       !
+			call DFT2(7,	nold,known,f2)		       !
+		endif						       !
+	!Fstep=2~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~!	
+		!F(0,x1s1)                                             !
+		if(abs(FL2(2)).lt. 1.0e-10_ki) then ! if(F(Fstep=2)==0) !
+			call DFT2(3,	nold,known,f2)		       !
+			call DFT2(2,	nold,known,f2)		       !
+		!------------------------------------------------------!
+		!F(0,y1)                                               !
+		else						       !
+			call DFT2(5,	nold,known,f2)		       !
+		endif						       !
+	!Fstep=3~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~!
+		!F(0,x1s2)                                             !
+		if(abs(FL2(3)).lt. 1.0e-10_ki) then ! if(F(Fstep=3)==0) !
+			call DFT2(2,	nold,known,f2)		       !
+			call DFT2(1,	nold,known,f2)		       !
+		!------------------------------------------------------!
+		!F(0,y2) 					       !
+		else						       !
+			call DFT2(3,	nold,known,f2)		       !
+		endif						       !
+	!Fstep=4~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~!
+		!F(0,y3)                                               !
+			call DFT2(1,	nold,known,f2)		       !
+	!Fstep=5~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~!
+		!F(mu2,0)=0                                            !
+		if(abs(FL2(5)).lt. 1.0e-10_ki) then ! if(F(Fstep=5)==0) !
+			call DFT2(2,	nold,known,f2)		       !
+			call DFT2(1,	nold,known,f2)		       !
+		!------------------------------------------------------!
+		!F(mu2,0)=nonzero                                      !
+		else						       !
+			call DFT2(3,	nold,known,f2)		       !
+		endif						       !
+	!Fstep=6~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~!
+		!F(mu2,1)                                              !
+			call DFT2(1,	nold,known,f2)		       !
+	!~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~!
+! COEFFICIENTS=====================================================================!
+! New Fstep 1~~~~~~~~~~~~~~~`
+if(abs(FL2(1)).lt. 1.0e-10_ki) then  
+!	print *, 'using the very zero version of Fstep=1'
+      c2(0) =  &
+     &f2(0) 
+      c2(3) =  &
+     &-(f2(6)/MP12(2)) 
+      c2(4) =  &
+     &f2(5)/MP12(2)**2 
+      c2(5) =  &
+     &-(f2(1)/MP12(2)) 
+      c2(6) =  &
+     &f2(2)/MP12(2)**2 
+      c2(14) =  &
+     &-((-f2(0) + f2(4))/MP12(2)**3) 
+      c2(15) =  &
+     &-(f2(3)/MP12(2)**3) 
+elseif(abs(FL2(1)).lt. 0.1_ki) then
+!	print *, 'using the new version of Fstep=1'
+      c2(0) =  &
+     &f2(0) 
+      c2(3) =  &
+     &        -((-f2(6) + f2(2)*FL2(1)**2 - f2(5)*FL2(1)**4 +  &
+     &      f2(1)*FL2(1)**5 + f2(0)*FL2(1)**8 - f2(4)*FL2(1)**8 +  &
+     &      f2(3)*FL2(1)**11)/((-one+ FL2(1)**12)*MP12(2))) 
+      c2(4) =  &
+     &        -((f2(5) - f2(1)*FL2(1) - f2(0)*FL2(1)**4 +  &
+     &      f2(4)*FL2(1)**4 - f2(3)*FL2(1)**7 + f2(6)*FL2(1)**8 -  &
+     &      f2(2)*FL2(1)**10)/((-one+ FL2(1)**12)*MP12(2)**2)) 
+      c2(5) =  &
+     &        -((-f2(1) - f2(0)*FL2(1)**3 + f2(4)*FL2(1)**3 -  &
+     &      f2(3)*FL2(1)**6 + f2(6)*FL2(1)**7 - f2(2)*FL2(1)**9 +  &
+     &      f2(5)*FL2(1)**11)/((-one+ FL2(1)**12)*MP12(2))) 
+      c2(6) =  &
+     &        -((f2(2) - f2(5)*FL2(1)**2 + f2(1)*FL2(1)**3 +  &
+     &      f2(0)*FL2(1)**6 - f2(4)*FL2(1)**6 + f2(3)*FL2(1)**9 -  &
+     &      f2(6)*FL2(1)**10)/((-one+ FL2(1)**12)*MP12(2)**2)) 
+      c2(14) =  &
+     &        -((f2(0) - f2(4) + f2(3)*FL2(1)**3 - f2(6)*FL2(1)**4 +  &
+     &      f2(2)*FL2(1)**6 - f2(5)*FL2(1)**8 + f2(1)*FL2(1)**9)/ &
+     &    ((-one+ FL2(1)**12)*MP12(2)**3)) 
+      c2(15) =  &
+     &        -((-f2(3) + f2(6)*FL2(1) - f2(2)*FL2(1)**3 +  &
+     &      f2(5)*FL2(1)**5 - f2(1)*FL2(1)**6 - f2(0)*FL2(1)**9 +  &
+     &      f2(4)*FL2(1)**9)/((-one+ FL2(1)**12)*MP12(2)**3)) 
+else  
+      c2(0) =  &
+     &f2(0) 
+      c2(3) =  &
+     &-(f2(6)/(FL2(1)*MP12(2))) 
+      c2(4) =  &
+     &f2(5)/(FL2(1)**2*MP12(2)**2) 
+      c2(5) =  &
+     &-(f2(1)/MP12(2)) 
+      c2(6) =  &
+     &f2(2)/MP12(2)**2 
+      c2(14) =  &
+     &-(f2(4)/(FL2(1)**3*MP12(2)**3)) 
+      c2(15) =  &
+     &-(f2(3)/MP12(2)**3) 
+endif  
+! Fstep=1~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~!
+!if(abs(FL2(1)).lt. 1.0e-10_ki) then
+!      c2(0) =  &
+!     &f2(0) 
+!      c2(3) =  &
+!     &-(f2(6)/MP12(2)) 
+!      c2(4) =  &
+!     &f2(5)/MP12(2)**2 
+!      c2(5) =  &
+!     &-(f2(1)/MP12(2)) 
+!      c2(6) =  &
+!     &f2(2)/MP12(2)**2 
+!      c2(14) =  &
+!     &-((-f2(0) + f2(4))/MP12(2)**3) 
+!      c2(15) =  &
+!     &-(f2(3)/MP12(2)**3)
+!----------------------------------------------------------------------------------! 
+!else
+!	print *, 'f2(0)',f2(0)
+!      c2(0) =  &
+!     &f2(0) 
+!      c2(3) =  &
+!     &-(f2(6)/(FL2(1)*MP12(2))) 
+!      c2(4) =  &
+!     &f2(5)/(FL2(1)**2*MP12(2)**2) 
+!      c2(5) =  &
+!     &-(f2(1)/MP12(2)) 
+!      c2(6) =  &
+!     &f2(2)/MP12(2)**2 
+!      c2(14) =  &
+!     &-(f2(4)/(FL2(1)**3*MP12(2)**3)) 
+!      c2(15) =  &
+!     &-(f2(3)/MP12(2)**3) 
+!endif
+! Fstep=2&3&4~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~!
+if(abs(x1s1).gt. 1.0e-10_ki) then  
+if(abs(x1s2).gt. 1.0e-10_ki) then
+! print *, 'mgetc2.f90: two or infinite solutions -> dividing by x1s1,x1s2,y3'
+      c2(1) =  &
+     &        (x1s2**2*(x1s2 - y3)*y3**2* &
+     &     (-c2(0) + f2(7) + c2(15)*MP12(2)**3) +  &
+     &    x1s1**2*(-(y3**3*(c2(0) - f2(12) + c2(6)*MP12(2)**2)) +  &
+     &       x1s2**2*y3*((f2(7) - f2(10))*(-one + FL2(4))*FL2(4) -  &
+     &          f2(9)*(one + FL2(4)) +  &
+     &          (c2(4)*(-one + FL2(4))*FL2(4) + c2(6)*(one + FL2(4)))* &
+     &           MP12(2)**2 +  &
+     &          c2(15)*(-one + FL2(4))*FL2(4)*MP12(2)**3) +  &
+     &       x1s2**3*(c2(0) - f2(15) -  &
+     &          (c2(5) + c2(3)*FL2(4))*MP12(2) +  &
+     &          (c2(6) + c2(4)*FL2(4)**2)*MP12(2)**2 -  &
+     &          (c2(15) + c2(14)*FL2(4)**3)*MP12(2)**3) +  &
+     &       x1s2*y3**2*(f2(9) + f2(13) - f2(12)*FL2(4) +  &
+     &          f2(14)*FL2(4) +  &
+     &          MP12(2)*(c2(5) + c2(3)*FL2(4) +  &
+     &             MP12(2)* &
+     &              (c2(6)*(-one + FL2(4)) - c2(4)*FL2(4) +  &
+     &                (c2(15) + c2(14)*FL2(4))*MP12(2))))) +  &
+     &    x1s1**3*(y3**2*(c2(0) - f2(12) + c2(6)*MP12(2)**2) +  &
+     &       x1s2**2*(-c2(0) + f2(15) +  &
+     &          MP12(2)*(c2(5) + c2(3)*FL2(4) -  &
+     &             (c2(6) + c2(4)*FL2(4)**2)*MP12(2) +  &
+     &             (c2(15) + c2(14)*FL2(4)**3)*MP12(2)**2)) -  &
+     &       x1s2*y3*(f2(13) - f2(12)*FL2(4) + f2(14)*FL2(4) +  &
+     &          MP12(2)*(c2(5) + c2(3)*FL2(4) +  &
+     &             MP12(2)* &
+     &              (c2(15)*MP12(2) +  &
+     &                FL2(4)*(-c2(4) + c2(6) + c2(14)*MP12(2)))))) &
+     &      + x1s1*x1s2*y3* &
+     &     (y3**2*(-f2(9) + c2(6)*MP12(2)**2) +  &
+     &       x1s2**2*(f2(8) + f2(9) +  &
+     &          FL2(4)*(f2(11) + (-f2(7) + f2(10))*FL2(4)) +  &
+     &          (c2(5) + c2(3)*FL2(4))*MP12(2) -  &
+     &          (c2(6) + c2(4)*FL2(4)**2)*MP12(2)**2 +  &
+     &          FL2(4)*(c2(14) - c2(15)*FL2(4))*MP12(2)**3) -  &
+     &       x1s2*y3*(f2(8) + c2(5)*MP12(2) +  &
+     &          FL2(4)*(-f2(7) - f2(9) + f2(10) + f2(11) +  &
+     &             MP12(2)* &
+     &              (c2(3) +  &
+     &                MP12(2)* &
+     &                 (-c2(4) + c2(6) +  &
+     &                   (c2(14) - c2(15))*MP12(2)))))))/ &
+     &  (x1s1*(x1s1 - x1s2)*x1s2*(x1s1 - y3)*(x1s2 - y3)*y3* &
+     &    MP12(2)) 
+      c2(2) =  &
+     &        (x1s1**3*(x1s2*c2(0) - y3*c2(0) + y3*f2(12) + y3*f2(13) -  &
+     &       x1s2*f2(15) - y3*f2(12)*FL2(4) + y3*f2(14)*FL2(4) -  &
+     &       (x1s2 - y3)*(c2(5) + c2(3)*FL2(4))*MP12(2) +  &
+     &       ((x1s2 - y3)*c2(6) + y3*(-c2(4) + c2(6))*FL2(4) +  &
+     &          x1s2*c2(4)*FL2(4)**2)*MP12(2)**2 +  &
+     &       (y3*(c2(15) + c2(14)*FL2(4)) -  &
+     &          x1s2*(c2(15) + c2(14)*FL2(4)**3))*MP12(2)**3) +  &
+     &    x1s1**2*y3*(y3*(-f2(13) + (f2(12) - f2(14))*FL2(4) -  &
+     &          (c2(5) + c2(3)*FL2(4))*MP12(2) +  &
+     &          (c2(4) - c2(6))*FL2(4)*MP12(2)**2 -  &
+     &          (c2(15) + c2(14)*FL2(4))*MP12(2)**3) +  &
+     &       x1s2*(f2(13) +  &
+     &          (f2(9) - f2(12) + f2(14) - f2(7)*(-one + FL2(4)) +  &
+     &             f2(10)*(-one + FL2(4)))*FL2(4) +  &
+     &          (c2(5) + c2(3)*FL2(4))*MP12(2) -  &
+     &          c2(4)*FL2(4)**2*MP12(2)**2 +  &
+     &          (c2(14)*FL2(4) + c2(15)*(one + FL2(4) - FL2(4)**2))* &
+     &           MP12(2)**3)) +  &
+     &    x1s2*y3*(y3**2*(-c2(0) + f2(7) + f2(9) -  &
+     &          c2(6)*MP12(2)**2 + c2(15)*MP12(2)**3) +  &
+     &       x1s2**2*(c2(0) - f2(8) - f2(9) -  &
+     &          FL2(4)*(f2(11) + f2(10)*FL2(4)) +  &
+     &          f2(7)*(-one + FL2(4)**2) -  &
+     &          (c2(5) + c2(3)*FL2(4))*MP12(2) +  &
+     &          (c2(6) + c2(4)*FL2(4)**2)*MP12(2)**2 +  &
+     &          (-(c2(14)*FL2(4)) + c2(15)*(-one + FL2(4)**2))* &
+     &           MP12(2)**3) +  &
+     &       x1s2*y3*(f2(8) + c2(5)*MP12(2) +  &
+     &          FL2(4)*(-f2(7) - f2(9) + f2(10) + f2(11) +  &
+     &             MP12(2)* &
+     &              (c2(3) +  &
+     &                MP12(2)* &
+     &                 (-c2(4) + c2(6) +  &
+     &                   (c2(14) - c2(15))*MP12(2)))))) +  &
+     &    x1s1*(y3**3*(c2(0) - f2(12) + c2(6)*MP12(2)**2) +  &
+     &       x1s2*y3**2*(f2(8) - f2(13) +  &
+     &          (-f2(7) - f2(9) + f2(10) + f2(11) + f2(12) -  &
+     &             f2(14))*FL2(4) - c2(15)*(one + FL2(4))*MP12(2)**3 &
+     &          ) + x1s2**3* &
+     &        (-c2(0) + f2(15) +  &
+     &          MP12(2)*(c2(5) + c2(3)*FL2(4) -  &
+     &             (c2(6) + c2(4)*FL2(4)**2)*MP12(2) +  &
+     &             (c2(15) + c2(14)*FL2(4)**3)*MP12(2)**2)) -  &
+     &       x1s2**2*y3*(f2(8) + c2(5)*MP12(2) +  &
+     &          FL2(4)*(-f2(7) - f2(9) + f2(10) + f2(11) +  &
+     &             MP12(2)* &
+     &              (c2(3) +  &
+     &                MP12(2)* &
+     &                 (-c2(4) + c2(6) +  &
+     &                   (c2(14) - c2(15))*MP12(2)))))))/ &
+     &  (x1s1*(x1s1 - x1s2)*x1s2*(x1s1 - y3)*(x1s2 - y3)*y3* &
+     &    MP12(2)**2) 
+      c2(7) =  &
+     &        (x1s2**2*(f2(11) + c2(3)*MP12(2) + c2(14)*MP12(2)**3) -  &
+     &    x1s1*x1s2*(f2(7) + f2(9) - f2(10) +  &
+     &       MP12(2)**2*(c2(4) - c2(6) + c2(15)*MP12(2))) +  &
+     &    x1s1**2*(f2(12) - f2(14) -  &
+     &       MP12(2)*(c2(3) +  &
+     &          MP12(2)*(-c2(4) + c2(6) + c2(14)*MP12(2)))))/ &
+     &  (x1s1*(x1s1 - x1s2)*x1s2*MP12(2)**2) 
+      c2(8) =  &
+     &        (x1s2**2*(f2(8) + c2(5)*MP12(2)) -  &
+     &    x1s1**2*(f2(13) + c2(5)*MP12(2) + c2(15)*MP12(2)**3))/ &
+     &  (x1s1*(x1s1 - x1s2)*x1s2*MP12(2)**2) 
+      c2(13) =  &
+     &        (-(x1s1**2*x1s2*c2(0)) + x1s1*x1s2**2*c2(0) +  &
+     &    x1s1**2*y3*c2(0) - x1s2**2*y3*c2(0) -  &
+     &    x1s1*y3**2*c2(0) + x1s2*y3**2*c2(0) +  &
+     &    x1s2**2*y3*f2(7) - x1s2*y3**2*f2(7) +  &
+     &    x1s2**2*y3*f2(8) - x1s2*y3**2*f2(8) +  &
+     &    x1s2**2*y3*f2(9) - x1s2*y3**2*f2(9) -  &
+     &    x1s1**2*y3*f2(12) + x1s1*y3**2*f2(12) -  &
+     &    x1s1**2*y3*f2(13) + x1s1*y3**2*f2(13) +  &
+     &    x1s1**2*x1s2*f2(15) - x1s1*x1s2**2*f2(15) -  &
+     &    x1s1*x1s2*y3*f2(7)*FL2(4) + x1s2*y3**2*f2(7)*FL2(4) -  &
+     &    x1s1*x1s2*y3*f2(9)*FL2(4) + x1s2*y3**2*f2(9)*FL2(4) +  &
+     &    x1s1*x1s2*y3*f2(10)*FL2(4) - x1s2*y3**2*f2(10)*FL2(4) +  &
+     &    x1s2**2*y3*f2(11)*FL2(4) - x1s2*y3**2*f2(11)*FL2(4) +  &
+     &    x1s1**2*y3*f2(12)*FL2(4) - x1s1*y3**2*f2(12)*FL2(4) -  &
+     &    x1s1**2*y3*f2(14)*FL2(4) + x1s1*y3**2*f2(14)*FL2(4) +  &
+     &    x1s1*x1s2*y3*f2(7)*FL2(4)**2 -  &
+     &    x1s2**2*y3*f2(7)*FL2(4)**2 -  &
+     &    x1s1*x1s2*y3*f2(10)*FL2(4)**2 +  &
+     &    x1s2**2*y3*f2(10)*FL2(4)**2 +  &
+     &    (x1s1 - x1s2)*(x1s1 - y3)*(x1s2 - y3)* &
+     &     (c2(5) + c2(3)*FL2(4))*MP12(2) -  &
+     &    (x1s1 - x1s2)*(x1s1 - y3)* &
+     &     ((x1s2 - y3)*c2(6) + y3*(-c2(4) + c2(6))*FL2(4) +  &
+     &       x1s2*c2(4)*FL2(4)**2)*MP12(2)**2 +  &
+     &    ((x1s1 - x1s2)*(x1s1 - y3)*(x1s2 - y3)*c2(15) +  &
+     &       y3*(-((x1s1 - x1s2)*(x1s1 + x1s2 - y3)*c2(14)) +  &
+     &          x1s2*(-x1s1 + y3)*c2(15))*FL2(4) +  &
+     &       (x1s1 - x1s2)*x1s2*y3*c2(15)*FL2(4)**2 +  &
+     &       x1s1*(x1s1 - x1s2)*x1s2*c2(14)*FL2(4)**3)*MP12(2)**3) &
+     &   /(x1s1*(x1s1 - x1s2)*x1s2*(x1s1 - y3)*(x1s2 - y3)*y3* &
+     &    MP12(2)**3) 
+      c2(16) =  &
+     &        (x1s2*(f2(7) + f2(9) - f2(10) - f2(11)) -  &
+     &    x1s2*c2(3)*MP12(2) +  &
+     &    (-x1s1 + x1s2)*(c2(4) - c2(6))*MP12(2)**2 +  &
+     &    ((x1s1 - x1s2)*c2(14) + x1s2*c2(15))*MP12(2)**3 +  &
+     &    x1s1*(-f2(12) + f2(14) + c2(3)*MP12(2)))/ &
+     &  (x1s1*(x1s1 - x1s2)*x1s2*MP12(2)**3) 
+      c2(17) =  &
+     &        (-(x1s2*(f2(8) + c2(5)*MP12(2))) +  &
+     &    x1s1*(f2(13) + c2(5)*MP12(2) + c2(15)*MP12(2)**3))/ &
+     &  (x1s1*(x1s1 - x1s2)*x1s2*MP12(2)**3) 
+      c2(18) =  &
+     &        (-f2(7) + f2(10) - MP12(2)**2*(c2(4) + c2(15)*MP12(2)))/ &
+     &  (x1s1*MP12(2)**3) 
+      c2(19) =  &
+     &(f2(9) - c2(6)*MP12(2)**2)/(x1s1*MP12(2)**3)
+!----------------------------------------------------------------------------------! 
+else  
+!print *, 'mgetc2.f90: one solution -> dividing by x1s1, y2,y3, FL(3)'
+      c2(1) =  &
+     &        (y2**2*(y2 - y3)*y3**2*FL2(3)* &
+     &     (-c2(0) + f2(7) + c2(15)*MP12(2)**3) +  &
+     &    x1s1*y2**2*y3*(y3* &
+     &        (-(f2(9)*FL2(4)) -  &
+     &          FL2(3)*(f2(8) + (-f2(7) + f2(10))*FL2(3)**2 +  &
+     &             f2(11)*FL2(4)) -  &
+     &          FL2(3)*(c2(5) + c2(3)*FL2(4))*MP12(2) +  &
+     &          (c2(4)*FL2(3)**3 + c2(6)*FL2(4))*MP12(2)**2 +  &
+     &          FL2(3)*(c2(15)*FL2(3)**2 - c2(14)*FL2(4))* &
+     &           MP12(2)**3) +  &
+     &       y2*FL2(3)*(f2(8) + f2(9) +  &
+     &          FL2(4)*(f2(11) + (-f2(7) + f2(10))*FL2(4)) +  &
+     &          (c2(5) + c2(3)*FL2(4))*MP12(2) -  &
+     &          (c2(6) + c2(4)*FL2(4)**2)*MP12(2)**2 +  &
+     &          FL2(4)*(c2(14) - c2(15)*FL2(4))*MP12(2)**3)) +  &
+     &    x1s1**3*(y2*y3*(-(f2(13)*FL2(3)) - f2(14)*FL2(4) -  &
+     &          FL2(3)*(c2(5) + c2(3)*FL2(4))*MP12(2) +  &
+     &          (c2(4)*FL2(3)**3 + c2(6)*FL2(4))*MP12(2)**2) -  &
+     &       y3**2*FL2(3)*(-c2(0) + f2(12) +  &
+     &          (c2(15) + c2(14)*FL2(3)**3)*MP12(2)**3) +  &
+     &       y2**2*FL2(3)*(-c2(0) + f2(15) +  &
+     &          MP12(2)*(c2(5) + c2(3)*FL2(4) -  &
+     &             (c2(6) + c2(4)*FL2(4)**2)*MP12(2) +  &
+     &             (c2(15) + c2(14)*FL2(4)**3)*MP12(2)**2))) +  &
+     &    x1s1**2*(y2*y3**2* &
+     &        (f2(13)*FL2(3) + f2(14)*FL2(4) +  &
+     &          FL2(3)*(c2(5) + c2(3)*FL2(4))*MP12(2) -  &
+     &          (c2(4)*FL2(3)**3 + c2(6)*FL2(4))*MP12(2)**2) +  &
+     &       y3**3*FL2(3)*(-c2(0) + f2(12) +  &
+     &          (c2(15) + c2(14)*FL2(3)**3)*MP12(2)**3) +  &
+     &       y2**3*FL2(3)*(c2(0) - f2(15) -  &
+     &          (c2(5) + c2(3)*FL2(4))*MP12(2) +  &
+     &          (c2(6) + c2(4)*FL2(4)**2)*MP12(2)**2 -  &
+     &          (c2(15) + c2(14)*FL2(4)**3)*MP12(2)**3) -  &
+     &       y2**2*y3*(FL2(3) - FL2(4))* &
+     &        (f2(9) - c2(6)*MP12(2)**2 +  &
+     &          FL2(3)*(FL2(3) + FL2(4))* &
+     &           (f2(7) - f2(10) +  &
+     &             MP12(2)**2*(c2(4) + c2(15)*MP12(2))))))/ &
+     &  (x1s1*(x1s1 - y2)*y2*(x1s1 - y3)*(y2 - y3)*y3*FL2(3)* &
+     &    MP12(2)) 
+      c2(2) =  &
+     &        (x1s1**3*y2*c2(0)*FL2(3) - x1s1*y2**3*c2(0)*FL2(3) -  &
+     &    x1s1**3*y3*c2(0)*FL2(3) + y2**3*y3*c2(0)*FL2(3) +  &
+     &    x1s1*y3**3*c2(0)*FL2(3) - y2*y3**3*c2(0)*FL2(3) -  &
+     &    y2**3*y3*f2(7)*FL2(3) + y2*y3**3*f2(7)*FL2(3) -  &
+     &    x1s1*y2**2*y3*f2(8)*FL2(3) - y2**3*y3*f2(8)*FL2(3) +  &
+     &    x1s1*y2*y3**2*f2(8)*FL2(3) + y2**2*y3**2*f2(8)*FL2(3) +  &
+     &    x1s1**2*y2*y3*f2(9)*FL2(3) - y2**3*y3*f2(9)*FL2(3) +  &
+     &    x1s1**3*y3*f2(12)*FL2(3) - x1s1*y3**3*f2(12)*FL2(3) +  &
+     &    x1s1**3*y3*f2(13)*FL2(3) +  &
+     &    x1s1**2*y2*y3*f2(13)*FL2(3) -  &
+     &    x1s1**2*y3**2*f2(13)*FL2(3) -  &
+     &    x1s1*y2*y3**2*f2(13)*FL2(3) -  &
+     &    x1s1**3*y2*f2(15)*FL2(3) + x1s1*y2**3*f2(15)*FL2(3) +  &
+     &    x1s1**2*y2*y3*f2(7)*FL2(3)**3 +  &
+     &    x1s1*y2**2*y3*f2(7)*FL2(3)**3 -  &
+     &    x1s1*y2*y3**2*f2(7)*FL2(3)**3 -  &
+     &    y2**2*y3**2*f2(7)*FL2(3)**3 -  &
+     &    x1s1**2*y2*y3*f2(10)*FL2(3)**3 -  &
+     &    x1s1*y2**2*y3*f2(10)*FL2(3)**3 +  &
+     &    x1s1*y2*y3**2*f2(10)*FL2(3)**3 +  &
+     &    y2**2*y3**2*f2(10)*FL2(3)**3 -  &
+     &    x1s1**2*y2*y3*f2(9)*FL2(4) -  &
+     &    x1s1*y2**2*y3*f2(9)*FL2(4) +  &
+     &    x1s1*y2*y3**2*f2(9)*FL2(4) + y2**2*y3**2*f2(9)*FL2(4) +  &
+     &    x1s1**3*y3*f2(14)*FL2(4) +  &
+     &    x1s1**2*y2*y3*f2(14)*FL2(4) -  &
+     &    x1s1**2*y3**2*f2(14)*FL2(4) -  &
+     &    x1s1*y2*y3**2*f2(14)*FL2(4) -  &
+     &    x1s1*y2**2*y3*f2(11)*FL2(3)*FL2(4) -  &
+     &    y2**3*y3*f2(11)*FL2(3)*FL2(4) +  &
+     &    x1s1*y2*y3**2*f2(11)*FL2(3)*FL2(4) +  &
+     &    y2**2*y3**2*f2(11)*FL2(3)*FL2(4) -  &
+     &    x1s1**2*y2*y3*f2(7)*FL2(3)*FL2(4)**2 +  &
+     &    y2**3*y3*f2(7)*FL2(3)*FL2(4)**2 +  &
+     &    x1s1**2*y2*y3*f2(10)*FL2(3)*FL2(4)**2 -  &
+     &    y2**3*y3*f2(10)*FL2(3)*FL2(4)**2 -  &
+     &    (x1s1 - y2)*(x1s1 + y2)*(x1s1 - y3)*(y2 - y3)*FL2(3)* &
+     &     (c2(5) + c2(3)*FL2(4))*MP12(2) +  &
+     &    (x1s1 - y2)*(x1s1 + y2)*(x1s1 - y3)* &
+     &     (-(y3*(c2(4)*FL2(3)**3 + c2(6)*FL2(4))) +  &
+     &       y2*FL2(3)*(c2(6) + c2(4)*FL2(4)**2))*MP12(2)**2 +  &
+     &    FL2(3)*((x1s1 - y3)* &
+     &        ((-x1s1 + y2)*(y2 - y3)*(x1s1 + y2 + y3)*c2(15) +  &
+     &          y2*(x1s1 + y2)*y3*c2(15)*FL2(3)**2 +  &
+     &          x1s1*y3*(x1s1 + y3)*c2(14)*FL2(3)**3) -  &
+     &       y2*(x1s1 + y2)*(y2 - y3)*y3*c2(14)*FL2(4) +  &
+     &       y2*(-x1s1**2 + y2**2)*y3*c2(15)*FL2(4)**2 +  &
+     &       x1s1*y2*(-x1s1**2 + y2**2)*c2(14)*FL2(4)**3)* &
+     &     MP12(2)**3)/ &
+     &  (x1s1*(x1s1 - y2)*y2*(x1s1 - y3)*(y2 - y3)*y3*FL2(3)* &
+     &    MP12(2)**2) 
+      c2(7) =  &
+     &        (x1s1*y2*(f2(9) - c2(6)*MP12(2)**2) +  &
+     &    y2**2*FL2(3)*(f2(11) + c2(3)*MP12(2) +  &
+     &       c2(14)*MP12(2)**3) -  &
+     &    x1s1**2*(f2(14) +  &
+     &       MP12(2)*(c2(3)*FL2(3) - c2(6)*MP12(2))))/ &
+     &  (x1s1*(x1s1 - y2)*y2*FL2(3)*MP12(2)**2) 
+      c2(8) =  &
+     &        (y2**2*(f2(8) + c2(5)*MP12(2)) -  &
+     &    x1s1*y2*FL2(3)**2* &
+     &     (f2(7) - f2(10) + MP12(2)**2*(c2(4) + c2(15)*MP12(2))) &
+     &     - x1s1**2*(f2(13) +  &
+     &       MP12(2)*(c2(5) - c2(4)*FL2(3)**2*MP12(2))))/ &
+     &  (x1s1*(x1s1 - y2)*y2*MP12(2)**2) 
+      c2(13) =  &
+     &        (-(x1s1**2*y2*c2(0)*FL2(3)) + x1s1*y2**2*c2(0)*FL2(3) +  &
+     &    x1s1**2*y3*c2(0)*FL2(3) - y2**2*y3*c2(0)*FL2(3) -  &
+     &    x1s1*y3**2*c2(0)*FL2(3) + y2*y3**2*c2(0)*FL2(3) +  &
+     &    y2**2*y3*f2(7)*FL2(3) - y2*y3**2*f2(7)*FL2(3) +  &
+     &    y2**2*y3*f2(8)*FL2(3) - y2*y3**2*f2(8)*FL2(3) -  &
+     &    x1s1*y2*y3*f2(9)*FL2(3) + y2**2*y3*f2(9)*FL2(3) -  &
+     &    x1s1**2*y3*f2(12)*FL2(3) + x1s1*y3**2*f2(12)*FL2(3) -  &
+     &    x1s1**2*y3*f2(13)*FL2(3) + x1s1*y3**2*f2(13)*FL2(3) +  &
+     &    x1s1**2*y2*f2(15)*FL2(3) - x1s1*y2**2*f2(15)*FL2(3) -  &
+     &    x1s1*y2*y3*f2(7)*FL2(3)**3 + y2*y3**2*f2(7)*FL2(3)**3 +  &
+     &    x1s1*y2*y3*f2(10)*FL2(3)**3 -  &
+     &    y2*y3**2*f2(10)*FL2(3)**3 + x1s1*y2*y3*f2(9)*FL2(4) -  &
+     &    y2*y3**2*f2(9)*FL2(4) - x1s1**2*y3*f2(14)*FL2(4) +  &
+     &    x1s1*y3**2*f2(14)*FL2(4) +  &
+     &    y2**2*y3*f2(11)*FL2(3)*FL2(4) -  &
+     &    y2*y3**2*f2(11)*FL2(3)*FL2(4) +  &
+     &    x1s1*y2*y3*f2(7)*FL2(3)*FL2(4)**2 -  &
+     &    y2**2*y3*f2(7)*FL2(3)*FL2(4)**2 -  &
+     &    x1s1*y2*y3*f2(10)*FL2(3)*FL2(4)**2 +  &
+     &    y2**2*y3*f2(10)*FL2(3)*FL2(4)**2 +  &
+     &    (x1s1 - y2)*(x1s1 - y3)*(y2 - y3)*FL2(3)* &
+     &     (c2(5) + c2(3)*FL2(4))*MP12(2) -  &
+     &    (x1s1 - y2)*(x1s1 - y3)* &
+     &     (-(y3*(c2(4)*FL2(3)**3 + c2(6)*FL2(4))) +  &
+     &       y2*FL2(3)*(c2(6) + c2(4)*FL2(4)**2))*MP12(2)**2 +  &
+     &    FL2(3)*(-((x1s1 - y3)* &
+     &          (-((x1s1 - y2)*(y2 - y3)*c2(15)) +  &
+     &            y2*y3*c2(15)*FL2(3)**2 +  &
+     &            x1s1*y3*c2(14)*FL2(3)**3)) +  &
+     &       y2*(y2 - y3)*y3*c2(14)*FL2(4) +  &
+     &       (x1s1 - y2)*y2*y3*c2(15)*FL2(4)**2 +  &
+     &       x1s1*(x1s1 - y2)*y2*c2(14)*FL2(4)**3)*MP12(2)**3)/ &
+     &  (x1s1*(x1s1 - y2)*y2*(x1s1 - y3)*(y2 - y3)*y3*FL2(3)* &
+     &    MP12(2)**3) 
+      c2(16) =  &
+     &        (x1s1*f2(14) - y2*(f2(9) + f2(11)*FL2(3)) +  &
+     &    (x1s1 - y2)*c2(3)*FL2(3)*MP12(2) +  &
+     &    (-x1s1 + y2)*c2(6)*MP12(2)**2 -  &
+     &    y2*c2(14)*FL2(3)*MP12(2)**3)/ &
+     &  (x1s1*(x1s1 - y2)*y2*FL2(3)*MP12(2)**3) 
+      c2(17) =  &
+     &        (x1s1*(f2(13) + MP12(2)* &
+     &        (c2(5) - c2(4)*FL2(3)**2*MP12(2))) +  &
+     &    y2*(-f2(8) - c2(5)*MP12(2) +  &
+     &       FL2(3)**2*(f2(7) - f2(10) +  &
+     &          MP12(2)**2*(c2(4) + c2(15)*MP12(2)))))/ &
+     &  (x1s1*(x1s1 - y2)*y2*MP12(2)**3) 
+      c2(18) =  &
+     &        (-f2(7) + f2(10) - MP12(2)**2*(c2(4) + c2(15)*MP12(2)))/ &
+     &  (x1s1*MP12(2)**3) 
+      c2(19) =  &
+     &(f2(9) - c2(6)*MP12(2)**2)/(x1s1*MP12(2)**3) 
+endif
+!----------------------------------------------------------------------------------!  
+else 
+! print *,'mgetc2.f90: no solutions -> dividing by FL(3),y1,y2,y3' 
+      c2(1) =  &
+     &        (-(y2**2*(y2 - y3)*y3**2*(c2(0) - f2(7))*FL2(2)**2* &
+     &       FL2(3)) + y1*y2**2*y3* &
+     &     (-(y3*(f2(8)*FL2(2)**2*FL2(3) + f2(10)*FL2(3)**3 +  &
+     &            FL2(2)*(f2(9)*FL2(2) + f2(11)*FL2(3))*FL2(4))) &
+     &        - y3*FL2(2)**2*FL2(3)*(c2(5) + c2(3)*FL2(4))* &
+     &        MP12(2) + y3*FL2(2)**2* &
+     &        (c2(4)*FL2(3)**3 + c2(6)*FL2(4))*MP12(2)**2 -  &
+     &       y3*(c2(15)*FL2(3)**3 + c2(14)*FL2(2)**5*FL2(4))* &
+     &        MP12(2)**3 +  &
+     &       y2*FL2(3)*(f2(8)*FL2(2)**2 + f2(9)*FL2(2)**2 +  &
+     &          f2(11)*FL2(2)*FL2(4) + f2(10)*FL2(4)**2 +  &
+     &          FL2(2)**2*(c2(5) + c2(3)*FL2(4))*MP12(2) -  &
+     &          FL2(2)**2*(c2(6) + c2(4)*FL2(4)**2)*MP12(2)**2 +  &
+     &          (c2(14)*FL2(2)**5 + c2(15)*FL2(4)**2)*MP12(2)**3)) &
+     &      + y1**2*(y2*y3**2*FL2(2)**2* &
+     &        (f2(13)*FL2(3) + f2(14)*FL2(4) +  &
+     &          FL2(3)*(c2(5) + c2(3)*FL2(4))*MP12(2) -  &
+     &          (c2(4)*FL2(3)**3 + c2(6)*FL2(4))*MP12(2)**2) +  &
+     &       y3**3*FL2(2)**2*FL2(3)* &
+     &        (-c2(0) + f2(12) +  &
+     &          (c2(15) + c2(14)*FL2(3)**3)*MP12(2)**3) +  &
+     &       y2**3*FL2(2)**2*FL2(3)* &
+     &        (c2(0) - f2(15) - (c2(5) + c2(3)*FL2(4))*MP12(2) +  &
+     &          (c2(6) + c2(4)*FL2(4)**2)*MP12(2)**2 -  &
+     &          (c2(15) + c2(14)*FL2(4)**3)*MP12(2)**3) -  &
+     &       y2**2*y3*(FL2(3) - FL2(4))* &
+     &        (f2(9)*FL2(2)**2 -  &
+     &          f2(10)*FL2(3)*(FL2(3) + FL2(4)) +  &
+     &          FL2(2)**2*(-c2(6) +  &
+     &             c2(4)*FL2(3)*(FL2(3) + FL2(4)))*MP12(2)**2 +  &
+     &          (c2(14)*FL2(2)**5 -  &
+     &             c2(15)*FL2(3)*(FL2(3) + FL2(4)))*MP12(2)**3)) &
+     &     + y1**3*FL2(2)**2* &
+     &     (y2*y3*(-(f2(13)*FL2(3)) - f2(14)*FL2(4) -  &
+     &          FL2(3)*(c2(5) + c2(3)*FL2(4))*MP12(2) +  &
+     &          (c2(4)*FL2(3)**3 + c2(6)*FL2(4))*MP12(2)**2) -  &
+     &       y3**2*FL2(3)*(-c2(0) + f2(12) +  &
+     &          (c2(15) + c2(14)*FL2(3)**3)*MP12(2)**3) +  &
+     &       y2**2*FL2(3)*(-c2(0) + f2(15) +  &
+     &          MP12(2)*(c2(5) + c2(3)*FL2(4) -  &
+     &             (c2(6) + c2(4)*FL2(4)**2)*MP12(2) +  &
+     &             (c2(15) + c2(14)*FL2(4)**3)*MP12(2)**2))))/ &
+     &  (y1*(y1 - y2)*y2*(y1 - y3)*(y2 - y3)*y3*FL2(2)**2*FL2(3)* &
+     &    MP12(2)) 
+      c2(2) =  &
+     &        (-(((y1 + y2)*y3*(f2(8) + c2(5)*MP12(2)))/ &
+     &       ((y1 - y3)*(-y2 + y3))) -  &
+     &    ((y1 + y2)*y3*FL2(4)*(f2(11) + c2(3)*FL2(2)*MP12(2)))/ &
+     &     ((y1 - y3)*(-y2 + y3)*FL2(2)) -  &
+     &    (y1*(y1 + y2)*FL2(4)**2* &
+     &       (f2(10) + MP12(2)**2* &
+     &          (-(c2(4)*FL2(2)**2) + c2(15)*MP12(2))))/ &
+     &     ((y1 - y3)*(-y2 + y3)*FL2(2)**2) -  &
+     &    (y1*(y1 + y2)*(f2(9) +  &
+     &         MP12(2)**2*(-c2(6) + c2(14)*FL2(2)**3*MP12(2))))/ &
+     &     ((y1 - y3)*(-y2 + y3)) +  &
+     &    ((y1 + y2)*FL2(4)* &
+     &       (-(y2**2*FL2(3)*(f2(11) + c2(3)*FL2(2)*MP12(2))) +  &
+     &         y1**2*FL2(2)* &
+     &          (f2(14) + MP12(2)*(c2(3)*FL2(3) - c2(6)*MP12(2))) &
+     &          - y1*y2*FL2(2)* &
+     &          (f2(9) + MP12(2)**2* &
+     &             (-c2(6) + c2(14)*FL2(2)**3*MP12(2)))))/ &
+     &     ((y1 - y2)*y2*(y2 - y3)*FL2(2)*FL2(3)) +  &
+     &    ((y1 + y2)*(-(y2**2*FL2(2)**2* &
+     &            (f2(8) + c2(5)*MP12(2))) -  &
+     &         y1*y2*FL2(3)**2* &
+     &          (f2(10) + MP12(2)**2* &
+     &             (-(c2(4)*FL2(2)**2) + c2(15)*MP12(2))) +  &
+     &         y1**2*FL2(2)**2* &
+     &          (f2(13) + MP12(2)* &
+     &             (c2(5) - c2(4)*FL2(3)**2*MP12(2)))))/ &
+     &     ((y1 - y2)*y2*(y2 - y3)*FL2(2)**2) +  &
+     &    (y1*(y2*(y2 - y3)*y3*(y2 + y3)*(c2(0) - f2(7)) +  &
+     &         y1**3*(y3*(-c2(0) + f2(12) +  &
+     &               (c2(15) + c2(14)*FL2(3)**3)*MP12(2)**3) +  &
+     &            y2*(c2(0) - f2(15) -  &
+     &               (c2(5) + c2(3)*FL2(4))*MP12(2) +  &
+     &               (c2(6) + c2(4)*FL2(4)**2)*MP12(2)**2 -  &
+     &               (c2(15) + c2(14)*FL2(4)**3)*MP12(2)**3)) +  &
+     &         y1*(y3**3*(c2(0) - f2(12) -  &
+     &               (c2(15) + c2(14)*FL2(3)**3)*MP12(2)**3) +  &
+     &            y2**3*(-c2(0) + f2(15) +  &
+     &               MP12(2)* &
+     &                (c2(5) + c2(3)*FL2(4) -  &
+     &                  (c2(6) + c2(4)*FL2(4)**2)*MP12(2) +  &
+     &                  (c2(15) + c2(14)*FL2(4)**3)*MP12(2)**2)))) &
+     &       )/((y1 - y2)*y2*(y1 - y3)*(y2 - y3)*y3))/ &
+     &  (y1**2*MP12(2)**2) 
+      c2(7) =  &
+     &        (y2**2*FL2(3)*(f2(11) + c2(3)*FL2(2)*MP12(2)) -  &
+     &    y1**2*FL2(2)*(f2(14) +  &
+     &       MP12(2)*(c2(3)*FL2(3) - c2(6)*MP12(2))) +  &
+     &    y1*y2*FL2(2)*(f2(9) +  &
+     &       MP12(2)**2*(-c2(6) + c2(14)*FL2(2)**3*MP12(2))))/ &
+     &  (y1*(y1 - y2)*y2*FL2(2)*FL2(3)*MP12(2)**2) 
+      c2(8) =  &
+     &        (y2**2*FL2(2)**2*(f2(8) + c2(5)*MP12(2)) +  &
+     &    y1*y2*FL2(3)**2*(f2(10) +  &
+     &       MP12(2)**2*(-(c2(4)*FL2(2)**2) + c2(15)*MP12(2))) -  &
+     &    y1**2*FL2(2)**2*(f2(13) +  &
+     &       MP12(2)*(c2(5) - c2(4)*FL2(3)**2*MP12(2))))/ &
+     &  (y1*(y1 - y2)*y2*FL2(2)**2*MP12(2)**2) 
+      c2(13) =  &
+     &        (y2*y3*(y3*(c2(0)*FL2(2)**2*FL2(3) -  &
+     &          f2(7)*FL2(2)**2*FL2(3) - f2(8)*FL2(2)**2*FL2(3) -  &
+     &          f2(10)*FL2(3)**3 - f2(9)*FL2(2)**2*FL2(4) -  &
+     &          f2(11)*FL2(2)*FL2(3)*FL2(4) -  &
+     &          FL2(2)**2*FL2(3)*(c2(5) + c2(3)*FL2(4))*MP12(2) +  &
+     &          FL2(2)**2*(c2(4)*FL2(3)**3 + c2(6)*FL2(4))* &
+     &           MP12(2)**2 -  &
+     &          (c2(15)*FL2(3)**3 + c2(14)*FL2(2)**5*FL2(4))* &
+     &           MP12(2)**3) +  &
+     &       y2*FL2(3)*(-(c2(0)*FL2(2)**2) + f2(7)*FL2(2)**2 +  &
+     &          f2(8)*FL2(2)**2 + f2(9)*FL2(2)**2 +  &
+     &          f2(11)*FL2(2)*FL2(4) + f2(10)*FL2(4)**2 +  &
+     &          FL2(2)**2*(c2(5) + c2(3)*FL2(4))*MP12(2) -  &
+     &          FL2(2)**2*(c2(6) + c2(4)*FL2(4)**2)*MP12(2)**2 +  &
+     &          (c2(14)*FL2(2)**5 + c2(15)*FL2(4)**2)*MP12(2)**3)) &
+     &      + y1*(y3**2*FL2(2)**2* &
+     &        ((-c2(0) + f2(12) + f2(13))*FL2(3) +  &
+     &          f2(14)*FL2(4) +  &
+     &          FL2(3)*(c2(5) + c2(3)*FL2(4))*MP12(2) -  &
+     &          (c2(4)*FL2(3)**3 + c2(6)*FL2(4))*MP12(2)**2 +  &
+     &          FL2(3)*(c2(15) + c2(14)*FL2(3)**3)*MP12(2)**3) +  &
+     &       y2**2*FL2(2)**2*FL2(3)* &
+     &        (c2(0) - f2(15) - (c2(5) + c2(3)*FL2(4))*MP12(2) +  &
+     &          (c2(6) + c2(4)*FL2(4)**2)*MP12(2)**2 -  &
+     &          (c2(15) + c2(14)*FL2(4)**3)*MP12(2)**3) +  &
+     &       y2*y3*(FL2(3) - FL2(4))* &
+     &        (-(f2(9)*FL2(2)**2) +  &
+     &          f2(10)*FL2(3)*(FL2(3) + FL2(4)) +  &
+     &          FL2(2)**2*(c2(6) -  &
+     &             c2(4)*FL2(3)*(FL2(3) + FL2(4)))*MP12(2)**2 +  &
+     &          (-(c2(14)*FL2(2)**5) +  &
+     &             c2(15)*FL2(3)*(FL2(3) + FL2(4)))*MP12(2)**3)) &
+     &     + y1**2*FL2(2)**2* &
+     &     (y3*(c2(0)*FL2(3) - (f2(12) + f2(13))*FL2(3) -  &
+     &          f2(14)*FL2(4) -  &
+     &          FL2(3)*(c2(5) + c2(3)*FL2(4))*MP12(2) +  &
+     &          (c2(4)*FL2(3)**3 + c2(6)*FL2(4))*MP12(2)**2 -  &
+     &          FL2(3)*(c2(15) + c2(14)*FL2(3)**3)*MP12(2)**3) +  &
+     &       y2*FL2(3)*(-c2(0) + f2(15) +  &
+     &          MP12(2)*(c2(5) + c2(3)*FL2(4) -  &
+     &             (c2(6) + c2(4)*FL2(4)**2)*MP12(2) +  &
+     &             (c2(15) + c2(14)*FL2(4)**3)*MP12(2)**2))))/ &
+     &  (y1*(y1 - y2)*y2*(y1 - y3)*(y2 - y3)*y3*FL2(2)**2*FL2(3)* &
+     &    MP12(2)**3) 
+      c2(16) =  &
+     &        (y1*FL2(2)*(f2(14) +  &
+     &       MP12(2)*(c2(3)*FL2(3) - c2(6)*MP12(2))) -  &
+     &    y2*(f2(11)*FL2(3) +  &
+     &       FL2(2)*(f2(9) +  &
+     &          MP12(2)*(c2(3)*FL2(3) - c2(6)*MP12(2) +  &
+     &             c2(14)*FL2(2)**3*MP12(2)**2))))/ &
+     &  (y1*(y1 - y2)*y2*FL2(2)*FL2(3)*MP12(2)**3) 
+      c2(17) =  &
+     &        (y1*FL2(2)**2*(f2(13) +  &
+     &       MP12(2)*(c2(5) - c2(4)*FL2(3)**2*MP12(2))) -  &
+     &    y2*(f2(8)*FL2(2)**2 + c2(5)*FL2(2)**2*MP12(2) +  &
+     &       FL2(3)**2*(f2(10) - c2(4)*FL2(2)**2*MP12(2)**2 +  &
+     &          c2(15)*MP12(2)**3)))/ &
+     &  (y1*(y1 - y2)*y2*FL2(2)**2*MP12(2)**3) 
+      c2(18) =  &
+     &        (f2(10) - c2(4)*FL2(2)**2*MP12(2)**2 + c2(15)*MP12(2)**3)/ &
+     &  (y1*FL2(2)**2*MP12(2)**3) 
+      c2(19) =  &
+     &        (f2(9) - c2(6)*MP12(2)**2 + c2(14)*FL2(2)**3*MP12(2)**3)/ &
+     &  (y1*MP12(2)**3) 
+endif  
+! Fstep=5~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~!
+if(abs(FL2(5)).lt. 1.0e-10_ki) then
+! print *,'mgetc2.f90: FL2(5)=0 -> dividing by mu2g(2)'  
+      c2(9) =  &
+     &-((c2(0) - f2(16) + c2(6)*MP12(2)**2)/mu2g(2)) 
+      c2(11) =  &
+     &        (f2(16) - f2(18) -  &
+     &    MP12(2)*(c2(3) +  &
+     &       MP12(2)*(-c2(4) + c2(6) + c2(14)*MP12(2))))/ &
+     &  (mu2g(2)*MP12(2)) 
+      c2(12) =  &
+     &-((f2(17) + c2(5)*MP12(2) + c2(15)*MP12(2)**3)/(mu2g(2)*MP12(2)))
+!----------------------------------------------------------------------------------!
+else
+! print *, 'mgetc2.f90: FL2(5) nonzero -> dividing by FL2(5),mu2g(2)' 
+      c2(9) =  &
+     &(-c2(0) + f2(16) + (c2(15) + c2(14)*FL2(5)**3)*MP12(2)**3)/mu2g(2) 
+      c2(11) =  &
+     &        -((f2(18) + c2(3)*FL2(5)*MP12(2) - c2(6)*MP12(2)**2)/ &
+     &    (mu2g(2)*FL2(5)*MP12(2))) 
+      c2(12) =  &
+     &        -((f2(17) + MP12(2)*(c2(5) - c2(4)*FL2(5)**2*MP12(2)))/ &
+     &    (mu2g(2)*MP12(2))) 
+endif
+! Fstep=6~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~!  
+      c2(10) =  &
+     &        (-c2(0) - mu2g(2)*c2(9) + f2(19) +  &
+     &    mu2g(2)*(c2(12) + c2(11)*FL2(6))*MP12(2) +  &
+     &    MP12(2)*(-c2(1) + c2(5) + c2(3)*FL2(6) +  &
+     &       MP12(2)*(-c2(2) - c2(6) + c2(8) +  &
+     &          FL2(6)*(c2(7) - c2(4)*FL2(6)) +  &
+     &          (-c2(13) + c2(15) + c2(17) - c2(19) +  &
+     &             FL2(6)*(c2(16) - c2(18)*FL2(6) +  &
+     &                c2(14)*FL2(6)**2))*MP12(2))))/(mu2g(2)*MP12(2))
+!~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~!
+	case default
+		print *, 'error in mgetc2.f90'
+	end select
+
+	if (diff.ge.0) then
+		do i=10,19
+		c2(i)=czip
+		enddo
+	if (diff.ge.1) then
+		c2(2)=czip
+		c2(4)=czip
+		c2(6)=czip
+		c2(7)=czip
+		c2(8)=czip
+		c2(9)=czip
+	if (diff.ge.2) then
+		c2(1)=czip
+		c2(3)=czip
+		c2(5)=czip
+	endif             
+	endif
+	endif
+end subroutine getc2_rm
+
+subroutine DFT2(n,nold,known,f2)
+! PARAMETERS=======================================================================!
+	! external paramters
+		complex(ki),intent(in   ) :: known(20)
+		integer,    intent(in   ) :: n
+		integer,    intent(inout) :: nold
+		complex(ki),intent(inout) :: f2(0:19)
+	! internal parameters
+		complex(ki) :: summation
+		real(ki)    :: theta
+		integer     :: k,i
+! DOING THE DFT N TIMES AND FILLING F2==============================================!
+	theta=twopi/n
+	!loop over number of number of f2's to fill
+	do i=1,n
+		summation=czip
+		! DFT summation
+		do k=0,n-1
+			summation = summation + known(k+nold+1)*&
+			&(cos(theta*real((i-1)*k,ki))+im*sin(theta*real((i-1)*k,ki)))
+		enddo
+		f2(i+nold-1) = summation/n
+	enddo
+	nold=nold+n		
+end subroutine DFT2
+
+
+
+subroutine HResL2(resin,nsol,nloops,nleg,cut2,q2,qt,Vi,msq,mu2vec)
+	use mfunctions
+	use precision
+	use mglobal, only: denst,resit,mu2t
+! PARAMETERS============================================================================!
+	! external parameters
+		complex(ki), dimension(20),	    intent(inout) :: resin
+
+
+		integer, 			    intent(in   ) :: nsol, nloops, nleg, cut2
+		complex(ki), dimension(20,4), 	    intent(in   ) :: q2
+		complex(ki), dimension(20),	    intent(in   ) :: mu2vec
+		complex(ki), dimension(4), 	    intent(in   ) :: qt
+		real(ki),    dimension(0:nleg-1,4), intent(in   ) :: Vi
+		real(ki),    dimension(0:nleg-1),   intent(in   ) :: msq
+	! internal parameters
+		integer			   :: i, j1, j2, n
+		integer			   :: i1, i2, i3, i4, i5
+		logical			   :: evalres
+		complex(ki), dimension(20) :: densn
+		complex(ki) 		   :: densnt
+		logical 		   :: notcut
+		integer,     dimension(5)  :: iarr
+		integer 		   :: dicutn
+! INITIALIZATION========================================================================!
+	! cuts
+		j2     = cut2/10
+		j1     = cut2-j2*10
+		dicutn = 1
+! LOOP==================================================================================!
+	select case(nloops)
+	case(5)
+	do i5=4,nleg-1
+	do i4=3,i5-1
+	do i3=2,i4-1
+	do i2=1,i3-1
+	do i1=0,i2-1
+		iarr(5)=i5
+		iarr(4)=i4
+		iarr(3)=i3
+		iarr(2)=i2
+		iarr(1)=i1
+	! init
+		densn(:) =  cone
+		densnt	 =  cone
+		evalres  = .false.
+
+	l5: do i=0, nleg-1
+		notcut   = .true.
+		do n=1,nloops
+			if(i.eq.iarr(n)) notcut = .false.
+		enddo
+		if(notcut) then
+			if ((i.ne.j1).and.(i.ne.j2)) then
+				do n=1,nsol
+				densn(n) = densn(n)*denevalmu2(nleg,i,q2(n,:),Vi,msq,mu2vec(n))
+				enddo
+				densnt   = densnt*denevalmu2(nleg,i,qt,Vi,msq,mu2t(2))
+				evalres  = .true.
+			else
+				densn(:) = czip
+				densnt   = czip
+				evalres  = .false.
+				exit l5
+			endif
+		endif
+	enddo l5
+	if (evalres) then
+		do n=1,nsol
+			resin(n)=resin(n)+densn(n)*res5(dicutn,mu2vec(n))
+		enddo
+		resit(2)=resit(2)+densnt*Res5(dicutn,mu2t(2))
+	endif
+	dicutn = dicutn+1
+	enddo
+	enddo
+	enddo
+	enddo
+	enddo
+!~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+	case(4)
+	do i4=3,nleg-1
+	do i3=2,i4-1
+	do i2=1,i3-1
+	do i1=0,i2-1
+		iarr(4)=i4
+		iarr(3)=i3
+		iarr(2)=i2
+		iarr(1)=i1
+	! init
+		densn(:) =  cone
+		densnt	 =  cone
+		evalres  = .false.
+
+	l4: do i=0, nleg-1
+		notcut   = .true.
+		do n=1,nloops
+			if(i.eq.iarr(n)) notcut = .false.
+		enddo
+		if(notcut) then
+			if ((i.ne.j1).and.(i.ne.j2)) then
+				do n=1,nsol
+				densn(n) = densn(n)*denevalmu2(nleg,i,q2(n,:),Vi,msq,mu2vec(n))
+				enddo
+				densnt   = densnt*denevalmu2(nleg,i,qt,Vi,msq,mu2t(2))
+				evalres  = .true.
+			else
+				densn(:) = czip
+				densnt   = czip
+				evalres  = .false.
+				exit l4
+			endif
+		endif
+	enddo l4
+	if (evalres) then
+		do n=1,nsol
+			resin(n)=resin(n)+densn(n)*Res4(dicutn,q2(n,:),mu2vec(n))
+		enddo
+		resit(2)=resit(2)+densnt*Res4(dicutn,qt,mu2t(2))	
+	endif
+	dicutn = dicutn+1
+	enddo
+	enddo
+	enddo
+	enddo
+!~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+	case(3)
+	do i3=2,nleg-1
+	do i2=1,i3-1
+	do i1=0,i2-1
+		iarr(3)=i3
+		iarr(2)=i2
+		iarr(1)=i1
+	! init
+		densn(:) =  cone
+		densnt	 =  cone
+		evalres  = .false.
+
+	l3: do i=0, nleg-1
+		notcut   = .true.
+		do n=1,nloops
+			if(i.eq.iarr(n)) notcut = .false.
+		enddo
+		if(notcut) then
+			if ((i.ne.j1).and.(i.ne.j2)) then
+				do n=1,nsol
+				densn(n) = densn(n)*denevalmu2(nleg,i,q2(n,:),Vi,msq,mu2vec(n))
+				enddo
+				densnt   = densnt*denevalmu2(nleg,i,qt,Vi,msq,mu2t(2))
+				evalres  = .true.
+			else
+				densn(:) = czip
+				densnt   = czip
+				evalres  = .false.
+				exit l3
+			endif
+		endif
+	enddo l3
+	if (evalres) then
+		do n=1,nsol
+			resin(n)=resin(n)+densn(n)*Res3(dicutn,q2(n,:),mu2vec(n))
+		enddo
+		resit(2)=resit(2)+densnt*Res3(dicutn,qt,mu2t(2))	
+	endif
+	dicutn = dicutn+1
+	enddo
+	enddo
+	enddo
+	end select
+!========================================
+end subroutine HResL2
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+!CM!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+
 
    subroutine getc2_cm(numeval,nleg,rank,c2,cut2,q2,qt,Vi,msq)
       use mglobal, only: Fpc,Fzc,Fmc,F1zc,KB,mu2g,KK,MP12,mu2t,&
@@ -693,7 +1493,7 @@ contains
       implicit none
       integer, intent(in) :: nleg,rank,cut2
       complex(ki), dimension(0:9), intent(out) :: c2
-      complex(ki), dimension(10,4), intent(in) :: q2
+      complex(ki), dimension(20,4), intent(in) :: q2
       complex(ki), dimension(4), intent(in) :: qt
       complex(ki), dimension(0:nleg-1), intent(in) :: msq
       real(ki), dimension(0:nleg-1,4), intent(in) :: Vi
@@ -786,7 +1586,6 @@ contains
 
 !---  for simplified sampling
       diff = nleg-rank
-      
       if (diff.eq.2) then
          !---#[ simplified sampling -- only c2(0):
          if     (nleg.eq.5) then

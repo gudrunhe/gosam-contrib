@@ -359,7 +359,7 @@ contains
  !         f3p_finite_rarg(3:4)= a3pC0i_rarg(s1,s2,s3,m1,m2,m3,par1,par2,par3)
 	  f3p_finite_rarg(3:4)= a3pC0i_rarg(s1p,s2p,s3p,m1p,m2p,m3p,par1,par2,par3)&
            &/plus_grand
-	  	  !
+          !
        else if (dim == "n+2") then
           !
 !          f3p_finite_rarg = a3pC0i_np2_rarg(s1,s2,s3,m1,m2,m3,par1,par2,par3)
@@ -656,7 +656,7 @@ contains
   !
   ! EXAMPLE
   !
-   function f3p_finite_c(dim,s1,s2,s3,m1,m2,m3,par1,par2,par3)
+  function f3p_finite_c(dim,s1,s2,s3,m1,m2,m3,par1,par2,par3)
     !
     use translate
     implicit none
@@ -1191,7 +1191,7 @@ contains
              end if
              !
              temp1 = temp1 + b_real(j)*truc1
-           !
+             !
           end if
           !
           j = j+1
@@ -1652,7 +1652,7 @@ contains
     s1r = s1
     s2r = s2
     s3r = s3
-   !
+    !
 !    if (equal_real(s1r,zero) ) s1r = 0._ki
 !    if (equal_real(s2r,zero) ) s2r = 0._ki
 !    if (equal_real(s3r,zero) ) s3r = 0._ki   

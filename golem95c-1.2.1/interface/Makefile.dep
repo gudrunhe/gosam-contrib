@@ -1,19 +1,19 @@
 # Module dependencies
-gb0.o: tool_lt_to_golem.o
+ga0.lo: tool_lt_to_golem.lo
+ga0.$(OBJEXT): tool_lt_to_golem.$(OBJEXT)
 gb0.lo: tool_lt_to_golem.lo
-gb0.obj: tool_lt_to_golem.obj
-gc0.o: tool_lt_to_golem.o
+gb0.$(OBJEXT): tool_lt_to_golem.$(OBJEXT)
 gc0.lo: tool_lt_to_golem.lo
-gc0.obj: tool_lt_to_golem.obj
-gd0.o: tool_lt_to_golem.o
+gc0.$(OBJEXT): tool_lt_to_golem.$(OBJEXT)
 gd0.lo: tool_lt_to_golem.lo
-gd0.obj: tool_lt_to_golem.obj
-ge0.o: tool_lt_to_golem.o
+gd0.$(OBJEXT): tool_lt_to_golem.$(OBJEXT)
 ge0.lo: tool_lt_to_golem.lo
-ge0.obj: tool_lt_to_golem.obj
-gf0.o: tool_lt_to_golem.o
+ge0.$(OBJEXT): tool_lt_to_golem.$(OBJEXT)
 gf0.lo: tool_lt_to_golem.lo
-gf0.obj: tool_lt_to_golem.obj
-tens_comb.o: tens_rec.o
+gf0.$(OBJEXT): tool_lt_to_golem.$(OBJEXT)
 tens_comb.lo: tens_rec.lo
-tens_comb.obj: tens_rec.obj
+tens_comb.$(OBJEXT): tens_rec.$(OBJEXT)
+tens_comb.mod: tens_comb.f90 tens_comb.$(OBJEXT) tens_rec.$(OBJEXT)
+tens_rec.mod: tens_rec.f90 tens_rec.$(OBJEXT)
+tensor_integrals.mod: tensor_integrals.f90 tensor_integrals.$(OBJEXT)
+tool_lt_to_golem.mod: tool_lt_to_golem.f90 tool_lt_to_golem.$(OBJEXT)

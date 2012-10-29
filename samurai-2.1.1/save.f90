@@ -21,7 +21,7 @@ module save
    real(ki) :: sav4e2(max4,4)
    complex(ki) :: sav4e3(max4,4)
    complex(ki) :: sav4e4(max4,4)
-   complex(ki) :: savc4(max4,0:4)
+   complex(ki) :: savc4(max4,0:5)
    integer :: savcut4(max4)
 
    real(ki) :: sav3p0(max3,4)
@@ -29,7 +29,7 @@ module save
    real(ki) :: sav3e2(max3,4)
    complex(ki) :: sav3e3(max3,4)
    complex(ki) :: sav3e4(max3,4)
-   complex(ki) :: savc3(max3,0:9)
+   complex(ki) :: savc3(max3,0:14)
    integer :: savcut3(max3)
 
    real(ki) :: sav2p0(max2,4)
@@ -37,7 +37,7 @@ module save
    real(ki) :: sav2e2(max2,4)
    complex(ki) :: sav2e3(max2,4)
    complex(ki) :: sav2e4(max2,4)
-   complex(ki) :: savc2(max2,0:9)
+   complex(ki) :: savc2(max2,0:19)
    integer :: savcut2(max2)
 
    real(ki) :: sav1p0(max1,4)
@@ -45,7 +45,7 @@ module save
    real(ki) :: sav1e2(max1,4)
    complex(ki) :: sav1e3(max1,4)
    complex(ki) :: sav1e4(max1,4)
-   complex(ki) :: savc1(max1,0:4)
+   complex(ki) :: savc1(max1,0:15)
    integer :: savcut1(max1)
 
 end module save

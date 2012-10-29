@@ -30,7 +30,7 @@ contains
       implicit none
       real(ki), dimension(4), intent(in) :: L3, p0, e1, e2
       complex(ki), dimension(4), intent(in) :: e3, e4
-      complex(ki), dimension(0:4), intent(in) :: c4
+      complex(ki), dimension(0:5), intent(in) :: c4
       integer, intent(in) :: icut4,cut4
       savL3(icut4,:)=L3(:)
       sav4p0(icut4,:)=p0(:)
@@ -46,7 +46,7 @@ contains
       implicit none
       real(ki), dimension(4), intent(in) :: p0, e1, e2
       complex(ki), dimension(4), intent(in) :: e3, e4
-      complex(ki), dimension(0:9), intent(in) :: c3
+      complex(ki), dimension(0:14), intent(in) :: c3
       integer, intent(in) :: icut3,cut3
       sav3p0(icut3,:)=p0(:)
       sav3e1(icut3,:)=e1(:)
@@ -61,7 +61,7 @@ contains
       implicit none
       real(ki), dimension(4), intent(in) :: p0, e1, e2
       complex(ki), dimension(4), intent(in) :: e3, e4
-      complex(ki), dimension(0:9), intent(in) :: c2
+      complex(ki), dimension(0:19), intent(in) :: c2
       integer, intent(in) :: icut2,cut2
       sav2p0(icut2,:)=p0(:)
       sav2e1(icut2,:)=e1(:)
@@ -76,7 +76,7 @@ contains
       implicit none
       real(ki), dimension(4), intent(in) :: p0, e1, e2
       complex(ki), dimension(4), intent(in) :: e3, e4
-      complex(ki), dimension(0:4), intent(in) :: c1
+      complex(ki), dimension(0:15), intent(in) :: c1
       integer, intent(in) :: icut1,cut1
 
       sav1p0(icut1,:)=p0(:)
@@ -107,7 +107,7 @@ contains
 
       real(ki), dimension(4) :: L3
       complex(ki), dimension(4) :: e3, e4, pm
-      complex(ki), dimension(0:4) :: c4
+      complex(ki), dimension(0:5) :: c4
 
       L3(:)=savL3(icut4,:)
       pm(:)=sav4p0(icut4,:)+q(:)
@@ -126,7 +126,7 @@ contains
       complex(ki) :: res3
 
       complex(ki), dimension(4) :: e3, e4, pm
-      complex(ki) :: c3(0:9)
+      complex(ki) :: c3(0:14)
 
       pm(:)=sav3p0(icut3,:)+q(:)
       e3(:)=sav3e3(icut3,:)
@@ -145,7 +145,7 @@ contains
 
       real(ki), dimension(4) :: e2
       complex(ki), dimension(4) :: e3,e4,pm
-      complex(ki), dimension(0:9) :: c2
+      complex(ki), dimension(0:19) :: c2
 
       pm(:)=sav2p0(icut2,:)+q(:)
       e2(:)=sav2e2(icut2,:)
@@ -155,15 +155,16 @@ contains
       res2=poly2(c2,pm,mu2,e2,e3,e4)
    end  function res2
 
-   pure function res1(icut1,q)
+   pure function res1(icut1,q,mu2)
       implicit none
       integer, intent(in) :: icut1
       complex(ki), dimension(4), intent(in) :: q
       complex(ki) :: res1
+      complex(ki), intent(in) :: mu2
 
       real(ki), dimension(4) ::  e1, e2
       complex(ki), dimension(4) :: e3, e4, pm
-      complex(ki), dimension(0:4) :: c1
+      complex(ki), dimension(0:15) :: c1
 
       pm(:)=sav1p0(icut1,:)+q(:)
       e1(:)=sav1e1(icut1,:)
@@ -172,7 +173,7 @@ contains
       e4(:)=sav1e4(icut1,:)
       c1(:)=savc1(icut1,:)
 
-      res1=poly1(c1,pm,e1,e2,e3,e4)
+      res1=poly1(c1,pm,mu2,e1,e2,e3,e4)
    end function res1
 
 end module mrestore

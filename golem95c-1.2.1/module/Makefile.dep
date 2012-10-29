@@ -1,28 +1,53 @@
 # Module dependencies
-cache.o: sortie_erreur.o
-cache.lo: sortie_erreur.lo
-cache.obj: sortie_erreur.obj
-equal.o: constante.o parametre.o sortie_erreur.o
-equal.lo: constante.lo parametre.lo sortie_erreur.lo
-equal.obj: constante.obj parametre.obj sortie_erreur.obj
-form_factor_type.o: constante.o
-form_factor_type.lo: constante.lo
-form_factor_type.obj: constante.obj
-s_matrix_type.o: constante.o equal.o sortie_erreur.o
-s_matrix_type.lo: constante.lo equal.lo sortie_erreur.lo
-s_matrix_type.obj: constante.obj equal.obj sortie_erreur.obj
-sortie_erreur.o: array.o parametre.o
-sortie_erreur.lo: array.lo parametre.lo
-sortie_erreur.obj: array.obj parametre.obj
-spinor.o: constante.o
-spinor.lo: constante.lo
-spinor.obj: constante.obj
-translate.o: sortie_erreur.o
-translate.lo: sortie_erreur.lo
-translate.obj: sortie_erreur.obj
-z_log.o: constante.o equal.o sortie_erreur.o
-z_log.lo: constante.lo equal.lo sortie_erreur.lo
-z_log.obj: constante.obj equal.obj sortie_erreur.obj
-zdilog.o: constante.o equal.o sortie_erreur.o z_log.o
-zdilog.lo: constante.lo equal.lo sortie_erreur.lo z_log.lo
-zdilog.obj: constante.obj equal.obj sortie_erreur.obj z_log.obj
+array.mod: array.f90 array.$(OBJEXT)
+cache.lo: form_factor_type.lo precision_golem.lo sortie_erreur.lo
+cache.$(OBJEXT): form_factor_type.$(OBJEXT) precision_golem.$(OBJEXT) sortie_erreur.$(OBJEXT)
+cache.mod: cache.f90 cache.$(OBJEXT) form_factor_type.$(OBJEXT) precision_golem.$(OBJEXT) \
+	sortie_erreur.$(OBJEXT)
+constante.lo: precision_golem.lo
+constante.$(OBJEXT): precision_golem.$(OBJEXT)
+constante.mod: constante.f90 constante.$(OBJEXT) precision_golem.$(OBJEXT)
+equal.lo: constante.lo parametre.lo precision_golem.lo sortie_erreur.lo
+equal.$(OBJEXT): constante.$(OBJEXT) parametre.$(OBJEXT) precision_golem.$(OBJEXT) sortie_erreur.$(OBJEXT)
+equal.mod: equal.f90 equal.$(OBJEXT) constante.$(OBJEXT) parametre.$(OBJEXT) precision_golem.$(OBJEXT) \
+	sortie_erreur.$(OBJEXT)
+form_factor_type.lo: constante.lo precision_golem.lo
+form_factor_type.$(OBJEXT): constante.$(OBJEXT) precision_golem.$(OBJEXT)
+form_factor_type.mod: form_factor_type.f90 form_factor_type.$(OBJEXT) \
+	constante.$(OBJEXT) precision_golem.$(OBJEXT)
+kronecker.mod: kronecker.f90 kronecker.$(OBJEXT)
+multiply_div.lo: precision_golem.lo
+multiply_div.$(OBJEXT): precision_golem.$(OBJEXT)
+multiply_div.mod: multiply_div.f90 multiply_div.$(OBJEXT) precision_golem.$(OBJEXT)
+parametre.lo: precision_golem.lo
+parametre.$(OBJEXT): precision_golem.$(OBJEXT)
+parametre.mod: parametre.f90 parametre.$(OBJEXT) precision_golem.$(OBJEXT)
+precision_golem.mod: precision_golem.f90 precision_golem.$(OBJEXT)
+s_matrix_type.lo: constante.lo equal.lo precision_golem.lo sortie_erreur.lo
+s_matrix_type.$(OBJEXT): constante.$(OBJEXT) equal.$(OBJEXT) precision_golem.$(OBJEXT) sortie_erreur.$(OBJEXT)
+s_matrix_type.mod: s_matrix_type.f90 s_matrix_type.$(OBJEXT) constante.$(OBJEXT) \
+	equal.$(OBJEXT) precision_golem.$(OBJEXT) sortie_erreur.$(OBJEXT)
+sortie_erreur.lo: array.lo parametre.lo precision_golem.lo
+sortie_erreur.$(OBJEXT): array.$(OBJEXT) parametre.$(OBJEXT) precision_golem.$(OBJEXT)
+sortie_erreur.mod: sortie_erreur.f90 sortie_erreur.$(OBJEXT) array.$(OBJEXT) \
+	parametre.$(OBJEXT) precision_golem.$(OBJEXT)
+spinor.lo: constante.lo precision_golem.lo
+spinor.$(OBJEXT): constante.$(OBJEXT) precision_golem.$(OBJEXT)
+spinor.mod: spinor.f90 spinor.$(OBJEXT) constante.$(OBJEXT) precision_golem.$(OBJEXT)
+translate.lo: precision_golem.lo sortie_erreur.lo
+translate.$(OBJEXT): precision_golem.$(OBJEXT) sortie_erreur.$(OBJEXT)
+translate.mod: translate.f90 translate.$(OBJEXT) precision_golem.$(OBJEXT) \
+	sortie_erreur.$(OBJEXT)
+tri.lo: precision_golem.lo
+tri.$(OBJEXT): precision_golem.$(OBJEXT)
+tri_croissant.mod: tri.f90 tri.$(OBJEXT) precision_golem.$(OBJEXT)
+z_log.lo: constante.lo equal.lo precision_golem.lo sortie_erreur.lo
+z_log.$(OBJEXT): constante.$(OBJEXT) equal.$(OBJEXT) precision_golem.$(OBJEXT) sortie_erreur.$(OBJEXT)
+logarithme.mod: z_log.f90 z_log.$(OBJEXT) constante.$(OBJEXT) equal.$(OBJEXT) \
+	precision_golem.$(OBJEXT) sortie_erreur.$(OBJEXT)
+zdilog.lo: constante.lo equal.lo precision_golem.lo sortie_erreur.lo \
+	z_log.lo
+zdilog.$(OBJEXT): constante.$(OBJEXT) equal.$(OBJEXT) precision_golem.$(OBJEXT) sortie_erreur.$(OBJEXT) \
+	z_log.$(OBJEXT)
+dilogarithme.mod: zdilog.f90 zdilog.$(OBJEXT) constante.$(OBJEXT) equal.$(OBJEXT) \
+	precision_golem.$(OBJEXT) sortie_erreur.$(OBJEXT) z_log.$(OBJEXT)

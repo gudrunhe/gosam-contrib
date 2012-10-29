@@ -40,3 +40,6 @@ CLEANFILES=\
    ncuts.mod notfirst.mod options.mod precision.mod save.mod maccu.mod
 
 include Makefile.dep
+
+%.mod: %.o %.f90
+	@true

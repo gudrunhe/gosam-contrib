@@ -250,6 +250,7 @@ subroutine     init_smat3(r1,r2,m1sq,m2sq,m3sq)
 
    call allocate_cache(3)
    ! init_invs not needed for triangles
+   call init_invs()
 end subroutine init_smat3
 
 subroutine     init_smat4(r1,r2,r3,m1sq,m2sq,m3sq,m4sq)

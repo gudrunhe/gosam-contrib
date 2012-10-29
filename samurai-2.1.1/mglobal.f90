@@ -81,13 +81,16 @@ module mglobal
    ! dens4t ---> denst(4)
    ! mu2test --> mu2test(4)
 
-   real(ki), dimension(1:4) :: MP12
-   real(ki), dimension(1:3) :: KK
-   complex(ki), dimension(1:4) :: mu2g, mu2t, mu2test
-   complex(ki), dimension(1:4) :: resit, denst
-   real(ki), dimension(2:3) :: Kmu
-   complex(ki), dimension(1:5) :: dx
-   real(ki) :: Fp,Fz,Fm,F1z,KB,C0,C1,G0
-   complex(ki) :: Fpc,Fzc,Fmc,F1zc,C0c,C1c,G0c
+   real(ki), 	dimension(1:4) 	:: MP12
+   real(ki), 	dimension(1:3) 	:: KK
+   complex(ki), dimension(1:4) 	:: mu2g, mu2t, mu2test
+   complex(ki), dimension(1:4) 	:: resit, denst
+   real(ki), 	dimension(2:3) 	:: Kmu
+   complex(ki), dimension(1:5) 	:: dx
+   complex(ki), dimension(1:20) :: mu2vec2
+   complex(ki), dimension(1:6)  :: FL2
+   real(ki) 	:: x1s1,x1s2,y1,y2,y3
+   real(ki) 	:: Fp,Fz,Fm,F1z,KB,C0,C1,Cm1,Fp2,F11,F10
+   complex(ki) 	:: Fpc,Fzc,Fmc,F1zc,C0c,C1c,G0c,Fp2c,F11c, G0, G0mu
 
 end module mglobal

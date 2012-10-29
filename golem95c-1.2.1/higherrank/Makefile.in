@@ -51,9 +51,9 @@ PRE_UNINSTALL = :
 POST_UNINSTALL = :
 build_triplet = @build@
 host_triplet = @host@
-DIST_COMMON = $(srcdir)/../../MakefileCommon.am $(srcdir)/Makefile.am \
+DIST_COMMON = $(srcdir)/../MakefileCommon.am $(srcdir)/Makefile.am \
 	$(srcdir)/Makefile.dep $(srcdir)/Makefile.in
-subdir = golem95c-1.2.1/integrals/one_point
+subdir = golem95c-1.2.1/higherrank
 ACLOCAL_M4 = $(top_srcdir)/aclocal.m4
 am__aclocal_m4_deps = $(top_srcdir)/m4/libtool.m4 \
 	$(top_srcdir)/m4/ltoptions.m4 $(top_srcdir)/m4/ltsugar.m4 \
@@ -65,10 +65,11 @@ mkinstalldirs = $(install_sh) -d
 CONFIG_CLEAN_FILES =
 CONFIG_CLEAN_VPATH_FILES =
 LTLIBRARIES = $(noinst_LTLIBRARIES)
-libgolem95_integrals_one_point_la_LIBADD =
-am_libgolem95_integrals_one_point_la_OBJECTS = generic_function_1p.lo
-libgolem95_integrals_one_point_la_OBJECTS =  \
-	$(am_libgolem95_integrals_one_point_la_OBJECTS)
+libgolem95_higherrank_la_LIBADD =
+am_libgolem95_higherrank_la_OBJECTS = generic_function_np.lo \
+	form_factor_higher_ranks.lo
+libgolem95_higherrank_la_OBJECTS =  \
+	$(am_libgolem95_higherrank_la_OBJECTS)
 DEFAULT_INCLUDES = -I.@am__isrc@
 FCCOMPILE = $(FC) $(AM_FCFLAGS) $(FCFLAGS)
 LTFCCOMPILE = $(LIBTOOL) --tag=FC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) \
@@ -77,8 +78,8 @@ FCLD = $(FC)
 FCLINK = $(LIBTOOL) --tag=FC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) \
 	--mode=link $(FCLD) $(AM_FCFLAGS) $(FCFLAGS) $(AM_LDFLAGS) \
 	$(LDFLAGS) -o $@
-SOURCES = $(libgolem95_integrals_one_point_la_SOURCES)
-DIST_SOURCES = $(libgolem95_integrals_one_point_la_SOURCES)
+SOURCES = $(libgolem95_higherrank_la_SOURCES)
+DIST_SOURCES = $(libgolem95_higherrank_la_SOURCES)
 am__can_run_installinfo = \
   case $$AM_UPDATE_INFO_DIR in \
     n|no|NO) false;; \
@@ -269,19 +270,24 @@ target_alias = @target_alias@
 top_build_prefix = @top_build_prefix@
 top_builddir = @top_builddir@
 top_srcdir = @top_srcdir@
-noinst_LTLIBRARIES = libgolem95_integrals_one_point.la
-libgolem95_integrals_one_point_la_SOURCES = generic_function_1p.f90
-AM_FCFLAGS = -I$(top_builddir)/avh_olo-2.2.1 \
-	-I$(builddir)/../../module -I$(builddir)/../../kinematic \
-	-I$(builddir)/../../numerical \
-	-I$(builddir)/../../../avh_olo-2.2.1
-nodist_pkginclude_HEADERS = generic_function_1p.mod
+noinst_LTLIBRARIES = libgolem95_higherrank.la
+AM_FCFLAGS = -I$(top_builddir)/avh_olo-2.2.1 -I$(builddir)/../module \
+	-I$(builddir)/../kinematic -I$(builddir)/../numerical \
+	-I$(builddir)/../form_factor \
+	-I$(builddir)/../integrals/one_point \
+	-I$(builddir)/../integrals/two_point \
+	-I$(builddir)/../integrals/three_point \
+	-I$(builddir)/../integrals/four_point
+
+#	-I$(builddir)/../../avh_olo-2.2.1
+libgolem95_higherrank_la_SOURCES = generic_function_np.f90 form_factor_higher_ranks.f90
+nodist_pkginclude_HEADERS = generic_function_np.mod form_factor_higher_ranks.mod
 CLEANFILES = *.mod
 all: all-am
 
 .SUFFIXES:
 .SUFFIXES: .f90 .lo .o .obj
-$(srcdir)/Makefile.in:  $(srcdir)/Makefile.am $(srcdir)/../../MakefileCommon.am $(srcdir)/Makefile.dep $(am__configure_deps)
+$(srcdir)/Makefile.in:  $(srcdir)/Makefile.am $(srcdir)/../MakefileCommon.am $(srcdir)/Makefile.dep $(am__configure_deps)
 	@for dep in $?; do \
 	  case '$(am__configure_deps)' in \
 	    *$$dep*) \
@@ -290,9 +296,9 @@ $(srcdir)/Makefile.in:  $(srcdir)/Makefile.am $(srcdir)/../../MakefileCommon.am 
 	      exit 1;; \
 	  esac; \
 	done; \
-	echo ' cd $(top_srcdir) && $(AUTOMAKE) --gnu golem95c-1.2.1/integrals/one_point/Makefile'; \
+	echo ' cd $(top_srcdir) && $(AUTOMAKE) --gnu golem95c-1.2.1/higherrank/Makefile'; \
 	$(am__cd) $(top_srcdir) && \
-	  $(AUTOMAKE) --gnu golem95c-1.2.1/integrals/one_point/Makefile
+	  $(AUTOMAKE) --gnu golem95c-1.2.1/higherrank/Makefile
 .PRECIOUS: Makefile
 Makefile: $(srcdir)/Makefile.in $(top_builddir)/config.status
 	@case '$?' in \
@@ -302,7 +308,7 @@ Makefile: $(srcdir)/Makefile.in $(top_builddir)/config.status
 	    echo ' cd $(top_builddir) && $(SHELL) ./config.status $(subdir)/$@ $(am__depfiles_maybe)'; \
 	    cd $(top_builddir) && $(SHELL) ./config.status $(subdir)/$@ $(am__depfiles_maybe);; \
 	esac;
-$(srcdir)/../../MakefileCommon.am $(srcdir)/Makefile.dep:
+$(srcdir)/../MakefileCommon.am $(srcdir)/Makefile.dep:
 
 $(top_builddir)/config.status: $(top_srcdir)/configure $(CONFIG_STATUS_DEPENDENCIES)
 	cd $(top_builddir) && $(MAKE) $(AM_MAKEFLAGS) am--refresh
@@ -323,8 +329,8 @@ clean-noinstLTLIBRARIES:
 	  echo rm -f $${locs}; \
 	  rm -f $${locs}; \
 	}
-libgolem95_integrals_one_point.la: $(libgolem95_integrals_one_point_la_OBJECTS) $(libgolem95_integrals_one_point_la_DEPENDENCIES) $(EXTRA_libgolem95_integrals_one_point_la_DEPENDENCIES) 
-	$(FCLINK)  $(libgolem95_integrals_one_point_la_OBJECTS) $(libgolem95_integrals_one_point_la_LIBADD) $(LIBS)
+libgolem95_higherrank.la: $(libgolem95_higherrank_la_OBJECTS) $(libgolem95_higherrank_la_DEPENDENCIES) $(EXTRA_libgolem95_higherrank_la_DEPENDENCIES) 
+	$(FCLINK)  $(libgolem95_higherrank_la_OBJECTS) $(libgolem95_higherrank_la_LIBADD) $(LIBS)
 
 mostlyclean-compile:
 	-rm -f *.$(OBJEXT)
@@ -592,8 +598,15 @@ uninstall-am: uninstall-nodist_pkgincludeHEADERS
 %.mod: %.o %.f90
 	@true
 
+%.mod: %.o %.f90
+	@true
+
 # Module dependencies
-generic_function_1p.mod: generic_function_1p.f90 generic_function_1p.$(OBJEXT)
+form_factor_higher_ranks.lo: generic_function_np.lo
+form_factor_higher_ranks.$(OBJEXT): generic_function_np.$(OBJEXT)
+form_factor_higher_ranks.mod: form_factor_higher_ranks.f90 \
+	form_factor_higher_ranks.$(OBJEXT) generic_function_np.$(OBJEXT)
+generic_function_np.mod: generic_function_np.f90 generic_function_np.$(OBJEXT)
 
 # Tell versions [3.59,3.63) of GNU make to not export all variables.
 # Otherwise a system limit (for SysV at least) may be exceeded.

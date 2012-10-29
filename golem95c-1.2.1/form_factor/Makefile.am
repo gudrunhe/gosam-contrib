@@ -1,9 +1,13 @@
 noinst_LTLIBRARIES=libgolem95_formfactor.la
 
+
 libgolem95_formfactor_la_SOURCES= form_factor_1p.f90 form_factor_2p.f90 \
 	form_factor_3p.f90 form_factor_4p.f90 form_factor_5p.f90 \
 	form_factor_6p.f90
-libgolem95_formfactor_la_FCFLAGS=\
+
+
+include ../MakefileCommon.am
+AM_FCFLAGS+=\
 	-I$(builddir)/../module \
 	-I$(builddir)/../kinematic \
 	-I$(builddir)/../numerical \
@@ -16,6 +20,7 @@ libgolem95_formfactor_la_FCFLAGS=\
 
 nodist_pkginclude_HEADERS= form_factor_5p.mod form_factor_6p.mod form_factor_4p.mod \
 	form_factor_3p.mod form_factor_2p.mod form_factor_1p.mod
+
 CLEANFILES=*.mod
 
 include Makefile.dep

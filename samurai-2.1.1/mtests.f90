@@ -254,7 +254,7 @@ contains
             dens1=dens1*denevalmu2(nleg,i,q1,Vi,msq,mu2)
          enddo
 
-         resi1=resi1+dens1*Res1(dicut1,q1)
+         resi1=resi1+dens1*Res1(dicut1,q1,mu2)
          dicut1=dicut1+1
       enddo
       !---#] Contribution of the single cut:
@@ -439,7 +439,7 @@ contains
             dens1=dens1*denevalmu2(nleg,i,q1,Vi,msq,mu2)
          enddo
 
-         resi1=resi1+dens1*Res1(dicut1,q1)
+         resi1=resi1+dens1*Res1(dicut1,q1,mu2)
          dicut1=dicut1+1
       enddo
       !---#] Contribution of the single cut:
@@ -475,7 +475,7 @@ contains
    subroutine lnntest4(numeval,cut4,c4,qt,p0,k3,e3,e4,ok)
       implicit none
       integer, intent(in) :: cut4
-      complex(ki), dimension(0:4), intent(in) :: c4
+      complex(ki), dimension(0:5), intent(in) :: c4
       complex(ki), dimension(4), intent(in) :: qt, e3, e4
       real(ki), dimension(4), intent(in) :: p0, k3
       logical, intent(out) :: ok
@@ -529,7 +529,7 @@ contains
    subroutine lnntest3(numeval,cut3,c3,qt,p0,e3,e4,ok)
       implicit none
       integer, intent(in) :: cut3
-      complex(ki), dimension(0:9), intent(in) :: c3
+      complex(ki), dimension(0:14), intent(in) :: c3
       complex(ki), dimension(4), intent(in) :: qt, e3, e4
       real(ki), dimension(4), intent(in) :: p0 
       logical, intent(out) :: ok  
@@ -584,7 +584,7 @@ contains
    subroutine lnntest2(numeval,cut2,c2,qt,p0,e2,e3,e4,ok)
       implicit none
       integer, intent(in) :: cut2
-      complex(ki), dimension(0:9), intent(in) :: c2
+      complex(ki), dimension(0:19), intent(in) :: c2
       complex(ki), dimension(4), intent(in) :: qt, e3, e4
       real(ki), dimension(4), intent(in) :: p0, e2
       logical, intent(out) :: ok
@@ -639,7 +639,7 @@ contains
    subroutine lnntest1(numeval,cut1,c1,qt,p0,e1,e2,e3,e4,ok)
       implicit none
       integer, intent(in) :: cut1
-      complex(ki), dimension(0:4), intent(in) :: c1
+      complex(ki), dimension(0:15), intent(in) :: c1
       complex(ki), dimension(4), intent(in) :: qt, e3, e4
       real(ki), dimension(4), intent(in) :: p0, e1, e2
       logical, intent(out) :: ok
@@ -664,7 +664,7 @@ contains
       elseif (imeth.eq.'tree') then
          test1= numeval(cut1,qt,chaf)-resit(1) /denst(1)
       endif
-      poli1=poly1(c1,pm,e1,e2,e3,e4)
+      poli1=poly1(c1,pm,chaf,e1,e2,e3,e4)
 
       if (abs(poli1).lt.nprec .and. abs(test1).lt.nprec) then
          reldif = nprec

@@ -155,6 +155,30 @@ module madds
 @case_with_golem@        end function gC0C
 @case_with_golem@     end interface
 @case_with_golem@     interface
+@case_with_golem@        function gC0i(idt,p1,p2,p3,m1,m2,m3,mu2,ep)
+@case_with_golem@           use precision_golem, only: ki
+@case_with_golem@           implicit none
+@case_with_golem@           character (len=*), intent (in) :: idt
+@case_with_golem@           real(ki), intent(in) :: p1,p2,p3
+@case_with_golem@           real(ki), intent(in) :: m1,m2,m3
+@case_with_golem@           real(ki), intent(in) :: mu2
+@case_with_golem@           integer, intent(in) :: ep
+@case_with_golem@           complex(ki) :: gC0i
+@case_with_golem@        end function gC0i
+@case_with_golem@     end interface
+@case_with_golem@     interface
+@case_with_golem@        function gC0iC(idt,p1,p2,p3,m1,m2,m3,mu2,ep)
+@case_with_golem@           use precision_golem, only: ki
+@case_with_golem@           implicit none
+@case_with_golem@           character (len=*), intent (in) :: idt
+@case_with_golem@           complex(ki), intent(in) :: p1,p2,p3
+@case_with_golem@           complex(ki), intent(in) :: m1,m2,m3
+@case_with_golem@           real(ki), intent(in) :: mu2
+@case_with_golem@           integer, intent(in) :: ep
+@case_with_golem@           complex(ki) :: gC0iC
+@case_with_golem@        end function gC0iC
+@case_with_golem@     end interface
+@case_with_golem@     interface
 @case_with_golem@        function gB0C(p1,m1,m2,mu2,ep)
 @case_with_golem@           use precision_golem, only: ki
 @case_with_golem@           implicit none
@@ -165,7 +189,72 @@ module madds
 @case_with_golem@           complex(ki) :: gB0C
 @case_with_golem@        end function gB0C
 @case_with_golem@     end interface
-
+@case_with_golem@     interface
+@case_with_golem@        function gB0i(idt,p1,m1,m2,mu2,ep)
+@case_with_golem@           use precision_golem, only: ki
+@case_with_golem@           implicit none
+@case_with_golem@           character (len=*), intent (in) :: idt
+@case_with_golem@           real(ki), intent(in) :: p1
+@case_with_golem@           real(ki), intent(in) :: m1,m2
+@case_with_golem@           real(ki), intent(in) :: mu2
+@case_with_golem@           integer, intent(in) :: ep
+@case_with_golem@           complex(ki) :: gB0i
+@case_with_golem@        end function gB0i
+@case_with_golem@     end interface
+@case_with_golem@     interface
+@case_with_golem@        function gB0iC(idt,p1,m1,m2,mu2,ep)
+@case_with_golem@           use precision_golem, only: ki
+@case_with_golem@           implicit none
+@case_with_golem@           character (len=*), intent (in) :: idt
+@case_with_golem@           complex(ki), intent(in) :: p1
+@case_with_golem@           complex(ki), intent(in) :: m1,m2
+@case_with_golem@           real(ki), intent(in) :: mu2
+@case_with_golem@           integer, intent(in) :: ep
+@case_with_golem@           complex(ki) :: gB0iC
+@case_with_golem@        end function gB0iC
+@case_with_golem@     end interface
+@case_with_golem@     interface
+@case_with_golem@        function gA0(m1,mu2,ep)
+@case_with_golem@           use precision_golem, only: ki
+@case_with_golem@           implicit none
+@case_with_golem@           real(ki), intent(in) :: m1
+@case_with_golem@           real(ki), intent(in) :: mu2
+@case_with_golem@           integer, intent(in) :: ep
+@case_with_golem@           complex(ki) :: gA0
+@case_with_golem@        end function gA0
+@case_with_golem@     end interface
+@case_with_golem@     interface
+@case_with_golem@        function gA0C(m1,mu2,ep)
+@case_with_golem@           use precision_golem, only: ki
+@case_with_golem@           implicit none
+@case_with_golem@           complex(ki), intent(in) :: m1
+@case_with_golem@           real(ki), intent(in) :: mu2
+@case_with_golem@           integer, intent(in) :: ep
+@case_with_golem@           complex(ki) :: gA0C
+@case_with_golem@        end function gA0C
+@case_with_golem@     end interface
+@case_with_golem@     interface
+@case_with_golem@        function gA0i(idt,m1,mu2,ep)
+@case_with_golem@           use precision_golem, only: ki
+@case_with_golem@           implicit none
+@case_with_golem@           character (len=*), intent (in) :: idt
+@case_with_golem@           real(ki), intent(in) :: m1
+@case_with_golem@           real(ki), intent(in) :: mu2
+@case_with_golem@           integer, intent(in) :: ep
+@case_with_golem@           complex(ki) :: gA0i
+@case_with_golem@        end function gA0i
+@case_with_golem@     end interface
+@case_with_golem@     interface
+@case_with_golem@        function gA0iC(idt,m1,mu2,ep)
+@case_with_golem@           use precision_golem, only: ki
+@case_with_golem@           implicit none
+@case_with_golem@           character (len=*), intent (in) :: idt
+@case_with_golem@           complex(ki), intent(in) :: m1
+@case_with_golem@           real(ki), intent(in) :: mu2
+@case_with_golem@           integer, intent(in) :: ep
+@case_with_golem@           complex(ki) :: gA0iC
+@case_with_golem@        end function gA0iC
+@case_with_golem@     end interface
 @case_with_lt@     interface
 @case_with_lt@        function D0(p1,p2,p3,p4,s12,s23,m1,m2,m3,m4)
 @case_with_lt@           use precision, only: ki_lt
@@ -379,7 +468,7 @@ contains
 @case_with_avh@      use avh_olo, only: olo_d0
       implicit none
       integer, intent(in) :: cut4,nleg
-      complex(ki), dimension(0:4), intent(in) :: c4
+      complex(ki), dimension(0:5), intent(in) :: c4
       real(ki), dimension(0:nleg-1,4), intent(in) :: Vi
       real(ki), dimension(0:nleg-1), intent(in) :: msq
       real(ki), intent(in) :: scale2
@@ -588,7 +677,7 @@ contains
       implicit none
 
       integer, intent(in) :: nleg, cut3
-      complex(ki), dimension(0:9), intent(in) :: c3
+      complex(ki), dimension(0:14), intent(in) :: c3
       real(ki), dimension(0:nleg-1,4) ::Vi
       real(ki), dimension(0:nleg-1):: msq
       complex(ki), dimension(-2:0), intent(out) :: tot3
@@ -602,10 +691,11 @@ contains
       integer :: j1,j2,j3
       real(ki) :: m0, m1, m2, V1, V2, V3
       real(ki), dimension(4):: Vi1, Vi2, Vi3
-      complex(ki) :: c30
+      complex(ki) :: c30, c314
+      logical :: highrank
 @case_with_avh@      complex(ki_avh), dimension(0:2) :: valc0
       complex(ki) :: ctmp
-@case_with_golem@      complex(ki), dimension(-2:0) :: c0t
+@case_with_golem@      complex(ki), dimension(-2:0) :: c0t, c0000t
       integer :: ep, cache_index
 
       if (notfirsti.eqv.(.false.)) then
@@ -642,6 +732,8 @@ contains
       end if
 
       c30=c3(0)
+      c314=c3(14)
+      highrank=(c314 /= 0._ki)
 
       tot3r=+c3(7)/two
 
@@ -702,6 +794,7 @@ contains
       elseif (isca.eq.3) then
 @case_with_golem@        call gtrunc_rm(abs(V1)+abs(V2)+abs(V3), &
 @case_with_golem@        &                V1,V2,V3,m0,m1,m2)
+@case_with_golem@        c0000t(:)=0
 @case_with_golem@        do ep=-2,0
 @case_with_golem@           if (present(cache_flag)) then
 @case_with_golem@              if (cache_flag) then
@@ -719,7 +812,15 @@ contains
 @case_with_golem@              &        real(m1,ki_gol),real(m2,ki_gol),&
 @case_with_golem@              &        real(scale2,ki_gol),ep)
 @case_with_golem@           end if
-@case_with_golem@        end do
+@case_with_golem@         end do
+@case_with_golem@         !if (highrank) then
+@case_with_golem@           !do ep=-2,-1
+@case_with_golem@           !   c0000t(ep)=gC0i("0000",real(V1,ki_gol),real(V2,ki_gol),&
+@case_with_golem@           !   &        real(V3,ki_gol),real(m0,ki_gol),&
+@case_with_golem@           !   &        real(m1,ki_gol),real(m2,ki_gol),&
+@case_with_golem@           !   &        real(scale2,ki_gol),ep)
+@case_with_golem@           !end do
+@case_with_golem@        !end if
 @case_with_golem@        !c0t( 0) = c0t(0) + log(scale2) * (c0t(-1) &
 @case_with_golem@        !      & + 0.5_ki * log(scale2) * c0t(-2))
 @case_with_golem@        !c0t(-1) = c0t(-1) + log(scale2) * c0t(-2)
@@ -730,6 +831,14 @@ contains
 @case_with_golem@           end do
 @case_with_golem@        end if
 @case_with_golem@        tot3(:) = c0t(:) * c30
+@case_with_golem@        if (highrank) then
+@case_with_golem@           tot3(0) = tot3(0) + c314 * ((V1+V2+V3)/four-m0-m1-m2)/six
+@case_with_golem@           !tot3(0) = tot3(0) + c314 * four * (c0000t(-2) - c0000t(-1))
+@case_with_golem@           !tot3(-1) = tot3(-1) + c314 * four * c0000t(-2)
+@case_with_golem@           !write (*, *) "C3(14) Golem:", (c0000t(-2) - c0000t(-1))*four
+@case_with_golem@           !write (*, *) "C3(14) Formula:", &
+@case_with_golem@           !  one/6.*(0.25*(V1+V2+V3)-m0-m1-m2)
+@case_with_golem@        end if
 @case_wout_golem@        print*, "isca=3: Golem95 not available"
 @case_wout_golem@        stop
       elseif (isca.eq.4) then
@@ -772,7 +881,7 @@ contains
       implicit none
 
       integer, intent(in) :: nleg, cut2
-      complex(ki), dimension(0:9), intent(in) :: c2
+      complex(ki), dimension(0:19), intent(in) :: c2
       real(ki), dimension(4), intent(in) :: k1, k2
       real(ki), dimension(0:nleg-1), intent(in) :: msq
       complex(ki), dimension(-2:0), intent(out) :: tot2
@@ -786,7 +895,8 @@ contains
       real(ki) :: m0, m1, K11, K12, B06
       integer :: ep, cache_index
       integer :: i1,i2
-      complex(ki), dimension(-2:0) :: J0, J1, J00, J01, J11 
+      complex(ki), dimension(-2:0) :: J0, J1, J00, J01, J11, J111, J001
+      logical :: highrank
 @case_with_avh@      complex(ki_avh), dimension(0:2) :: scf2, scf1, scf0, scf 
 @case_with_avh@      complex(ki) :: xbb, xb0, xb00
 @case_with_avh@      real(ki) :: bkv
@@ -807,6 +917,8 @@ contains
       m0=msq(i1)
       m1=msq(i2)
 
+      highrank = ((c2(13) /= 0._ki) .or. (c2(10) /= 0._ki))
+
       if (allocated(s_mat)) then
          K11 = s_mat(i2+1, i1+1) + msq(i1) + msq(i2)
       else
@@ -818,6 +930,9 @@ contains
       B06=-(K11-three*(m0+m1))/six
 
       tot2r= + B06*c2(9)
+
+      J001(:)=0
+      J111(:)=0
 
       if (present(cache_flag)) cache_index = lbound(scalar_cache,2)+cache_offset
       if (isca.eq.1) then
@@ -863,6 +978,10 @@ contains
 @case_with_ql@            J1(ep) = qlI1(real(m1,ki_ql),real(scale2,ki_ql),ep)
 @case_with_ql@         end do
 @case_with_ql@      end if
+@case_with_ql@      if (highrank) then
+@case_with_ql@             print*, "Rank N+1 not yet implemented for isca=1."
+@case_with_ql@             stop
+@case_with_ql@      end if
 @case_with_ql@      ! The remaining steps come in another if-statement
 @case_wout_ql@      print*, "isca=1: QCDLoop not available"
 @case_wout_ql@      stop
@@ -900,6 +1019,10 @@ contains
 @case_with_avh@                write(iout,903) 'B_11(',cut2,',',-i,') =',scf2(i)
 @case_with_avh@             enddo
 @case_with_avh@          endif
+@case_with_avh@      if (highrank) then
+@case_with_avh@             print*, "Rank N+1 not yet implemented for isca=2."
+@case_with_avh@             stop
+@case_with_avh@      end if
 @case_wout_avh@      print*, "isca=2: OneLOop not available"
 @case_wout_avh@      stop
       elseif (isca.eq.3) then
@@ -951,6 +1074,16 @@ contains
 @case_with_golem@          &           real(scale2,ki_gol),ep)
 @case_with_golem@           end do
 @case_with_golem@        end if
+@case_with_golem@        if (highrank) then
+@case_with_golem@           do ep=-2,0
+@case_with_golem@              J001(ep) = gB0i("001",real(K11,ki_gol),&
+@case_with_golem@              &           real(m0,ki_gol),real(m0,ki_gol),&
+@case_with_golem@              &           real(scale2,ki_gol),ep)
+@case_with_golem@              J111(ep) = gB0i("111",real(K11,ki_gol),&
+@case_with_golem@              &            real(m0,ki_gol),real(m0,ki_gol),&
+@case_with_golem@              &            real(scale2,ki_gol),ep)
+@case_with_golem@           end do
+@case_with_golem@        end if
 @case_wout_golem@        print*, "isca=3: Golem95 not available"
 @case_wout_golem@        stop
       elseif (isca.eq.4) then
@@ -992,6 +1125,10 @@ contains
 @case_with_lt@          &             real(m0,ki_lt),real(m1,ki_lt))
 @case_with_lt@           J0(ep)  = A0(real(m0,ki_lt))
 @case_with_lt@           J1(ep)  = A0(real(m1,ki_lt))
+@case_with_lt@        end if
+@case_with_lt@        if (highrank) then
+@case_with_lt@             print*, "Rank N+1 not yet implemented for isca=4."
+@case_with_lt@             stop
 @case_with_lt@        end if
 @case_wout_lt@        print*, "isca=4: LoopTools not available"
 @case_wout_lt@        stop
@@ -1040,13 +1177,29 @@ contains
         &           (K12**2*m1**2*c2(2))/(9.0_ki*(m0 - m1)**2) + B06*c2(9)
              endif
           endif
+          if (highrank) then
+                  !tot2(0) = tot2(0) + c2(13)*(K11**3)*J111(0) + c2(10)*K12*two*J001(-1)
+                  tot2(0) = tot2(0) + c2(13)*(K12**3)*J111(0) + c2(10)*one/12.0_ki* K12 * &
+                         & (K11 - two*m0-four*m1)
+                  tot2(-1) = tot2(-1) + c2(13)*(K12**3)*J111(-1)
+                  tot2(-2) = tot2(-2) + c2(13)*(K12**3)*J111(-2)
+                  !write (*, *) "c2(10): Golem:", K12*two*J001(-1)
+                  !write (*, *) "c2(10): Formula:", one/12._ki* K12 * &
+                  !       & (K11 - two*m0-four*m1)
+          end if
           if (verbosity.ge.2) then
              do ep=0,2
                 write(iout,903) 'B0 (',cut2,',',-ep,') = ',J0(-ep)
                 write(iout,903) 'B1 (',cut2,',',-ep,') =',J1(-ep)
                 write(iout,903) 'B00(',cut2,',',-ep,') =',J00(-ep)
                 write(iout,903) 'B11(',cut2,',',-ep,') =',J11(-ep)
+                if (highrank) then
+                        write(iout,903) 'B111(',cut2,',',-ep,') =',J111(-ep)
+                end if
              end do
+             if (highrank) then
+                     write(iout,903) 'B001(',cut2,',',-1,') =',one/24._ki* (K11 - two*m0-four*m1)
+             end if
           endif
        end if
        if (present(cache_flag)) cache_offset = cache_offset + 5
@@ -1055,15 +1208,16 @@ contains
 
   end subroutine add2_rm
 
-  subroutine add1_rm(nleg,c1,cut1,msq,tot1,scale2, &
+  subroutine add1_rm(nleg,c1,cut1,msq,tot1,scale2,e3,e4, &
         cache_flag, cache_offset, scalar_cache)
 @case_with_avh@      use avh_olo, only: olo_a0
       implicit none 
       integer, intent(in) :: nleg, cut1
-      complex(ki), dimension(0:4), intent(in) :: c1
+      complex(ki), dimension(0:15), intent(in) :: c1
       real(ki), dimension(0:nleg-1), intent(in) :: msq
       complex(ki), dimension(-2:0), intent(out) :: tot1
       real(ki), intent(in) :: scale2
+      complex(ki), dimension(4), intent(in) :: e3,e4
 
       logical, intent(in), optional :: cache_flag
       integer, intent(inout), optional :: cache_offset
@@ -1163,11 +1317,27 @@ contains
 @case_with_golem@         do ep=-1,0
 @case_with_golem@            ctmp = gA0(real(m0,ki_gol),&
 @case_with_golem@           &        real(scale2,ki_gol),ep)
-@case_with_golem@            tot1(ep) = c1(0)*ctmp
+@case_with_golem@            !TODO replace number in next line with sdot(e3,e4)
+@case_with_golem@            tot1(ep) = (c1(0)  + sdot(e3,e4) * c1(15)*m0/four)*ctmp
 @case_with_golem@            if (verbosity.ge.2) write(iout,1) &
 @case_with_golem@              & 'I1(',cut1,',',ep,') = (',&
 @case_with_golem@              & real(ctmp),',',aimag(ctmp),'  )' 
 @case_with_golem@         enddo
+@case_with_golem@      end if
+@case_with_golem@      if ((c1(14) /= 0) .or. (c1(15) /= 0) ) then
+@case_with_golem@           tot1(0) = tot1(0) + (c1(14) + sdot(e3,e4) * c1(15)/four)*m0*m0/two
+@case_with_golem@           !tot1(0) = tot1(0) + c1(14)*two*gA0i("00",real(m0,ki_gol),&
+@case_with_golem@           !            &   real(scale2,ki_gol),-1)
+@case_with_golem@           !do ep=-1,0
+@case_with_golem@           !   ctmp = gA0i("00",real(m0,ki_gol),real(scale2,ki_gol),ep)
+@case_with_golem@           !   tot1(ep) = tot1(ep) - c1(15)*ctmp
+@case_with_golem@           !   if (verbosity.ge.2) write(iout,1) &
+@case_with_golem@           !    & 'A00(',cut1,',',ep,') = (',&
+@case_with_golem@           !    & real(ctmp),',',aimag(ctmp),'  )' 
+@case_with_golem@           !end do
+@case_with_golem@           !write (*, *) "Golem->", two*c1(14)*gA0i("00",real(m0,ki_gol),&
+@case_with_golem@           !            &   real(scale2,ki_gol),-1)
+@case_with_golem@           !write (*, *) "Formula:", one*real(m0,ki_gol)/2.
 @case_with_golem@      end if
 @case_wout_golem@      print*, "isca=3: Golem95 not available"
 @case_wout_golem@      stop
@@ -1204,7 +1374,7 @@ contains
 @case_with_avh@      use avh_olo, only: olo_d0
       implicit none
       integer, intent(in) :: cut4,nleg
-      complex(ki), dimension(0:4), intent(in) :: c4
+      complex(ki), dimension(0:5), intent(in) :: c4
       real(ki), dimension(0:nleg-1,4), intent(in) :: Vi
       complex(ki), dimension(0:nleg-1), intent(in) :: msq
       real(ki), intent(in) :: scale2
@@ -1429,7 +1599,7 @@ contains
       implicit none
 
       integer, intent(in) :: nleg, cut3
-      complex(ki), dimension(0:9), intent(in) :: c3
+      complex(ki), dimension(0:14), intent(in) :: c3
       real(ki), dimension(0:nleg-1,4) ::Vi
       complex(ki), dimension(0:nleg-1):: msq
       complex(ki), dimension(-2:0), intent(out) :: tot3
@@ -1444,10 +1614,11 @@ contains
       real(ki) :: V1, V2, V3
       complex(ki) :: m0, m1, m2
       real(ki), dimension(4):: Vi1, Vi2, Vi3
-      complex(ki) :: c30
+      complex(ki) :: c30, c314
+      logical :: highrank
 @case_with_avh@      complex(ki_avh), dimension(0:2) :: valc0
       complex(ki) :: ctmp
-@case_with_golem@      complex(ki), dimension(-2:0) :: c0t
+@case_with_golem@      complex(ki), dimension(-2:0) :: c0t, c0000t
       integer :: ep, cache_index
 
       if (notfirsti.eqv.(.false.)) then
@@ -1456,7 +1627,6 @@ contains
          elseif (isca .eq. 4) then
 @case_with_lt@             call setmudim(real(scale2, ki_lt))
          endif
-         notfirsti=.true.
       endif
 
       j3=cut3/100
@@ -1483,6 +1653,8 @@ contains
       end if
 
       c30=c3(0)
+      c314=c3(14)
+      highrank=(c314 /= 0._ki)
 
       tot3r=+c3(7)/two
 
@@ -1525,11 +1697,16 @@ contains
 @case_with_avh@             if (verbosity.ge.2) write(iout,1) &
 @case_with_avh@     &'I3(',cut3,',',ep,') = (',real(valc0(-ep)),',',aimag(valc0(-ep)),'  )' 
 @case_with_avh@          enddo
+@case_with_avh@      if (highrank) then
+@case_with_avh@             print*, "Rank N+1 not yet implemented for isca=2."
+@case_with_avh@             stop
+@case_with_avh@      end if
 @case_wout_avh@      print*, "isca=2: OneLOop not available"
 @case_wout_avh@      stop
       elseif (isca.eq.3) then
 @case_with_golem@        call gtrunc_rm(abs(V1)+abs(V2)+abs(V3), V1,V2,V3)
 @case_with_golem@        call gtrunc_cm(abs(V1)+abs(V2)+abs(V3), m0,m1,m2)
+@case_with_golem@        c0000t(:)=0
 @case_with_golem@        do ep=-2,0
 @case_with_golem@           if (present(cache_flag)) then
 @case_with_golem@              if (cache_flag) then
@@ -1556,6 +1733,18 @@ contains
 @case_with_golem@             &        real(scale2,ki_gol),ep)
 @case_with_golem@           end if
 @case_with_golem@        end do
+@case_with_golem@        !if (highrank) then
+@case_with_golem@        !   do ep=-2,-1
+@case_with_golem@        !    c0000t(ep)=gC0iC("0000",&
+@case_with_golem@        !      &       cmplx(V1,0.0_ki_gol,ki_gol), &
+@case_with_golem@        !      &       cmplx(V2,0.0_ki_gol,ki_gol), &
+@case_with_golem@        !      &       cmplx(V3,0.0_ki_gol,ki_gol), &
+@case_with_golem@        !      &       cmplx(real(m0,ki_gol),aimag(m0),ki_gol),&
+@case_with_golem@        !      &       cmplx(real(m1,ki_gol),aimag(m1),ki_gol),&
+@case_with_golem@        !      &       cmplx(real(m2,ki_gol),aimag(m2),ki_gol),&
+@case_with_golem@        !      &       real(scale2,ki_gol),ep)
+@case_with_golem@        !   end do
+@case_with_golem@        !end if
 @case_with_golem@        !c0t( 0) = c0t(0) + log(scale2) * (c0t(-1) &
 @case_with_golem@        !      & + 0.5_ki * log(scale2) * c0t(-2))
 @case_with_golem@        !c0t(-1) = c0t(-1) + log(scale2) * c0t(-2)
@@ -1564,6 +1753,14 @@ contains
 @case_with_golem@             & ') = (',real(c0t(ep)),',',aimag(c0t(ep)),'  )' 
 @case_with_golem@        end do
 @case_with_golem@        tot3(:) = c0t(:) * c30
+@case_with_golem@        if (highrank) then
+@case_with_golem@           tot3(0) = tot3(0) + c314/six*((V1+V2+V3)/four-m0-m1-m2)
+@case_with_golem@           !tot3(0) = tot3(0) + c314 * four * (c0000t(-2) - c0000t(-1))
+@case_with_golem@           !tot3(-1) = tot3(-1) + c314 * four * c0000t(-2)
+@case_with_golem@           !write (*, *) "C3(14)  Golem:", (c0000t(-2) - c0000t(-1)) * four
+@case_with_golem@           !write (*, *) "C3(14) Formula:", &
+@case_with_golem@           !  one/6.*(0.25*(V1+V2+V3)-m0-m1-m2)
+@case_with_golem@        end if
 @case_wout_golem@        print*, "isca=3: Golem95 not available"
 @case_wout_golem@        stop
       elseif (isca.eq.4) then
@@ -1598,6 +1795,10 @@ contains
 @case_with_lt@        tot3(ep)=c30*ctmp 
 @case_with_lt@        if (verbosity.ge.2) write(iout,1) &
 @case_with_lt@       &'I3(',cut3,',',ep,') = (',real(ctmp),',',aimag(ctmp),'  )'
+@case_with_lt@        if (highrank) then
+@case_with_lt@               print*, "Rank N+1 not yet implemented for isca=4."
+@case_with_lt@               stop
+@case_with_lt@         end if
 @case_wout_lt@         print*, "isca=4: LoopTools not available"
 @case_wout_lt@         stop
       else
@@ -1614,7 +1815,7 @@ contains
       implicit none
 
       integer, intent(in) :: nleg, cut2
-      complex(ki), dimension(0:9), intent(in) :: c2
+      complex(ki), dimension(0:19), intent(in) :: c2
       real(ki), dimension(4), intent(in) :: k1, k2
       complex(ki), dimension(0:nleg-1), intent(in) :: msq
       complex(ki), dimension(-2:0), intent(out) :: tot2
@@ -1631,7 +1832,8 @@ contains
       complex(ki) :: m0, m1
       integer :: ep, cache_index
 
-      complex(ki), dimension(-2:0) :: J0, J1, J00, J01, J11 
+      complex(ki), dimension(-2:0) :: J0, J1, J00, J01, J11, J111, J001
+      logical :: highrank
 @case_with_avh@      complex(ki_avh), dimension(0:2) :: scf2, scf1, scf0, scf 
 @case_with_avh@      complex(ki) :: xbb, xb0, xb00
 @case_with_avh@      real(ki) :: bkv
@@ -1662,6 +1864,10 @@ contains
       B06=-(K11-three*(m0+m1))/six
 
       tot2r= + B06*c2(9)
+
+      J001(:)=0
+      J111(:)=0
+      highrank = ((c2(10) /= 0._ki) .or. (c2(13)/=0._ki))
 
       if (present(cache_flag)) cache_index = lbound(scalar_cache,2)+cache_offset
       if (isca.eq.1) then
@@ -1706,6 +1912,10 @@ contains
 @case_with_avh@                write(iout,903) 'B_11(',cut2,',',-i,') =',scf2(i)
 @case_with_avh@             enddo
 @case_with_avh@          endif
+@case_with_avh@      if (highrank) then
+@case_with_avh@            print*, "Rank N+1 not yet implemented for isca=2."
+@case_with_avh@            stop
+@case_with_avh@      end if
 @case_wout_avh@      print*, "isca=2: OneLOop not available"
 @case_wout_avh@      stop
       elseif (isca.eq.3) then
@@ -1775,6 +1985,20 @@ contains
 @case_with_golem@             &   real(scale2,ki_gol),ep)
 @case_with_golem@           end do
 @case_with_golem@        end if
+@case_with_golem@        if (highrank) then
+@case_with_golem@           do ep=-2,0
+@case_with_golem@                 J001(ep) = gB0iC("001",&
+@case_with_golem@               &   cmplx(K11,0.0_ki_gol,ki_gol), &
+@case_with_golem@               &   cmplx(real(m0,ki_gol),aimag(m0),ki_gol),&
+@case_with_golem@               &   cmplx(real(m1,ki_gol),aimag(m1),ki_gol),&
+@case_with_golem@               &   real(scale2,ki_gol),ep)
+@case_with_golem@               J111(ep) = gB0iC("111",&
+@case_with_golem@             &   cmplx(K11,0.0_ki_gol,ki_gol), &
+@case_with_golem@             &   cmplx(real(m0,ki_gol),aimag(m0),ki_gol),&
+@case_with_golem@             &   cmplx(real(m1,ki_gol),aimag(m1),ki_gol),&
+@case_with_golem@             &   real(scale2,ki_gol),ep)
+@case_with_golem@           end do
+@case_with_golem@        end if
 @case_wout_golem@        print*, "isca=3: Golem95 not available"
 @case_wout_golem@        stop
       elseif (isca.eq.4) then
@@ -1835,6 +2059,10 @@ contains
 @case_with_lt@           J1(ep)  = A0C(&
 @case_with_lt@          &           cmplx(real(m1,ki_lt),aimag(m1),ki_lt))
 @case_with_lt@        end if
+@case_with_lt@        if (highrank) then
+@case_with_lt@               print*, "Rank N+1 not yet implemented for isca=4."
+@case_with_lt@               stop
+@case_with_lt@         end if
 @case_wout_lt@        print*, "isca=4: LoopTools not available"
 @case_wout_lt@        stop
        else
@@ -1882,13 +2110,23 @@ contains
         &           (K12**2*m1**2*c2(2))/(9.0_ki*(m0 - m1)**2) + B06*c2(9)
              endif
           endif
+          if (highrank) then
+                  !tot2(0) = tot2(0) + c2(13)*(K12**3)*J111(0) + c2(10)*two*K12*J001(-1)
+                  tot2(0) = tot2(0) + c2(13)*(K12**3)*J111(0) + c2(10)/12.0_ki* K12 * &
+                         & (K11 - two*m0-four*m1)
+                  tot2(-1) = tot2(-1) + c2(13)*(K12**3)*J111(-1)
+                  tot2(-2) = tot2(-2) + c2(13)*(K12**3)*J111(-2)
+          end if
           if (verbosity.ge.2) then
              do ep=0,2
                 write(iout,903) 'B0 (',cut2,',',-ep,') = ',J0(-ep)
                 write(iout,903) 'B1 (',cut2,',',-ep,') =',J1(-ep)
                 write(iout,903) 'B00(',cut2,',',-ep,') =',J00(-ep)
                 write(iout,903) 'B11(',cut2,',',-ep,') =',J11(-ep)
+                write(iout,903) 'B111(',cut2,',',-ep,') =',J111(-ep)
              end do
+             write(iout,903) 'B001(',cut2,',',-1,') =',J001(-1)
+             write(iout,903) 'B001(',cut2,',',-1,') =',one/24._ki* (K11 - two*m0-four*m1)
           endif
        end if
        if (present(cache_flag)) cache_offset = cache_offset + 5
@@ -1896,15 +2134,16 @@ contains
  903   format(a5,I2,a1,I2,a4,2(D24.15))
   end subroutine add2_cm
 
-  subroutine add1_cm(nleg,c1,cut1,msq,tot1,scale2,&
+  subroutine add1_cm(nleg,c1,cut1,msq,tot1,scale2,e3,e4,&
         cache_flag, cache_offset, scalar_cache)
 @case_with_avh@      use avh_olo, only: olo_a0
       implicit none
       integer, intent(in) :: nleg, cut1
-      complex(ki), dimension(0:4), intent(in) :: c1
+      complex(ki), dimension(0:15), intent(in) :: c1
       complex(ki), dimension(0:nleg-1), intent(in) :: msq
       complex(ki), dimension(-2:0), intent(out) :: tot1
       real(ki), intent(in) :: scale2
+      complex(ki), dimension(4), intent(in) :: e3,e4
 
       logical, intent(in), optional :: cache_flag
       integer, intent(inout), optional :: cache_offset
@@ -1960,6 +2199,10 @@ contains
 @case_with_avh@        & 'I1(',cut1,',',ep,') = (',real(vala0(-ep)),',',&
 @case_with_avh@        & aimag(vala0(-ep)),'  )' 
 @case_with_avh@      enddo
+@case_with_avh@      if (c1(14) /= 0) then
+@case_with_avh@           print*, "Rank N+1 not yet implemented for isca=1."
+@case_with_avh@           stop
+@case_with_avh@      end if
 @case_wout_avh@      print*, "isca=2: OneLOop not available"
 @case_wout_avh@      stop
       elseif (isca.eq.3) then
@@ -1995,11 +2238,28 @@ contains
 @case_with_golem@            ctmp = gA0C(&
 @case_with_golem@           & cmplx(real(m0,ki_gol),aimag(m0),ki_gol),&
 @case_with_golem@           &        real(scale2,ki_gol),ep)
-@case_with_golem@            tot1(ep) = c1(0)*ctmp
+@case_with_golem@            !TODO replace number in next line with sdot(e3,e4)
+@case_with_golem@            tot1(ep) = (c1(0) + sdot(e3,e4)* c1(15)*m0/four)*ctmp
 @case_with_golem@            if (verbosity.ge.2) write(iout,1) &
 @case_with_golem@              & 'I1(',cut1,',',ep,') = (',&
 @case_with_golem@              & real(ctmp),',',aimag(ctmp),'  )' 
 @case_with_golem@         enddo
+@case_with_golem@      end if
+@case_with_golem@      if ((c1(14) /= 0) .or. (c1(15) /= 0) ) then
+@case_with_golem@           tot1(0) = tot1(0) + (c1(14) + sdot(e3,e4) * c1(15)/four)*m0*m0/two
+@case_with_golem@          !tot1(0) = tot1(0) + c1(14)*two*gA0iC("00",cmplx(real(m0,ki_gol),aimag(m0),ki_gol),&
+@case_with_golem@          !             &   real(scale2,ki_gol),-1)
+@case_with_golem@          ! do ep=-1,0
+@case_with_golem@          !    ctmp = gA0iC("00",cmplx(real(m0,ki_gol),aimag(m0),ki_gol),&
+@case_with_golem@          !             &   real(scale2,ki_gol),ep)
+@case_with_golem@          !    tot1(ep) = tot1(ep) - c1(15)*ctmp
+@case_with_golem@          !    if (verbosity.ge.2) write(iout,1) &
+@case_with_golem@          !     & 'A00(',cut1,',',ep,') = (',&
+@case_with_golem@          !     & real(ctmp),',',aimag(ctmp),'  )' 
+@case_with_golem@          ! end do
+@case_with_golem@          ! write (*, *) "Golem->", two*gA0iC("00",cmplx(real(m0,ki_gol),aimag(m0),ki_gol),&
+@case_with_golem@          !             &   real(scale2,ki_gol),-1)
+@case_with_golem@          ! write (*, *) "Formula:", one*cmplx(real(m0,ki_gol),aimag(m0),ki_gol)**2/two
 @case_with_golem@      end if
 @case_wout_golem@      print*, "isca=3: Golem95 not available"
 @case_wout_golem@      stop
@@ -2021,6 +2281,10 @@ contains
 @case_with_lt@      tot1(ep)=c1(0)*ctmp
 @case_with_lt@      if (verbosity.ge.2) write(iout,1) &
 @case_with_lt@     & 'I1(',cut1,',',ep,') = (',real(ctmp),',',aimag(ctmp),'  )' 
+@case_with_lt@      if (c(14)/= 0.0_ki) then
+@case_with_lt@             print*, "Rank N+1 not yet implemented for isca=4."
+@case_with_lt@             stop
+@case_with_lt@      end if
 @case_wout_lt@      print*, "isca=4: LoopTools not available"
 @case_wout_lt@      stop
       else
@@ -2030,35 +2294,35 @@ contains
       if (present(cache_flag)) cache_offset = cache_offset + 1
   end subroutine add1_cm
 
-@case_with_golem@function gA0(m0,mu2,ep)
-@case_with_golem@   implicit none
-@case_with_golem@   real(ki_gol), intent(in) :: m0, mu2
-@case_with_golem@   integer, intent(in) :: ep
-@case_with_golem@   complex(ki_gol) :: gA0
-@case_with_golem@   if(ep.eq.(-2) .or. m0.eq.0.0_ki_gol) then
-@case_with_golem@      gA0 = (0.0_ki_gol, 0.0_ki_gol)
-@case_with_golem@   elseif(ep.eq.(-1)) then
-@case_with_golem@      gA0 = m0 * gB0(0.0_ki_gol,m0,m0,mu2,-1)
-@case_with_golem@   else
-@case_with_golem@      gA0 = m0 * (gB0(0.0_ki_gol,m0,m0,mu2,0) &
-@case_with_golem@          &    +  gB0(0.0_ki_gol,m0,m0,mu2,-1))
-@case_with_golem@   end if
-@case_with_golem@end function gA0
-@case_with_golem@function gA0C(m0,mu2,ep)
-@case_with_golem@   implicit none
-@case_with_golem@   complex(ki_gol), intent(in) :: m0
-@case_with_golem@   real(ki_gol), intent(in) :: mu2
-@case_with_golem@   integer, intent(in) :: ep
-@case_with_golem@   complex(ki_gol) :: gA0C
-@case_with_golem@   if(ep.eq.(-2) .or. m0.eq.(0.0_ki_gol,0.0_ki_gol)) then
-@case_with_golem@      gA0C = (0.0_ki_gol, 0.0_ki_gol)
-@case_with_golem@   elseif(ep.eq.(-1)) then
-@case_with_golem@      gA0C = m0 * gB0C((0.0_ki_gol,0.0_ki_gol),m0,m0,mu2,-1)
-@case_with_golem@   else
-@case_with_golem@      gA0C = m0 * (gB0C((0.0_ki_gol,0.0_ki_gol),m0,m0,mu2,0) &
-@case_with_golem@          &    +  gB0C((0.0_ki_gol,0.0_ki_gol),m0,m0,mu2,-1))
-@case_with_golem@   end if
-@case_with_golem@end function gA0C
+@case_with_golem@!function gA0(m0,mu2,ep)
+@case_with_golem@!   implicit none
+@case_with_golem@!   real(ki_gol), intent(in) :: m0, mu2
+@case_with_golem@!   integer, intent(in) :: ep
+@case_with_golem@!   complex(ki_gol) :: gA0
+@case_with_golem@!   if(ep.eq.(-2) .or. m0.eq.0.0_ki_gol) then
+@case_with_golem@!      gA0 = (0.0_ki_gol, 0.0_ki_gol)
+@case_with_golem@!   elseif(ep.eq.(-1)) then
+@case_with_golem@!      gA0 = m0 * gB0(0.0_ki_gol,m0,m0,mu2,-1)
+@case_with_golem@!   else
+@case_with_golem@!      gA0 = m0 * (gB0(0.0_ki_gol,m0,m0,mu2,0) &
+@case_with_golem@!          &    +  gB0(0.0_ki_gol,m0,m0,mu2,-1))
+@case_with_golem@!   end if
+@case_with_golem@!end function gA0
+@case_with_golem@!function gA0C(m0,mu2,ep)
+@case_with_golem@!   implicit none
+@case_with_golem@!   complex(ki_gol), intent(in) :: m0
+@case_with_golem@!   real(ki_gol), intent(in) :: mu2
+@case_with_golem@!   integer, intent(in) :: ep
+@case_with_golem@!   complex(ki_gol) :: gA0C
+@case_with_golem@!   if(ep.eq.(-2) .or. m0.eq.(0.0_ki_gol,0.0_ki_gol)) then
+@case_with_golem@!      gA0C = (0.0_ki_gol, 0.0_ki_gol)
+@case_with_golem@!   elseif(ep.eq.(-1)) then
+@case_with_golem@!      gA0C = m0 * gB0C((0.0_ki_gol,0.0_ki_gol),m0,m0,mu2,-1)
+@case_with_golem@!   else
+@case_with_golem@!      gA0C = m0 * (gB0C((0.0_ki_gol,0.0_ki_gol),m0,m0,mu2,0) &
+@case_with_golem@!          &    +  gB0C((0.0_ki_gol,0.0_ki_gol),m0,m0,mu2,-1))
+@case_with_golem@!   end if
+@case_with_golem@!end function gA0C
 
 @case_with_golem@pure subroutine gtrunc_rm(ref,s1,s2,s3,s4,s5,s6,s7,s8,s9,s10)
 @case_with_golem@   implicit none

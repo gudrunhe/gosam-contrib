@@ -1,7 +1,8 @@
 noinst_LTLIBRARIES=libgolem95_integrals_one_point.la
 
 libgolem95_integrals_one_point_la_SOURCES= generic_function_1p.f90
-libgolem95_integrals_one_point_la_FCFLAGS=\
+include ../../MakefileCommon.am
+AM_FCFLAGS+=\
 	-I$(builddir)/../../module \
 	-I$(builddir)/../../kinematic \
 	-I$(builddir)/../../numerical \
