@@ -1076,11 +1076,11 @@ contains
 @case_with_golem@        end if
 @case_with_golem@        if (highrank) then
 @case_with_golem@           do ep=-2,0
-@case_with_golem@              J001(ep) = gB0i("001",real(K11,ki_gol),&
-@case_with_golem@              &           real(m0,ki_gol),real(m0,ki_gol),&
-@case_with_golem@              &           real(scale2,ki_gol),ep)
+@case_with_golem@              !J001(ep) = gB0i("001",real(K11,ki_gol),&
+@case_with_golem@              !&           real(m0,ki_gol),real(m1,ki_gol),&
+@case_with_golem@              !&           real(scale2,ki_gol),ep)
 @case_with_golem@              J111(ep) = gB0i("111",real(K11,ki_gol),&
-@case_with_golem@              &            real(m0,ki_gol),real(m0,ki_gol),&
+@case_with_golem@              &            real(m0,ki_gol),real(m1,ki_gol),&
 @case_with_golem@              &            real(scale2,ki_gol),ep)
 @case_with_golem@           end do
 @case_with_golem@        end if
@@ -1987,11 +1987,11 @@ contains
 @case_with_golem@        end if
 @case_with_golem@        if (highrank) then
 @case_with_golem@           do ep=-2,0
-@case_with_golem@                 J001(ep) = gB0iC("001",&
-@case_with_golem@               &   cmplx(K11,0.0_ki_gol,ki_gol), &
-@case_with_golem@               &   cmplx(real(m0,ki_gol),aimag(m0),ki_gol),&
-@case_with_golem@               &   cmplx(real(m1,ki_gol),aimag(m1),ki_gol),&
-@case_with_golem@               &   real(scale2,ki_gol),ep)
+@case_with_golem@               !  J001(ep) = gB0iC("001",&
+@case_with_golem@               !&   cmplx(K11,0.0_ki_gol,ki_gol), &
+@case_with_golem@               !&   cmplx(real(m0,ki_gol),aimag(m0),ki_gol),&
+@case_with_golem@               !&   cmplx(real(m1,ki_gol),aimag(m1),ki_gol),&
+@case_with_golem@               !&   real(scale2,ki_gol),ep)
 @case_with_golem@               J111(ep) = gB0iC("111",&
 @case_with_golem@             &   cmplx(K11,0.0_ki_gol,ki_gol), &
 @case_with_golem@             &   cmplx(real(m0,ki_gol),aimag(m0),ki_gol),&
@@ -2125,7 +2125,7 @@ contains
                 write(iout,903) 'B11(',cut2,',',-ep,') =',J11(-ep)
                 write(iout,903) 'B111(',cut2,',',-ep,') =',J111(-ep)
              end do
-             write(iout,903) 'B001(',cut2,',',-1,') =',J001(-1)
+             !write(iout,903) 'B001(',cut2,',',-1,') =',J001(-1)
              write(iout,903) 'B001(',cut2,',',-1,') =',one/24._ki* (K11 - two*m0-four*m1)
           endif
        end if

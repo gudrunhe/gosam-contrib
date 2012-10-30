@@ -102,11 +102,10 @@ private ::  f2p_ndim_0p_generic;
        complex(ki) :: detS
        integer :: cur_depth,i,b_used,hash
 
-       real(ki) ::  limit_small_detS, limit_small_sumb
+       real(ki) ::  limit_small_sumb
        integer, save :: miss
 
-       limit_small_detS = 1E-15
-       limit_small_sumb = 1E-15
+       limit_small_sumb = 1E-15_ki
 
 
        if (present(depth)) then
@@ -169,12 +168,9 @@ private ::  f2p_ndim_0p_generic;
                                            .or. (leg_count==4 .and. l_count>0) ) ) then
           detS = calc_determinant(s_mat_p,leg_count,b_pin)
 
-
-          if (abs(detS) < limit_small_detS .or. (abs(sumb(b_pin))<=limit_small_sumb) .or. isnan(real(sumb(b_pin)))) then
+          if ((abs(sumb(b_pin))<=limit_small_sumb) .or. isnan(real(sumb(b_pin)))) then
 
              return_val=reduce_pave_generic(leg_count,dim_nplus,b_pin,l_count,l,cur_depth)
-
-
 
 
              if (hash /= 0 .and. cache_generic_count < 1000) then
