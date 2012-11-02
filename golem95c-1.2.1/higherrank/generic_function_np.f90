@@ -102,7 +102,7 @@ private ::  f2p_ndim_0p_generic;
        complex(ki) :: detS
        integer :: cur_depth,i,b_used,hash
 
-       real(ki) ::  limit_small_sumb
+       real(ki) ::  limit_small_sumb, abs_sumb
        integer, save :: miss
 
        limit_small_sumb = 1E-15_ki
@@ -168,7 +168,10 @@ private ::  f2p_ndim_0p_generic;
                                            .or. (leg_count==4 .and. l_count>0) ) ) then
           detS = calc_determinant(s_mat_p,leg_count,b_pin)
 
-          if ((abs(sumb(b_pin))<=limit_small_sumb) .or. isnan(real(sumb(b_pin)))) then
+          abs_sumb = abs(sumb(b_pin))
+
+          ! test if abs_sumb is below threshold or NaN
+          if (( abs_sumb <=limit_small_sumb) .or. (.not. abs_sumb>=0._ki)) then
 
              return_val=reduce_pave_generic(leg_count,dim_nplus,b_pin,l_count,l,cur_depth)
 
@@ -289,17 +292,17 @@ private ::  f2p_ndim_0p_generic;
         end if
 
 
-        if (.false. .and. l_count == 2 .and. dim_nplus==2 .and. leg_count==3) then
-        !if (l_count == 2 .and. dim_nplus==2 .and. leg_count==3 ) then
-            ! TODO Trap:
-              ! The program stops because error in function f3p2m_np2 no need of
-              ! two mass six dimensional 3-point function with more
-              ! than one Feynman parameter in the numerator
-           ret_temp(:) = czero
-           ret_temp(2:3) = f3p_np2(s_mat_p, b_used,l(1),l(2))
-           return_val= ret_temp
-           return
-        end if
+        !if (.false. .and. l_count == 2 .and. dim_nplus==2 .and. leg_count==3) then
+        !!if (l_count == 2 .and. dim_nplus==2 .and. leg_count==3 ) then
+        !    ! TODO Trap:
+        !      ! The program stops because error in function f3p2m_np2 no need of
+        !      ! two mass six dimensional 3-point function with more
+        !      ! than one Feynman parameter in the numerator
+        !   ret_temp(:) = czero
+        !   ret_temp(2:3) = f3p_np2(s_mat_p, b_used,l(1),l(2))
+        !   return_val= ret_temp
+        !   return
+        !end if
 
 
         if (l_count == 3 .and. dim_nplus==2 .and. leg_count==4) then
@@ -340,7 +343,7 @@ private ::  f2p_ndim_0p_generic;
                return_val = f3p(s_mat_p, b_used,l(1),l(2))
                return
            end select
-       end if
+        end if
 
        if (l_count == 1 .and. dim_nplus==0) then
            select case (leg_count)

@@ -6,11 +6,11 @@
 !****h* src/higherrank/form_factor_higher_ranks
 ! NAME
 !
-!  Module form_factor_highrank
+!  Module form_factor_higher_ranks
 !
 ! USAGE
 !
-!  use form_factor_highrank
+!  use form_factor_higher_ranks
 !
 ! DESCRIPTION
 !
@@ -368,7 +368,7 @@
 !  * precision (src/module/precision_golem.f90)
 !  * matrice_s (src/kinematic/matrice_s.f90)
 !  * array (src/module/array.f90)
-!  * generic_function_np (src/integrals/n_point/generic_function_np.f90)
+!  * generic_function_np (src/highrank/generic_function_np.f90)
 !  * constante (src/module/constante.f90)
 !
 !*****
@@ -384,7 +384,7 @@ use array
     module procedure my_a11_b, my_a11_s
   end interface my_a11
   public :: my_a11
-
+!
 !
 !
   interface a12
@@ -395,7 +395,7 @@ use array
     module procedure b12_b, b12_s
   end interface b12
   public :: b12
-
+!
 !
 !
   interface a13
@@ -406,7 +406,7 @@ use array
     module procedure b13_b, b13_s
   end interface b13
   public :: b13
-
+!
 !
 !
   interface a14
@@ -421,7 +421,7 @@ use array
     module procedure c14_b, c14_s
   end interface c14
   public :: c14
-
+!
 !
 !
   interface a15
@@ -436,7 +436,7 @@ use array
     module procedure c15_b, c15_s
   end interface c15
   public :: c15
-
+!
 !
 !
   interface a16
@@ -455,7 +455,7 @@ use array
     module procedure d16_b, d16_s
   end interface d16
   public :: d16
-
+!
 !
 !
   interface a17
@@ -474,7 +474,7 @@ use array
     module procedure d17_b, d17_s
   end interface d17
   public :: d17
-
+!
 !
 !
   interface a18
@@ -497,7 +497,7 @@ use array
     module procedure e18_b, e18_s
   end interface e18
   public :: e18
-
+!
 !
 !
   interface a19
@@ -520,7 +520,7 @@ use array
     module procedure e19_b, e19_s
   end interface e19
   public :: e19
-
+!
 !
 !
   interface a110
@@ -547,7 +547,7 @@ use array
     module procedure f110_b, f110_s
   end interface f110
   public :: f110
-
+!
 !
 !
   interface a111
@@ -574,7 +574,7 @@ use array
     module procedure f111_b, f111_s
   end interface f111
   public :: f111
-
+!
 !
 !
   interface a112
@@ -605,7 +605,7 @@ use array
     module procedure g112_b, g112_s
   end interface g112
   public :: g112
-
+!
 !
 !
   interface a113
@@ -636,7 +636,7 @@ use array
     module procedure g113_b, g113_s
   end interface g113
   public :: g113
-
+!
 !
 !
   interface a114
@@ -671,7 +671,7 @@ use array
     module procedure h114_b, h114_s
   end interface h114
   public :: h114
-
+!
 !
 !
   interface a115
@@ -706,16 +706,16 @@ use array
     module procedure h115_b, h115_s
   end interface h115
   public :: h115
-
 !
-
+!
+!
 !
 !
   interface my_a21
     module procedure my_a21_b, my_a21_s
   end interface my_a21
   public :: my_a21
-
+!
 !
 !
   interface my_a22
@@ -726,7 +726,7 @@ use array
     module procedure my_b22_b, my_b22_s
   end interface my_b22
   public :: my_b22
-
+!
 !
 !
   interface a23
@@ -737,7 +737,7 @@ use array
     module procedure b23_b, b23_s
   end interface b23
   public :: b23
-
+!
 !
 !
   interface a24
@@ -752,7 +752,7 @@ use array
     module procedure c24_b, c24_s
   end interface c24
   public :: c24
-
+!
 !
 !
   interface a25
@@ -767,7 +767,7 @@ use array
     module procedure c25_b, c25_s
   end interface c25
   public :: c25
-
+!
 !
 !
   interface a26
@@ -786,7 +786,7 @@ use array
     module procedure d26_b, d26_s
   end interface d26
   public :: d26
-
+!
 !
 !
   interface a27
@@ -805,7 +805,7 @@ use array
     module procedure d27_b, d27_s
   end interface d27
   public :: d27
-
+!
 !
 !
   interface a28
@@ -828,7 +828,7 @@ use array
     module procedure e28_b, e28_s
   end interface e28
   public :: e28
-
+!
 !
 !
   interface a29
@@ -851,7 +851,7 @@ use array
     module procedure e29_b, e29_s
   end interface e29
   public :: e29
-
+!
 !
 !
   interface a210
@@ -878,7 +878,7 @@ use array
     module procedure f210_b, f210_s
   end interface f210
   public :: f210
-
+!
 !
 !
   interface a211
@@ -905,7 +905,7 @@ use array
     module procedure f211_b, f211_s
   end interface f211
   public :: f211
-
+!
 !
 !
   interface a212
@@ -936,7 +936,7 @@ use array
     module procedure g212_b, g212_s
   end interface g212
   public :: g212
-
+!
 !
 !
   interface a213
@@ -967,7 +967,7 @@ use array
     module procedure g213_b, g213_s
   end interface g213
   public :: g213
-
+!
 !
 !
   interface a214
@@ -1002,7 +1002,7 @@ use array
     module procedure h214_b, h214_s
   end interface h214
   public :: h214
-
+!
 !
 !
   interface a215
@@ -1037,7 +1037,7 @@ use array
     module procedure h215_b, h215_s
   end interface h215
   public :: h215
-
+!
 !
 !
   interface a216
@@ -1076,16 +1076,16 @@ use array
     module procedure i216_b, i216_s
   end interface i216
   public :: i216
-
 !
-
+!
+!
 !
 !
   interface my_a31
     module procedure my_a31_b, my_a31_s
   end interface my_a31
   public :: my_a31
-
+!
 !
 !
   interface my_a32
@@ -1096,7 +1096,7 @@ use array
     module procedure my_b32_b, my_b32_s
   end interface my_b32
   public :: my_b32
-
+!
 !
 !
   interface my_a33
@@ -1107,7 +1107,7 @@ use array
     module procedure my_b33_b, my_b33_s
   end interface my_b33
   public :: my_b33
-
+!
 !
 !
   interface a34
@@ -1122,7 +1122,7 @@ use array
     module procedure c34_b, c34_s
   end interface c34
   public :: c34
-
+!
 !
 !
   interface a35
@@ -1137,7 +1137,7 @@ use array
     module procedure c35_b, c35_s
   end interface c35
   public :: c35
-
+!
 !
 !
   interface a36
@@ -1156,7 +1156,7 @@ use array
     module procedure d36_b, d36_s
   end interface d36
   public :: d36
-
+!
 !
 !
   interface a37
@@ -1175,7 +1175,7 @@ use array
     module procedure d37_b, d37_s
   end interface d37
   public :: d37
-
+!
 !
 !
   interface a38
@@ -1198,7 +1198,7 @@ use array
     module procedure e38_b, e38_s
   end interface e38
   public :: e38
-
+!
 !
 !
   interface a39
@@ -1221,7 +1221,7 @@ use array
     module procedure e39_b, e39_s
   end interface e39
   public :: e39
-
+!
 !
 !
   interface a310
@@ -1248,7 +1248,7 @@ use array
     module procedure f310_b, f310_s
   end interface f310
   public :: f310
-
+!
 !
 !
   interface a311
@@ -1275,7 +1275,7 @@ use array
     module procedure f311_b, f311_s
   end interface f311
   public :: f311
-
+!
 !
 !
   interface a312
@@ -1306,7 +1306,7 @@ use array
     module procedure g312_b, g312_s
   end interface g312
   public :: g312
-
+!
 !
 !
   interface a313
@@ -1337,7 +1337,7 @@ use array
     module procedure g313_b, g313_s
   end interface g313
   public :: g313
-
+!
 !
 !
   interface a314
@@ -1372,7 +1372,7 @@ use array
     module procedure h314_b, h314_s
   end interface h314
   public :: h314
-
+!
 !
 !
   interface a315
@@ -1407,7 +1407,7 @@ use array
     module procedure h315_b, h315_s
   end interface h315
   public :: h315
-
+!
 !
 !
   interface a316
@@ -1446,7 +1446,7 @@ use array
     module procedure i316_b, i316_s
   end interface i316
   public :: i316
-
+!
 !
 !
   interface a317
@@ -1485,16 +1485,16 @@ use array
     module procedure i317_b, i317_s
   end interface i317
   public :: i317
-
 !
-
+!
+!
 !
 !
   interface my_a41
     module procedure my_a41_b, my_a41_s
   end interface my_a41
   public :: my_a41
-
+!
 !
 !
   interface my_a42
@@ -1505,7 +1505,7 @@ use array
     module procedure my_b42_b, my_b42_s
   end interface my_b42
   public :: my_b42
-
+!
 !
 !
   interface my_a43
@@ -1516,7 +1516,7 @@ use array
     module procedure my_b43_b, my_b43_s
   end interface my_b43
   public :: my_b43
-
+!
 !
 !
   interface my_a44
@@ -1531,7 +1531,7 @@ use array
     module procedure my_c44_b, my_c44_s
   end interface my_c44
   public :: my_c44
-
+!
 !
 !
   interface a45
@@ -1546,7 +1546,7 @@ use array
     module procedure c45_b, c45_s
   end interface c45
   public :: c45
-
+!
 !
 !
   interface a46
@@ -1565,7 +1565,7 @@ use array
     module procedure d46_b, d46_s
   end interface d46
   public :: d46
-
+!
 !
 !
   interface a47
@@ -1584,7 +1584,7 @@ use array
     module procedure d47_b, d47_s
   end interface d47
   public :: d47
-
+!
 !
 !
   interface a48
@@ -1607,7 +1607,7 @@ use array
     module procedure e48_b, e48_s
   end interface e48
   public :: e48
-
+!
 !
 !
   interface a49
@@ -1630,7 +1630,7 @@ use array
     module procedure e49_b, e49_s
   end interface e49
   public :: e49
-
+!
 !
 !
   interface a410
@@ -1657,7 +1657,7 @@ use array
     module procedure f410_b, f410_s
   end interface f410
   public :: f410
-
+!
 !
 !
   interface a411
@@ -1684,7 +1684,7 @@ use array
     module procedure f411_b, f411_s
   end interface f411
   public :: f411
-
+!
 !
 !
   interface a412
@@ -1715,7 +1715,7 @@ use array
     module procedure g412_b, g412_s
   end interface g412
   public :: g412
-
+!
 !
 !
   interface a413
@@ -1746,7 +1746,7 @@ use array
     module procedure g413_b, g413_s
   end interface g413
   public :: g413
-
+!
 !
 !
   interface a414
@@ -1781,7 +1781,7 @@ use array
     module procedure h414_b, h414_s
   end interface h414
   public :: h414
-
+!
 !
 !
   interface a415
@@ -1816,7 +1816,7 @@ use array
     module procedure h415_b, h415_s
   end interface h415
   public :: h415
-
+!
 !
 !
   interface a416
@@ -1855,7 +1855,7 @@ use array
     module procedure i416_b, i416_s
   end interface i416
   public :: i416
-
+!
 !
 !
   interface a417
@@ -1894,7 +1894,7 @@ use array
     module procedure i417_b, i417_s
   end interface i417
   public :: i417
-
+!
 !
 !
   interface a418
@@ -1937,10 +1937,11 @@ use array
     module procedure j418_b, j418_s
   end interface j418
   public :: j418
-
 !
-
 !
+!
+!
+  integer, dimension(0) :: no_feynmanparam
   contains
 
   function my_a11_b(l1,b_pin)
@@ -1985,7 +1986,7 @@ use array
    integer, intent(in) :: b_pin
    type(form_factor) :: b12_b
    !
-   b12_b = -0.5_ki * fnp_generic(1,2,b_pin,0,(/  integer::  /))
+   b12_b = -0.5_ki * fnp_generic(1,2,b_pin,0,no_feynmanparam)
    !
   end function b12_b
 
@@ -2076,7 +2077,7 @@ use array
    integer, intent(in) :: b_pin
    type(form_factor) :: c14_b
    !
-   c14_b = 0.25_ki * fnp_generic(1,4,b_pin,0,(/  integer::  /))
+   c14_b = 0.25_ki * fnp_generic(1,4,b_pin,0,no_feynmanparam)
    !
   end function c14_b
 
@@ -2203,7 +2204,7 @@ use array
    integer, intent(in) :: b_pin
    type(form_factor) :: d16_b
    !
-   d16_b = -0.125_ki * fnp_generic(1,6,b_pin,0,(/  integer::  /))
+   d16_b = -0.125_ki * fnp_generic(1,6,b_pin,0,no_feynmanparam)
    !
   end function d16_b
 
@@ -2366,7 +2367,7 @@ use array
    integer, intent(in) :: b_pin
    type(form_factor) :: e18_b
    !
-   e18_b = 0.0625_ki * fnp_generic(1,8,b_pin,0,(/  integer::  /))
+   e18_b = 0.0625_ki * fnp_generic(1,8,b_pin,0,no_feynmanparam)
    !
   end function e18_b
 
@@ -2565,7 +2566,7 @@ use array
    integer, intent(in) :: b_pin
    type(form_factor) :: f110_b
    !
-   f110_b = -0.03125_ki * fnp_generic(1,10,b_pin,0,(/  integer::  /))
+   f110_b = -0.03125_ki * fnp_generic(1,10,b_pin,0,no_feynmanparam)
    !
   end function f110_b
 
@@ -2800,7 +2801,7 @@ use array
    integer, intent(in) :: b_pin
    type(form_factor) :: g112_b
    !
-   g112_b = 0.015625_ki * fnp_generic(1,12,b_pin,0,(/  integer::  /))
+   g112_b = 0.015625_ki * fnp_generic(1,12,b_pin,0,no_feynmanparam)
    !
   end function g112_b
 
@@ -3071,7 +3072,7 @@ use array
    integer, intent(in) :: b_pin
    type(form_factor) :: h114_b
    !
-   h114_b = -0.0078125_ki * fnp_generic(1,14,b_pin,0,(/  integer::  /))
+   h114_b = -0.0078125_ki * fnp_generic(1,14,b_pin,0,no_feynmanparam)
    !
   end function h114_b
 
@@ -3271,7 +3272,7 @@ use array
    integer, intent(in) :: b_pin
    type(form_factor) :: my_b22_b
    !
-   my_b22_b = -0.5_ki * fnp_generic(2,2,b_pin,0,(/  integer::  /))
+   my_b22_b = -0.5_ki * fnp_generic(2,2,b_pin,0,no_feynmanparam)
    !
   end function my_b22_b
 
@@ -3362,7 +3363,7 @@ use array
    integer, intent(in) :: b_pin
    type(form_factor) :: c24_b
    !
-   c24_b = 0.25_ki * fnp_generic(2,4,b_pin,0,(/  integer::  /))
+   c24_b = 0.25_ki * fnp_generic(2,4,b_pin,0,no_feynmanparam)
    !
   end function c24_b
 
@@ -3489,7 +3490,7 @@ use array
    integer, intent(in) :: b_pin
    type(form_factor) :: d26_b
    !
-   d26_b = -0.125_ki * fnp_generic(2,6,b_pin,0,(/  integer::  /))
+   d26_b = -0.125_ki * fnp_generic(2,6,b_pin,0,no_feynmanparam)
    !
   end function d26_b
 
@@ -3652,7 +3653,7 @@ use array
    integer, intent(in) :: b_pin
    type(form_factor) :: e28_b
    !
-   e28_b = 0.0625_ki * fnp_generic(2,8,b_pin,0,(/  integer::  /))
+   e28_b = 0.0625_ki * fnp_generic(2,8,b_pin,0,no_feynmanparam)
    !
   end function e28_b
 
@@ -3851,7 +3852,7 @@ use array
    integer, intent(in) :: b_pin
    type(form_factor) :: f210_b
    !
-   f210_b = -0.03125_ki * fnp_generic(2,10,b_pin,0,(/  integer::  /))
+   f210_b = -0.03125_ki * fnp_generic(2,10,b_pin,0,no_feynmanparam)
    !
   end function f210_b
 
@@ -4086,7 +4087,7 @@ use array
    integer, intent(in) :: b_pin
    type(form_factor) :: g212_b
    !
-   g212_b = 0.015625_ki * fnp_generic(2,12,b_pin,0,(/  integer::  /))
+   g212_b = 0.015625_ki * fnp_generic(2,12,b_pin,0,no_feynmanparam)
    !
   end function g212_b
 
@@ -4357,7 +4358,7 @@ use array
    integer, intent(in) :: b_pin
    type(form_factor) :: h214_b
    !
-   h214_b = -0.0078125_ki * fnp_generic(2,14,b_pin,0,(/  integer::  /))
+   h214_b = -0.0078125_ki * fnp_generic(2,14,b_pin,0,no_feynmanparam)
    !
   end function h214_b
 
@@ -4664,7 +4665,7 @@ use array
    integer, intent(in) :: b_pin
    type(form_factor) :: i216_b
    !
-   i216_b = 0.00390625_ki * fnp_generic(2,16,b_pin,0,(/  integer::  /))
+   i216_b = 0.00390625_ki * fnp_generic(2,16,b_pin,0,no_feynmanparam)
    !
   end function i216_b
 
@@ -4719,7 +4720,7 @@ use array
    integer, intent(in) :: b_pin
    type(form_factor) :: my_b32_b
    !
-   my_b32_b = -0.5_ki * fnp_generic(3,2,b_pin,0,(/  integer::  /))
+   my_b32_b = -0.5_ki * fnp_generic(3,2,b_pin,0,no_feynmanparam)
    !
   end function my_b32_b
 
@@ -4810,7 +4811,7 @@ use array
    integer, intent(in) :: b_pin
    type(form_factor) :: c34_b
    !
-   c34_b = 0.25_ki * fnp_generic(3,4,b_pin,0,(/  integer::  /))
+   c34_b = 0.25_ki * fnp_generic(3,4,b_pin,0,no_feynmanparam)
    !
   end function c34_b
 
@@ -4937,7 +4938,7 @@ use array
    integer, intent(in) :: b_pin
    type(form_factor) :: d36_b
    !
-   d36_b = -0.125_ki * fnp_generic(3,6,b_pin,0,(/  integer::  /))
+   d36_b = -0.125_ki * fnp_generic(3,6,b_pin,0,no_feynmanparam)
    !
   end function d36_b
 
@@ -5100,7 +5101,7 @@ use array
    integer, intent(in) :: b_pin
    type(form_factor) :: e38_b
    !
-   e38_b = 0.0625_ki * fnp_generic(3,8,b_pin,0,(/  integer::  /))
+   e38_b = 0.0625_ki * fnp_generic(3,8,b_pin,0,no_feynmanparam)
    !
   end function e38_b
 
@@ -5299,7 +5300,7 @@ use array
    integer, intent(in) :: b_pin
    type(form_factor) :: f310_b
    !
-   f310_b = -0.03125_ki * fnp_generic(3,10,b_pin,0,(/  integer::  /))
+   f310_b = -0.03125_ki * fnp_generic(3,10,b_pin,0,no_feynmanparam)
    !
   end function f310_b
 
@@ -5534,7 +5535,7 @@ use array
    integer, intent(in) :: b_pin
    type(form_factor) :: g312_b
    !
-   g312_b = 0.015625_ki * fnp_generic(3,12,b_pin,0,(/  integer::  /))
+   g312_b = 0.015625_ki * fnp_generic(3,12,b_pin,0,no_feynmanparam)
    !
   end function g312_b
 
@@ -5805,7 +5806,7 @@ use array
    integer, intent(in) :: b_pin
    type(form_factor) :: h314_b
    !
-   h314_b = -0.0078125_ki * fnp_generic(3,14,b_pin,0,(/  integer::  /))
+   h314_b = -0.0078125_ki * fnp_generic(3,14,b_pin,0,no_feynmanparam)
    !
   end function h314_b
 
@@ -6112,7 +6113,7 @@ use array
    integer, intent(in) :: b_pin
    type(form_factor) :: i316_b
    !
-   i316_b = 0.00390625_ki * fnp_generic(3,16,b_pin,0,(/  integer::  /))
+   i316_b = 0.00390625_ki * fnp_generic(3,16,b_pin,0,no_feynmanparam)
    !
   end function i316_b
 
@@ -6330,7 +6331,7 @@ use array
    integer, intent(in) :: b_pin
    type(form_factor) :: my_b42_b
    !
-   my_b42_b = -0.5_ki * fnp_generic(4,2,b_pin,0,(/  integer::  /))
+   my_b42_b = -0.5_ki * fnp_generic(4,2,b_pin,0,no_feynmanparam)
    !
   end function my_b42_b
 
@@ -6421,7 +6422,7 @@ use array
    integer, intent(in) :: b_pin
    type(form_factor) :: my_c44_b
    !
-   my_c44_b = 0.25_ki * fnp_generic(4,4,b_pin,0,(/  integer::  /))
+   my_c44_b = 0.25_ki * fnp_generic(4,4,b_pin,0,no_feynmanparam)
    !
   end function my_c44_b
 
@@ -6548,7 +6549,7 @@ use array
    integer, intent(in) :: b_pin
    type(form_factor) :: d46_b
    !
-   d46_b = -0.125_ki * fnp_generic(4,6,b_pin,0,(/  integer::  /))
+   d46_b = -0.125_ki * fnp_generic(4,6,b_pin,0,no_feynmanparam)
    !
   end function d46_b
 
@@ -6711,7 +6712,7 @@ use array
    integer, intent(in) :: b_pin
    type(form_factor) :: e48_b
    !
-   e48_b = 0.0625_ki * fnp_generic(4,8,b_pin,0,(/  integer::  /))
+   e48_b = 0.0625_ki * fnp_generic(4,8,b_pin,0,no_feynmanparam)
    !
   end function e48_b
 
@@ -6910,7 +6911,7 @@ use array
    integer, intent(in) :: b_pin
    type(form_factor) :: f410_b
    !
-   f410_b = -0.03125_ki * fnp_generic(4,10,b_pin,0,(/  integer::  /))
+   f410_b = -0.03125_ki * fnp_generic(4,10,b_pin,0,no_feynmanparam)
    !
   end function f410_b
 
@@ -7145,7 +7146,7 @@ use array
    integer, intent(in) :: b_pin
    type(form_factor) :: g412_b
    !
-   g412_b = 0.015625_ki * fnp_generic(4,12,b_pin,0,(/  integer::  /))
+   g412_b = 0.015625_ki * fnp_generic(4,12,b_pin,0,no_feynmanparam)
    !
   end function g412_b
 
@@ -7416,7 +7417,7 @@ use array
    integer, intent(in) :: b_pin
    type(form_factor) :: h414_b
    !
-   h414_b = -0.0078125_ki * fnp_generic(4,14,b_pin,0,(/  integer::  /))
+   h414_b = -0.0078125_ki * fnp_generic(4,14,b_pin,0,no_feynmanparam)
    !
   end function h414_b
 
@@ -7723,7 +7724,7 @@ use array
    integer, intent(in) :: b_pin
    type(form_factor) :: i416_b
    !
-   i416_b = 0.00390625_ki * fnp_generic(4,16,b_pin,0,(/  integer::  /))
+   i416_b = 0.00390625_ki * fnp_generic(4,16,b_pin,0,no_feynmanparam)
    !
   end function i416_b
 
@@ -8066,7 +8067,7 @@ use array
    integer, intent(in) :: b_pin
    type(form_factor) :: j418_b
    !
-   j418_b = -0.001953125_ki * fnp_generic(4,18,b_pin,0,(/  integer::  /))
+   j418_b = -0.001953125_ki * fnp_generic(4,18,b_pin,0,no_feynmanparam)
    !
   end function j418_b
 

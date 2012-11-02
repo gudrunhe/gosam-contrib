@@ -33,7 +33,10 @@ implicit none
 !-----------------------------------------------------
       complex(ki),parameter :: chaf=(0.5_ki,0.0_ki)
       complex(ki),parameter :: im=(0.0_ki,1.0_ki)
-      complex(ki),parameter :: impi =(0.0_ki,pi)
+      complex(ki),parameter :: impi =(0.0_ki,3.14159265358979323846&
+      &2643383279502884197169399375105820974944592307816&
+      &4062862089986280348253421170679821480865132823066&
+      &47093844609550582231725359408128_ki)
       complex(ki),parameter :: czip=(0.0_ki,0.0_ki)
       complex(ki),parameter :: cone=(1.0_ki,0.0_ki)
       complex(ki),parameter :: ctwo=(2.0_ki,0.0_ki)

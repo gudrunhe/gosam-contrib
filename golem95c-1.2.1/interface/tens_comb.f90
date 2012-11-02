@@ -781,6 +781,10 @@ function     contract2_3s1(coeffs, momenta, b_set) result(amp)
    l1 = unpinched(1)
    l2 = unpinched(2)
    amp = coeffs%c0 * b22(b_set)
+   mom1 = momenta((/l1/),:)
+   amp = amp + contract_a_tensor_1(coeffs, mom1) * b23(l1, b_set)
+   mom1 = momenta((/l2/),:)
+   amp = amp + contract_a_tensor_1(coeffs, mom1) * b23(l2, b_set)
    ! multiply by 2*epsilon
    amp%c = 2.0_ki*amp%b
    amp%b = 2.0_ki*amp%a
@@ -1345,6 +1349,19 @@ function     contract3_4s1(coeffs, momenta, b_set) result(amp)
    amp = amp + contract_a_tensor_2(coeffs, mom1) * b33(l2, b_set)
    mom1 = momenta((/l3/),:)
    amp = amp + contract_a_tensor_2(coeffs, mom1) * b33(l3, b_set)
+   mom2 = momenta((/l1,l1/),:)
+   amp = amp + contract_a_tensor_2(coeffs, mom2) * b34(l1, l1, b_set)
+   mom2 = momenta((/l1,l2/),:)
+   amp = amp + 2.0_ki * contract_a_tensor_2(coeffs, mom2) * b34(l1, l2, b_set)
+   mom2 = momenta((/l1,l3/),:)
+   amp = amp + 2.0_ki * contract_a_tensor_2(coeffs, mom2) * b34(l1, l3, b_set)
+   mom2 = momenta((/l2,l2/),:)
+   amp = amp + contract_a_tensor_2(coeffs, mom2) * b34(l2, l2, b_set)
+   mom2 = momenta((/l2,l3/),:)
+   amp = amp + 2.0_ki * contract_a_tensor_2(coeffs, mom2) * b34(l2, l3, b_set)
+   mom2 = momenta((/l3,l3/),:)
+   amp = amp + contract_a_tensor_2(coeffs, mom2) * b34(l3, l3, b_set)
+   amp = amp + contract_b_tensor_2(coeffs) * c34(b_set)
    ! multiply by 2*epsilon
    amp%c = 2.0_ki*amp%b
    amp%b = 2.0_ki*amp%a
@@ -1397,7 +1414,11 @@ function     contract3_4s2(coeffs, momenta, b_set) result(amp)
    l1 = unpinched(1)
    l2 = unpinched(2)
    l3 = unpinched(3)
-   amp = 0.0_ki
+   amp = coeffs%c0 * c34(b_set)
+   ! multiply by -4*(epsilon-epsilon^2)
+   amp%c = -4.0_ki*(amp%b-amp%a)
+   amp%b = -4.0_ki*amp%a
+   amp%a = 0.0_ki
 end function contract3_4s2
 !****f* src/interface/tens_comb/contract4_1
 ! NAME
@@ -2719,6 +2740,14 @@ function     contract4_5s1(coeffs, momenta, b_set) result(amp)
    l3 = unpinched(3)
    l4 = unpinched(4)
    amp = contract_b_tensor_3(coeffs) * c44(b_set)
+   mom1 = momenta((/l1/),:)
+   amp = amp + contract_b_tensor_3(coeffs, mom1) * c45(l1, b_set)
+   mom1 = momenta((/l2/),:)
+   amp = amp + contract_b_tensor_3(coeffs, mom1) * c45(l2, b_set)
+   mom1 = momenta((/l3/),:)
+   amp = amp + contract_b_tensor_3(coeffs, mom1) * c45(l3, b_set)
+   mom1 = momenta((/l4/),:)
+   amp = amp + contract_b_tensor_3(coeffs, mom1) * c45(l4, b_set)
    ! multiply by 2*epsilon
    amp%c = 2.0_ki*amp%b
    amp%b = 2.0_ki*amp%a
@@ -2774,6 +2803,14 @@ function     contract4_5s2(coeffs, momenta, b_set) result(amp)
    l3 = unpinched(3)
    l4 = unpinched(4)
    amp = coeffs%c0 * c44(b_set)
+   mom1 = momenta((/l1/),:)
+   amp = amp + contract_a_tensor_3(coeffs, mom1) * c45(l1, b_set)
+   mom1 = momenta((/l2/),:)
+   amp = amp + contract_a_tensor_3(coeffs, mom1) * c45(l2, b_set)
+   mom1 = momenta((/l3/),:)
+   amp = amp + contract_a_tensor_3(coeffs, mom1) * c45(l3, b_set)
+   mom1 = momenta((/l4/),:)
+   amp = amp + contract_a_tensor_3(coeffs, mom1) * c45(l4, b_set)
    ! multiply by -4*(epsilon-epsilon^2)
    amp%c = -4.0_ki*(amp%b-amp%a)
    amp%b = -4.0_ki*amp%a
