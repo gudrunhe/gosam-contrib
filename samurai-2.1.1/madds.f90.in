@@ -737,6 +737,7 @@ contains
 
       tot3r=+c3(7)/two
 
+
   1  Format(A3,I3,A1,I2,A5,D24.15,A1,D24.15,A3)
 
       if (present(cache_flag)) cache_index = lbound(scalar_cache,2)+cache_offset
@@ -831,14 +832,6 @@ contains
 @case_with_golem@           end do
 @case_with_golem@        end if
 @case_with_golem@        tot3(:) = c0t(:) * c30
-@case_with_golem@        if (highrank) then
-@case_with_golem@           tot3(0) = tot3(0) + c314 * ((V1+V2+V3)/four-m0-m1-m2)/six
-@case_with_golem@           !tot3(0) = tot3(0) + c314 * four * (c0000t(-2) - c0000t(-1))
-@case_with_golem@           !tot3(-1) = tot3(-1) + c314 * four * c0000t(-2)
-@case_with_golem@           !write (*, *) "C3(14) Golem:", (c0000t(-2) - c0000t(-1))*four
-@case_with_golem@           !write (*, *) "C3(14) Formula:", &
-@case_with_golem@           !  one/6.*(0.25*(V1+V2+V3)-m0-m1-m2)
-@case_with_golem@        end if
 @case_wout_golem@        print*, "isca=3: Golem95 not available"
 @case_wout_golem@        stop
       elseif (isca.eq.4) then
@@ -871,6 +864,12 @@ contains
          print*, 'error in add3'
          stop
       endif
+
+      if (highrank) then
+         tot3(0) = tot3(0) + c314 * ((V1+V2+V3)/four-m0-m1-m2)/six
+      end if
+
+
       tot3(0)=tot3(0) + tot3r
       if (present(cache_flag)) cache_offset = cache_offset + 1
   end subroutine add3_rm
@@ -901,6 +900,10 @@ contains
 @case_with_avh@      complex(ki) :: xbb, xb0, xb00
 @case_with_avh@      real(ki) :: bkv
 @case_with_avh@      integer :: i
+! Added by HvD
+	complex(ki), 	dimension(-2:0) :: B0p12, B0z11, B0z22
+	complex(ki_avh),dimension( 0:2) :: dscf2, dscf1, dscf0, dscf 
+!------------
 
       if (notfirsti.eqv.(.false.)) then
          if (isca .eq. 2) then
@@ -978,10 +981,6 @@ contains
 @case_with_ql@            J1(ep) = qlI1(real(m1,ki_ql),real(scale2,ki_ql),ep)
 @case_with_ql@         end do
 @case_with_ql@      end if
-@case_with_ql@      if (highrank) then
-@case_with_ql@             print*, "Rank N+1 not yet implemented for isca=1."
-@case_with_ql@             stop
-@case_with_ql@      end if
 @case_with_ql@      ! The remaining steps come in another if-statement
 @case_wout_ql@      print*, "isca=1: QCDLoop not available"
 @case_wout_ql@      stop
@@ -1019,10 +1018,6 @@ contains
 @case_with_avh@                write(iout,903) 'B_11(',cut2,',',-i,') =',scf2(i)
 @case_with_avh@             enddo
 @case_with_avh@          endif
-@case_with_avh@      if (highrank) then
-@case_with_avh@             print*, "Rank N+1 not yet implemented for isca=2."
-@case_with_avh@             stop
-@case_with_avh@      end if
 @case_wout_avh@      print*, "isca=2: OneLOop not available"
 @case_wout_avh@      stop
       elseif (isca.eq.3) then
@@ -1076,9 +1071,9 @@ contains
 @case_with_golem@        end if
 @case_with_golem@        if (highrank) then
 @case_with_golem@           do ep=-2,0
-@case_with_golem@              !J001(ep) = gB0i("001",real(K11,ki_gol),&
-@case_with_golem@              !&           real(m0,ki_gol),real(m1,ki_gol),&
-@case_with_golem@              !&           real(scale2,ki_gol),ep)
+@case_with_golem@              J001(ep) = gB0i("001",real(K11,ki_gol),&
+@case_with_golem@              &           real(m0,ki_gol),real(m1,ki_gol),&
+@case_with_golem@              &           real(scale2,ki_gol),ep)
 @case_with_golem@              J111(ep) = gB0i("111",real(K11,ki_gol),&
 @case_with_golem@              &            real(m0,ki_gol),real(m1,ki_gol),&
 @case_with_golem@              &            real(scale2,ki_gol),ep)
@@ -1177,16 +1172,9 @@ contains
         &           (K12**2*m1**2*c2(2))/(9.0_ki*(m0 - m1)**2) + B06*c2(9)
              endif
           endif
-          if (highrank) then
-                  !tot2(0) = tot2(0) + c2(13)*(K11**3)*J111(0) + c2(10)*K12*two*J001(-1)
-                  tot2(0) = tot2(0) + c2(13)*(K12**3)*J111(0) + c2(10)*one/12.0_ki* K12 * &
-                         & (K11 - two*m0-four*m1)
-                  tot2(-1) = tot2(-1) + c2(13)*(K12**3)*J111(-1)
-                  tot2(-2) = tot2(-2) + c2(13)*(K12**3)*J111(-2)
-                  !write (*, *) "c2(10): Golem:", K12*two*J001(-1)
-                  !write (*, *) "c2(10): Formula:", one/12._ki* K12 * &
-                  !       & (K11 - two*m0-four*m1)
-          end if
+
+
+
           if (verbosity.ge.2) then
              do ep=0,2
                 write(iout,903) 'B0 (',cut2,',',-ep,') = ',J0(-ep)
@@ -1202,11 +1190,125 @@ contains
              end if
           endif
        end if
+          if (highrank) then
+!Added by HvD------------
+		if(isca .eq. 1) then
+@case_with_ql@        	        do ep=-2,0
+@case_with_ql@        	           B0p12(ep) = qlI2(&
+@case_with_ql@        	       &     real(K11,ki_ql),real(m0,ki_ql),real(m1,ki_ql),&
+@case_with_ql@        	       &     real(scale2,ki_ql),ep)
+@case_with_ql@        	           B0z11(ep) = qlI2(&
+@case_with_ql@        	       &     real(zip,ki_ql),real(m0,ki_ql),real(m0,ki_ql),&
+@case_with_ql@        	       &     real(scale2,ki_ql),ep)
+@case_with_ql@        	           B0z22(ep) = qlI2(&
+@case_with_ql@        	       &     real(zip,ki_ql),real(m1,ki_ql),real(m1,ki_ql),&
+@case_with_ql@        	       &     real(scale2,ki_ql),ep)
+			enddo
+		elseif(isca .eq. 2) then
+@case_with_avh@	                call olo_b11(dscf2,dscf0,dscf1,dscf,&
+@case_with_avh@        	       & real(K11,ki_avh),real(m0,ki_avh),real(m1,ki_avh))
+@case_with_avh@        	        B0p12(-2) = dscf(2)
+@case_with_avh@        	        B0p12(-1) = dscf(1)
+@case_with_avh@        	        B0p12(0)  = dscf(0)
+@case_with_avh@        	        call olo_b11(dscf2,dscf0,dscf1,dscf,&
+@case_with_avh@        	       & real(zip,ki_avh),real(m0,ki_avh),real(m0,ki_avh))
+@case_with_avh@        	        B0z11(-2) = dscf(2)
+@case_with_avh@        	        B0z11(-1) = dscf(1)
+@case_with_avh@        	        B0z11(0)  = dscf(0)
+@case_with_avh@        	        call olo_b11(dscf2,dscf0,dscf1,dscf,&
+@case_with_avh@        	       & real(zip,ki_avh),real(m1,ki_avh),real(m1,ki_avh))
+@case_with_avh@        	        B0z22(-2) = dscf(2)
+@case_with_avh@        	        B0z22(-1) = dscf(1)
+@case_with_avh@        	        B0z22(0)  = dscf(0)
+		elseif(isca .eq. 3) then
+@case_with_golem@        	        do ep=-2,0
+@case_with_golem@        	             B0p12(ep)= gB0(real(K11,ki_gol),&
+@case_with_golem@        	         &           real(m0,ki_gol),real(m1,ki_gol),&
+@case_with_golem@        	         &           real(scale2,ki_gol),ep)
+@case_with_golem@        	             B0z11(ep)= gB0(real(zip,ki_gol),&
+@case_with_golem@        	         &           real(m0,ki_gol),real(m0,ki_gol),&
+@case_with_golem@        	         &           real(scale2,ki_gol),ep)
+@case_with_golem@        	             B0z22(ep)= gB0(real(zip,ki_gol),&
+@case_with_golem@        	         &           real(m1,ki_gol),real(m1,ki_gol),&
+@case_with_golem@        	         &           real(scale2,ki_gol),ep)
+			enddo
+		else
+			print *, 'error in madds.f90: isca value not allowed'
+		endif
+		! if isca=3 (Golem95), J111 can be computed in two ways:
+		! way-1: as high rank-tensor directly (see above)
+		! way-2: derived from scalars, through HJ111.
+		! With the following if statement, way-1 is on; 
+		! Comment out the if statement to use way-2.  
+		!if(isca .ne. 3) then
+			call HJ111(J111,K11,m0,m1,B0p12,B0z11,B0z22)
+		!endif
+!------------------------
+                  tot2(0) = tot2(0) + c2(13)*(K12**3)*J111(0) + c2(10)*one/12.0_ki* K12 * &
+                         & (K11 - two*m0-four*m1)
+                  tot2(-1) = tot2(-1) + c2(13)*(K12**3)*J111(-1)
+                  tot2(-2) = tot2(-2) + c2(13)*(K12**3)*J111(-2)
+          end if
        if (present(cache_flag)) cache_offset = cache_offset + 5
 
  903   format(a5,I2,a1,I2,a4,2(D24.15))
 
   end subroutine add2_rm
+
+! Added by HvD-----------
+subroutine HJ111(B31, K11,m0,m1,B0p12,B0z11,B0z22)
+	implicit none
+! PARAMETERS=============================================================================!
+	! external parameters
+	real(ki),			intent(in   ) :: K11
+	real(ki), 			intent(in   ) :: m0,m1
+	complex(ki), dimension(-2:0), 	intent(in   ) :: B0p12,B0z11,B0z22
+	complex(ki), dimension(-2:0),	intent(inout) :: B31
+	! internal parameters
+	complex(ki)			:: A1,A2,A3,A4,B1,B2,B3
+	integer :: B31case
+! INITIALIZATION=========================================================================!
+	! determine branch
+	if(abs(K11) .gt. 1.0e-10) then
+		B31case = 0
+	elseif(m0 .ne. m1) then
+		B31case = 1
+	else
+		B31case = 2
+	endif
+! CALCULATE B31(:)=======================================================================!
+	select case(B31case) 
+	case(0)
+		A1 = &
+		     &        -(K11**3 - K11**2*m0 + K11*m0**2 - m0**3 + 3*K11**2*m1 -  &
+		     &     4*K11*m0*m1 + 3*m0**2*m1 + 3*K11*m1**2 - 3*m0*m1**2 +  &
+		     &     m1**3)/(four*K11**3) 
+		A2 = &
+		     &        -(m0*(K11**2 - K11*m0 + m0**2 + 2*K11*m1 - 2*m0*m1 +  &
+		     &       m1**2))/(four*K11**3) 
+		A3 = &
+		     &        (m1*(3*K11**2 - 2*K11*m0 + m0**2 + 3*K11*m1 - 2*m0*m1 +  &
+		     &      m1**2))/(four*K11**3) 
+		A4 = &
+		     &        -(2*K11**3 + 10*K11**2*m0 - 9*K11*m0**2 + 6*m0**3 -  &
+		     &     10*K11**2*m1 + 24*K11*m0*m1 - 18*m0**2*m1 -  &
+		     &     15*K11*m1**2 + 18*m0*m1**2 - 6*m1**3)/(24.0_ki*K11**3) 
+		B31(:) = A1*B0p12(:)+A2*B0z11(:)+A3*B0z22(:)+A4 
+	case(1)   
+		B1 = &
+		     &-m0**4/(two*(m0 - m1)**4) 
+		B2 = &
+		     &        (m1*(4*m0**3 - 6*m0**2*m1 + 4*m0*m1**2 - m1**3))/ &
+		     &  (four*(m0 - m1)**4) 
+		B3 = &
+		     &        -(25*m0**3 - 23*m0**2*m1 + 13*m0*m1**2 - 3*m1**3)/ &
+		     &  (48.0_ki*(m0 - m1)**3) 
+		B31(:) = B1*B0z11(:)+B2*B0z22(:)+B3 
+	case(2)
+		B31(:) = -B0z11(:)/four 
+	end select 
+end subroutine HJ111
+!------------------------
 
   subroutine add1_rm(nleg,c1,cut1,msq,tot1,scale2,e3,e4, &
         cache_flag, cache_offset, scalar_cache)
@@ -1324,21 +1426,6 @@ contains
 @case_with_golem@              & real(ctmp),',',aimag(ctmp),'  )' 
 @case_with_golem@         enddo
 @case_with_golem@      end if
-@case_with_golem@      if ((c1(14) /= 0) .or. (c1(15) /= 0) ) then
-@case_with_golem@           tot1(0) = tot1(0) + (c1(14) + sdot(e3,e4) * c1(15)/four)*m0*m0/two
-@case_with_golem@           !tot1(0) = tot1(0) + c1(14)*two*gA0i("00",real(m0,ki_gol),&
-@case_with_golem@           !            &   real(scale2,ki_gol),-1)
-@case_with_golem@           !do ep=-1,0
-@case_with_golem@           !   ctmp = gA0i("00",real(m0,ki_gol),real(scale2,ki_gol),ep)
-@case_with_golem@           !   tot1(ep) = tot1(ep) - c1(15)*ctmp
-@case_with_golem@           !   if (verbosity.ge.2) write(iout,1) &
-@case_with_golem@           !    & 'A00(',cut1,',',ep,') = (',&
-@case_with_golem@           !    & real(ctmp),',',aimag(ctmp),'  )' 
-@case_with_golem@           !end do
-@case_with_golem@           !write (*, *) "Golem->", two*c1(14)*gA0i("00",real(m0,ki_gol),&
-@case_with_golem@           !            &   real(scale2,ki_gol),-1)
-@case_with_golem@           !write (*, *) "Formula:", one*real(m0,ki_gol)/2.
-@case_with_golem@      end if
 @case_wout_golem@      print*, "isca=3: Golem95 not available"
 @case_wout_golem@      stop
       elseif (isca.eq.4) then
@@ -1365,6 +1452,11 @@ contains
          print*, 'error in add1'
          stop
       endif
+
+      if ((c1(14) /= 0) .or. (c1(15) /= 0) ) then
+           tot1(0) = tot1(0) + (c1(14) + sdot(e3,e4) * c1(15)/four)*m0*m0/two
+      end if
+
 
       if (present(cache_flag)) cache_offset = cache_offset + 1
   end subroutine add1_rm
@@ -1697,10 +1789,6 @@ contains
 @case_with_avh@             if (verbosity.ge.2) write(iout,1) &
 @case_with_avh@     &'I3(',cut3,',',ep,') = (',real(valc0(-ep)),',',aimag(valc0(-ep)),'  )' 
 @case_with_avh@          enddo
-@case_with_avh@      if (highrank) then
-@case_with_avh@             print*, "Rank N+1 not yet implemented for isca=2."
-@case_with_avh@             stop
-@case_with_avh@      end if
 @case_wout_avh@      print*, "isca=2: OneLOop not available"
 @case_wout_avh@      stop
       elseif (isca.eq.3) then
@@ -1753,14 +1841,6 @@ contains
 @case_with_golem@             & ') = (',real(c0t(ep)),',',aimag(c0t(ep)),'  )' 
 @case_with_golem@        end do
 @case_with_golem@        tot3(:) = c0t(:) * c30
-@case_with_golem@        if (highrank) then
-@case_with_golem@           tot3(0) = tot3(0) + c314/six*((V1+V2+V3)/four-m0-m1-m2)
-@case_with_golem@           !tot3(0) = tot3(0) + c314 * four * (c0000t(-2) - c0000t(-1))
-@case_with_golem@           !tot3(-1) = tot3(-1) + c314 * four * c0000t(-2)
-@case_with_golem@           !write (*, *) "C3(14)  Golem:", (c0000t(-2) - c0000t(-1)) * four
-@case_with_golem@           !write (*, *) "C3(14) Formula:", &
-@case_with_golem@           !  one/6.*(0.25*(V1+V2+V3)-m0-m1-m2)
-@case_with_golem@        end if
 @case_wout_golem@        print*, "isca=3: Golem95 not available"
 @case_wout_golem@        stop
       elseif (isca.eq.4) then
@@ -1795,16 +1875,18 @@ contains
 @case_with_lt@        tot3(ep)=c30*ctmp 
 @case_with_lt@        if (verbosity.ge.2) write(iout,1) &
 @case_with_lt@       &'I3(',cut3,',',ep,') = (',real(ctmp),',',aimag(ctmp),'  )'
-@case_with_lt@        if (highrank) then
-@case_with_lt@               print*, "Rank N+1 not yet implemented for isca=4."
-@case_with_lt@               stop
-@case_with_lt@         end if
 @case_wout_lt@         print*, "isca=4: LoopTools not available"
 @case_wout_lt@         stop
       else
          print*, 'error in add3'
          stop
       endif
+
+      if (highrank) then
+         tot3(0) = tot3(0) + c314/six*((V1+V2+V3)/four-m0-m1-m2)
+      end if
+
+
       tot3(0)=tot3(0) + tot3r
       if (present(cache_flag)) cache_offset = cache_offset + 1
   end subroutine add3_cm
@@ -1987,11 +2069,11 @@ contains
 @case_with_golem@        end if
 @case_with_golem@        if (highrank) then
 @case_with_golem@           do ep=-2,0
-@case_with_golem@               !  J001(ep) = gB0iC("001",&
-@case_with_golem@               !&   cmplx(K11,0.0_ki_gol,ki_gol), &
-@case_with_golem@               !&   cmplx(real(m0,ki_gol),aimag(m0),ki_gol),&
-@case_with_golem@               !&   cmplx(real(m1,ki_gol),aimag(m1),ki_gol),&
-@case_with_golem@               !&   real(scale2,ki_gol),ep)
+@case_with_golem@                 J001(ep) = gB0iC("001",&
+@case_with_golem@               &   cmplx(K11,0.0_ki_gol,ki_gol), &
+@case_with_golem@               &   cmplx(real(m0,ki_gol),aimag(m0),ki_gol),&
+@case_with_golem@               &   cmplx(real(m1,ki_gol),aimag(m1),ki_gol),&
+@case_with_golem@               &   real(scale2,ki_gol),ep)
 @case_with_golem@               J111(ep) = gB0iC("111",&
 @case_with_golem@             &   cmplx(K11,0.0_ki_gol,ki_gol), &
 @case_with_golem@             &   cmplx(real(m0,ki_gol),aimag(m0),ki_gol),&
@@ -2125,7 +2207,7 @@ contains
                 write(iout,903) 'B11(',cut2,',',-ep,') =',J11(-ep)
                 write(iout,903) 'B111(',cut2,',',-ep,') =',J111(-ep)
              end do
-             !write(iout,903) 'B001(',cut2,',',-1,') =',J001(-1)
+             write(iout,903) 'B001(',cut2,',',-1,') =',J001(-1)
              write(iout,903) 'B001(',cut2,',',-1,') =',one/24._ki* (K11 - two*m0-four*m1)
           endif
        end if
