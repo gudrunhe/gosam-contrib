@@ -123,7 +123,7 @@ contains
       endif
       if (itest.gt.0) then
          if (notfirstd.eqv.(.false.)) then
-            if (ibad.gt.0) then
+            if (ibad.gt.0 .and. verbosity.gt.0) then
                open(unit=ibad,file='bad.points',status='unknown')
                write(ibad,*) '-------------------------------------------------&
                &-------------------'
@@ -185,7 +185,7 @@ contains
       endif
 
       if (itest.gt.0) then
-         if (ibad.gt.0) then
+         if (ibad.gt.0 .and. verbosity.gt.0) then
             close(ibad)
          endif
       endif
