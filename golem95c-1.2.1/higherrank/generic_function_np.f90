@@ -102,10 +102,10 @@ private ::  f2p_ndim_0p_generic;
        complex(ki) :: detS
        integer :: cur_depth,i,b_used,hash
 
-       real(ki) ::  limit_small_sumb, abs_sumb
+       real(ki) ::  limit_small_detS, abs_sumb
        integer, save :: miss
 
-       limit_small_sumb = 1E-15_ki
+       limit_small_detS = 1E-15_ki
 
 
        if (present(depth)) then
@@ -170,8 +170,8 @@ private ::  f2p_ndim_0p_generic;
 
           abs_sumb = abs(sumb(b_pin))
 
-          ! test if abs_sumb is below threshold or NaN
-          if (( abs_sumb <=limit_small_sumb) .or. (.not. abs_sumb>=0._ki)) then
+          ! test if detS is below threshold or if sumb is NaN
+          if (( abs(detS) <=limit_small_detS) .or. (.not. abs_sumb>=0._ki)) then
 
              return_val=reduce_pave_generic(leg_count,dim_nplus,b_pin,l_count,l,cur_depth)
 
@@ -343,7 +343,7 @@ private ::  f2p_ndim_0p_generic;
                return_val = f3p(s_mat_p, b_used,l(1),l(2))
                return
            end select
-        end if
+       end if
 
        if (l_count == 1 .and. dim_nplus==0) then
            select case (leg_count)
