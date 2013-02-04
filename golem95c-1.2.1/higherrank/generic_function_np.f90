@@ -38,6 +38,7 @@
 module generic_function_np
   !
   use precision_golem
+  use form_factor_5p
   use form_factor_4p
   use form_factor_3p
   use form_factor_2p
@@ -215,10 +216,9 @@ private ::  f2p_ndim_0p_generic;
         integer :: i,j,k,b_used,b_tmp,ib,cur_depth
         type(form_factor) :: return_val, temp1, temp2
         complex(ki), dimension(3) :: ret_temp, tmp4,tmp5
-        complex(ki)  :: mass1, tmp
-        real(ki) :: r_tmp1,r_tmp2
+        complex(ki)  :: mass1, tmp3
+        integer :: tmp
         integer :: n ! dimension = n + dim_nplus =  4-2epsilon + dim_nplus TODO: float
-        integer :: y
         integer,dimension(size(l)) :: l_tmp1
         integer,dimension(1) :: s1
         logical :: usable
@@ -229,7 +229,6 @@ private ::  f2p_ndim_0p_generic;
         else
                 cur_depth=0
         end if
-
 
 
         b_used=pminus(b_ref,b_pin)
@@ -264,8 +263,8 @@ private ::  f2p_ndim_0p_generic;
         !
         if (l_count == 0 .and. dim_nplus==0) then
            select case (leg_count)
-           !case (5)
-           !   ret_temp(2:3) = a50(b_pin)
+           case (5)
+              return_val = a50(b_pin)
            case (4)
               return_val = a40(b_pin)
            case (3)
@@ -322,7 +321,6 @@ private ::  f2p_ndim_0p_generic;
            !ret_temp(1:3) = f4p(s_mat_p,b_used,b_pin,(1),l(2),l(3),l(4))
            return
         end if
-
 
         if (l_count == 3 .and. dim_nplus==0 .and. leg_count==4) then
            return_val= -a43(l(1),l(2),l(3),b_pin)
@@ -408,7 +406,9 @@ private ::  f2p_ndim_0p_generic;
         if (l_count == 0 .and. dim_nplus==4 ) then
              select case (leg_count)
                     case (41)
-                       return_val= f4p_np4(s_mat_p,b_used,b_pin)
+                       ret_temp(:) = czero
+                       ret_temp(2:3) = f4p_np4(s_mat_p,b_used,b_pin)
+                       return_val=ret_temp
                        return
              end select
        end if
@@ -436,6 +436,71 @@ private ::  f2p_ndim_0p_generic;
                 return_val = f1p_ndim_generic(mass1,dim_nplus)
 
                 return
+        end if
+
+
+        ! ==================================================
+        !     Reduction of higher dimensional tensor integrals
+
+        if ((l_count > 0) .and. (dim_nplus > 0)) then
+
+           temp1 = -fnp_generic(leg_count,dim_nplus-2,b_pin,l_count,l,cur_depth+1)
+
+           do k = 1, l_count
+                   l_tmp1(1:k-1) =l(1:k-1)
+                   l_tmp1(k:l_count-1) =l(k+1:l_count)
+                   temp1=temp1-b(l(k),b_pin)*fnp_generic(leg_count,dim_nplus,b_pin,l_count-1,l_tmp1(1:l_count-1),cur_depth+1)
+           end do
+
+           ib=b_used
+           j=0
+           do while (ib /= 0)
+                   if (iand(ib,1) == 1 ) then
+                          usable =.true.
+                          do i = 1,l_count
+                             if (l(i) == j) then
+                                usable =.false.
+                                exit
+                             end if
+                          end do
+                          if (usable) then
+                            b_tmp=ibset(b_pin,j)
+                            temp1=temp1 + b(j,b_pin)*fnp_generic(leg_count-1, dim_nplus-2,b_tmp,l_count,l,cur_depth+1)
+                          end if
+                   end if
+                   ib=ishft(ib,-1)
+                   j=j+1
+           end do
+
+           tmp= leg_count - n - dim_nplus - l_count + 1
+           tmp4(1) =temp1%a
+           tmp4(2) =temp1%b
+           tmp4(3) =temp1%c
+
+           if (tmp/=0) then
+             ret_temp(3)= 1._ki/tmp * (tmp4(3) - 2._ki/tmp * tmp4(2)  &
+                                               + 4._ki/tmp/tmp * tmp4(1) )
+             ret_temp(2)= 1._ki/tmp * (tmp4(2) - 2._ki/tmp * tmp4(1))
+             ret_temp(1)= 1._ki/tmp * tmp4(1)
+           else ! tmp==0
+                    tab_erreur_par(1)%a_imprimer = .true.
+                    tab_erreur_par(1)%chaine = 'Internal error:' &
+                            //'This case is not yet implemented, in file generic_function_np.f90'
+                    call catch_exception(0)
+           end if
+
+           if (sumb(b_pin)==0) then
+                   return_val = 0
+                   tab_erreur_par(1)%a_imprimer = .true.
+                   tab_erreur_par(1)%chaine = 'Internal error:' &
+                           //'This case (sumb=0) is not yet implemented, in file generic_function_np.f90'
+                   call catch_exception(0)
+                   return
+           end if
+
+           return_val = ret_temp/sumb(b_pin)
+
+           return
         end if
 
 
@@ -527,7 +592,7 @@ private ::  f2p_ndim_0p_generic;
            ! ==  - b * I^(n+2)
 
            temp2 = fnp_generic(leg_count,dim_nplus+2,b_pin,l_count-1,l(2:l_count),cur_depth+1)
-           tmp=(leg_count-n-dim_nplus -(l_count-1._ki)-1._ki)
+           tmp=(leg_count-n-dim_nplus -(l_count-1)-1)
            tmp4(:)=(/ temp1%a, temp1%b, temp1%c /)
            tmp5(:)=(/ temp2%a, temp2%b, temp2%c /)
 
@@ -986,7 +1051,7 @@ recursive  function calc_determinant(mat_p,used_size,b_pin) result(detS)
            ret_temp(2) = ret_temp(2)/(2*k) + ret_temp(1)/k/k
            ret_temp(1) = ret_temp(1)/(2*k)
 
-           return_val = ret_temp*(-2._ki)**(dim_nplus/2)*(-1)**(l_count) ! factor because of g_mu,nu encoded by dim_nplus
+           return_val = ret_temp*(-2._ki)**(dim_nplus/2)*(-1._ki)**(l_count) ! factor because of g_mu,nu encoded by dim_nplus
 
 
         !
@@ -1281,7 +1346,7 @@ recursive  function calc_determinant(mat_p,used_size,b_pin) result(detS)
         integer, intent (in),dimension(:) :: l_pos
         type(form_factor) :: return_val
         integer :: leq1_count ,k1,k2;
-        real(ki) :: k1fak,k2fak,ksump1fak, harmonic1,harmonic2
+        real(ki) :: k1fak,k2fak,ksump1fak
         logical :: zm1,zm2,zdiffm
         integer :: i
         complex(ki), dimension(3) :: ret_temp
