@@ -164,7 +164,7 @@ private ::  f2p_ndim_0p_generic;
         end if
 
 
-      if ((leg_count>=2)  &
+      if ((leg_count>=2 .and. leg_count <=4)  &
              .and. (cur_depth<=100) .and. ( dim_nplus>=2 .or. (l_count>leg_count) &
                                            .or. (leg_count==4 .and. l_count>0) ) ) then
           detS = calc_determinant(s_mat_p,leg_count,b_pin)

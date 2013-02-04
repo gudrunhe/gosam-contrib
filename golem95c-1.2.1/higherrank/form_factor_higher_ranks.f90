@@ -359,6 +359,115 @@
 !  * h418  -- a function to compute H^{4,18}
 !  * i418  -- a function to compute I^{4,18}
 !  * j418  -- a function to compute J^{4,18}
+!  * my_a51  -- a function to compute A^{5,1}
+!  * my_a52  -- a function to compute A^{5,2}
+!  * my_b52  -- a function to compute B^{5,2}
+!  * my_a53  -- a function to compute A^{5,3}
+!  * my_b53  -- a function to compute B^{5,3}
+!  * my_a54  -- a function to compute A^{5,4}
+!  * my_b54  -- a function to compute B^{5,4}
+!  * my_c54  -- a function to compute C^{5,4}
+!  * my_a55  -- a function to compute A^{5,5}
+!  * my_b55  -- a function to compute B^{5,5}
+!  * my_c55  -- a function to compute C^{5,5}
+!  * a56  -- a function to compute A^{5,6}
+!  * b56  -- a function to compute B^{5,6}
+!  * c56  -- a function to compute C^{5,6}
+!  * d56  -- a function to compute D^{5,6}
+!  * a57  -- a function to compute A^{5,7}
+!  * b57  -- a function to compute B^{5,7}
+!  * c57  -- a function to compute C^{5,7}
+!  * d57  -- a function to compute D^{5,7}
+!  * a58  -- a function to compute A^{5,8}
+!  * b58  -- a function to compute B^{5,8}
+!  * c58  -- a function to compute C^{5,8}
+!  * d58  -- a function to compute D^{5,8}
+!  * e58  -- a function to compute E^{5,8}
+!  * a59  -- a function to compute A^{5,9}
+!  * b59  -- a function to compute B^{5,9}
+!  * c59  -- a function to compute C^{5,9}
+!  * d59  -- a function to compute D^{5,9}
+!  * e59  -- a function to compute E^{5,9}
+!  * a510  -- a function to compute A^{5,10}
+!  * b510  -- a function to compute B^{5,10}
+!  * c510  -- a function to compute C^{5,10}
+!  * d510  -- a function to compute D^{5,10}
+!  * e510  -- a function to compute E^{5,10}
+!  * f510  -- a function to compute F^{5,10}
+!  * a511  -- a function to compute A^{5,11}
+!  * b511  -- a function to compute B^{5,11}
+!  * c511  -- a function to compute C^{5,11}
+!  * d511  -- a function to compute D^{5,11}
+!  * e511  -- a function to compute E^{5,11}
+!  * f511  -- a function to compute F^{5,11}
+!  * a512  -- a function to compute A^{5,12}
+!  * b512  -- a function to compute B^{5,12}
+!  * c512  -- a function to compute C^{5,12}
+!  * d512  -- a function to compute D^{5,12}
+!  * e512  -- a function to compute E^{5,12}
+!  * f512  -- a function to compute F^{5,12}
+!  * g512  -- a function to compute G^{5,12}
+!  * a513  -- a function to compute A^{5,13}
+!  * b513  -- a function to compute B^{5,13}
+!  * c513  -- a function to compute C^{5,13}
+!  * d513  -- a function to compute D^{5,13}
+!  * e513  -- a function to compute E^{5,13}
+!  * f513  -- a function to compute F^{5,13}
+!  * g513  -- a function to compute G^{5,13}
+!  * a514  -- a function to compute A^{5,14}
+!  * b514  -- a function to compute B^{5,14}
+!  * c514  -- a function to compute C^{5,14}
+!  * d514  -- a function to compute D^{5,14}
+!  * e514  -- a function to compute E^{5,14}
+!  * f514  -- a function to compute F^{5,14}
+!  * g514  -- a function to compute G^{5,14}
+!  * h514  -- a function to compute H^{5,14}
+!  * a515  -- a function to compute A^{5,15}
+!  * b515  -- a function to compute B^{5,15}
+!  * c515  -- a function to compute C^{5,15}
+!  * d515  -- a function to compute D^{5,15}
+!  * e515  -- a function to compute E^{5,15}
+!  * f515  -- a function to compute F^{5,15}
+!  * g515  -- a function to compute G^{5,15}
+!  * h515  -- a function to compute H^{5,15}
+!  * a516  -- a function to compute A^{5,16}
+!  * b516  -- a function to compute B^{5,16}
+!  * c516  -- a function to compute C^{5,16}
+!  * d516  -- a function to compute D^{5,16}
+!  * e516  -- a function to compute E^{5,16}
+!  * f516  -- a function to compute F^{5,16}
+!  * g516  -- a function to compute G^{5,16}
+!  * h516  -- a function to compute H^{5,16}
+!  * i516  -- a function to compute I^{5,16}
+!  * a517  -- a function to compute A^{5,17}
+!  * b517  -- a function to compute B^{5,17}
+!  * c517  -- a function to compute C^{5,17}
+!  * d517  -- a function to compute D^{5,17}
+!  * e517  -- a function to compute E^{5,17}
+!  * f517  -- a function to compute F^{5,17}
+!  * g517  -- a function to compute G^{5,17}
+!  * h517  -- a function to compute H^{5,17}
+!  * i517  -- a function to compute I^{5,17}
+!  * a518  -- a function to compute A^{5,18}
+!  * b518  -- a function to compute B^{5,18}
+!  * c518  -- a function to compute C^{5,18}
+!  * d518  -- a function to compute D^{5,18}
+!  * e518  -- a function to compute E^{5,18}
+!  * f518  -- a function to compute F^{5,18}
+!  * g518  -- a function to compute G^{5,18}
+!  * h518  -- a function to compute H^{5,18}
+!  * i518  -- a function to compute I^{5,18}
+!  * j518  -- a function to compute J^{5,18}
+!  * a519  -- a function to compute A^{5,19}
+!  * b519  -- a function to compute B^{5,19}
+!  * c519  -- a function to compute C^{5,19}
+!  * d519  -- a function to compute D^{5,19}
+!  * e519  -- a function to compute E^{5,19}
+!  * f519  -- a function to compute F^{5,19}
+!  * g519  -- a function to compute G^{5,19}
+!  * h519  -- a function to compute H^{5,19}
+!  * i519  -- a function to compute I^{5,19}
+!  * j519  -- a function to compute J^{5,19}
 !
 !  Note that these are generic functions which can be called either with a
 !  set of integers or with an integer whose bits represents the set
@@ -1937,6 +2046,501 @@ use array
     module procedure j418_b, j418_s
   end interface j418
   public :: j418
+!
+!
+!
+!
+!
+  interface my_a51
+    module procedure my_a51_b, my_a51_s
+  end interface my_a51
+  public :: my_a51
+!
+!
+!
+  interface my_a52
+    module procedure my_a52_b, my_a52_s
+  end interface my_a52
+  public :: my_a52
+  interface my_b52
+    module procedure my_b52_b, my_b52_s
+  end interface my_b52
+  public :: my_b52
+!
+!
+!
+  interface my_a53
+    module procedure my_a53_b, my_a53_s
+  end interface my_a53
+  public :: my_a53
+  interface my_b53
+    module procedure my_b53_b, my_b53_s
+  end interface my_b53
+  public :: my_b53
+!
+!
+!
+  interface my_a54
+    module procedure my_a54_b, my_a54_s
+  end interface my_a54
+  public :: my_a54
+  interface my_b54
+    module procedure my_b54_b, my_b54_s
+  end interface my_b54
+  public :: my_b54
+  interface my_c54
+    module procedure my_c54_b, my_c54_s
+  end interface my_c54
+  public :: my_c54
+!
+!
+!
+  interface my_a55
+    module procedure my_a55_b, my_a55_s
+  end interface my_a55
+  public :: my_a55
+  interface my_b55
+    module procedure my_b55_b, my_b55_s
+  end interface my_b55
+  public :: my_b55
+  interface my_c55
+    module procedure my_c55_b, my_c55_s
+  end interface my_c55
+  public :: my_c55
+!
+!
+!
+  interface a56
+    module procedure a56_b, a56_s
+  end interface a56
+  public :: a56
+  interface b56
+    module procedure b56_b, b56_s
+  end interface b56
+  public :: b56
+  interface c56
+    module procedure c56_b, c56_s
+  end interface c56
+  public :: c56
+  interface d56
+    module procedure d56_b, d56_s
+  end interface d56
+  public :: d56
+!
+!
+!
+  interface a57
+    module procedure a57_b, a57_s
+  end interface a57
+  public :: a57
+  interface b57
+    module procedure b57_b, b57_s
+  end interface b57
+  public :: b57
+  interface c57
+    module procedure c57_b, c57_s
+  end interface c57
+  public :: c57
+  interface d57
+    module procedure d57_b, d57_s
+  end interface d57
+  public :: d57
+!
+!
+!
+  interface a58
+    module procedure a58_b, a58_s
+  end interface a58
+  public :: a58
+  interface b58
+    module procedure b58_b, b58_s
+  end interface b58
+  public :: b58
+  interface c58
+    module procedure c58_b, c58_s
+  end interface c58
+  public :: c58
+  interface d58
+    module procedure d58_b, d58_s
+  end interface d58
+  public :: d58
+  interface e58
+    module procedure e58_b, e58_s
+  end interface e58
+  public :: e58
+!
+!
+!
+  interface a59
+    module procedure a59_b, a59_s
+  end interface a59
+  public :: a59
+  interface b59
+    module procedure b59_b, b59_s
+  end interface b59
+  public :: b59
+  interface c59
+    module procedure c59_b, c59_s
+  end interface c59
+  public :: c59
+  interface d59
+    module procedure d59_b, d59_s
+  end interface d59
+  public :: d59
+  interface e59
+    module procedure e59_b, e59_s
+  end interface e59
+  public :: e59
+!
+!
+!
+  interface a510
+    module procedure a510_b, a510_s
+  end interface a510
+  public :: a510
+  interface b510
+    module procedure b510_b, b510_s
+  end interface b510
+  public :: b510
+  interface c510
+    module procedure c510_b, c510_s
+  end interface c510
+  public :: c510
+  interface d510
+    module procedure d510_b, d510_s
+  end interface d510
+  public :: d510
+  interface e510
+    module procedure e510_b, e510_s
+  end interface e510
+  public :: e510
+  interface f510
+    module procedure f510_b, f510_s
+  end interface f510
+  public :: f510
+!
+!
+!
+  interface a511
+    module procedure a511_b, a511_s
+  end interface a511
+  public :: a511
+  interface b511
+    module procedure b511_b, b511_s
+  end interface b511
+  public :: b511
+  interface c511
+    module procedure c511_b, c511_s
+  end interface c511
+  public :: c511
+  interface d511
+    module procedure d511_b, d511_s
+  end interface d511
+  public :: d511
+  interface e511
+    module procedure e511_b, e511_s
+  end interface e511
+  public :: e511
+  interface f511
+    module procedure f511_b, f511_s
+  end interface f511
+  public :: f511
+!
+!
+!
+  interface a512
+    module procedure a512_b, a512_s
+  end interface a512
+  public :: a512
+  interface b512
+    module procedure b512_b, b512_s
+  end interface b512
+  public :: b512
+  interface c512
+    module procedure c512_b, c512_s
+  end interface c512
+  public :: c512
+  interface d512
+    module procedure d512_b, d512_s
+  end interface d512
+  public :: d512
+  interface e512
+    module procedure e512_b, e512_s
+  end interface e512
+  public :: e512
+  interface f512
+    module procedure f512_b, f512_s
+  end interface f512
+  public :: f512
+  interface g512
+    module procedure g512_b, g512_s
+  end interface g512
+  public :: g512
+!
+!
+!
+  interface a513
+    module procedure a513_b, a513_s
+  end interface a513
+  public :: a513
+  interface b513
+    module procedure b513_b, b513_s
+  end interface b513
+  public :: b513
+  interface c513
+    module procedure c513_b, c513_s
+  end interface c513
+  public :: c513
+  interface d513
+    module procedure d513_b, d513_s
+  end interface d513
+  public :: d513
+  interface e513
+    module procedure e513_b, e513_s
+  end interface e513
+  public :: e513
+  interface f513
+    module procedure f513_b, f513_s
+  end interface f513
+  public :: f513
+  interface g513
+    module procedure g513_b, g513_s
+  end interface g513
+  public :: g513
+!
+!
+!
+  interface a514
+    module procedure a514_b, a514_s
+  end interface a514
+  public :: a514
+  interface b514
+    module procedure b514_b, b514_s
+  end interface b514
+  public :: b514
+  interface c514
+    module procedure c514_b, c514_s
+  end interface c514
+  public :: c514
+  interface d514
+    module procedure d514_b, d514_s
+  end interface d514
+  public :: d514
+  interface e514
+    module procedure e514_b, e514_s
+  end interface e514
+  public :: e514
+  interface f514
+    module procedure f514_b, f514_s
+  end interface f514
+  public :: f514
+  interface g514
+    module procedure g514_b, g514_s
+  end interface g514
+  public :: g514
+  interface h514
+    module procedure h514_b, h514_s
+  end interface h514
+  public :: h514
+!
+!
+!
+  interface a515
+    module procedure a515_b, a515_s
+  end interface a515
+  public :: a515
+  interface b515
+    module procedure b515_b, b515_s
+  end interface b515
+  public :: b515
+  interface c515
+    module procedure c515_b, c515_s
+  end interface c515
+  public :: c515
+  interface d515
+    module procedure d515_b, d515_s
+  end interface d515
+  public :: d515
+  interface e515
+    module procedure e515_b, e515_s
+  end interface e515
+  public :: e515
+  interface f515
+    module procedure f515_b, f515_s
+  end interface f515
+  public :: f515
+  interface g515
+    module procedure g515_b, g515_s
+  end interface g515
+  public :: g515
+  interface h515
+    module procedure h515_b, h515_s
+  end interface h515
+  public :: h515
+!
+!
+!
+  interface a516
+    module procedure a516_b, a516_s
+  end interface a516
+  public :: a516
+  interface b516
+    module procedure b516_b, b516_s
+  end interface b516
+  public :: b516
+  interface c516
+    module procedure c516_b, c516_s
+  end interface c516
+  public :: c516
+  interface d516
+    module procedure d516_b, d516_s
+  end interface d516
+  public :: d516
+  interface e516
+    module procedure e516_b, e516_s
+  end interface e516
+  public :: e516
+  interface f516
+    module procedure f516_b, f516_s
+  end interface f516
+  public :: f516
+  interface g516
+    module procedure g516_b, g516_s
+  end interface g516
+  public :: g516
+  interface h516
+    module procedure h516_b, h516_s
+  end interface h516
+  public :: h516
+  interface i516
+    module procedure i516_b, i516_s
+  end interface i516
+  public :: i516
+!
+!
+!
+  interface a517
+    module procedure a517_b, a517_s
+  end interface a517
+  public :: a517
+  interface b517
+    module procedure b517_b, b517_s
+  end interface b517
+  public :: b517
+  interface c517
+    module procedure c517_b, c517_s
+  end interface c517
+  public :: c517
+  interface d517
+    module procedure d517_b, d517_s
+  end interface d517
+  public :: d517
+  interface e517
+    module procedure e517_b, e517_s
+  end interface e517
+  public :: e517
+  interface f517
+    module procedure f517_b, f517_s
+  end interface f517
+  public :: f517
+  interface g517
+    module procedure g517_b, g517_s
+  end interface g517
+  public :: g517
+  interface h517
+    module procedure h517_b, h517_s
+  end interface h517
+  public :: h517
+  interface i517
+    module procedure i517_b, i517_s
+  end interface i517
+  public :: i517
+!
+!
+!
+  interface a518
+    module procedure a518_b, a518_s
+  end interface a518
+  public :: a518
+  interface b518
+    module procedure b518_b, b518_s
+  end interface b518
+  public :: b518
+  interface c518
+    module procedure c518_b, c518_s
+  end interface c518
+  public :: c518
+  interface d518
+    module procedure d518_b, d518_s
+  end interface d518
+  public :: d518
+  interface e518
+    module procedure e518_b, e518_s
+  end interface e518
+  public :: e518
+  interface f518
+    module procedure f518_b, f518_s
+  end interface f518
+  public :: f518
+  interface g518
+    module procedure g518_b, g518_s
+  end interface g518
+  public :: g518
+  interface h518
+    module procedure h518_b, h518_s
+  end interface h518
+  public :: h518
+  interface i518
+    module procedure i518_b, i518_s
+  end interface i518
+  public :: i518
+  interface j518
+    module procedure j518_b, j518_s
+  end interface j518
+  public :: j518
+!
+!
+!
+  interface a519
+    module procedure a519_b, a519_s
+  end interface a519
+  public :: a519
+  interface b519
+    module procedure b519_b, b519_s
+  end interface b519
+  public :: b519
+  interface c519
+    module procedure c519_b, c519_s
+  end interface c519
+  public :: c519
+  interface d519
+    module procedure d519_b, d519_s
+  end interface d519
+  public :: d519
+  interface e519
+    module procedure e519_b, e519_s
+  end interface e519
+  public :: e519
+  interface f519
+    module procedure f519_b, f519_s
+  end interface f519
+  public :: f519
+  interface g519
+    module procedure g519_b, g519_s
+  end interface g519
+  public :: g519
+  interface h519
+    module procedure h519_b, h519_s
+  end interface h519
+  public :: h519
+  interface i519
+    module procedure i519_b, i519_s
+  end interface i519
+  public :: i519
+  interface j519
+    module procedure j519_b, j519_s
+  end interface j519
+  public :: j519
 !
 !
 !
@@ -8079,5 +8683,1977 @@ use array
    j418_s = j418_b(packb(set)) 
    !
   end function j418_s
+
+  function my_a51_b(l1,b_pin)
+   !
+   integer, intent(in) :: l1,b_pin
+   type(form_factor) :: my_a51_b
+   !
+   my_a51_b = -1.0_ki * fnp_generic(5,0,b_pin,1,(/ l1 /))
+   !
+  end function my_a51_b
+
+  function my_a51_s(l1,set)
+   !
+   integer, intent (in), dimension(:) :: set
+   integer, intent(in) :: l1
+   type(form_factor) :: my_a51_s
+   !
+   my_a51_s = my_a51_b(l1,packb(set)) 
+   !
+  end function my_a51_s
+
+  function my_a52_b(l1,l2,b_pin)
+   !
+   integer, intent(in) :: l1,l2,b_pin
+   type(form_factor) :: my_a52_b
+   !
+   my_a52_b = fnp_generic(5,0,b_pin,2,(/ l1,l2 /))
+   !
+  end function my_a52_b
+
+  function my_a52_s(l1,l2,set)
+   !
+   integer, intent (in), dimension(:) :: set
+   integer, intent(in) :: l1,l2
+   type(form_factor) :: my_a52_s
+   !
+   my_a52_s = my_a52_b(l1,l2,packb(set)) 
+   !
+  end function my_a52_s
+  function my_b52_b(b_pin)
+   !
+   integer, intent(in) :: b_pin
+   type(form_factor) :: my_b52_b
+   !
+   my_b52_b = -0.5_ki * fnp_generic(5,2,b_pin,0,no_feynmanparam)
+   !
+  end function my_b52_b
+
+  function my_b52_s(set)
+   !
+   integer, intent (in), dimension(:) :: set
+   type(form_factor) :: my_b52_s
+   !
+   my_b52_s = my_b52_b(packb(set)) 
+   !
+  end function my_b52_s
+
+  function my_a53_b(l1,l2,l3,b_pin)
+   !
+   integer, intent(in) :: l1,l2,l3,b_pin
+   type(form_factor) :: my_a53_b
+   !
+   my_a53_b = -1.0_ki * fnp_generic(5,0,b_pin,3,(/ l1,l2,l3 /))
+   !
+  end function my_a53_b
+
+  function my_a53_s(l1,l2,l3,set)
+   !
+   integer, intent (in), dimension(:) :: set
+   integer, intent(in) :: l1,l2,l3
+   type(form_factor) :: my_a53_s
+   !
+   my_a53_s = my_a53_b(l1,l2,l3,packb(set)) 
+   !
+  end function my_a53_s
+  function my_b53_b(l1,b_pin)
+   !
+   integer, intent(in) :: l1,b_pin
+   type(form_factor) :: my_b53_b
+   !
+   my_b53_b = 0.5_ki * fnp_generic(5,2,b_pin,1,(/ l1 /))
+   !
+  end function my_b53_b
+
+  function my_b53_s(l1,set)
+   !
+   integer, intent (in), dimension(:) :: set
+   integer, intent(in) :: l1
+   type(form_factor) :: my_b53_s
+   !
+   my_b53_s = my_b53_b(l1,packb(set)) 
+   !
+  end function my_b53_s
+
+  function my_a54_b(l1,l2,l3,l4,b_pin)
+   !
+   integer, intent(in) :: l1,l2,l3,l4,b_pin
+   type(form_factor) :: my_a54_b
+   !
+   my_a54_b = fnp_generic(5,0,b_pin,4,(/ l1,l2,l3,l4 /))
+   !
+  end function my_a54_b
+
+  function my_a54_s(l1,l2,l3,l4,set)
+   !
+   integer, intent (in), dimension(:) :: set
+   integer, intent(in) :: l1,l2,l3,l4
+   type(form_factor) :: my_a54_s
+   !
+   my_a54_s = my_a54_b(l1,l2,l3,l4,packb(set)) 
+   !
+  end function my_a54_s
+  function my_b54_b(l1,l2,b_pin)
+   !
+   integer, intent(in) :: l1,l2,b_pin
+   type(form_factor) :: my_b54_b
+   !
+   my_b54_b = -0.5_ki * fnp_generic(5,2,b_pin,2,(/ l1,l2 /))
+   !
+  end function my_b54_b
+
+  function my_b54_s(l1,l2,set)
+   !
+   integer, intent (in), dimension(:) :: set
+   integer, intent(in) :: l1,l2
+   type(form_factor) :: my_b54_s
+   !
+   my_b54_s = my_b54_b(l1,l2,packb(set)) 
+   !
+  end function my_b54_s
+  function my_c54_b(b_pin)
+   !
+   integer, intent(in) :: b_pin
+   type(form_factor) :: my_c54_b
+   !
+   my_c54_b = 0.25_ki * fnp_generic(5,4,b_pin,0,no_feynmanparam)
+   !
+  end function my_c54_b
+
+  function my_c54_s(set)
+   !
+   integer, intent (in), dimension(:) :: set
+   type(form_factor) :: my_c54_s
+   !
+   my_c54_s = my_c54_b(packb(set)) 
+   !
+  end function my_c54_s
+
+  function my_a55_b(l1,l2,l3,l4,l5,b_pin)
+   !
+   integer, intent(in) :: l1,l2,l3,l4,l5,b_pin
+   type(form_factor) :: my_a55_b
+   !
+   my_a55_b = -1.0_ki * fnp_generic(5,0,b_pin,5,(/ l1,l2,l3,l4,l5 /))
+   !
+  end function my_a55_b
+
+  function my_a55_s(l1,l2,l3,l4,l5,set)
+   !
+   integer, intent (in), dimension(:) :: set
+   integer, intent(in) :: l1,l2,l3,l4,l5
+   type(form_factor) :: my_a55_s
+   !
+   my_a55_s = my_a55_b(l1,l2,l3,l4,l5,packb(set)) 
+   !
+  end function my_a55_s
+  function my_b55_b(l1,l2,l3,b_pin)
+   !
+   integer, intent(in) :: l1,l2,l3,b_pin
+   type(form_factor) :: my_b55_b
+   !
+   my_b55_b = 0.5_ki * fnp_generic(5,2,b_pin,3,(/ l1,l2,l3 /))
+   !
+  end function my_b55_b
+
+  function my_b55_s(l1,l2,l3,set)
+   !
+   integer, intent (in), dimension(:) :: set
+   integer, intent(in) :: l1,l2,l3
+   type(form_factor) :: my_b55_s
+   !
+   my_b55_s = my_b55_b(l1,l2,l3,packb(set)) 
+   !
+  end function my_b55_s
+  function my_c55_b(l1,b_pin)
+   !
+   integer, intent(in) :: l1,b_pin
+   type(form_factor) :: my_c55_b
+   !
+   my_c55_b = -0.25_ki * fnp_generic(5,4,b_pin,1,(/ l1 /))
+   !
+  end function my_c55_b
+
+  function my_c55_s(l1,set)
+   !
+   integer, intent (in), dimension(:) :: set
+   integer, intent(in) :: l1
+   type(form_factor) :: my_c55_s
+   !
+   my_c55_s = my_c55_b(l1,packb(set)) 
+   !
+  end function my_c55_s
+
+  function a56_b(l1,l2,l3,l4,l5,l6,b_pin)
+   !
+   integer, intent(in) :: l1,l2,l3,l4,l5,l6,b_pin
+   type(form_factor) :: a56_b
+   !
+   a56_b = fnp_generic(5,0,b_pin,6,(/ l1,l2,l3,l4,l5,l6 /))
+   !
+  end function a56_b
+
+  function a56_s(l1,l2,l3,l4,l5,l6,set)
+   !
+   integer, intent (in), dimension(:) :: set
+   integer, intent(in) :: l1,l2,l3,l4,l5,l6
+   type(form_factor) :: a56_s
+   !
+   a56_s = a56_b(l1,l2,l3,l4,l5,l6,packb(set)) 
+   !
+  end function a56_s
+  function b56_b(l1,l2,l3,l4,b_pin)
+   !
+   integer, intent(in) :: l1,l2,l3,l4,b_pin
+   type(form_factor) :: b56_b
+   !
+   b56_b = -0.5_ki * fnp_generic(5,2,b_pin,4,(/ l1,l2,l3,l4 /))
+   !
+  end function b56_b
+
+  function b56_s(l1,l2,l3,l4,set)
+   !
+   integer, intent (in), dimension(:) :: set
+   integer, intent(in) :: l1,l2,l3,l4
+   type(form_factor) :: b56_s
+   !
+   b56_s = b56_b(l1,l2,l3,l4,packb(set)) 
+   !
+  end function b56_s
+  function c56_b(l1,l2,b_pin)
+   !
+   integer, intent(in) :: l1,l2,b_pin
+   type(form_factor) :: c56_b
+   !
+   c56_b = 0.25_ki * fnp_generic(5,4,b_pin,2,(/ l1,l2 /))
+   !
+  end function c56_b
+
+  function c56_s(l1,l2,set)
+   !
+   integer, intent (in), dimension(:) :: set
+   integer, intent(in) :: l1,l2
+   type(form_factor) :: c56_s
+   !
+   c56_s = c56_b(l1,l2,packb(set)) 
+   !
+  end function c56_s
+  function d56_b(b_pin)
+   !
+   integer, intent(in) :: b_pin
+   type(form_factor) :: d56_b
+   !
+   d56_b = -0.125_ki * fnp_generic(5,6,b_pin,0,no_feynmanparam)
+   !
+  end function d56_b
+
+  function d56_s(set)
+   !
+   integer, intent (in), dimension(:) :: set
+   type(form_factor) :: d56_s
+   !
+   d56_s = d56_b(packb(set)) 
+   !
+  end function d56_s
+
+  function a57_b(l1,l2,l3,l4,l5,l6,l7,b_pin)
+   !
+   integer, intent(in) :: l1,l2,l3,l4,l5,l6,l7,b_pin
+   type(form_factor) :: a57_b
+   !
+   a57_b = -1.0_ki * fnp_generic(5,0,b_pin,7,(/ l1,l2,l3,l4,l5,l6,l7 /))
+   !
+  end function a57_b
+
+  function a57_s(l1,l2,l3,l4,l5,l6,l7,set)
+   !
+   integer, intent (in), dimension(:) :: set
+   integer, intent(in) :: l1,l2,l3,l4,l5,l6,l7
+   type(form_factor) :: a57_s
+   !
+   a57_s = a57_b(l1,l2,l3,l4,l5,l6,l7,packb(set)) 
+   !
+  end function a57_s
+  function b57_b(l1,l2,l3,l4,l5,b_pin)
+   !
+   integer, intent(in) :: l1,l2,l3,l4,l5,b_pin
+   type(form_factor) :: b57_b
+   !
+   b57_b = 0.5_ki * fnp_generic(5,2,b_pin,5,(/ l1,l2,l3,l4,l5 /))
+   !
+  end function b57_b
+
+  function b57_s(l1,l2,l3,l4,l5,set)
+   !
+   integer, intent (in), dimension(:) :: set
+   integer, intent(in) :: l1,l2,l3,l4,l5
+   type(form_factor) :: b57_s
+   !
+   b57_s = b57_b(l1,l2,l3,l4,l5,packb(set)) 
+   !
+  end function b57_s
+  function c57_b(l1,l2,l3,b_pin)
+   !
+   integer, intent(in) :: l1,l2,l3,b_pin
+   type(form_factor) :: c57_b
+   !
+   c57_b = -0.25_ki * fnp_generic(5,4,b_pin,3,(/ l1,l2,l3 /))
+   !
+  end function c57_b
+
+  function c57_s(l1,l2,l3,set)
+   !
+   integer, intent (in), dimension(:) :: set
+   integer, intent(in) :: l1,l2,l3
+   type(form_factor) :: c57_s
+   !
+   c57_s = c57_b(l1,l2,l3,packb(set)) 
+   !
+  end function c57_s
+  function d57_b(l1,b_pin)
+   !
+   integer, intent(in) :: l1,b_pin
+   type(form_factor) :: d57_b
+   !
+   d57_b = 0.125_ki * fnp_generic(5,6,b_pin,1,(/ l1 /))
+   !
+  end function d57_b
+
+  function d57_s(l1,set)
+   !
+   integer, intent (in), dimension(:) :: set
+   integer, intent(in) :: l1
+   type(form_factor) :: d57_s
+   !
+   d57_s = d57_b(l1,packb(set)) 
+   !
+  end function d57_s
+
+  function a58_b(l1,l2,l3,l4,l5,l6,l7,l8,b_pin)
+   !
+   integer, intent(in) :: l1,l2,l3,l4,l5,l6,l7,l8,b_pin
+   type(form_factor) :: a58_b
+   !
+   a58_b = fnp_generic(5,0,b_pin,8,(/ l1,l2,l3,l4,l5,l6,l7,l8 /))
+   !
+  end function a58_b
+
+  function a58_s(l1,l2,l3,l4,l5,l6,l7,l8,set)
+   !
+   integer, intent (in), dimension(:) :: set
+   integer, intent(in) :: l1,l2,l3,l4,l5,l6,l7,l8
+   type(form_factor) :: a58_s
+   !
+   a58_s = a58_b(l1,l2,l3,l4,l5,l6,l7,l8,packb(set)) 
+   !
+  end function a58_s
+  function b58_b(l1,l2,l3,l4,l5,l6,b_pin)
+   !
+   integer, intent(in) :: l1,l2,l3,l4,l5,l6,b_pin
+   type(form_factor) :: b58_b
+   !
+   b58_b = -0.5_ki * fnp_generic(5,2,b_pin,6,(/ l1,l2,l3,l4,l5,l6 /))
+   !
+  end function b58_b
+
+  function b58_s(l1,l2,l3,l4,l5,l6,set)
+   !
+   integer, intent (in), dimension(:) :: set
+   integer, intent(in) :: l1,l2,l3,l4,l5,l6
+   type(form_factor) :: b58_s
+   !
+   b58_s = b58_b(l1,l2,l3,l4,l5,l6,packb(set)) 
+   !
+  end function b58_s
+  function c58_b(l1,l2,l3,l4,b_pin)
+   !
+   integer, intent(in) :: l1,l2,l3,l4,b_pin
+   type(form_factor) :: c58_b
+   !
+   c58_b = 0.25_ki * fnp_generic(5,4,b_pin,4,(/ l1,l2,l3,l4 /))
+   !
+  end function c58_b
+
+  function c58_s(l1,l2,l3,l4,set)
+   !
+   integer, intent (in), dimension(:) :: set
+   integer, intent(in) :: l1,l2,l3,l4
+   type(form_factor) :: c58_s
+   !
+   c58_s = c58_b(l1,l2,l3,l4,packb(set)) 
+   !
+  end function c58_s
+  function d58_b(l1,l2,b_pin)
+   !
+   integer, intent(in) :: l1,l2,b_pin
+   type(form_factor) :: d58_b
+   !
+   d58_b = -0.125_ki * fnp_generic(5,6,b_pin,2,(/ l1,l2 /))
+   !
+  end function d58_b
+
+  function d58_s(l1,l2,set)
+   !
+   integer, intent (in), dimension(:) :: set
+   integer, intent(in) :: l1,l2
+   type(form_factor) :: d58_s
+   !
+   d58_s = d58_b(l1,l2,packb(set)) 
+   !
+  end function d58_s
+  function e58_b(b_pin)
+   !
+   integer, intent(in) :: b_pin
+   type(form_factor) :: e58_b
+   !
+   e58_b = 0.0625_ki * fnp_generic(5,8,b_pin,0,no_feynmanparam)
+   !
+  end function e58_b
+
+  function e58_s(set)
+   !
+   integer, intent (in), dimension(:) :: set
+   type(form_factor) :: e58_s
+   !
+   e58_s = e58_b(packb(set)) 
+   !
+  end function e58_s
+
+  function a59_b(l1,l2,l3,l4,l5,l6,l7,l8,l9,b_pin)
+   !
+   integer, intent(in) :: l1,l2,l3,l4,l5,l6,l7,l8,l9,b_pin
+   type(form_factor) :: a59_b
+   !
+   a59_b = -1.0_ki * fnp_generic(5,0,b_pin,9,(/ l1,l2,l3,l4,l5,l6,l7,l8,l9 /))
+   !
+  end function a59_b
+
+  function a59_s(l1,l2,l3,l4,l5,l6,l7,l8,l9,set)
+   !
+   integer, intent (in), dimension(:) :: set
+   integer, intent(in) :: l1,l2,l3,l4,l5,l6,l7,l8,l9
+   type(form_factor) :: a59_s
+   !
+   a59_s = a59_b(l1,l2,l3,l4,l5,l6,l7,l8,l9,packb(set)) 
+   !
+  end function a59_s
+  function b59_b(l1,l2,l3,l4,l5,l6,l7,b_pin)
+   !
+   integer, intent(in) :: l1,l2,l3,l4,l5,l6,l7,b_pin
+   type(form_factor) :: b59_b
+   !
+   b59_b = 0.5_ki * fnp_generic(5,2,b_pin,7,(/ l1,l2,l3,l4,l5,l6,l7 /))
+   !
+  end function b59_b
+
+  function b59_s(l1,l2,l3,l4,l5,l6,l7,set)
+   !
+   integer, intent (in), dimension(:) :: set
+   integer, intent(in) :: l1,l2,l3,l4,l5,l6,l7
+   type(form_factor) :: b59_s
+   !
+   b59_s = b59_b(l1,l2,l3,l4,l5,l6,l7,packb(set)) 
+   !
+  end function b59_s
+  function c59_b(l1,l2,l3,l4,l5,b_pin)
+   !
+   integer, intent(in) :: l1,l2,l3,l4,l5,b_pin
+   type(form_factor) :: c59_b
+   !
+   c59_b = -0.25_ki * fnp_generic(5,4,b_pin,5,(/ l1,l2,l3,l4,l5 /))
+   !
+  end function c59_b
+
+  function c59_s(l1,l2,l3,l4,l5,set)
+   !
+   integer, intent (in), dimension(:) :: set
+   integer, intent(in) :: l1,l2,l3,l4,l5
+   type(form_factor) :: c59_s
+   !
+   c59_s = c59_b(l1,l2,l3,l4,l5,packb(set)) 
+   !
+  end function c59_s
+  function d59_b(l1,l2,l3,b_pin)
+   !
+   integer, intent(in) :: l1,l2,l3,b_pin
+   type(form_factor) :: d59_b
+   !
+   d59_b = 0.125_ki * fnp_generic(5,6,b_pin,3,(/ l1,l2,l3 /))
+   !
+  end function d59_b
+
+  function d59_s(l1,l2,l3,set)
+   !
+   integer, intent (in), dimension(:) :: set
+   integer, intent(in) :: l1,l2,l3
+   type(form_factor) :: d59_s
+   !
+   d59_s = d59_b(l1,l2,l3,packb(set)) 
+   !
+  end function d59_s
+  function e59_b(l1,b_pin)
+   !
+   integer, intent(in) :: l1,b_pin
+   type(form_factor) :: e59_b
+   !
+   e59_b = -0.0625_ki * fnp_generic(5,8,b_pin,1,(/ l1 /))
+   !
+  end function e59_b
+
+  function e59_s(l1,set)
+   !
+   integer, intent (in), dimension(:) :: set
+   integer, intent(in) :: l1
+   type(form_factor) :: e59_s
+   !
+   e59_s = e59_b(l1,packb(set)) 
+   !
+  end function e59_s
+
+  function a510_b(l1,l2,l3,l4,l5,l6,l7,l8,l9,l10,b_pin)
+   !
+   integer, intent(in) :: l1,l2,l3,l4,l5,l6,l7,l8,l9,l10,b_pin
+   type(form_factor) :: a510_b
+   !
+   a510_b = fnp_generic(5,0,b_pin,10,(/ l1,l2,l3,l4,l5,l6,l7,l8,l9,l10 /))
+   !
+  end function a510_b
+
+  function a510_s(l1,l2,l3,l4,l5,l6,l7,l8,l9,l10,set)
+   !
+   integer, intent (in), dimension(:) :: set
+   integer, intent(in) :: l1,l2,l3,l4,l5,l6,l7,l8,l9,l10
+   type(form_factor) :: a510_s
+   !
+   a510_s = a510_b(l1,l2,l3,l4,l5,l6,l7,l8,l9,l10,packb(set)) 
+   !
+  end function a510_s
+  function b510_b(l1,l2,l3,l4,l5,l6,l7,l8,b_pin)
+   !
+   integer, intent(in) :: l1,l2,l3,l4,l5,l6,l7,l8,b_pin
+   type(form_factor) :: b510_b
+   !
+   b510_b = -0.5_ki * fnp_generic(5,2,b_pin,8,(/ l1,l2,l3,l4,l5,l6,l7,l8 /))
+   !
+  end function b510_b
+
+  function b510_s(l1,l2,l3,l4,l5,l6,l7,l8,set)
+   !
+   integer, intent (in), dimension(:) :: set
+   integer, intent(in) :: l1,l2,l3,l4,l5,l6,l7,l8
+   type(form_factor) :: b510_s
+   !
+   b510_s = b510_b(l1,l2,l3,l4,l5,l6,l7,l8,packb(set)) 
+   !
+  end function b510_s
+  function c510_b(l1,l2,l3,l4,l5,l6,b_pin)
+   !
+   integer, intent(in) :: l1,l2,l3,l4,l5,l6,b_pin
+   type(form_factor) :: c510_b
+   !
+   c510_b = 0.25_ki * fnp_generic(5,4,b_pin,6,(/ l1,l2,l3,l4,l5,l6 /))
+   !
+  end function c510_b
+
+  function c510_s(l1,l2,l3,l4,l5,l6,set)
+   !
+   integer, intent (in), dimension(:) :: set
+   integer, intent(in) :: l1,l2,l3,l4,l5,l6
+   type(form_factor) :: c510_s
+   !
+   c510_s = c510_b(l1,l2,l3,l4,l5,l6,packb(set)) 
+   !
+  end function c510_s
+  function d510_b(l1,l2,l3,l4,b_pin)
+   !
+   integer, intent(in) :: l1,l2,l3,l4,b_pin
+   type(form_factor) :: d510_b
+   !
+   d510_b = -0.125_ki * fnp_generic(5,6,b_pin,4,(/ l1,l2,l3,l4 /))
+   !
+  end function d510_b
+
+  function d510_s(l1,l2,l3,l4,set)
+   !
+   integer, intent (in), dimension(:) :: set
+   integer, intent(in) :: l1,l2,l3,l4
+   type(form_factor) :: d510_s
+   !
+   d510_s = d510_b(l1,l2,l3,l4,packb(set)) 
+   !
+  end function d510_s
+  function e510_b(l1,l2,b_pin)
+   !
+   integer, intent(in) :: l1,l2,b_pin
+   type(form_factor) :: e510_b
+   !
+   e510_b = 0.0625_ki * fnp_generic(5,8,b_pin,2,(/ l1,l2 /))
+   !
+  end function e510_b
+
+  function e510_s(l1,l2,set)
+   !
+   integer, intent (in), dimension(:) :: set
+   integer, intent(in) :: l1,l2
+   type(form_factor) :: e510_s
+   !
+   e510_s = e510_b(l1,l2,packb(set)) 
+   !
+  end function e510_s
+  function f510_b(b_pin)
+   !
+   integer, intent(in) :: b_pin
+   type(form_factor) :: f510_b
+   !
+   f510_b = -0.03125_ki * fnp_generic(5,10,b_pin,0,no_feynmanparam)
+   !
+  end function f510_b
+
+  function f510_s(set)
+   !
+   integer, intent (in), dimension(:) :: set
+   type(form_factor) :: f510_s
+   !
+   f510_s = f510_b(packb(set)) 
+   !
+  end function f510_s
+
+  function a511_b(l1,l2,l3,l4,l5,l6,l7,l8,l9,l10,l11,b_pin)
+   !
+   integer, intent(in) :: l1,l2,l3,l4,l5,l6,l7,l8,l9,l10,l11,b_pin
+   type(form_factor) :: a511_b
+   !
+   a511_b = -1.0_ki * fnp_generic(5,0,b_pin,11,(/ l1,l2,l3,l4,l5,l6,l7,l8,l9,l10,l11 /))
+   !
+  end function a511_b
+
+  function a511_s(l1,l2,l3,l4,l5,l6,l7,l8,l9,l10,l11,set)
+   !
+   integer, intent (in), dimension(:) :: set
+   integer, intent(in) :: l1,l2,l3,l4,l5,l6,l7,l8,l9,l10,l11
+   type(form_factor) :: a511_s
+   !
+   a511_s = a511_b(l1,l2,l3,l4,l5,l6,l7,l8,l9,l10,l11,packb(set)) 
+   !
+  end function a511_s
+  function b511_b(l1,l2,l3,l4,l5,l6,l7,l8,l9,b_pin)
+   !
+   integer, intent(in) :: l1,l2,l3,l4,l5,l6,l7,l8,l9,b_pin
+   type(form_factor) :: b511_b
+   !
+   b511_b = 0.5_ki * fnp_generic(5,2,b_pin,9,(/ l1,l2,l3,l4,l5,l6,l7,l8,l9 /))
+   !
+  end function b511_b
+
+  function b511_s(l1,l2,l3,l4,l5,l6,l7,l8,l9,set)
+   !
+   integer, intent (in), dimension(:) :: set
+   integer, intent(in) :: l1,l2,l3,l4,l5,l6,l7,l8,l9
+   type(form_factor) :: b511_s
+   !
+   b511_s = b511_b(l1,l2,l3,l4,l5,l6,l7,l8,l9,packb(set)) 
+   !
+  end function b511_s
+  function c511_b(l1,l2,l3,l4,l5,l6,l7,b_pin)
+   !
+   integer, intent(in) :: l1,l2,l3,l4,l5,l6,l7,b_pin
+   type(form_factor) :: c511_b
+   !
+   c511_b = -0.25_ki * fnp_generic(5,4,b_pin,7,(/ l1,l2,l3,l4,l5,l6,l7 /))
+   !
+  end function c511_b
+
+  function c511_s(l1,l2,l3,l4,l5,l6,l7,set)
+   !
+   integer, intent (in), dimension(:) :: set
+   integer, intent(in) :: l1,l2,l3,l4,l5,l6,l7
+   type(form_factor) :: c511_s
+   !
+   c511_s = c511_b(l1,l2,l3,l4,l5,l6,l7,packb(set)) 
+   !
+  end function c511_s
+  function d511_b(l1,l2,l3,l4,l5,b_pin)
+   !
+   integer, intent(in) :: l1,l2,l3,l4,l5,b_pin
+   type(form_factor) :: d511_b
+   !
+   d511_b = 0.125_ki * fnp_generic(5,6,b_pin,5,(/ l1,l2,l3,l4,l5 /))
+   !
+  end function d511_b
+
+  function d511_s(l1,l2,l3,l4,l5,set)
+   !
+   integer, intent (in), dimension(:) :: set
+   integer, intent(in) :: l1,l2,l3,l4,l5
+   type(form_factor) :: d511_s
+   !
+   d511_s = d511_b(l1,l2,l3,l4,l5,packb(set)) 
+   !
+  end function d511_s
+  function e511_b(l1,l2,l3,b_pin)
+   !
+   integer, intent(in) :: l1,l2,l3,b_pin
+   type(form_factor) :: e511_b
+   !
+   e511_b = -0.0625_ki * fnp_generic(5,8,b_pin,3,(/ l1,l2,l3 /))
+   !
+  end function e511_b
+
+  function e511_s(l1,l2,l3,set)
+   !
+   integer, intent (in), dimension(:) :: set
+   integer, intent(in) :: l1,l2,l3
+   type(form_factor) :: e511_s
+   !
+   e511_s = e511_b(l1,l2,l3,packb(set)) 
+   !
+  end function e511_s
+  function f511_b(l1,b_pin)
+   !
+   integer, intent(in) :: l1,b_pin
+   type(form_factor) :: f511_b
+   !
+   f511_b = 0.03125_ki * fnp_generic(5,10,b_pin,1,(/ l1 /))
+   !
+  end function f511_b
+
+  function f511_s(l1,set)
+   !
+   integer, intent (in), dimension(:) :: set
+   integer, intent(in) :: l1
+   type(form_factor) :: f511_s
+   !
+   f511_s = f511_b(l1,packb(set)) 
+   !
+  end function f511_s
+
+  function a512_b(l1,l2,l3,l4,l5,l6,l7,l8,l9,l10,l11,l12,b_pin)
+   !
+   integer, intent(in) :: l1,l2,l3,l4,l5,l6,l7,l8,l9,l10,l11,l12,b_pin
+   type(form_factor) :: a512_b
+   !
+   a512_b = fnp_generic(5,0,b_pin,12,(/ l1,l2,l3,l4,l5,l6,l7,l8,l9,l10,l11,l12 /))
+   !
+  end function a512_b
+
+  function a512_s(l1,l2,l3,l4,l5,l6,l7,l8,l9,l10,l11,l12,set)
+   !
+   integer, intent (in), dimension(:) :: set
+   integer, intent(in) :: l1,l2,l3,l4,l5,l6,l7,l8,l9,l10,l11,l12
+   type(form_factor) :: a512_s
+   !
+   a512_s = a512_b(l1,l2,l3,l4,l5,l6,l7,l8,l9,l10,l11,l12,packb(set)) 
+   !
+  end function a512_s
+  function b512_b(l1,l2,l3,l4,l5,l6,l7,l8,l9,l10,b_pin)
+   !
+   integer, intent(in) :: l1,l2,l3,l4,l5,l6,l7,l8,l9,l10,b_pin
+   type(form_factor) :: b512_b
+   !
+   b512_b = -0.5_ki * fnp_generic(5,2,b_pin,10,(/ l1,l2,l3,l4,l5,l6,l7,l8,l9,l10 /))
+   !
+  end function b512_b
+
+  function b512_s(l1,l2,l3,l4,l5,l6,l7,l8,l9,l10,set)
+   !
+   integer, intent (in), dimension(:) :: set
+   integer, intent(in) :: l1,l2,l3,l4,l5,l6,l7,l8,l9,l10
+   type(form_factor) :: b512_s
+   !
+   b512_s = b512_b(l1,l2,l3,l4,l5,l6,l7,l8,l9,l10,packb(set)) 
+   !
+  end function b512_s
+  function c512_b(l1,l2,l3,l4,l5,l6,l7,l8,b_pin)
+   !
+   integer, intent(in) :: l1,l2,l3,l4,l5,l6,l7,l8,b_pin
+   type(form_factor) :: c512_b
+   !
+   c512_b = 0.25_ki * fnp_generic(5,4,b_pin,8,(/ l1,l2,l3,l4,l5,l6,l7,l8 /))
+   !
+  end function c512_b
+
+  function c512_s(l1,l2,l3,l4,l5,l6,l7,l8,set)
+   !
+   integer, intent (in), dimension(:) :: set
+   integer, intent(in) :: l1,l2,l3,l4,l5,l6,l7,l8
+   type(form_factor) :: c512_s
+   !
+   c512_s = c512_b(l1,l2,l3,l4,l5,l6,l7,l8,packb(set)) 
+   !
+  end function c512_s
+  function d512_b(l1,l2,l3,l4,l5,l6,b_pin)
+   !
+   integer, intent(in) :: l1,l2,l3,l4,l5,l6,b_pin
+   type(form_factor) :: d512_b
+   !
+   d512_b = -0.125_ki * fnp_generic(5,6,b_pin,6,(/ l1,l2,l3,l4,l5,l6 /))
+   !
+  end function d512_b
+
+  function d512_s(l1,l2,l3,l4,l5,l6,set)
+   !
+   integer, intent (in), dimension(:) :: set
+   integer, intent(in) :: l1,l2,l3,l4,l5,l6
+   type(form_factor) :: d512_s
+   !
+   d512_s = d512_b(l1,l2,l3,l4,l5,l6,packb(set)) 
+   !
+  end function d512_s
+  function e512_b(l1,l2,l3,l4,b_pin)
+   !
+   integer, intent(in) :: l1,l2,l3,l4,b_pin
+   type(form_factor) :: e512_b
+   !
+   e512_b = 0.0625_ki * fnp_generic(5,8,b_pin,4,(/ l1,l2,l3,l4 /))
+   !
+  end function e512_b
+
+  function e512_s(l1,l2,l3,l4,set)
+   !
+   integer, intent (in), dimension(:) :: set
+   integer, intent(in) :: l1,l2,l3,l4
+   type(form_factor) :: e512_s
+   !
+   e512_s = e512_b(l1,l2,l3,l4,packb(set)) 
+   !
+  end function e512_s
+  function f512_b(l1,l2,b_pin)
+   !
+   integer, intent(in) :: l1,l2,b_pin
+   type(form_factor) :: f512_b
+   !
+   f512_b = -0.03125_ki * fnp_generic(5,10,b_pin,2,(/ l1,l2 /))
+   !
+  end function f512_b
+
+  function f512_s(l1,l2,set)
+   !
+   integer, intent (in), dimension(:) :: set
+   integer, intent(in) :: l1,l2
+   type(form_factor) :: f512_s
+   !
+   f512_s = f512_b(l1,l2,packb(set)) 
+   !
+  end function f512_s
+  function g512_b(b_pin)
+   !
+   integer, intent(in) :: b_pin
+   type(form_factor) :: g512_b
+   !
+   g512_b = 0.015625_ki * fnp_generic(5,12,b_pin,0,no_feynmanparam)
+   !
+  end function g512_b
+
+  function g512_s(set)
+   !
+   integer, intent (in), dimension(:) :: set
+   type(form_factor) :: g512_s
+   !
+   g512_s = g512_b(packb(set)) 
+   !
+  end function g512_s
+
+  function a513_b(l1,l2,l3,l4,l5,l6,l7,l8,l9,l10,l11,l12,l13,b_pin)
+   !
+   integer, intent(in) :: l1,l2,l3,l4,l5,l6,l7,l8,l9,l10,l11,l12,l13,b_pin
+   type(form_factor) :: a513_b
+   !
+   a513_b = -1.0_ki * fnp_generic(5,0,b_pin,13,(/ l1,l2,l3,l4,l5,l6,l7,l8,l9,l10,l11,l12,l13 /))
+   !
+  end function a513_b
+
+  function a513_s(l1,l2,l3,l4,l5,l6,l7,l8,l9,l10,l11,l12,l13,set)
+   !
+   integer, intent (in), dimension(:) :: set
+   integer, intent(in) :: l1,l2,l3,l4,l5,l6,l7,l8,l9,l10,l11,l12,l13
+   type(form_factor) :: a513_s
+   !
+   a513_s = a513_b(l1,l2,l3,l4,l5,l6,l7,l8,l9,l10,l11,l12,l13,packb(set)) 
+   !
+  end function a513_s
+  function b513_b(l1,l2,l3,l4,l5,l6,l7,l8,l9,l10,l11,b_pin)
+   !
+   integer, intent(in) :: l1,l2,l3,l4,l5,l6,l7,l8,l9,l10,l11,b_pin
+   type(form_factor) :: b513_b
+   !
+   b513_b = 0.5_ki * fnp_generic(5,2,b_pin,11,(/ l1,l2,l3,l4,l5,l6,l7,l8,l9,l10,l11 /))
+   !
+  end function b513_b
+
+  function b513_s(l1,l2,l3,l4,l5,l6,l7,l8,l9,l10,l11,set)
+   !
+   integer, intent (in), dimension(:) :: set
+   integer, intent(in) :: l1,l2,l3,l4,l5,l6,l7,l8,l9,l10,l11
+   type(form_factor) :: b513_s
+   !
+   b513_s = b513_b(l1,l2,l3,l4,l5,l6,l7,l8,l9,l10,l11,packb(set)) 
+   !
+  end function b513_s
+  function c513_b(l1,l2,l3,l4,l5,l6,l7,l8,l9,b_pin)
+   !
+   integer, intent(in) :: l1,l2,l3,l4,l5,l6,l7,l8,l9,b_pin
+   type(form_factor) :: c513_b
+   !
+   c513_b = -0.25_ki * fnp_generic(5,4,b_pin,9,(/ l1,l2,l3,l4,l5,l6,l7,l8,l9 /))
+   !
+  end function c513_b
+
+  function c513_s(l1,l2,l3,l4,l5,l6,l7,l8,l9,set)
+   !
+   integer, intent (in), dimension(:) :: set
+   integer, intent(in) :: l1,l2,l3,l4,l5,l6,l7,l8,l9
+   type(form_factor) :: c513_s
+   !
+   c513_s = c513_b(l1,l2,l3,l4,l5,l6,l7,l8,l9,packb(set)) 
+   !
+  end function c513_s
+  function d513_b(l1,l2,l3,l4,l5,l6,l7,b_pin)
+   !
+   integer, intent(in) :: l1,l2,l3,l4,l5,l6,l7,b_pin
+   type(form_factor) :: d513_b
+   !
+   d513_b = 0.125_ki * fnp_generic(5,6,b_pin,7,(/ l1,l2,l3,l4,l5,l6,l7 /))
+   !
+  end function d513_b
+
+  function d513_s(l1,l2,l3,l4,l5,l6,l7,set)
+   !
+   integer, intent (in), dimension(:) :: set
+   integer, intent(in) :: l1,l2,l3,l4,l5,l6,l7
+   type(form_factor) :: d513_s
+   !
+   d513_s = d513_b(l1,l2,l3,l4,l5,l6,l7,packb(set)) 
+   !
+  end function d513_s
+  function e513_b(l1,l2,l3,l4,l5,b_pin)
+   !
+   integer, intent(in) :: l1,l2,l3,l4,l5,b_pin
+   type(form_factor) :: e513_b
+   !
+   e513_b = -0.0625_ki * fnp_generic(5,8,b_pin,5,(/ l1,l2,l3,l4,l5 /))
+   !
+  end function e513_b
+
+  function e513_s(l1,l2,l3,l4,l5,set)
+   !
+   integer, intent (in), dimension(:) :: set
+   integer, intent(in) :: l1,l2,l3,l4,l5
+   type(form_factor) :: e513_s
+   !
+   e513_s = e513_b(l1,l2,l3,l4,l5,packb(set)) 
+   !
+  end function e513_s
+  function f513_b(l1,l2,l3,b_pin)
+   !
+   integer, intent(in) :: l1,l2,l3,b_pin
+   type(form_factor) :: f513_b
+   !
+   f513_b = 0.03125_ki * fnp_generic(5,10,b_pin,3,(/ l1,l2,l3 /))
+   !
+  end function f513_b
+
+  function f513_s(l1,l2,l3,set)
+   !
+   integer, intent (in), dimension(:) :: set
+   integer, intent(in) :: l1,l2,l3
+   type(form_factor) :: f513_s
+   !
+   f513_s = f513_b(l1,l2,l3,packb(set)) 
+   !
+  end function f513_s
+  function g513_b(l1,b_pin)
+   !
+   integer, intent(in) :: l1,b_pin
+   type(form_factor) :: g513_b
+   !
+   g513_b = -0.015625_ki * fnp_generic(5,12,b_pin,1,(/ l1 /))
+   !
+  end function g513_b
+
+  function g513_s(l1,set)
+   !
+   integer, intent (in), dimension(:) :: set
+   integer, intent(in) :: l1
+   type(form_factor) :: g513_s
+   !
+   g513_s = g513_b(l1,packb(set)) 
+   !
+  end function g513_s
+
+  function a514_b(l1,l2,l3,l4,l5,l6,l7,l8,l9,l10,l11,l12,l13,l14,b_pin)
+   !
+   integer, intent(in) :: l1,l2,l3,l4,l5,l6,l7,l8,l9,l10,l11,l12,l13,l14,b_pin
+   type(form_factor) :: a514_b
+   !
+   a514_b = fnp_generic(5,0,b_pin,14,(/ l1,l2,l3,l4,l5,l6,l7,l8,l9,l10,l11,l12,l13,l14 /))
+   !
+  end function a514_b
+
+  function a514_s(l1,l2,l3,l4,l5,l6,l7,l8,l9,l10,l11,l12,l13,l14,set)
+   !
+   integer, intent (in), dimension(:) :: set
+   integer, intent(in) :: l1,l2,l3,l4,l5,l6,l7,l8,l9,l10,l11,l12,l13,l14
+   type(form_factor) :: a514_s
+   !
+   a514_s = a514_b(l1,l2,l3,l4,l5,l6,l7,l8,l9,l10,l11,l12,l13,l14,packb(set)) 
+   !
+  end function a514_s
+  function b514_b(l1,l2,l3,l4,l5,l6,l7,l8,l9,l10,l11,l12,b_pin)
+   !
+   integer, intent(in) :: l1,l2,l3,l4,l5,l6,l7,l8,l9,l10,l11,l12,b_pin
+   type(form_factor) :: b514_b
+   !
+   b514_b = -0.5_ki * fnp_generic(5,2,b_pin,12,(/ l1,l2,l3,l4,l5,l6,l7,l8,l9,l10,l11,l12 /))
+   !
+  end function b514_b
+
+  function b514_s(l1,l2,l3,l4,l5,l6,l7,l8,l9,l10,l11,l12,set)
+   !
+   integer, intent (in), dimension(:) :: set
+   integer, intent(in) :: l1,l2,l3,l4,l5,l6,l7,l8,l9,l10,l11,l12
+   type(form_factor) :: b514_s
+   !
+   b514_s = b514_b(l1,l2,l3,l4,l5,l6,l7,l8,l9,l10,l11,l12,packb(set)) 
+   !
+  end function b514_s
+  function c514_b(l1,l2,l3,l4,l5,l6,l7,l8,l9,l10,b_pin)
+   !
+   integer, intent(in) :: l1,l2,l3,l4,l5,l6,l7,l8,l9,l10,b_pin
+   type(form_factor) :: c514_b
+   !
+   c514_b = 0.25_ki * fnp_generic(5,4,b_pin,10,(/ l1,l2,l3,l4,l5,l6,l7,l8,l9,l10 /))
+   !
+  end function c514_b
+
+  function c514_s(l1,l2,l3,l4,l5,l6,l7,l8,l9,l10,set)
+   !
+   integer, intent (in), dimension(:) :: set
+   integer, intent(in) :: l1,l2,l3,l4,l5,l6,l7,l8,l9,l10
+   type(form_factor) :: c514_s
+   !
+   c514_s = c514_b(l1,l2,l3,l4,l5,l6,l7,l8,l9,l10,packb(set)) 
+   !
+  end function c514_s
+  function d514_b(l1,l2,l3,l4,l5,l6,l7,l8,b_pin)
+   !
+   integer, intent(in) :: l1,l2,l3,l4,l5,l6,l7,l8,b_pin
+   type(form_factor) :: d514_b
+   !
+   d514_b = -0.125_ki * fnp_generic(5,6,b_pin,8,(/ l1,l2,l3,l4,l5,l6,l7,l8 /))
+   !
+  end function d514_b
+
+  function d514_s(l1,l2,l3,l4,l5,l6,l7,l8,set)
+   !
+   integer, intent (in), dimension(:) :: set
+   integer, intent(in) :: l1,l2,l3,l4,l5,l6,l7,l8
+   type(form_factor) :: d514_s
+   !
+   d514_s = d514_b(l1,l2,l3,l4,l5,l6,l7,l8,packb(set)) 
+   !
+  end function d514_s
+  function e514_b(l1,l2,l3,l4,l5,l6,b_pin)
+   !
+   integer, intent(in) :: l1,l2,l3,l4,l5,l6,b_pin
+   type(form_factor) :: e514_b
+   !
+   e514_b = 0.0625_ki * fnp_generic(5,8,b_pin,6,(/ l1,l2,l3,l4,l5,l6 /))
+   !
+  end function e514_b
+
+  function e514_s(l1,l2,l3,l4,l5,l6,set)
+   !
+   integer, intent (in), dimension(:) :: set
+   integer, intent(in) :: l1,l2,l3,l4,l5,l6
+   type(form_factor) :: e514_s
+   !
+   e514_s = e514_b(l1,l2,l3,l4,l5,l6,packb(set)) 
+   !
+  end function e514_s
+  function f514_b(l1,l2,l3,l4,b_pin)
+   !
+   integer, intent(in) :: l1,l2,l3,l4,b_pin
+   type(form_factor) :: f514_b
+   !
+   f514_b = -0.03125_ki * fnp_generic(5,10,b_pin,4,(/ l1,l2,l3,l4 /))
+   !
+  end function f514_b
+
+  function f514_s(l1,l2,l3,l4,set)
+   !
+   integer, intent (in), dimension(:) :: set
+   integer, intent(in) :: l1,l2,l3,l4
+   type(form_factor) :: f514_s
+   !
+   f514_s = f514_b(l1,l2,l3,l4,packb(set)) 
+   !
+  end function f514_s
+  function g514_b(l1,l2,b_pin)
+   !
+   integer, intent(in) :: l1,l2,b_pin
+   type(form_factor) :: g514_b
+   !
+   g514_b = 0.015625_ki * fnp_generic(5,12,b_pin,2,(/ l1,l2 /))
+   !
+  end function g514_b
+
+  function g514_s(l1,l2,set)
+   !
+   integer, intent (in), dimension(:) :: set
+   integer, intent(in) :: l1,l2
+   type(form_factor) :: g514_s
+   !
+   g514_s = g514_b(l1,l2,packb(set)) 
+   !
+  end function g514_s
+  function h514_b(b_pin)
+   !
+   integer, intent(in) :: b_pin
+   type(form_factor) :: h514_b
+   !
+   h514_b = -0.0078125_ki * fnp_generic(5,14,b_pin,0,no_feynmanparam)
+   !
+  end function h514_b
+
+  function h514_s(set)
+   !
+   integer, intent (in), dimension(:) :: set
+   type(form_factor) :: h514_s
+   !
+   h514_s = h514_b(packb(set)) 
+   !
+  end function h514_s
+
+  function a515_b(l1,l2,l3,l4,l5,l6,l7,l8,l9,l10,l11,l12,l13,l14,l15,b_pin)
+   !
+   integer, intent(in) :: l1,l2,l3,l4,l5,l6,l7,l8,l9,l10,l11,l12,l13,l14,l15,b_pin
+   type(form_factor) :: a515_b
+   !
+   a515_b = -1.0_ki * fnp_generic(5,0,b_pin,15,(/ l1,l2,l3,l4,l5,l6,l7,l8,l9,l10,l11,l12,l13,l14,l15 /))
+   !
+  end function a515_b
+
+  function a515_s(l1,l2,l3,l4,l5,l6,l7,l8,l9,l10,l11,l12,l13,l14,l15,set)
+   !
+   integer, intent (in), dimension(:) :: set
+   integer, intent(in) :: l1,l2,l3,l4,l5,l6,l7,l8,l9,l10,l11,l12,l13,l14,l15
+   type(form_factor) :: a515_s
+   !
+   a515_s = a515_b(l1,l2,l3,l4,l5,l6,l7,l8,l9,l10,l11,l12,l13,l14,l15,packb(set)) 
+   !
+  end function a515_s
+  function b515_b(l1,l2,l3,l4,l5,l6,l7,l8,l9,l10,l11,l12,l13,b_pin)
+   !
+   integer, intent(in) :: l1,l2,l3,l4,l5,l6,l7,l8,l9,l10,l11,l12,l13,b_pin
+   type(form_factor) :: b515_b
+   !
+   b515_b = 0.5_ki * fnp_generic(5,2,b_pin,13,(/ l1,l2,l3,l4,l5,l6,l7,l8,l9,l10,l11,l12,l13 /))
+   !
+  end function b515_b
+
+  function b515_s(l1,l2,l3,l4,l5,l6,l7,l8,l9,l10,l11,l12,l13,set)
+   !
+   integer, intent (in), dimension(:) :: set
+   integer, intent(in) :: l1,l2,l3,l4,l5,l6,l7,l8,l9,l10,l11,l12,l13
+   type(form_factor) :: b515_s
+   !
+   b515_s = b515_b(l1,l2,l3,l4,l5,l6,l7,l8,l9,l10,l11,l12,l13,packb(set)) 
+   !
+  end function b515_s
+  function c515_b(l1,l2,l3,l4,l5,l6,l7,l8,l9,l10,l11,b_pin)
+   !
+   integer, intent(in) :: l1,l2,l3,l4,l5,l6,l7,l8,l9,l10,l11,b_pin
+   type(form_factor) :: c515_b
+   !
+   c515_b = -0.25_ki * fnp_generic(5,4,b_pin,11,(/ l1,l2,l3,l4,l5,l6,l7,l8,l9,l10,l11 /))
+   !
+  end function c515_b
+
+  function c515_s(l1,l2,l3,l4,l5,l6,l7,l8,l9,l10,l11,set)
+   !
+   integer, intent (in), dimension(:) :: set
+   integer, intent(in) :: l1,l2,l3,l4,l5,l6,l7,l8,l9,l10,l11
+   type(form_factor) :: c515_s
+   !
+   c515_s = c515_b(l1,l2,l3,l4,l5,l6,l7,l8,l9,l10,l11,packb(set)) 
+   !
+  end function c515_s
+  function d515_b(l1,l2,l3,l4,l5,l6,l7,l8,l9,b_pin)
+   !
+   integer, intent(in) :: l1,l2,l3,l4,l5,l6,l7,l8,l9,b_pin
+   type(form_factor) :: d515_b
+   !
+   d515_b = 0.125_ki * fnp_generic(5,6,b_pin,9,(/ l1,l2,l3,l4,l5,l6,l7,l8,l9 /))
+   !
+  end function d515_b
+
+  function d515_s(l1,l2,l3,l4,l5,l6,l7,l8,l9,set)
+   !
+   integer, intent (in), dimension(:) :: set
+   integer, intent(in) :: l1,l2,l3,l4,l5,l6,l7,l8,l9
+   type(form_factor) :: d515_s
+   !
+   d515_s = d515_b(l1,l2,l3,l4,l5,l6,l7,l8,l9,packb(set)) 
+   !
+  end function d515_s
+  function e515_b(l1,l2,l3,l4,l5,l6,l7,b_pin)
+   !
+   integer, intent(in) :: l1,l2,l3,l4,l5,l6,l7,b_pin
+   type(form_factor) :: e515_b
+   !
+   e515_b = -0.0625_ki * fnp_generic(5,8,b_pin,7,(/ l1,l2,l3,l4,l5,l6,l7 /))
+   !
+  end function e515_b
+
+  function e515_s(l1,l2,l3,l4,l5,l6,l7,set)
+   !
+   integer, intent (in), dimension(:) :: set
+   integer, intent(in) :: l1,l2,l3,l4,l5,l6,l7
+   type(form_factor) :: e515_s
+   !
+   e515_s = e515_b(l1,l2,l3,l4,l5,l6,l7,packb(set)) 
+   !
+  end function e515_s
+  function f515_b(l1,l2,l3,l4,l5,b_pin)
+   !
+   integer, intent(in) :: l1,l2,l3,l4,l5,b_pin
+   type(form_factor) :: f515_b
+   !
+   f515_b = 0.03125_ki * fnp_generic(5,10,b_pin,5,(/ l1,l2,l3,l4,l5 /))
+   !
+  end function f515_b
+
+  function f515_s(l1,l2,l3,l4,l5,set)
+   !
+   integer, intent (in), dimension(:) :: set
+   integer, intent(in) :: l1,l2,l3,l4,l5
+   type(form_factor) :: f515_s
+   !
+   f515_s = f515_b(l1,l2,l3,l4,l5,packb(set)) 
+   !
+  end function f515_s
+  function g515_b(l1,l2,l3,b_pin)
+   !
+   integer, intent(in) :: l1,l2,l3,b_pin
+   type(form_factor) :: g515_b
+   !
+   g515_b = -0.015625_ki * fnp_generic(5,12,b_pin,3,(/ l1,l2,l3 /))
+   !
+  end function g515_b
+
+  function g515_s(l1,l2,l3,set)
+   !
+   integer, intent (in), dimension(:) :: set
+   integer, intent(in) :: l1,l2,l3
+   type(form_factor) :: g515_s
+   !
+   g515_s = g515_b(l1,l2,l3,packb(set)) 
+   !
+  end function g515_s
+  function h515_b(l1,b_pin)
+   !
+   integer, intent(in) :: l1,b_pin
+   type(form_factor) :: h515_b
+   !
+   h515_b = 0.0078125_ki * fnp_generic(5,14,b_pin,1,(/ l1 /))
+   !
+  end function h515_b
+
+  function h515_s(l1,set)
+   !
+   integer, intent (in), dimension(:) :: set
+   integer, intent(in) :: l1
+   type(form_factor) :: h515_s
+   !
+   h515_s = h515_b(l1,packb(set)) 
+   !
+  end function h515_s
+
+  function a516_b(l1,l2,l3,l4,l5,l6,l7,l8,l9,l10,l11,l12,l13,l14,l15,l16,b_pin)
+   !
+   integer, intent(in) :: l1,l2,l3,l4,l5,l6,l7,l8,l9,l10,l11,l12,l13,l14,l15,l16,b_pin
+   type(form_factor) :: a516_b
+   !
+   a516_b = fnp_generic(5,0,b_pin,16,(/ l1,l2,l3,l4,l5,l6,l7,l8,l9,l10,l11,l12,l13,l14,l15,l16 /))
+   !
+  end function a516_b
+
+  function a516_s(l1,l2,l3,l4,l5,l6,l7,l8,l9,l10,l11,l12,l13,l14,l15,l16,set)
+   !
+   integer, intent (in), dimension(:) :: set
+   integer, intent(in) :: l1,l2,l3,l4,l5,l6,l7,l8,l9,l10,l11,l12,l13,l14,l15,l16
+   type(form_factor) :: a516_s
+   !
+   a516_s = a516_b(l1,l2,l3,l4,l5,l6,l7,l8,l9,l10,l11,l12,l13,l14,l15,l16,packb(set)) 
+   !
+  end function a516_s
+  function b516_b(l1,l2,l3,l4,l5,l6,l7,l8,l9,l10,l11,l12,l13,l14,b_pin)
+   !
+   integer, intent(in) :: l1,l2,l3,l4,l5,l6,l7,l8,l9,l10,l11,l12,l13,l14,b_pin
+   type(form_factor) :: b516_b
+   !
+   b516_b = -0.5_ki * fnp_generic(5,2,b_pin,14,(/ l1,l2,l3,l4,l5,l6,l7,l8,l9,l10,l11,l12,l13,l14 /))
+   !
+  end function b516_b
+
+  function b516_s(l1,l2,l3,l4,l5,l6,l7,l8,l9,l10,l11,l12,l13,l14,set)
+   !
+   integer, intent (in), dimension(:) :: set
+   integer, intent(in) :: l1,l2,l3,l4,l5,l6,l7,l8,l9,l10,l11,l12,l13,l14
+   type(form_factor) :: b516_s
+   !
+   b516_s = b516_b(l1,l2,l3,l4,l5,l6,l7,l8,l9,l10,l11,l12,l13,l14,packb(set)) 
+   !
+  end function b516_s
+  function c516_b(l1,l2,l3,l4,l5,l6,l7,l8,l9,l10,l11,l12,b_pin)
+   !
+   integer, intent(in) :: l1,l2,l3,l4,l5,l6,l7,l8,l9,l10,l11,l12,b_pin
+   type(form_factor) :: c516_b
+   !
+   c516_b = 0.25_ki * fnp_generic(5,4,b_pin,12,(/ l1,l2,l3,l4,l5,l6,l7,l8,l9,l10,l11,l12 /))
+   !
+  end function c516_b
+
+  function c516_s(l1,l2,l3,l4,l5,l6,l7,l8,l9,l10,l11,l12,set)
+   !
+   integer, intent (in), dimension(:) :: set
+   integer, intent(in) :: l1,l2,l3,l4,l5,l6,l7,l8,l9,l10,l11,l12
+   type(form_factor) :: c516_s
+   !
+   c516_s = c516_b(l1,l2,l3,l4,l5,l6,l7,l8,l9,l10,l11,l12,packb(set)) 
+   !
+  end function c516_s
+  function d516_b(l1,l2,l3,l4,l5,l6,l7,l8,l9,l10,b_pin)
+   !
+   integer, intent(in) :: l1,l2,l3,l4,l5,l6,l7,l8,l9,l10,b_pin
+   type(form_factor) :: d516_b
+   !
+   d516_b = -0.125_ki * fnp_generic(5,6,b_pin,10,(/ l1,l2,l3,l4,l5,l6,l7,l8,l9,l10 /))
+   !
+  end function d516_b
+
+  function d516_s(l1,l2,l3,l4,l5,l6,l7,l8,l9,l10,set)
+   !
+   integer, intent (in), dimension(:) :: set
+   integer, intent(in) :: l1,l2,l3,l4,l5,l6,l7,l8,l9,l10
+   type(form_factor) :: d516_s
+   !
+   d516_s = d516_b(l1,l2,l3,l4,l5,l6,l7,l8,l9,l10,packb(set)) 
+   !
+  end function d516_s
+  function e516_b(l1,l2,l3,l4,l5,l6,l7,l8,b_pin)
+   !
+   integer, intent(in) :: l1,l2,l3,l4,l5,l6,l7,l8,b_pin
+   type(form_factor) :: e516_b
+   !
+   e516_b = 0.0625_ki * fnp_generic(5,8,b_pin,8,(/ l1,l2,l3,l4,l5,l6,l7,l8 /))
+   !
+  end function e516_b
+
+  function e516_s(l1,l2,l3,l4,l5,l6,l7,l8,set)
+   !
+   integer, intent (in), dimension(:) :: set
+   integer, intent(in) :: l1,l2,l3,l4,l5,l6,l7,l8
+   type(form_factor) :: e516_s
+   !
+   e516_s = e516_b(l1,l2,l3,l4,l5,l6,l7,l8,packb(set)) 
+   !
+  end function e516_s
+  function f516_b(l1,l2,l3,l4,l5,l6,b_pin)
+   !
+   integer, intent(in) :: l1,l2,l3,l4,l5,l6,b_pin
+   type(form_factor) :: f516_b
+   !
+   f516_b = -0.03125_ki * fnp_generic(5,10,b_pin,6,(/ l1,l2,l3,l4,l5,l6 /))
+   !
+  end function f516_b
+
+  function f516_s(l1,l2,l3,l4,l5,l6,set)
+   !
+   integer, intent (in), dimension(:) :: set
+   integer, intent(in) :: l1,l2,l3,l4,l5,l6
+   type(form_factor) :: f516_s
+   !
+   f516_s = f516_b(l1,l2,l3,l4,l5,l6,packb(set)) 
+   !
+  end function f516_s
+  function g516_b(l1,l2,l3,l4,b_pin)
+   !
+   integer, intent(in) :: l1,l2,l3,l4,b_pin
+   type(form_factor) :: g516_b
+   !
+   g516_b = 0.015625_ki * fnp_generic(5,12,b_pin,4,(/ l1,l2,l3,l4 /))
+   !
+  end function g516_b
+
+  function g516_s(l1,l2,l3,l4,set)
+   !
+   integer, intent (in), dimension(:) :: set
+   integer, intent(in) :: l1,l2,l3,l4
+   type(form_factor) :: g516_s
+   !
+   g516_s = g516_b(l1,l2,l3,l4,packb(set)) 
+   !
+  end function g516_s
+  function h516_b(l1,l2,b_pin)
+   !
+   integer, intent(in) :: l1,l2,b_pin
+   type(form_factor) :: h516_b
+   !
+   h516_b = -0.0078125_ki * fnp_generic(5,14,b_pin,2,(/ l1,l2 /))
+   !
+  end function h516_b
+
+  function h516_s(l1,l2,set)
+   !
+   integer, intent (in), dimension(:) :: set
+   integer, intent(in) :: l1,l2
+   type(form_factor) :: h516_s
+   !
+   h516_s = h516_b(l1,l2,packb(set)) 
+   !
+  end function h516_s
+  function i516_b(b_pin)
+   !
+   integer, intent(in) :: b_pin
+   type(form_factor) :: i516_b
+   !
+   i516_b = 0.00390625_ki * fnp_generic(5,16,b_pin,0,no_feynmanparam)
+   !
+  end function i516_b
+
+  function i516_s(set)
+   !
+   integer, intent (in), dimension(:) :: set
+   type(form_factor) :: i516_s
+   !
+   i516_s = i516_b(packb(set)) 
+   !
+  end function i516_s
+
+  function a517_b(l1,l2,l3,l4,l5,l6,l7,l8,l9,l10,l11,l12,l13,l14,l15,l16,l17,b_pin)
+   !
+   integer, intent(in) :: l1,l2,l3,l4,l5,l6,l7,l8,l9,l10,l11,l12,l13,l14,l15,l16,l17,b_pin
+   type(form_factor) :: a517_b
+   !
+   a517_b = -1.0_ki * fnp_generic(5,0,b_pin,17,(/ l1,l2,l3,l4,l5,l6,l7,l8,l9,l10,l11,l12,l13,l14,l15,l16,l17 /))
+   !
+  end function a517_b
+
+  function a517_s(l1,l2,l3,l4,l5,l6,l7,l8,l9,l10,l11,l12,l13,l14,l15,l16,l17,set)
+   !
+   integer, intent (in), dimension(:) :: set
+   integer, intent(in) :: l1,l2,l3,l4,l5,l6,l7,l8,l9,l10,l11,l12,l13,l14,l15,l16,l17
+   type(form_factor) :: a517_s
+   !
+   a517_s = a517_b(l1,l2,l3,l4,l5,l6,l7,l8,l9,l10,l11,l12,l13,l14,l15,l16,l17,packb(set)) 
+   !
+  end function a517_s
+  function b517_b(l1,l2,l3,l4,l5,l6,l7,l8,l9,l10,l11,l12,l13,l14,l15,b_pin)
+   !
+   integer, intent(in) :: l1,l2,l3,l4,l5,l6,l7,l8,l9,l10,l11,l12,l13,l14,l15,b_pin
+   type(form_factor) :: b517_b
+   !
+   b517_b = 0.5_ki * fnp_generic(5,2,b_pin,15,(/ l1,l2,l3,l4,l5,l6,l7,l8,l9,l10,l11,l12,l13,l14,l15 /))
+   !
+  end function b517_b
+
+  function b517_s(l1,l2,l3,l4,l5,l6,l7,l8,l9,l10,l11,l12,l13,l14,l15,set)
+   !
+   integer, intent (in), dimension(:) :: set
+   integer, intent(in) :: l1,l2,l3,l4,l5,l6,l7,l8,l9,l10,l11,l12,l13,l14,l15
+   type(form_factor) :: b517_s
+   !
+   b517_s = b517_b(l1,l2,l3,l4,l5,l6,l7,l8,l9,l10,l11,l12,l13,l14,l15,packb(set)) 
+   !
+  end function b517_s
+  function c517_b(l1,l2,l3,l4,l5,l6,l7,l8,l9,l10,l11,l12,l13,b_pin)
+   !
+   integer, intent(in) :: l1,l2,l3,l4,l5,l6,l7,l8,l9,l10,l11,l12,l13,b_pin
+   type(form_factor) :: c517_b
+   !
+   c517_b = -0.25_ki * fnp_generic(5,4,b_pin,13,(/ l1,l2,l3,l4,l5,l6,l7,l8,l9,l10,l11,l12,l13 /))
+   !
+  end function c517_b
+
+  function c517_s(l1,l2,l3,l4,l5,l6,l7,l8,l9,l10,l11,l12,l13,set)
+   !
+   integer, intent (in), dimension(:) :: set
+   integer, intent(in) :: l1,l2,l3,l4,l5,l6,l7,l8,l9,l10,l11,l12,l13
+   type(form_factor) :: c517_s
+   !
+   c517_s = c517_b(l1,l2,l3,l4,l5,l6,l7,l8,l9,l10,l11,l12,l13,packb(set)) 
+   !
+  end function c517_s
+  function d517_b(l1,l2,l3,l4,l5,l6,l7,l8,l9,l10,l11,b_pin)
+   !
+   integer, intent(in) :: l1,l2,l3,l4,l5,l6,l7,l8,l9,l10,l11,b_pin
+   type(form_factor) :: d517_b
+   !
+   d517_b = 0.125_ki * fnp_generic(5,6,b_pin,11,(/ l1,l2,l3,l4,l5,l6,l7,l8,l9,l10,l11 /))
+   !
+  end function d517_b
+
+  function d517_s(l1,l2,l3,l4,l5,l6,l7,l8,l9,l10,l11,set)
+   !
+   integer, intent (in), dimension(:) :: set
+   integer, intent(in) :: l1,l2,l3,l4,l5,l6,l7,l8,l9,l10,l11
+   type(form_factor) :: d517_s
+   !
+   d517_s = d517_b(l1,l2,l3,l4,l5,l6,l7,l8,l9,l10,l11,packb(set)) 
+   !
+  end function d517_s
+  function e517_b(l1,l2,l3,l4,l5,l6,l7,l8,l9,b_pin)
+   !
+   integer, intent(in) :: l1,l2,l3,l4,l5,l6,l7,l8,l9,b_pin
+   type(form_factor) :: e517_b
+   !
+   e517_b = -0.0625_ki * fnp_generic(5,8,b_pin,9,(/ l1,l2,l3,l4,l5,l6,l7,l8,l9 /))
+   !
+  end function e517_b
+
+  function e517_s(l1,l2,l3,l4,l5,l6,l7,l8,l9,set)
+   !
+   integer, intent (in), dimension(:) :: set
+   integer, intent(in) :: l1,l2,l3,l4,l5,l6,l7,l8,l9
+   type(form_factor) :: e517_s
+   !
+   e517_s = e517_b(l1,l2,l3,l4,l5,l6,l7,l8,l9,packb(set)) 
+   !
+  end function e517_s
+  function f517_b(l1,l2,l3,l4,l5,l6,l7,b_pin)
+   !
+   integer, intent(in) :: l1,l2,l3,l4,l5,l6,l7,b_pin
+   type(form_factor) :: f517_b
+   !
+   f517_b = 0.03125_ki * fnp_generic(5,10,b_pin,7,(/ l1,l2,l3,l4,l5,l6,l7 /))
+   !
+  end function f517_b
+
+  function f517_s(l1,l2,l3,l4,l5,l6,l7,set)
+   !
+   integer, intent (in), dimension(:) :: set
+   integer, intent(in) :: l1,l2,l3,l4,l5,l6,l7
+   type(form_factor) :: f517_s
+   !
+   f517_s = f517_b(l1,l2,l3,l4,l5,l6,l7,packb(set)) 
+   !
+  end function f517_s
+  function g517_b(l1,l2,l3,l4,l5,b_pin)
+   !
+   integer, intent(in) :: l1,l2,l3,l4,l5,b_pin
+   type(form_factor) :: g517_b
+   !
+   g517_b = -0.015625_ki * fnp_generic(5,12,b_pin,5,(/ l1,l2,l3,l4,l5 /))
+   !
+  end function g517_b
+
+  function g517_s(l1,l2,l3,l4,l5,set)
+   !
+   integer, intent (in), dimension(:) :: set
+   integer, intent(in) :: l1,l2,l3,l4,l5
+   type(form_factor) :: g517_s
+   !
+   g517_s = g517_b(l1,l2,l3,l4,l5,packb(set)) 
+   !
+  end function g517_s
+  function h517_b(l1,l2,l3,b_pin)
+   !
+   integer, intent(in) :: l1,l2,l3,b_pin
+   type(form_factor) :: h517_b
+   !
+   h517_b = 0.0078125_ki * fnp_generic(5,14,b_pin,3,(/ l1,l2,l3 /))
+   !
+  end function h517_b
+
+  function h517_s(l1,l2,l3,set)
+   !
+   integer, intent (in), dimension(:) :: set
+   integer, intent(in) :: l1,l2,l3
+   type(form_factor) :: h517_s
+   !
+   h517_s = h517_b(l1,l2,l3,packb(set)) 
+   !
+  end function h517_s
+  function i517_b(l1,b_pin)
+   !
+   integer, intent(in) :: l1,b_pin
+   type(form_factor) :: i517_b
+   !
+   i517_b = -0.00390625_ki * fnp_generic(5,16,b_pin,1,(/ l1 /))
+   !
+  end function i517_b
+
+  function i517_s(l1,set)
+   !
+   integer, intent (in), dimension(:) :: set
+   integer, intent(in) :: l1
+   type(form_factor) :: i517_s
+   !
+   i517_s = i517_b(l1,packb(set)) 
+   !
+  end function i517_s
+
+  function a518_b(l1,l2,l3,l4,l5,l6,l7,l8,l9,l10,l11,l12,l13,l14,l15,l16,l17,l18,b_pin)
+   !
+   integer, intent(in) :: l1,l2,l3,l4,l5,l6,l7,l8,l9,l10,l11,l12,l13,l14,l15,l16,l17,l18,b_pin
+   type(form_factor) :: a518_b
+   !
+   a518_b = fnp_generic(5,0,b_pin,18,(/ l1,l2,l3,l4,l5,l6,l7,l8,l9,l10,l11,l12,l13,l14,l15,l16,l17,l18 /))
+   !
+  end function a518_b
+
+  function a518_s(l1,l2,l3,l4,l5,l6,l7,l8,l9,l10,l11,l12,l13,l14,l15,l16,l17,l18,set)
+   !
+   integer, intent (in), dimension(:) :: set
+   integer, intent(in) :: l1,l2,l3,l4,l5,l6,l7,l8,l9,l10,l11,l12,l13,l14,l15,l16,l17,l18
+   type(form_factor) :: a518_s
+   !
+   a518_s = a518_b(l1,l2,l3,l4,l5,l6,l7,l8,l9,l10,l11,l12,l13,l14,l15,l16,l17,l18,packb(set)) 
+   !
+  end function a518_s
+  function b518_b(l1,l2,l3,l4,l5,l6,l7,l8,l9,l10,l11,l12,l13,l14,l15,l16,b_pin)
+   !
+   integer, intent(in) :: l1,l2,l3,l4,l5,l6,l7,l8,l9,l10,l11,l12,l13,l14,l15,l16,b_pin
+   type(form_factor) :: b518_b
+   !
+   b518_b = -0.5_ki * fnp_generic(5,2,b_pin,16,(/ l1,l2,l3,l4,l5,l6,l7,l8,l9,l10,l11,l12,l13,l14,l15,l16 /))
+   !
+  end function b518_b
+
+  function b518_s(l1,l2,l3,l4,l5,l6,l7,l8,l9,l10,l11,l12,l13,l14,l15,l16,set)
+   !
+   integer, intent (in), dimension(:) :: set
+   integer, intent(in) :: l1,l2,l3,l4,l5,l6,l7,l8,l9,l10,l11,l12,l13,l14,l15,l16
+   type(form_factor) :: b518_s
+   !
+   b518_s = b518_b(l1,l2,l3,l4,l5,l6,l7,l8,l9,l10,l11,l12,l13,l14,l15,l16,packb(set)) 
+   !
+  end function b518_s
+  function c518_b(l1,l2,l3,l4,l5,l6,l7,l8,l9,l10,l11,l12,l13,l14,b_pin)
+   !
+   integer, intent(in) :: l1,l2,l3,l4,l5,l6,l7,l8,l9,l10,l11,l12,l13,l14,b_pin
+   type(form_factor) :: c518_b
+   !
+   c518_b = 0.25_ki * fnp_generic(5,4,b_pin,14,(/ l1,l2,l3,l4,l5,l6,l7,l8,l9,l10,l11,l12,l13,l14 /))
+   !
+  end function c518_b
+
+  function c518_s(l1,l2,l3,l4,l5,l6,l7,l8,l9,l10,l11,l12,l13,l14,set)
+   !
+   integer, intent (in), dimension(:) :: set
+   integer, intent(in) :: l1,l2,l3,l4,l5,l6,l7,l8,l9,l10,l11,l12,l13,l14
+   type(form_factor) :: c518_s
+   !
+   c518_s = c518_b(l1,l2,l3,l4,l5,l6,l7,l8,l9,l10,l11,l12,l13,l14,packb(set)) 
+   !
+  end function c518_s
+  function d518_b(l1,l2,l3,l4,l5,l6,l7,l8,l9,l10,l11,l12,b_pin)
+   !
+   integer, intent(in) :: l1,l2,l3,l4,l5,l6,l7,l8,l9,l10,l11,l12,b_pin
+   type(form_factor) :: d518_b
+   !
+   d518_b = -0.125_ki * fnp_generic(5,6,b_pin,12,(/ l1,l2,l3,l4,l5,l6,l7,l8,l9,l10,l11,l12 /))
+   !
+  end function d518_b
+
+  function d518_s(l1,l2,l3,l4,l5,l6,l7,l8,l9,l10,l11,l12,set)
+   !
+   integer, intent (in), dimension(:) :: set
+   integer, intent(in) :: l1,l2,l3,l4,l5,l6,l7,l8,l9,l10,l11,l12
+   type(form_factor) :: d518_s
+   !
+   d518_s = d518_b(l1,l2,l3,l4,l5,l6,l7,l8,l9,l10,l11,l12,packb(set)) 
+   !
+  end function d518_s
+  function e518_b(l1,l2,l3,l4,l5,l6,l7,l8,l9,l10,b_pin)
+   !
+   integer, intent(in) :: l1,l2,l3,l4,l5,l6,l7,l8,l9,l10,b_pin
+   type(form_factor) :: e518_b
+   !
+   e518_b = 0.0625_ki * fnp_generic(5,8,b_pin,10,(/ l1,l2,l3,l4,l5,l6,l7,l8,l9,l10 /))
+   !
+  end function e518_b
+
+  function e518_s(l1,l2,l3,l4,l5,l6,l7,l8,l9,l10,set)
+   !
+   integer, intent (in), dimension(:) :: set
+   integer, intent(in) :: l1,l2,l3,l4,l5,l6,l7,l8,l9,l10
+   type(form_factor) :: e518_s
+   !
+   e518_s = e518_b(l1,l2,l3,l4,l5,l6,l7,l8,l9,l10,packb(set)) 
+   !
+  end function e518_s
+  function f518_b(l1,l2,l3,l4,l5,l6,l7,l8,b_pin)
+   !
+   integer, intent(in) :: l1,l2,l3,l4,l5,l6,l7,l8,b_pin
+   type(form_factor) :: f518_b
+   !
+   f518_b = -0.03125_ki * fnp_generic(5,10,b_pin,8,(/ l1,l2,l3,l4,l5,l6,l7,l8 /))
+   !
+  end function f518_b
+
+  function f518_s(l1,l2,l3,l4,l5,l6,l7,l8,set)
+   !
+   integer, intent (in), dimension(:) :: set
+   integer, intent(in) :: l1,l2,l3,l4,l5,l6,l7,l8
+   type(form_factor) :: f518_s
+   !
+   f518_s = f518_b(l1,l2,l3,l4,l5,l6,l7,l8,packb(set)) 
+   !
+  end function f518_s
+  function g518_b(l1,l2,l3,l4,l5,l6,b_pin)
+   !
+   integer, intent(in) :: l1,l2,l3,l4,l5,l6,b_pin
+   type(form_factor) :: g518_b
+   !
+   g518_b = 0.015625_ki * fnp_generic(5,12,b_pin,6,(/ l1,l2,l3,l4,l5,l6 /))
+   !
+  end function g518_b
+
+  function g518_s(l1,l2,l3,l4,l5,l6,set)
+   !
+   integer, intent (in), dimension(:) :: set
+   integer, intent(in) :: l1,l2,l3,l4,l5,l6
+   type(form_factor) :: g518_s
+   !
+   g518_s = g518_b(l1,l2,l3,l4,l5,l6,packb(set)) 
+   !
+  end function g518_s
+  function h518_b(l1,l2,l3,l4,b_pin)
+   !
+   integer, intent(in) :: l1,l2,l3,l4,b_pin
+   type(form_factor) :: h518_b
+   !
+   h518_b = -0.0078125_ki * fnp_generic(5,14,b_pin,4,(/ l1,l2,l3,l4 /))
+   !
+  end function h518_b
+
+  function h518_s(l1,l2,l3,l4,set)
+   !
+   integer, intent (in), dimension(:) :: set
+   integer, intent(in) :: l1,l2,l3,l4
+   type(form_factor) :: h518_s
+   !
+   h518_s = h518_b(l1,l2,l3,l4,packb(set)) 
+   !
+  end function h518_s
+  function i518_b(l1,l2,b_pin)
+   !
+   integer, intent(in) :: l1,l2,b_pin
+   type(form_factor) :: i518_b
+   !
+   i518_b = 0.00390625_ki * fnp_generic(5,16,b_pin,2,(/ l1,l2 /))
+   !
+  end function i518_b
+
+  function i518_s(l1,l2,set)
+   !
+   integer, intent (in), dimension(:) :: set
+   integer, intent(in) :: l1,l2
+   type(form_factor) :: i518_s
+   !
+   i518_s = i518_b(l1,l2,packb(set)) 
+   !
+  end function i518_s
+  function j518_b(b_pin)
+   !
+   integer, intent(in) :: b_pin
+   type(form_factor) :: j518_b
+   !
+   j518_b = -0.001953125_ki * fnp_generic(5,18,b_pin,0,no_feynmanparam)
+   !
+  end function j518_b
+
+  function j518_s(set)
+   !
+   integer, intent (in), dimension(:) :: set
+   type(form_factor) :: j518_s
+   !
+   j518_s = j518_b(packb(set)) 
+   !
+  end function j518_s
+
+  function a519_b(l1,l2,l3,l4,l5,l6,l7,l8,l9,l10,l11,l12,l13,l14,l15,l16,l17,l18,l19,b_pin)
+   !
+   integer, intent(in) :: l1,l2,l3,l4,l5,l6,l7,l8,l9,l10,l11,l12,l13,l14,l15,l16,l17,l18,l19,b_pin
+   type(form_factor) :: a519_b
+   !
+   a519_b = -1.0_ki * fnp_generic(5,0,b_pin,19,(/ l1,l2,l3,l4,l5,l6,l7,l8,l9,l10,l11,l12,l13,l14,l15,l16,l17,l18,l19 /))
+   !
+  end function a519_b
+
+  function a519_s(l1,l2,l3,l4,l5,l6,l7,l8,l9,l10,l11,l12,l13,l14,l15,l16,l17,l18,l19,set)
+   !
+   integer, intent (in), dimension(:) :: set
+   integer, intent(in) :: l1,l2,l3,l4,l5,l6,l7,l8,l9,l10,l11,l12,l13,l14,l15,l16,l17,l18,l19
+   type(form_factor) :: a519_s
+   !
+   a519_s = a519_b(l1,l2,l3,l4,l5,l6,l7,l8,l9,l10,l11,l12,l13,l14,l15,l16,l17,l18,l19,packb(set)) 
+   !
+  end function a519_s
+  function b519_b(l1,l2,l3,l4,l5,l6,l7,l8,l9,l10,l11,l12,l13,l14,l15,l16,l17,b_pin)
+   !
+   integer, intent(in) :: l1,l2,l3,l4,l5,l6,l7,l8,l9,l10,l11,l12,l13,l14,l15,l16,l17,b_pin
+   type(form_factor) :: b519_b
+   !
+   b519_b = 0.5_ki * fnp_generic(5,2,b_pin,17,(/ l1,l2,l3,l4,l5,l6,l7,l8,l9,l10,l11,l12,l13,l14,l15,l16,l17 /))
+   !
+  end function b519_b
+
+  function b519_s(l1,l2,l3,l4,l5,l6,l7,l8,l9,l10,l11,l12,l13,l14,l15,l16,l17,set)
+   !
+   integer, intent (in), dimension(:) :: set
+   integer, intent(in) :: l1,l2,l3,l4,l5,l6,l7,l8,l9,l10,l11,l12,l13,l14,l15,l16,l17
+   type(form_factor) :: b519_s
+   !
+   b519_s = b519_b(l1,l2,l3,l4,l5,l6,l7,l8,l9,l10,l11,l12,l13,l14,l15,l16,l17,packb(set)) 
+   !
+  end function b519_s
+  function c519_b(l1,l2,l3,l4,l5,l6,l7,l8,l9,l10,l11,l12,l13,l14,l15,b_pin)
+   !
+   integer, intent(in) :: l1,l2,l3,l4,l5,l6,l7,l8,l9,l10,l11,l12,l13,l14,l15,b_pin
+   type(form_factor) :: c519_b
+   !
+   c519_b = -0.25_ki * fnp_generic(5,4,b_pin,15,(/ l1,l2,l3,l4,l5,l6,l7,l8,l9,l10,l11,l12,l13,l14,l15 /))
+   !
+  end function c519_b
+
+  function c519_s(l1,l2,l3,l4,l5,l6,l7,l8,l9,l10,l11,l12,l13,l14,l15,set)
+   !
+   integer, intent (in), dimension(:) :: set
+   integer, intent(in) :: l1,l2,l3,l4,l5,l6,l7,l8,l9,l10,l11,l12,l13,l14,l15
+   type(form_factor) :: c519_s
+   !
+   c519_s = c519_b(l1,l2,l3,l4,l5,l6,l7,l8,l9,l10,l11,l12,l13,l14,l15,packb(set)) 
+   !
+  end function c519_s
+  function d519_b(l1,l2,l3,l4,l5,l6,l7,l8,l9,l10,l11,l12,l13,b_pin)
+   !
+   integer, intent(in) :: l1,l2,l3,l4,l5,l6,l7,l8,l9,l10,l11,l12,l13,b_pin
+   type(form_factor) :: d519_b
+   !
+   d519_b = 0.125_ki * fnp_generic(5,6,b_pin,13,(/ l1,l2,l3,l4,l5,l6,l7,l8,l9,l10,l11,l12,l13 /))
+   !
+  end function d519_b
+
+  function d519_s(l1,l2,l3,l4,l5,l6,l7,l8,l9,l10,l11,l12,l13,set)
+   !
+   integer, intent (in), dimension(:) :: set
+   integer, intent(in) :: l1,l2,l3,l4,l5,l6,l7,l8,l9,l10,l11,l12,l13
+   type(form_factor) :: d519_s
+   !
+   d519_s = d519_b(l1,l2,l3,l4,l5,l6,l7,l8,l9,l10,l11,l12,l13,packb(set)) 
+   !
+  end function d519_s
+  function e519_b(l1,l2,l3,l4,l5,l6,l7,l8,l9,l10,l11,b_pin)
+   !
+   integer, intent(in) :: l1,l2,l3,l4,l5,l6,l7,l8,l9,l10,l11,b_pin
+   type(form_factor) :: e519_b
+   !
+   e519_b = -0.0625_ki * fnp_generic(5,8,b_pin,11,(/ l1,l2,l3,l4,l5,l6,l7,l8,l9,l10,l11 /))
+   !
+  end function e519_b
+
+  function e519_s(l1,l2,l3,l4,l5,l6,l7,l8,l9,l10,l11,set)
+   !
+   integer, intent (in), dimension(:) :: set
+   integer, intent(in) :: l1,l2,l3,l4,l5,l6,l7,l8,l9,l10,l11
+   type(form_factor) :: e519_s
+   !
+   e519_s = e519_b(l1,l2,l3,l4,l5,l6,l7,l8,l9,l10,l11,packb(set)) 
+   !
+  end function e519_s
+  function f519_b(l1,l2,l3,l4,l5,l6,l7,l8,l9,b_pin)
+   !
+   integer, intent(in) :: l1,l2,l3,l4,l5,l6,l7,l8,l9,b_pin
+   type(form_factor) :: f519_b
+   !
+   f519_b = 0.03125_ki * fnp_generic(5,10,b_pin,9,(/ l1,l2,l3,l4,l5,l6,l7,l8,l9 /))
+   !
+  end function f519_b
+
+  function f519_s(l1,l2,l3,l4,l5,l6,l7,l8,l9,set)
+   !
+   integer, intent (in), dimension(:) :: set
+   integer, intent(in) :: l1,l2,l3,l4,l5,l6,l7,l8,l9
+   type(form_factor) :: f519_s
+   !
+   f519_s = f519_b(l1,l2,l3,l4,l5,l6,l7,l8,l9,packb(set)) 
+   !
+  end function f519_s
+  function g519_b(l1,l2,l3,l4,l5,l6,l7,b_pin)
+   !
+   integer, intent(in) :: l1,l2,l3,l4,l5,l6,l7,b_pin
+   type(form_factor) :: g519_b
+   !
+   g519_b = -0.015625_ki * fnp_generic(5,12,b_pin,7,(/ l1,l2,l3,l4,l5,l6,l7 /))
+   !
+  end function g519_b
+
+  function g519_s(l1,l2,l3,l4,l5,l6,l7,set)
+   !
+   integer, intent (in), dimension(:) :: set
+   integer, intent(in) :: l1,l2,l3,l4,l5,l6,l7
+   type(form_factor) :: g519_s
+   !
+   g519_s = g519_b(l1,l2,l3,l4,l5,l6,l7,packb(set)) 
+   !
+  end function g519_s
+  function h519_b(l1,l2,l3,l4,l5,b_pin)
+   !
+   integer, intent(in) :: l1,l2,l3,l4,l5,b_pin
+   type(form_factor) :: h519_b
+   !
+   h519_b = 0.0078125_ki * fnp_generic(5,14,b_pin,5,(/ l1,l2,l3,l4,l5 /))
+   !
+  end function h519_b
+
+  function h519_s(l1,l2,l3,l4,l5,set)
+   !
+   integer, intent (in), dimension(:) :: set
+   integer, intent(in) :: l1,l2,l3,l4,l5
+   type(form_factor) :: h519_s
+   !
+   h519_s = h519_b(l1,l2,l3,l4,l5,packb(set)) 
+   !
+  end function h519_s
+  function i519_b(l1,l2,l3,b_pin)
+   !
+   integer, intent(in) :: l1,l2,l3,b_pin
+   type(form_factor) :: i519_b
+   !
+   i519_b = -0.00390625_ki * fnp_generic(5,16,b_pin,3,(/ l1,l2,l3 /))
+   !
+  end function i519_b
+
+  function i519_s(l1,l2,l3,set)
+   !
+   integer, intent (in), dimension(:) :: set
+   integer, intent(in) :: l1,l2,l3
+   type(form_factor) :: i519_s
+   !
+   i519_s = i519_b(l1,l2,l3,packb(set)) 
+   !
+  end function i519_s
+  function j519_b(l1,b_pin)
+   !
+   integer, intent(in) :: l1,b_pin
+   type(form_factor) :: j519_b
+   !
+   j519_b = 0.001953125_ki * fnp_generic(5,18,b_pin,1,(/ l1 /))
+   !
+  end function j519_b
+
+  function j519_s(l1,set)
+   !
+   integer, intent (in), dimension(:) :: set
+   integer, intent(in) :: l1
+   type(form_factor) :: j519_s
+   !
+   j519_s = j519_b(l1,packb(set)) 
+   !
+  end function j519_s
 
 end module form_factor_higher_ranks
