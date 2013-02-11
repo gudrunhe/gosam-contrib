@@ -632,9 +632,9 @@ contains
 @case_wout_golem@        print*, "isca=3: Golem95 not available"
 @case_wout_golem@        stop
       elseif (isca.eq.4) then
-@case_with_lt@        tot4(-2) = 0
-@case_with_lt@        tot4(-1) = 0
-@case_with_lt@        tot4(0)  = 0
+@case_with_lt@        tot4(-2) = czip
+@case_with_lt@        tot4(-1) = czip
+@case_with_lt@        tot4(0)  = czip
 @case_with_lt@        ep = -dim(0, int(getlambda()))
 @case_with_lt@        if (present(cache_flag)) then
 @case_with_lt@           if (cache_flag) then
@@ -934,8 +934,8 @@ contains
 
       tot2r= + B06*c2(9)
 
-      J001(:)=0
-      J111(:)=0
+      J001(:)=czip
+      J111(:)=czip
 
       if (present(cache_flag)) cache_index = lbound(scalar_cache,2)+cache_offset
       if (isca.eq.1) then
@@ -1140,7 +1140,7 @@ contains
         &         + ((two*K12**2*(m0 - m1)**2*c2(2) +  &
         &         K11*K12*(-three*m0*c2(1) + three*m1*c2(1) +  &
         &         two*K12*m0*c2(2) - four*K12*m1*c2(2)) +  &
-        &         K11**2*(6*c2(0) + K12*(-three*c2(1) + two*K12*c2(2))))* &
+        &         K11**2*(six*c2(0) + K12*(-three*c2(1) + two*K12*c2(2))))* &
         &         J01(ep))/(six*K11**2) +  &
         &         (K12*(two*K12*(m0 - m1)*c2(2) +  &
         &         K11*(-three*c2(1) + four*K12*c2(2)))*J1(ep))/(six*K11**2)
@@ -1160,8 +1160,8 @@ contains
                    tot2(ep)=(K12*m0**2*(-three*m0*c2(1) + three*m1*c2(1) &
         &              + two*K12*m0*c2(2))* &
         &              J00(ep))/(six*(m0 - m1)**3) + c2(0)*J01(ep) -  &
-        &              (K12*m1*(m0*m1*(9*c2(1) - 6*K12*c2(2)) -  &
-        &              6*m0**2*(c2(1) - K12*c2(2)) +  &
+        &              (K12*m1*(m0*m1*(nine*c2(1) - six*K12*c2(2)) -  &
+        &              six*m0**2*(c2(1) - K12*c2(2)) +  &
         &              m1**2*(-three*c2(1) + two*K12*c2(2)))*J11(ep))/ &
         &              (six*(m0 - m1)**3)
                 enddo
@@ -1186,7 +1186,7 @@ contains
                 end if
              end do
              if (highrank) then
-                     write(iout,903) 'B001(',cut2,',',-1,') =',one/24._ki* (K11 - two*m0-four*m1)
+                     write(iout,903) 'B001(',cut2,',',-1,') =',one/24.0_ki* (K11 - two*m0-four*m1)
              end if
           endif
        end if
@@ -1240,9 +1240,9 @@ contains
 		! way-2: derived from scalars, through HJ111.
 		! With the following if statement, way-1 is on; 
 		! Comment out the if statement to use way-2.  
-		!if(isca .ne. 3) then
+		if(isca .ne. 3) then
 			call HJ111(J111,K11,m0,m1,B0p12,B0z11,B0z22)
-		!endif
+		endif
 !------------------------
                   tot2(0) = tot2(0) + c2(13)*(K12**3)*J111(0) + c2(10)*one/12.0_ki* K12 * &
                          & (K11 - two*m0-four*m1)
@@ -1280,30 +1280,34 @@ subroutine HJ111(B31, K11,m0,m1,B0p12,B0z11,B0z22)
 	select case(B31case) 
 	case(0)
 		A1 = &
-		     &        -(K11**3 - K11**2*m0 + K11*m0**2 - m0**3 + 3*K11**2*m1 -  &
-		     &     4*K11*m0*m1 + 3*m0**2*m1 + 3*K11*m1**2 - 3*m0*m1**2 +  &
+		     &        -(K11**3 - K11**2*m0 + K11*m0**2 - m0**3 + three*K11**2*m1 -  &
+		     &     four*K11*m0*m1 + three*m0**2*m1 + three*K11*m1**2 - three*m0*m1**2 +  &
 		     &     m1**3)/(four*K11**3) 
 		A2 = &
-		     &        -(m0*(K11**2 - K11*m0 + m0**2 + 2*K11*m1 - 2*m0*m1 +  &
+		     &        -(m0*(K11**2 - K11*m0 + m0**2 + two*K11*m1 - two*m0*m1 +  &
 		     &       m1**2))/(four*K11**3) 
 		A3 = &
-		     &        (m1*(3*K11**2 - 2*K11*m0 + m0**2 + 3*K11*m1 - 2*m0*m1 +  &
+		     &        (m1*(three*K11**2 - two*K11*m0 + m0**2 + three*K11*m1 - two*m0*m1 +  &
 		     &      m1**2))/(four*K11**3) 
 		A4 = &
-		     &        -(2*K11**3 + 10*K11**2*m0 - 9*K11*m0**2 + 6*m0**3 -  &
-		     &     10*K11**2*m1 + 24*K11*m0*m1 - 18*m0**2*m1 -  &
-		     &     15*K11*m1**2 + 18*m0*m1**2 - 6*m1**3)/(24.0_ki*K11**3) 
-		B31(:) = A1*B0p12(:)+A2*B0z11(:)+A3*B0z22(:)+A4 
+		     &        -(two*K11**3 + 10.0_ki*K11**2*m0 - nine*K11*m0**2 + six*m0**3 -  &
+		     &     10.0_ki*K11**2*m1 + 24.0_ki*K11*m0*m1 - 18.0_ki*m0**2*m1 -  &
+		     &     15.0_ki*K11*m1**2 + 18.0_ki*m0*m1**2 - six*m1**3)/(24.0_ki*K11**3) 
+		B31(0) = A1*B0p12(0)+A2*B0z11(0)+A3*B0z22(:)+A4 
+		B31(-1) = A1*B0p12(-1)+A2*B0z11(-1)+A3*B0z22(-1) 
+		B31(-2) = A1*B0p12(-2)+A2*B0z11(-2)+A3*B0z22(-2) 
 	case(1)   
 		B1 = &
 		     &-m0**4/(two*(m0 - m1)**4) 
 		B2 = &
-		     &        (m1*(4*m0**3 - 6*m0**2*m1 + 4*m0*m1**2 - m1**3))/ &
+		     &        (m1*(four*m0**3 - six*m0**2*m1 + four*m0*m1**2 - m1**3))/ &
 		     &  (four*(m0 - m1)**4) 
 		B3 = &
-		     &        -(25*m0**3 - 23*m0**2*m1 + 13*m0*m1**2 - 3*m1**3)/ &
+		     &        -(25.0_ki*m0**3 - 23.0_ki*m0**2*m1 + 13.0_ki*m0*m1**2 - three*m1**3)/ &
 		     &  (48.0_ki*(m0 - m1)**3) 
-		B31(:) = B1*B0z11(:)+B2*B0z22(:)+B3 
+		B31(0)  = B1*B0z11(0) + B2*B0z22(0) + B3 
+		B31(-1) = B1*B0z11(-1) + B2*B0z22(-1) 
+		B31(-2) = B1*B0z11(-2) + B2*B0z22(-2) 
 	case(2)
 		B31(:) = -B0z11(:)/four 
 	end select 
@@ -1429,9 +1433,9 @@ end subroutine HJ111
 @case_wout_golem@      print*, "isca=3: Golem95 not available"
 @case_wout_golem@      stop
       elseif (isca.eq.4) then
-@case_with_lt@      tot1(-2) = 0
-@case_with_lt@      tot1(-1) = 0
-@case_with_lt@      tot1( 0) = 0
+@case_with_lt@      tot1(-2) = czip
+@case_with_lt@      tot1(-1) = czip
+@case_with_lt@      tot1( 0) = czip
 @case_with_lt@      ep = -dim(0, int(getlambda()))
 @case_with_lt@      if (present(cache_flag)) then
 @case_with_lt@         if (cache_flag) then
