@@ -2,7 +2,7 @@
 
 # libtool - Provide generalized library-building support services.
 # Generated automatically by config.status (gosam-contrib) 1.0
-# Libtool was configured on host pcl247e:
+# Libtool was configured on host pcl305a:
 # NOTE: Changes made to this file will be lost: look at ltmain.sh.
 #
 #   Copyright (C) 1996, 1997, 1998, 1999, 2000, 2001, 2003, 2004, 2005,
@@ -3400,7 +3400,7 @@ func_mode_install ()
 	  # are installed into $libdir/../bin (currently, that works fine)
 	  # but it's something to keep an eye on.
 	  test "$inst_prefix_dir" = "$destdir" && \
-	    func_warning "error: cannot install \`$file' to a directory not ending in $libdir"
+	    func_fatal_error "error: cannot install \`$file' to a directory not ending in $libdir"
 
 	  if test -n "$inst_prefix_dir"; then
 	    # Stick the inst_prefix_dir data into the link command.
