@@ -94,7 +94,7 @@ contains
       s = sign(1.0_ki, real(pol, ki))
               
       e1(4) = 0.0_ki
-      if (abs(r + 1.0_ki) > 1.0E+03_ki * epsilon(1.0_ki)) then
+      if (abs(r + 1.0_ki) > 1.0E-09_ki) then
               n = 1.0_ki / sqrt(2.0_ki * abs(1.0_ki - r*r))
 
               e1(1) = k(2) * p(3) - k(3) * p(2)
