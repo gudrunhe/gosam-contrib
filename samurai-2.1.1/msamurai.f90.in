@@ -37,7 +37,8 @@ contains
 
    !---#[ subroutine initsamurai:
    subroutine initsamurai(ameth, asca, averb, atest, aresc)
-@case_with_avh@      use avh_olo, only: olo_onshell
+@case_with_avh@  use avh_olo, only: olo_onshell
+@case_with_avh@  use avh_olo_kinds, only: ki_avh => kindr2
       implicit none
       integer, intent(in) :: asca, averb, atest
       character(len=4), intent(in) :: ameth
@@ -101,7 +102,7 @@ contains
       if (isca .eq. 1) then
 @case_with_ql@         call qlinit
       elseif (isca .eq. 2) then
-@case_with_avh@         call olo_onshell(1.d-8)
+@case_with_avh@         call olo_onshell(1.0E-08_ki_avh)
       elseif (isca .eq. 4) then
 @case_with_lt@         call ltini
       end if

@@ -28,7 +28,7 @@ module precision_golem
     !
     integer, parameter :: ki=@fortran_real_kind@
 @case_with_lt@integer, parameter :: ki_lt=@lt_real_kind@
-    integer, parameter :: ki_avh=kind(1.0d0)
+    integer, parameter :: ki_avh=@fortran_real_kind@
     !
 end module precision_golem
 
