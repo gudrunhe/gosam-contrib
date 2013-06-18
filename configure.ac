@@ -1,4 +1,4 @@
-AC_INIT([GoSam Convenience Package],[1.0],[reiterth@mpp.mpg.de],[gosam-contrib],[http://projects.hepforge.org/golem/gosam-contrib/])
+AC_INIT([GoSam Convenience Package],[1.0],[gosam@hepforge.org],[gosam-contrib],[http://projects.hepforge.org/golem/gosam-contrib/])
 AC_PREREQ(2.65)
 
 AC_CONFIG_MACRO_DIR([m4])
