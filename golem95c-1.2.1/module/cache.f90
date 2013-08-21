@@ -31,6 +31,7 @@ module cache
   use precision_golem
   use sortie_erreur, only : tab_erreur_par,catch_exception
   use form_factor_type
+  use cache_generic
   implicit none
   !
   private :: ki
@@ -44,11 +45,6 @@ module cache
   real(ki),dimension(:,:,:,:,:,:,:), allocatable :: results_f3p
   logical, dimension(:,:,:,:,:,:), allocatable :: computed_f3p_np2
   real(ki),dimension(:,:,:,:,:,:,:), allocatable :: results_f3p_np2
-
-
-type(form_factor),dimension(1000) ::  cache_generic;
-integer, dimension(1000):: cache_generic_tag;
-integer :: cache_generic_count;
 
 
   !
@@ -191,6 +187,8 @@ integer :: cache_generic_count;
         !
       end if
       !
+      call allocate_cache_generic()
+      !
     end subroutine allocate_cache
     !
     !
@@ -230,7 +228,7 @@ integer :: cache_generic_count;
       computed_f3p = .false.
       computed_f3p_np2 = .false.
 
-      cache_generic_count = 0
+      call reset_cache_generic()
       !
     end subroutine reset_cache
     !
@@ -365,6 +363,8 @@ integer :: cache_generic_count;
         call catch_exception(0)
         !
       end if
+      !
+      call clear_cache_generic()
       !
     end subroutine clear_cache
 end module cache

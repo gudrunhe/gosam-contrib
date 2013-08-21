@@ -178,6 +178,7 @@ module inverse_matrice
       real(ki), intent(out), dimension(size(mat_r,1),size(mat_r,1)) :: inv_mat_r
       real(ki), intent(out) :: error
       integer, optional :: pinch1,pinch2,pinch3,pinch4,pinch5
+      logical :: invertible
       !
       real(ki), dimension(size(mat_r,1),size(mat_r,1)) :: norm_mat_r, mat_greville
       real(ki) :: plus_grand,g_error,o_error
@@ -202,13 +203,16 @@ module inverse_matrice
       ! First we rescale the matrix
       !
       plus_grand = maxval(array=abs(mat_r))
+      if (equal_real(plus_grand,0._ki)) then
+              plus_grand = 1._ki ! to prevent divison by zero
+      end if
       norm_mat_r = mat_r/plus_grand
       !
       ! We first use the Gauss method
       !
-      call inverse_rescue(norm_mat_r,inv_mat_r,o_error,pin1,pin2,pin3,pin4,pin5)
+      call inverse_rescue(norm_mat_r,inv_mat_r,o_error,invertible,pin1,pin2,pin3,pin4,pin5)
       !
-      if (o_error >= accuracy_par) then
+      if ((o_error >= accuracy_par) .and. invertible) then
         !
         call inverse_greville(norm_mat_r,mat_greville,g_error)
         !
@@ -220,7 +224,7 @@ module inverse_matrice
       !
       error = min(g_error,o_error)
       !
-      if (error >= accuracy_par) then
+      if ((error >= accuracy_par) .and. invertible) then
         !
         tab_erreur_par(1)%a_imprimer = .true.
         tab_erreur_par(1)%chaine = 'the Greville method failed'
@@ -229,6 +233,12 @@ module inverse_matrice
         tab_erreur_par(3)%a_imprimer = .true.
         tab_erreur_par(3)%chaine = 'the error returned %f0'
         tab_erreur_par(3)%arg_real = error
+        call catch_exception(1)
+      else if (.not. invertible) then
+        tab_erreur_par(1)%chaine = 'The Gauss method failed. Matrix not invertible.'
+        tab_erreur_par(1)%a_imprimer = .true.
+        tab_erreur_par(2)%chaine = 'The error returned %f0'
+        tab_erreur_par(2)%arg_real = error
         call catch_exception(1)
         !
       end if
@@ -247,6 +257,7 @@ module inverse_matrice
       complex(ki), dimension(size(mat_c,1),size(mat_c,1)) :: norm_mat_c, mat_greville_c
       real(ki) :: plus_grand,g_error,o_error
       integer :: pin1,pin2,pin3,pin4,pin5
+      logical :: invertible
       !
       pin1 = -1
       pin2 = -1
@@ -267,13 +278,16 @@ module inverse_matrice
       ! First we rescale the matrix
       !
       plus_grand = max(maxval( array=abs( real(mat_c,ki) ) ), maxval( array=abs( aimag(mat_c) ) ) ) 
+      if (equal_real(plus_grand,0._ki)) then
+              plus_grand = 1._ki ! to prevent divison by zero
+      end if
       norm_mat_c = mat_c/cmplx(plus_grand,0._ki,ki)
       !
       ! We first use the Gauss method
       !
-      call inverse_rescue(norm_mat_c,inv_mat_c,o_error,pin1,pin2,pin3,pin4,pin5)
+      call inverse_rescue(norm_mat_c,inv_mat_c,o_error,invertible,pin1,pin2,pin3,pin4,pin5)
       !
-      if (o_error >= accuracy_par) then
+      if ((o_error >= accuracy_par) .and. invertible) then
         !
         call inverse_greville(norm_mat_c,mat_greville_c,g_error)
         !
@@ -284,7 +298,7 @@ module inverse_matrice
       !
       error = min(g_error,o_error)
       !
-      if (error >= accuracy_par) then
+      if ((error >= accuracy_par) .and. invertible) then
         !
         tab_erreur_par(1)%a_imprimer = .true.
         tab_erreur_par(1)%chaine = 'the Greville method failed'
@@ -293,6 +307,13 @@ module inverse_matrice
         tab_erreur_par(3)%a_imprimer = .true.
         tab_erreur_par(3)%chaine = 'the error returned %f0'
         tab_erreur_par(3)%arg_real = error
+        call catch_exception(1)
+        !
+      else if (.not. invertible) then
+        tab_erreur_par(1)%chaine = 'The Gauss method failed. Matrix not invertible.'
+        tab_erreur_par(1)%a_imprimer = .true.
+        tab_erreur_par(2)%chaine = 'The error returned %f0'
+        tab_erreur_par(2)%arg_real = error
         call catch_exception(1)
         !
       end if
@@ -332,6 +353,7 @@ module inverse_matrice
     !  * inv_mat -- a real/compelx (type ki) array of rank 2, same shape, the inverse 
     !               of the matrix mat
     !  * error -- a real (type ki), the estimation of the error of the numerical inversion
+    !  * invertible -- logical, true if the matrix is invertible
     !
     ! EXAMPLE
     !
@@ -339,11 +361,12 @@ module inverse_matrice
     !
     !*****
     !
-    subroutine inverse_rescue_r(mat_r,inv_mat_r,error,pin1,pin2,pin3,pin4,pin5)
+    subroutine inverse_rescue_r(mat_r,inv_mat_r,error,invertible,pin1,pin2,pin3,pin4,pin5)
       !
       real(ki), intent(in), dimension(:,:) :: mat_r
       real(ki), intent(out), dimension(size(mat_r,1),size(mat_r,1)) :: inv_mat_r
       real(ki), intent(out) :: error
+      logical, intent(out) :: invertible
       integer, intent(in) :: pin1,pin2,pin3,pin4,pin5
       !
       integer :: i,j,n_dim
@@ -383,7 +406,7 @@ module inverse_matrice
         true_mat_r = reshape(source=true_vect_r,shape=(/n_dim,n_dim/))
       end select
       !
-      call inverse_true(true_mat_r,true_inv_mat_r,error)
+      call inverse_true(true_mat_r,true_inv_mat_r,error,invertible)
       !
       f2(:,:) = 0._ki
       true_vect_r = pack(true_inv_mat_r,.true.)
@@ -395,11 +418,12 @@ module inverse_matrice
       !
     end subroutine inverse_rescue_r
     !
-   subroutine inverse_rescue_c(mat_c,inv_mat_c,error,pin1,pin2,pin3,pin4,pin5)
+   subroutine inverse_rescue_c(mat_c,inv_mat_c,error,invertible,pin1,pin2,pin3,pin4,pin5)
       !
       complex(ki), intent(in), dimension(:,:) :: mat_c
       complex(ki), intent(out), dimension(size(mat_c,1),size(mat_c,1)) :: inv_mat_c
       real(ki), intent(out) :: error
+      logical, intent(out) :: invertible
       integer, intent(in) :: pin1,pin2,pin3,pin4,pin5
       !
       integer :: i,j,n_dim
@@ -439,7 +463,7 @@ module inverse_matrice
         true_mat_c = reshape(source=true_vect_c,shape=(/n_dim,n_dim/))
       end select
       !
-      call inverse_true(true_mat_c,true_inv_mat_c,error)
+      call inverse_true(true_mat_c,true_inv_mat_c,error,invertible)
       !
       f2(:,:) = czero
       true_vect_c = pack(true_inv_mat_c,.true.)
@@ -458,7 +482,7 @@ module inverse_matrice
     !
     ! USAGE
     !
-    !  call inverse_true(mat,inv_mat,error)
+    !  call inverse_true(mat,inv_mat,error,invertible)
     !
     ! DESCRIPTION
     !
@@ -479,6 +503,7 @@ module inverse_matrice
     !  * inv_mat -- a real/complex (type ki) array of rank 2, same shape, the inverse 
     !               of the matrix mat
     !  * error -- a real (type ki), the estimation of the error of the numerical inversion
+    !  * invertible -- logical, true if mat is invertible
     !
     ! EXAMPLE
     !
@@ -486,11 +511,12 @@ module inverse_matrice
     !
     !*****
     !
-    subroutine inverse_true_r(mat_r,inv_mat_r,error)
+    subroutine inverse_true_r(mat_r,inv_mat_r,error,invertible)
       !
       real(ki), intent(in), dimension(:,:) :: mat_r
       real(ki), intent(out), dimension(size(mat_r,1),size(mat_r,1)) :: inv_mat_r
       real(ki), intent(out) :: error
+      logical, intent(out) :: invertible
       !
       real(ki), dimension(size(mat_r,1),size(mat_r,1)) :: mat1,mat2,unit_mat
       real(ki), dimension(size(mat_r,1),size(mat_r,1)) :: p_mat,l_mat,u_mat
@@ -508,7 +534,12 @@ module inverse_matrice
         !
       end do
       !
-      call lu_decomp(mat_r,p_mat,l_mat,u_mat)
+      call lu_decomp(mat_r,p_mat,l_mat,u_mat,invertible)
+      if (.not. invertible) then
+              inv_mat_r = 0._ki
+              error = 1._ki
+              return
+      end if
       call inverse_triangular(l_mat,'inf',inv_l_mat)
       call inverse_triangular(u_mat,'sup',inv_u_mat)
       inv_mat_r = matmul(inv_u_mat,inv_l_mat)
@@ -526,11 +557,12 @@ module inverse_matrice
       !
     end subroutine inverse_true_r
     !
-    subroutine inverse_true_c(mat_c,inv_mat_c,error)
+    subroutine inverse_true_c(mat_c,inv_mat_c,error,invertible)
       !
       complex(ki), intent(in), dimension(:,:) :: mat_c
       complex(ki), intent(out), dimension(size(mat_c,1),size(mat_c,1)) :: inv_mat_c
       real(ki), intent(out) :: error
+      logical, intent(out) :: invertible
       !
       complex(ki), dimension(size(mat_c,1),size(mat_c,1)) :: mat1c,mat2c,unit_mat
       complex(ki), dimension(size(mat_c,1),size(mat_c,1)) :: p_mat,l_mat,u_mat
@@ -549,7 +581,12 @@ module inverse_matrice
         !
       end do
       !
-      call lu_decomp(mat_c,p_mat,l_mat,u_mat)
+      call lu_decomp(mat_c,p_mat,l_mat,u_mat,invertible)
+      if (.not. invertible) then
+              inv_mat_c = 0._ki
+              error = 1._ki
+              return
+      end if
       call inverse_triangular(l_mat,'inf',inv_l_mat)
       call inverse_triangular(u_mat,'sup',inv_u_mat)
       inv_mat_c = matmul(inv_u_mat,inv_l_mat)
@@ -1403,6 +1440,7 @@ module inverse_matrice
     !  * p_mat -- a real (type ki) array of rank 2, the permutation matrix 
     !  * l_mat -- a real (type ki) array of rank 2, the lower triangular matrix 
     !  * u_mat -- a real (type ki) array of rank 2, the upper triangular matrix 
+    !  * succeed -- logical, true if the decomposition succeeded
     !
     ! EXAMPLE
     !
@@ -1410,10 +1448,11 @@ module inverse_matrice
     !
     !*****
     !
-    subroutine lu_decomp_r(mat_r,p_mat,l_mat,u_mat)
+    subroutine lu_decomp_r(mat_r,p_mat,l_mat,u_mat, succeeded)
       !
       real(ki), intent(in), dimension(:,:) :: mat_r
       real(ki), intent(out), dimension(size(mat_r,1),size(mat_r,1)) :: l_mat,u_mat,p_mat
+      logical, intent(out) :: succeeded
       !
       integer :: n_dim,i,j,k
       integer, dimension(1) :: loc_m
@@ -1424,6 +1463,7 @@ module inverse_matrice
       n_dim = size(mat_r,1)  ! dimension de la matrice
       u_mat(:,:) = 0._ki
       id_mat(:,:) = 0._ki
+      succeeded = .true.
       !
       do i=1,n_dim
         !
@@ -1463,7 +1503,12 @@ module inverse_matrice
         end if
         !
         l_mat(k,k) = 1._ki
-        l_mat(k+1:n_dim,k) = mat_b(k+1:n_dim,k)/mat_b(k,k)
+        if (equal_real(mat_b(k,k),0._ki)) then
+                l_mat(k+1:n_dim,k) = 0._ki ! matrix not invertible
+                succeeded=.false.
+        else
+                l_mat(k+1:n_dim,k) = mat_b(k+1:n_dim,k)/mat_b(k,k)
+        end if
         !
         do i=k+1,n_dim
           !
@@ -1485,10 +1530,11 @@ module inverse_matrice
     end subroutine lu_decomp_r
     !
     !
-    subroutine lu_decomp_c(mat_c,p_mat,l_mat,u_mat)
+    subroutine lu_decomp_c(mat_c,p_mat,l_mat,u_mat,succeeded)
       !
       complex(ki), intent(in), dimension(:,:) :: mat_c
       complex(ki), intent(out), dimension(size(mat_c,1),size(mat_c,1)) :: l_mat,u_mat,p_mat
+      logical, intent(out) :: succeeded
       !
       integer :: n_dim,i,j,k
       integer, dimension(1) :: loc_m
@@ -1499,6 +1545,7 @@ module inverse_matrice
       n_dim = size(mat_c,1)  ! dimension de la matrice
       u_mat(:,:) = czero
       id_mat(:,:) = czero
+      succeeded=.true.
       !
       do i=1,n_dim
         !
@@ -1538,7 +1585,12 @@ module inverse_matrice
         end if
         !
         l_mat(k,k) = cmplx(1._ki,0._ki,ki)
-        l_mat(k+1:n_dim,k) = mat_b(k+1:n_dim,k)/mat_b(k,k)
+        if (equal_real(abs(mat_b(k,k)),0._ki)) then
+                l_mat(k+1:n_dim,k) = 0._ki ! matrix not invertible
+                succeeded=.false.
+        else
+                l_mat(k+1:n_dim,k) = mat_b(k+1:n_dim,k)/mat_b(k,k)
+        end if
         !
         do i=k+1,n_dim
           !

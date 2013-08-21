@@ -3,7 +3,7 @@ libgolem95_module_la_SOURCES= precision_golem.f90 \
 	tri.f90 array.f90 parametre.f90 constante.f90 form_factor_type.f90 \
 	sortie_erreur.f90 equal.f90 s_matrix_type.f90 multiply_div.f90 \
 	cache.f90 kronecker.f90 z_log.f90 \
-	spinor.f90 translate.f90 zdilog.f90
+	spinor.f90 translate.f90 zdilog.f90 cache_generic.f90
 include ../MakefileCommon.am
 
 nodist_pkginclude_HEADERS= precision_golem.mod \
@@ -11,7 +11,7 @@ nodist_pkginclude_HEADERS= precision_golem.mod \
 	cache.mod constante.mod s_matrix_type.mod dilogarithme.mod \
 	equal.mod form_factor_type.mod kronecker.mod logarithme.mod \
 	multiply_div.mod parametre.mod \
-	sortie_erreur.mod spinor.mod translate.mod
+	sortie_erreur.mod spinor.mod translate.mod cache_generic.mod
 
 CLEANFILES=$(nodist_pkginclude_HEADERS)
 

@@ -23,7 +23,7 @@
 !
 !  * TODO
 !  * array (src/module/array.f90)
-!  * cache (src/module/cache.f90)
+!  * cache_generic (src/module/cache_generic.f90)
 !  * constante (src/module/constante.f90)
 !  * equal (src/module/equal.f90)
 !  * form_factor_type (src/module/form_factor_type.f90)
@@ -57,19 +57,27 @@ module generic_function_np
   use sortie_erreur
   use parametre
   use equal
-  use cache
+  use cache_generic
   !
 
   implicit none
   !
   private
   !
-public :: fnp_generic
+public :: fnp_generic , test_D56, test_C56, test_B56, test_A56
 private :: reduce_generic, reduce_pave_generic
 !
 !
 
 private ::  f2p_ndim_0p_generic;
+
+logical ::  pave_mode;
+
+integer, dimension(0) :: no_feynmanparam
+
+! symmetric parameters for rank-6 pentagons
+real, dimension(6) :: sym_parameters = (/ 15._ki,15._ki,15._ki,7.5_ki,15._ki,5._ki  /)
+public :: sym_parameters
 
 !
   !
@@ -99,15 +107,13 @@ private ::  f2p_ndim_0p_generic;
        integer, intent (in) :: l_count
        integer, intent (in),dimension(:) :: l
        integer, intent (in), optional :: depth
-       type(form_factor) :: return_val, control
+       type(form_factor) :: return_val
        complex(ki) :: detS
-       integer :: cur_depth,i,b_used,hash
+       integer :: cur_depth,i,b_used
 
        real(ki) ::  limit_small_detS, abs_sumb
-       integer, save :: miss
 
        limit_small_detS = 1E-15_ki
-
 
        if (present(depth)) then
           cur_depth=depth
@@ -115,32 +121,28 @@ private ::  f2p_ndim_0p_generic;
           cur_depth=0
        end if
 
+       b_used=pminus(b_ref,b_pin)
+       pave_mode=.false.
+
+
+
         b_used=pminus(b_ref,b_pin)
 
 
-
-
-       ! simple Cache system
-       hash=0
-      if (leg_count<=4 .and. cur_depth <= 100) then ! do not use cache for control
-          ! max 6 legs supported
-          do i = 1, l_count
-             hash = hash*7 + l(i)
-          end do
-          hash = hash*128 + b_used
-          hash = hash*20 + dim_nplus
-          hash = hash*7 + leg_count
-          ! search backwards in cache, last entries are more probable
-          do i = cache_generic_count, 1, -1
-             if (cache_generic_tag(i)==hash) then
-                  return_val=cache_generic(i)
-                  return
-             end if
-             miss = miss + 1
-          end do
+        if (cur_depth <= 100) then ! do not use cache for control
+         if(cache_generic_get_value(leg_count,dim_nplus,b_pin,l_count,l,return_val) .and. cur_depth>=1) then
+            ! return_val set by cache_generic_get_value
+            return
+         end if
        end if
 
        do i  = 1, l_count
+           if (locateb(l(i),b_used) < 0 .and. leg_count>1 ) then
+              return_val=0
+              call cache_generic_put_value(leg_count,dim_nplus,b_pin,l_count,l,return_val)
+              return
+           end if
+
            if (locateb(l(i),b_used) > leg_count .and. leg_count>1 ) then
               write (*, *) "WRONG CALL:", leg_count, dim_nplus,l_count, b_used
               write (*, *) "depth:",cur_depth,"", "legs:", leg_count,"", "dim-n:",dim_nplus,"", "l_count",l_count, "l",l
@@ -153,8 +155,8 @@ private ::  f2p_ndim_0p_generic;
            end if
         end do
 
-        ! test if S-matrix contains only zeros
 
+        ! test if S-matrix contains only zeros
         if(test_mat_zero(s_mat_p,leg_count,b_pin)) then
            return_val=0
            !if (cur_depth==0) then
@@ -164,24 +166,23 @@ private ::  f2p_ndim_0p_generic;
         end if
 
 
-      if ((leg_count>=2 .and. leg_count <=4)  &
-             .and. (cur_depth<=100) .and. ( dim_nplus>=2 .or. (l_count>leg_count) &
-                                           .or. (leg_count==4 .and. l_count>0) ) ) then
+      ! check for detS=0 only for higher rank and not elsewhere implemented integrals
+      if ( ((leg_count>=2 .and. leg_count<=4)  &
+           .and. (cur_depth<=100) .and. ( l_count+dim_nplus>leg_count) &
+           .and. (.not. (leg_count ==4 .and. ((dim_nplus==2 .and. l_count<=3) .or. &
+              (dim_nplus==4 .and. l_count<=1  )))) &
+        ) .or.  (pave_mode .and. (leg_count <= 4) .and. ((l_count>0) .or. (dim_nplus > 0 )))) then
           detS = calc_determinant(s_mat_p,leg_count,b_pin)
 
           abs_sumb = abs(sumb(b_pin))
 
           ! test if detS is below threshold or if sumb is NaN
-          if (( abs(detS) <=limit_small_detS) .or. (.not. abs_sumb>=0._ki)) then
+          if (( abs(detS) <=limit_small_detS) .or. (.not. abs_sumb>=0._ki) .or. pave_mode) then
 
              return_val=reduce_pave_generic(leg_count,dim_nplus,b_pin,l_count,l,cur_depth)
 
 
-             if (hash /= 0 .and. cache_generic_count < 1000) then
-                cache_generic_count = cache_generic_count + 1
-                cache_generic(cache_generic_count) = return_val
-                cache_generic_tag(cache_generic_count) = hash
-             end if
+             call cache_generic_put_value(leg_count,dim_nplus,b_pin,l_count,l,return_val)
 
              return
           end if
@@ -189,11 +190,7 @@ private ::  f2p_ndim_0p_generic;
 
        return_val =  reduce_generic(leg_count,dim_nplus,b_pin,l_count,l,cur_depth)
 
-       if ( (hash /= 0) .and. (cache_generic_count < 1000)) then
-          cache_generic_count = cache_generic_count + 1
-          cache_generic(cache_generic_count) = return_val
-          cache_generic_tag(cache_generic_count) = hash
-       end if
+       call cache_generic_put_value(leg_count,dim_nplus,b_pin,l_count,l,return_val)
 
     end function fnp_generic
 
@@ -213,14 +210,15 @@ private ::  f2p_ndim_0p_generic;
         integer, intent (in) :: l_count
         integer, intent (in),dimension(:) :: l
         integer, intent (in), optional :: depth
-        integer :: i,j,k,b_used,b_tmp,ib,cur_depth
+        integer :: i,j,k,b_used,b_tmp,ib,cur_depth,jj,kk,pos
         type(form_factor) :: return_val, temp1, temp2
-        complex(ki), dimension(3) :: ret_temp, tmp4,tmp5
-        complex(ki)  :: mass1, tmp3
+        complex(ki), dimension(3) :: ret_temp, tmp4,tmp5,tmp6,tmp7,tmp8
+        complex(ki)  :: mass1, tmp3, multiplicity, multiplicity_twodelta, multiplicity_g
         integer :: tmp
-        integer :: n ! dimension = n + dim_nplus =  4-2epsilon + dim_nplus TODO: float
-        integer,dimension(size(l)) :: l_tmp1
+        integer :: n ! dimension = n + dim_nplus =  4-2epsilon + dim_nplus
+        integer,dimension(size(l)) :: l_tmp1, l_tmp2, l_tmp3
         integer,dimension(1) :: s1
+        integer,dimension(leg_count) :: s
         logical :: usable
 
         n = 4
@@ -236,7 +234,6 @@ private ::  f2p_ndim_0p_generic;
 
 
 
-
         ret_temp = 0
 
         ! ===
@@ -249,11 +246,11 @@ private ::  f2p_ndim_0p_generic;
                 stop
         end if
 
-        if (leg_count<=0 .or. leg_count>=5) then
+        if (leg_count<=0 .or. leg_count>=7) then
               tab_erreur_par(1)%a_imprimer = .true.
               tab_erreur_par(1)%chaine = 'Internal error: not implemented, in file generic_function_np.f90.'
               tab_erreur_par(2)%a_imprimer = .true.
-              tab_erreur_par(2)%chaine = '  Only leg_count = 1,2,3,4 supported.'
+              tab_erreur_par(2)%chaine = '  Only leg_count = 1,2,3,4,5,6 supported.'
               call catch_exception(0)
         end if
 
@@ -291,8 +288,7 @@ private ::  f2p_ndim_0p_generic;
         end if
 
 
-        !if (.false. .and. l_count == 2 .and. dim_nplus==2 .and. leg_count==3) then
-        !!if (l_count == 2 .and. dim_nplus==2 .and. leg_count==3 ) then
+        !if (l_count == 2 .and. dim_nplus==2 .and. leg_count==3 ) then
         !    ! TODO Trap:
         !      ! The program stops because error in function f3p2m_np2 no need of
         !      ! two mass six dimensional 3-point function with more
@@ -319,6 +315,7 @@ private ::  f2p_ndim_0p_generic;
         if (l_count == 4 .and. dim_nplus==0 .and. leg_count==4) then
            return_val= a44(l(1),l(2),l(3),l(4),b_pin)
            !ret_temp(1:3) = f4p(s_mat_p,b_used,b_pin,(1),l(2),l(3),l(4))
+           !return_val= ret_temp
            return
         end if
 
@@ -366,11 +363,11 @@ private ::  f2p_ndim_0p_generic;
                         ret_temp(3) = f4p_np2(s_mat_p,b_used,b_pin,l(1))
                         return_val=ret_temp
                         return
-               ! case (3)
-               !         ret_temp(:) = czero
-               !         ret_temp(2:3) = f3p_np2(s_mat_p,b_used,l(1))
-               !         return_val=ret_temp
-               !         return
+                case (3)
+                        ret_temp(:) = czero
+                        ret_temp(2:3) = f3p_np2(s_mat_p,b_used,l(1))
+                        return_val=ret_temp
+                        return
                end select
         end if
 
@@ -393,21 +390,28 @@ private ::  f2p_ndim_0p_generic;
               return_val=ret_temp
               return
            end select
-        end if
+       end if
 
-        if (l_count == 2 .and. dim_nplus==2 ) then
+       if (l_count == 2 .and. dim_nplus==2 ) then
              select case (leg_count)
                     case (4)
-                       return_val= f4p_np2(s_mat_p,b_used,b_pin,l(1),l(2))
+                       ret_temp(:) = czero
+                       ret_temp(3)= f4p_np2(s_mat_p,b_used,b_pin,l(1),l(2))
+                       return_val= ret_temp
                        return
              end select
        end if
 
-        if (l_count == 0 .and. dim_nplus==4 ) then
-             select case (leg_count)
-                    case (41)
+       if (leg_count == 4 .and. dim_nplus==4 ) then
+             select case (l_count)
+                    case (0)
                        ret_temp(:) = czero
                        ret_temp(2:3) = f4p_np4(s_mat_p,b_used,b_pin)
+                       return_val=ret_temp
+                       return
+                    case (1)
+                       ret_temp(:) = czero
+                       ret_temp(2:3) = f4p_np4(s_mat_p,b_used,b_pin,l(1))
                        return_val=ret_temp
                        return
              end select
@@ -423,14 +427,13 @@ private ::  f2p_ndim_0p_generic;
 
 
         if (leg_count==1 .and. dim_nplus /= 0) then
-                ret_temp(:) = czero
                 s1=unpackb(b_used,countb(b_used))
                 k=s1(1)
 
                 if (iand(s_mat_p%b_cmplx, b_used) .eq. 0 ) then
-                   mass1=-s_mat_p%pt_real(k,k)/2
+                   mass1=-s_mat_p%pt_real(k,k)/2._ki
                 else
-                   mass1=-s_mat_p%pt_cmplx(k,k)/2
+                   mass1=-s_mat_p%pt_cmplx(k,k)/2._ki
                 end if
 
                 return_val = f1p_ndim_generic(mass1,dim_nplus)
@@ -439,7 +442,186 @@ private ::  f2p_ndim_0p_generic;
         end if
 
 
-        ! ==================================================
+        ! =================================
+        ! Reduction of five point integrals
+        !
+        ! Formula C.103 of hep-ph/0504267
+
+        if (leg_count==5) then
+
+           s = unpackb(b_used,countb(b_used))
+           if (l_count+dim_nplus <= 6) then
+              tmp5=0 ! for the result at the end
+
+              ! calculate a symmetry factor (later used)
+              if(dim_nplus>=0) then
+                 multiplicity=1
+
+                multiplicity_twodelta=0
+                multiplicity_g=0
+
+                if(l_count>=2) then
+                   multiplicity_twodelta = (dim_nplus+l_count)*(dim_nplus+l_count-1)/2._ki
+                 end if
+
+                if(dim_nplus>=2) then
+                   multiplicity_g = (dim_nplus+l_count)*(dim_nplus+l_count-1)  / (2._ki*(dim_nplus/2))
+                end if
+
+              end if
+
+
+              do j=1,5
+                 ! First part of C.103 in  hep-ph/0504267
+
+                 ! assuming fnp_generic(..., l_count-2,..) is symmetric, only two indices need
+                 ! to be symmetrized
+
+                 if(l_count>=2) then
+                    do k=1,l_count
+                       do jj=1,l_count
+                          if(k==jj) then
+                             cycle
+                          end if
+                          l_tmp3(l_count)= l(k)
+                          l_tmp3(l_count-1)= l(jj)
+                          i=1
+                          do kk=1,l_count
+                             if((kk /= k) .and. (kk/=jj)) then
+                                l_tmp3(i)=l(kk)
+                                i=i+1
+                             end if
+                          end do
+                          b_tmp = ibset(b_pin,s(j))
+                          tmp3 = 0.5_ki*(b(s(j),b_pin) * inv_s(l_tmp3(l_count),l_tmp3(l_count-1),b_pin) - &
+                             &  b(l_tmp3(l_count),b_pin) * inv_s(s(j),l_tmp3(l_count-1),b_pin))
+
+                          temp2= (-1._ki)**(l_count-2)*(-0.5_ki)**((dim_nplus)/2) *fnp_generic(4,dim_nplus+2,b_tmp,l_count-2,l_tmp3(1:l_count-2),cur_depth+1)
+                          tmp4 = (/ temp2%a, temp2%b, temp2%c /)
+
+                          ! TODO simplify formula, factor can be cancelled
+                          tmp4(3) = tmp3 * ( (4._ki-l_count-dim_nplus+1._ki-4._ki) * tmp4(3) + 2._ki*tmp4(2) )
+                          tmp4(2) = tmp3 * ( (4._ki-l_count-dim_nplus+1._ki-4._ki) * tmp4(2) + 2._ki*tmp4(1) )
+                          tmp4(1) = tmp3 * ( (4._ki-l_count-dim_nplus+1._ki-4._ki) * tmp4(1) )
+
+                          tmp5 = tmp5 + tmp4 / multiplicity_twodelta
+                       end do
+                    end do
+                 end if
+
+                 if (dim_nplus>= 2) then ! g^(mu_r-1,mu_r) in T need to be considered
+                    b_tmp = ibset(b_pin,s(j))
+                    tmp3=b(s(j),b_pin)*0.5_ki
+                    temp2= (-1._ki)**(l_count)*(-0.5_ki)**((dim_nplus-2)/2) &
+                         * fnp_generic(4,dim_nplus,b_tmp,l_count,l(1:l_count),cur_depth+1)
+                    tmp4 = (/ temp2%a, temp2%b, temp2%c /)
+                    tmp4(3) = tmp3 * ( (4._ki-l_count-dim_nplus+1._ki-4._ki) * tmp4(3) + 2._ki*tmp4(2) )
+                    tmp4(2) = tmp3 * ( (4._ki-l_count-dim_nplus+1._ki-4._ki) * tmp4(2) + 2._ki*tmp4(1) )
+                    tmp4(1) = tmp3 * ( (4._ki-l_count-dim_nplus+1._ki-4._ki) * tmp4(1) )
+
+                    tmp4=tmp4  / multiplicity_g
+
+                    tmp5 = tmp5 + tmp4
+                 end if
+
+
+
+                 ! Second part of C.103 in  hep-ph/0504267
+
+                 l_tmp3=l
+                 b_tmp = ibset(b_pin,s(j))
+
+                 do k=1, l_count ! symmetries over first Feynman parameter (not in formula)
+                    l_tmp3(1:k-1)=l(1:k-1)
+                    l_tmp3(k:l_count-1)=l(k+1:l_count)
+                    l_tmp3(l_count)=l(k)
+
+                    temp2 =  ((-1._ki)**(l_count-1) * (-0.5_ki)**((dim_nplus)/2))* &
+                       &  fnp_generic(4,dim_nplus,b_tmp,l_count-1,l_tmp3(1:l_count-1),cur_depth+1)
+
+                    tmp4 = (/ temp2%a, temp2%b, temp2%c /)
+                    tmp4 =tmp4 / (l_count+dim_nplus)
+
+                    tmp5 = tmp5 - inv_s(s(j),l_tmp3(l_count),b_pin)*tmp4
+                 end do
+
+              end do
+              return_val=(-1._ki)**(l_count)* (-2._ki)**(dim_nplus/2) * tmp5
+
+             return
+           else
+              tab_erreur_par(1)%a_imprimer = .true.
+              tab_erreur_par(1)%chaine = 'Rank 7 and higher pentagons not yet tested.'
+              call catch_exception(0)
+              stop
+           end if
+        end if
+
+
+        !===================================================
+        !     Reduction of six point tensor integrals
+
+        !
+        ! Formula (63) from hep/0504267
+
+        if (leg_count == 6) then
+
+           if(dim_nplus /= 0) then
+              tab_erreur_par(1)%a_imprimer = .true.
+              tab_erreur_par(1)%chaine = 'Higher dimensional hexagons are not&
+                                        & necessary and are therefore not implemented.'
+              call catch_exception(0)
+              stop
+           end if
+
+          b_used=pminus(b_ref,b_pin)
+          s = unpackb(b_used,countb(b_used))
+
+          temp1%a=0
+          temp1%b=0
+          temp1%c=0
+
+          do j = 1,6
+             b_tmp = ibset(b_pin,s(j))
+
+             do k = 1, 6
+                l_tmp2(k)=k
+             end do
+             l_tmp1=l
+
+             pos=99 ! initial
+             do while (pos>0)
+                do k=0,l_count-1,2  ! A5x, B5x, C5x, ...
+                   if ((pos<=k+1) .or. (pos==99)) then ! ignore permutation of irrelevant arguments
+                      usable=.true.
+                      ! check if current permutation is usable (=sorted)
+                      do kk=2,k+1,2
+                         if((l_tmp2(kk)>l_tmp2(kk+1)) .or. &
+                           ((kk>=4) .and. (l_tmp2(kk-2)>l_tmp2(kk)))) then
+                            usable=.false.
+                            exit
+                         end if
+                      end do
+                      if(usable) then
+                        tmp3=1._ki
+                        do kk=2,k+1,2 ! for each g -> -2*inv_s
+                           tmp3=tmp3*(-2._ki)*inv_s(l_tmp1(kk),l_tmp1(kk+1),b_pin)
+                        end do
+                        temp1 = temp1 - tmp3*(-1._ki)**(l_count-k-1)* (-0.5_ki)**((dim_nplus+k)/2)*&
+                          & inv_s(s(j),l_tmp1(1),b_pin)*   &
+                         & fnp_generic(leg_count-1,dim_nplus+k,b_tmp,l_count-k-1,l_tmp1(k+2:l_count),cur_depth+1)
+                      end if
+                   end if
+                end do
+                pos = next_permutation_twice_pos(l_tmp2, l_tmp1, 1, l_count)
+              end do
+           end do
+           temp1 = temp1 / l_count
+           return_val=(-1._ki)**(l_count)* (-2._ki)**(dim_nplus/2) * temp1
+           return
+        end if
+
+        ! ====================================================
         !     Reduction of higher dimensional tensor integrals
 
         if ((l_count > 0) .and. (dim_nplus > 0)) then
@@ -504,7 +686,7 @@ private ::  f2p_ndim_0p_generic;
         end if
 
 
-        ! ==================================================
+        ! ====================================================
         !     Reduction of higher dimensional scalar integrals
         !
         ! !     cf. eq. (68) and (83) from  hep-ph/0504267
@@ -560,7 +742,7 @@ private ::  f2p_ndim_0p_generic;
         end if
 
 
-        ! =======================================================
+        ! ========================================================
         !     Reduction of integrals with Feynman parameter in the
         !     numerator
         !
@@ -579,11 +761,17 @@ private ::  f2p_ndim_0p_generic;
         if (leg_count < 5) then
 
            l_tmp1=0
-           do k = 2, l_count
-                   l_tmp1(1:k-2) =l(2:k-1)
-                   l_tmp1(k-1:l_count-2) =l(k+1:l_count)
+           do j = 1, min(1,l_count)
+            do k = j+1, l_count
+                   l_tmp1(1) = l(j)
+                   l_tmp1(2) = l(k)
+                   l_tmp1(3:j+1) =  l(1:j-1)
+                   l_tmp1(j+2:k) =  l(j+1:k-1)
+                   l_tmp1(k+1:l_count) = l(k+1:l_count)
+
                    i=max(l_count-2,0)
-                   temp1=temp1-inv_s(l(1),l(k),b_pin)*fnp_generic(leg_count,dim_nplus+2,b_pin,i,l_tmp1(1:l_count-2),cur_depth+1)
+                   temp1=temp1-inv_s(l_tmp1(1),l_tmp1(2),b_pin)*fnp_generic(leg_count,dim_nplus+2,b_pin,i,l_tmp1(3:l_count),cur_depth+1) ! / (l_count-1)
+            end do
            end do
 
 
@@ -591,23 +779,27 @@ private ::  f2p_ndim_0p_generic;
            ! == Second term
            ! ==  - b * I^(n+2)
 
-           temp2 = fnp_generic(leg_count,dim_nplus+2,b_pin,l_count-1,l(2:l_count),cur_depth+1)
-           tmp=(leg_count-n-dim_nplus -(l_count-1)-1)
-           tmp4(:)=(/ temp1%a, temp1%b, temp1%c /)
-           tmp5(:)=(/ temp2%a, temp2%b, temp2%c /)
-
-           if (tmp/= 0) then
-              tmp4(3)=tmp4(3)-(b(l(1),b_pin) * ( tmp * tmp5(3) + 2._ki*tmp5(2) ))
-              tmp4(2)=tmp4(2)-(b(l(1),b_pin) * ( tmp * tmp5(2) + 2._ki*tmp5(1) ))
-              tmp4(1)=tmp4(1)-(b(l(1),b_pin) * ( tmp * tmp5(1) ))
-           else
-           end if
-           temp1%a=tmp4(1)
-           temp1%b=tmp4(2)
-           temp1%c=tmp4(3)
+           do k = 1, 1 ! l_count
+             l_tmp1(1) =l(k)
+             l_tmp1(2:k) =l(1:k-1)
+             l_tmp1(k+1:l_count) =l(k+1:l_count)
 
 
+            temp2 = fnp_generic(leg_count,dim_nplus+2,b_pin,l_count-1,l_tmp1(2:l_count),cur_depth+1) ! / (l_count)
+            tmp=(leg_count-n-dim_nplus -(l_count-1)-1)
+            tmp4(:)=(/ temp1%a, temp1%b, temp1%c /)
+            tmp5(:)=(/ temp2%a, temp2%b, temp2%c /)
 
+            if (tmp/= 0) then
+               tmp4(3)=tmp4(3)-(b(l(1),b_pin) * ( tmp * tmp5(3) + 2._ki*tmp5(2) ))
+               tmp4(2)=tmp4(2)-(b(l(1),b_pin) * ( tmp * tmp5(2) + 2._ki*tmp5(1) ))
+               tmp4(1)=tmp4(1)-(b(l(1),b_pin) * ( tmp * tmp5(1) ))
+            end if
+            temp1%a=tmp4(1)
+            temp1%b=tmp4(2)
+            temp1%c=tmp4(3)
+
+          end do
 
         end if
 
@@ -831,7 +1023,7 @@ recursive  function calc_determinant(mat_p,used_size,b_pin) result(detS)
         type(form_factor) :: return_val, tmp, temp2
         complex(ki), dimension(3) :: ret_temp
         complex(ki), dimension(leg_count)  :: m,r,f
-        integer :: n ! dimension n = 4-2epsilon TODO: float
+        integer :: n ! dimension n = 4-2epsilon
         integer,dimension(size(l)) :: lpos
         integer,dimension(size(l)+1) :: l_tmp1
         integer,dimension(leg_count) :: s
@@ -855,19 +1047,23 @@ recursive  function calc_determinant(mat_p,used_size,b_pin) result(detS)
 
         lpos = locateb(l,b_used)
 
-
         ret_temp=0._ki
-
-
 
         ! some checks if everything is consistent
         if ((countb(b_used) /= leg_count ) .or. (size(l)/= l_count)) then
-           write (*, *) countb(b_used),"PPPPPXXXX", size(l), l_count, b_used
            tab_erreur_par(1)%a_imprimer = .true.
-           tab_erreur_par(1)%chaine = 'Assert failed: internal error in file generic_function_np.f90'
+           tab_erreur_par(1)%chaine = 'Assert failed: internal error in file generic_function_np.f90 &
+              &(reduce_pave_generic).'
            call catch_exception(0)
            stop
         end if
+
+        do i = 1, l_count
+           if (lpos(i)<0) then
+              return_val=0
+              return
+           end if
+        end do
 
         s = unpackb(b_used,countb(b_used))
 
@@ -967,11 +1163,10 @@ recursive  function calc_determinant(mat_p,used_size,b_pin) result(detS)
         ! Reduction case 1
         !
 
-!        if ((dim_nplus >= 2) .and. ( l_count== 0 ) ) then
-        if ((dim_nplus >= 2) ) then
+        if ((dim_nplus >= 2) .and. ( l_count== 0 ) ) then
 
            ! only leg_count == 2,3,4 implemented yet
-           if ( leg_count /= 3 .and. leg_count /= 2 .and. leg_count /= 4) then
+           if ( leg_count /= 3 .and. leg_count /= 2 .and. leg_count /= 4 .and.  leg_count /= 5) then
               tab_erreur_par(1)%a_imprimer = .true.
               tab_erreur_par(1)%chaine = 'Assert failed: wrong arguments (not implemented) in file generic_function_np.f90'
               call catch_exception(0)
@@ -1053,7 +1248,6 @@ recursive  function calc_determinant(mat_p,used_size,b_pin) result(detS)
 
            return_val = ret_temp*(-2._ki)**(dim_nplus/2)*(-1._ki)**(l_count) ! factor because of g_mu,nu encoded by dim_nplus
 
-
         !
         !  Reduction case 2
         !
@@ -1106,14 +1300,6 @@ recursive  function calc_determinant(mat_p,used_size,b_pin) result(detS)
               l_tmp1=0
               do ii = 2, l_count
                 if (i==lpos(ii)) then
-                    !k=0
-                    !do j = 2, l_count
-                    !   if(l(j) /= l(ii)) then
-                    !     k=k+1
-                    !     l_tmp1(k) = l(j)
-                    !  end if
-                    !end do
-
                     l_tmp1(1:ii-2) = l(2:ii-1)
                     l_tmp1(ii-1:l_count-2) = l(ii+1:l_count)
                     k = l_count-2
@@ -1135,8 +1321,7 @@ recursive  function calc_determinant(mat_p,used_size,b_pin) result(detS)
            tab_erreur_par(1)%chaine = 'Assert failed: Not implemented yet. generic_function_np.f90'
            call catch_exception(0)
            stop
-        end if
-
+       end if
      end function reduce_pave_generic
 
 
@@ -1302,7 +1487,7 @@ recursive  function calc_determinant(mat_p,used_size,b_pin) result(detS)
 
         y = dim_nplus
 
-        if (y > 0) then ! To be tested, y is assumed even
+        if (y > 0) then ! y is assumed even
                  i = y/2
                  r_tmp1=1._ki
                  r_tmp2=0._ki
@@ -1555,7 +1740,319 @@ recursive  function calc_determinant(mat_p,used_size,b_pin) result(detS)
       end if
     end function f2p_ndim_0p_generic
 
+    function test_D56(b_pin) result(return_val)
+        implicit none
+        integer, intent(in) :: b_pin
+        type(form_factor) :: return_val,temp2
+        complex(ki), dimension(3) :: tmp4
+        integer :: j, b_tmp,b_used
+        integer,dimension(5) :: s
 
+        b_used=pminus(b_ref,b_pin)
+        s = unpackb(b_used,countb(b_used))
+        tmp4=0
+        temp2=0
+
+        do j = 1, 5
+                   b_tmp = ibset(b_pin,s(j))
+                   temp2 = b(s(j),b_pin) / sym_parameters(6) * fnp_generic(4,6,b_tmp,0,no_feynmanparam,1) / 8._ki
+                   tmp4 = tmp4+(/ temp2%a, temp2%b, temp2%c /)
+         end do
+         tmp4(3) = ( (4._ki-6._ki+1._ki-4._ki) * tmp4(3) + 2._ki*tmp4(2) )
+         tmp4(2) = ( (4._ki-6._ki+1._ki-4._ki) * tmp4(2) + 2._ki*tmp4(1) )
+         tmp4(1) = ( (4._ki-6._ki+1._ki-4._ki) * tmp4(1) )
+
+         return_val=tmp4
+   end function test_D56
+
+
+
+    function test_C56(l1,l2,b_pin) result(return_val)
+        implicit none
+        integer, intent(in) :: l1,l2,b_pin
+        type(form_factor) :: return_val,temp2
+        complex(ki), dimension(3) :: tmp4, tmp5
+        integer :: i,j, b_tmp,b_used
+        integer,dimension(5) :: s
+
+        b_used=pminus(b_ref,b_pin)
+        s = unpackb(b_used,countb(b_used))
+        tmp4=0
+
+        do j = 1, 5
+                   b_tmp = ibset(b_pin,s(j))
+                   temp2= -0.5_ki*b(s(j),b_pin) / sym_parameters(4) * fnp_generic(4,4,b_tmp,2,(/ l1,l2 /),1) / 2._ki ! C46
+                   tmp4 = tmp4 + (/ temp2%a, temp2%b, temp2%c /)
+
+                   temp2 = 0.25*( b(s(j),b_pin)*inv_s(l1,l2,b_pin) - 0.5*b(l1,b_pin)*inv_s(l2,s(j),b_pin) - 0.5*b(l2,b_pin)*inv_s(l1,s(j),b_pin))  / sym_parameters(5) &
+                   *  fnp_generic(4,6,b_tmp,0, no_feynmanparam,1 )
+                   tmp4 = tmp4 + (/ temp2%a, temp2%b, temp2%c /)  ! D46
+        end do
+        tmp5(3) = ( (-1._ki-4._ki) * tmp4(3) + 2._ki*tmp4(2) )
+        tmp5(2) = ( (-1._ki-4._ki) * tmp4(2) + 2._ki*tmp4(1) )
+        tmp5(1) = ( (-1._ki-4._ki) * tmp4(1) )
+
+        do j = 1, 5
+                 b_tmp = ibset(b_pin,s(j))
+                 temp2 = -0.25_ki *   &
+                    &  fnp_generic(4,4,b_tmp,1,(/ l2/),1) ! C45
+                 tmp4 = (/ temp2%a, temp2%b, temp2%c /)
+                 tmp5 = tmp5 - inv_s(s(j),l1,b_pin)*tmp4 / 6._ki
+
+                 b_tmp = ibset(b_pin,s(j))
+                 temp2 = -0.25_ki *   &
+                    &  fnp_generic(4,4,b_tmp,1,(/ l1/),1) ! C45
+                 tmp4 = (/ temp2%a, temp2%b, temp2%c /)
+                 tmp5 = tmp5 - inv_s(s(j),l2,b_pin)*tmp4 / 6._ki
+
+       end do
+       return_val= tmp5
+
+    end function
+
+
+    function test_b56(l1,l2,l3,l4,b_pin) result(return_val)
+        implicit none
+        integer, intent(in) :: l1,l2,l3,l4,b_pin
+        type(form_factor) :: return_val,temp2
+        complex(ki), dimension(3) :: tmp4, tmp5
+        integer :: i,j, b_tmp,b_used
+        integer,dimension(5) :: s
+
+        b_used=pminus(b_ref,b_pin)
+        s = unpackb(b_used,countb(b_used))
+        tmp4=0
+
+        do j = 1, 5
+                   b_tmp = ibset(b_pin,s(j))
+                   temp2= 0.5_ki*b(s(j),b_pin) / sym_parameters(2) * fnp_generic(4,2,b_tmp,4,(/ l1,l2,l3,l4 /),1)
+                   tmp4 = tmp4 + (/ temp2%a, temp2%b, temp2%c /)
+        end do
+        temp2 = test_B56h1(l1,l2,l3,l4,b_pin) + test_B56h1(l1,l3,l2,l4,b_pin) &
+                    + test_B56h1(l1,l4,l2,l3,b_pin) + test_B56h1(l2,l3,l1,l4,b_pin) &
+                    + test_B56h1(l2,l4,l1,l3,b_pin) + test_B56h1(l3,l4,l1,l2,b_pin)
+        tmp4 = tmp4 + (/ temp2%a, temp2%b, temp2%c /)
+
+        tmp5(3) = ( (-1._ki-4._ki) * tmp4(3) + 2._ki*tmp4(2) )
+        tmp5(2) = ( (-1._ki-4._ki) * tmp4(2) + 2._ki*tmp4(1) )
+        tmp5(1) = ( (-1._ki-4._ki) * tmp4(1) )
+
+        temp2 = 1._ki/6._ki * ( test_B56h2(l1,l2,l3,l4,b_pin) + test_B56h2(l1,l2,l4,l3,b_pin) &
+                    + test_B56h2(l1,l3,l4,l2,b_pin) + test_B56h2(l2,l3,l4,l1,b_pin) )
+        tmp5 = tmp5 + (/ temp2%a, temp2%b, temp2%c /)
+       return_val= tmp5
+    end function
+
+    function test_B56h1(l1,l2,l3,l4, b_pin) result(return_val)
+       ! symm l1<->l2, l3<->l4
+       implicit none
+       integer, intent(in) :: l1,l2,l3,l4,b_pin
+       type(form_factor) :: return_val,temp2
+
+       integer :: i,j, b_tmp,b_used
+       integer,dimension(5) :: s
+
+       b_used=pminus(b_ref,b_pin)
+       s = unpackb(b_used,countb(b_used))
+
+
+       !B46(l1,l2,l3,l4,b_tmp)
+       temp2=0
+       do j = 1, 5
+          b_tmp = ibset(b_pin,s(j))
+          temp2= temp2 - 0.5_ki *(b(s(j),b_pin)*inv_s(l3,l4,b_pin)- 0.5_ki*b(l3,b_pin)*inv_s(l4,s(j),b_pin) &
+                       - 0.5_ki*b(l4,b_pin)*inv_s(l3,s(j),b_pin) &
+                   ) / sym_parameters(3) * fnp_generic(4,4,b_tmp,2,(/ l1,l2 /),1)
+       end do
+       return_val= temp2
+    end function
+
+    function test_B56h2(l1,l2,l3, l4, b_pin) result(return_val)
+       ! symm l1<->l2<->l3
+       implicit none
+       integer, intent(in) :: l1,l2,l3,l4,b_pin
+       type(form_factor) :: return_val,temp2
+
+       integer :: i,j, b_tmp,b_used
+       integer,dimension(5) :: s
+
+       b_used=pminus(b_ref,b_pin)
+       s = unpackb(b_used,countb(b_used))
+       temp2=0
+
+       do j = 1, 5
+          b_tmp = ibset(b_pin,s(j))
+          temp2 = temp2 - inv_s(s(j),l4,b_pin) * 0.5_ki *  &
+             &  fnp_generic(4,2,b_tmp,3,(/ l1,l2,l3/),1)
+       end do
+       return_val= temp2
+    end function
+
+
+    function test_a56(l1,l2,l3,l4,l5,l6,b_pin) result(return_val)
+        implicit none
+        integer, intent(in) :: l1,l2,l3,l4,l5,l6,b_pin
+        type(form_factor) :: return_val,temp2
+        complex(ki), dimension(3) :: tmp4, tmp5
+        integer :: i,j, b_tmp,b_used
+        integer,dimension(5) :: s
+
+        b_used=pminus(b_ref,b_pin)
+        s = unpackb(b_used,countb(b_used))
+        tmp4=0
+
+        temp2 = test_A56h1(l1,l2,l3,l4,l5,l6,b_pin) + test_A56h1(l5,l2,l3,l4,l1,l6,b_pin)
+        temp2 = temp2 + test_A56h1(l6,l2,l3,l4,l5,l1,b_pin)  + test_A56h1(l1,l5,l3,l4,l2,l6,b_pin)
+        temp2 = temp2 + test_A56h1(l1,l6,l3,l4,l5,l2,b_pin) + test_A56h1(l1,l2,l5,l4,l3,l6,b_pin)
+        temp2 = temp2 + test_A56h1(l1,l2,l6,l4,l5,l3,b_pin) + test_A56h1(l1,l2,l3,l5,l4,l6,b_pin)
+        temp2 = temp2 + test_A56h1(l1,l2,l3,l6,l5,l4,b_pin) + test_A56h1(l5,l6,l3,l4,l1,l2,b_pin)
+        temp2 = temp2 + test_A56h1(l5,l2,l6,l4,l1,l3,b_pin) + test_A56h1(l5,l2,l3,l6,l1,l4,b_pin)
+        temp2 = temp2 + test_A56h1(l1,l5,l6,l4,l2,l3,b_pin) + test_A56h1(l1,l5,l3,l6,l2,l4,b_pin)
+        temp2 = temp2 + test_A56h1(l1,l2,l5,l6,l3,l4,b_pin)
+
+        tmp4 = tmp4 + (/ temp2%a, temp2%b, temp2%c /)
+
+        tmp5(3) = ( (-1._ki-4._ki) * tmp4(3) + 2._ki*tmp4(2) )
+        tmp5(2) = ( (-1._ki-4._ki) * tmp4(2) + 2._ki*tmp4(1) )
+        tmp5(1) = ( (-1._ki-4._ki) * tmp4(1) )
+
+        temp2 = 1._ki/6._ki * ( test_A56h2(l1,l2,l3,l4,l5,l6,b_pin) + test_A56h2(l2,l1,l3,l4,l6,l5,b_pin) &
+                    + test_A56h2(l1,l2,l3,l6,l5,l4,b_pin) + test_A56h2(l1,l2,l6,l4,l5,l3,b_pin) &
+                 + test_A56h2(l1,l6,l3,l4,l5,l2,b_pin)+ test_A56h2(l6,l2,l3,l4,l5,l1,b_pin))
+        tmp5 = tmp5 + (/ temp2%a, temp2%b, temp2%c /)
+       return_val= tmp5
+    end function
+
+    function test_A56h1(l1,l2,l3,l4,l5,l6, b_pin) result(return_val)
+       ! symm l1<->l2<->l3<->l4 ; l5<->l6
+       implicit none
+       integer, intent(in) :: l1,l2,l3,l4,l5,l6,b_pin
+       type(form_factor) :: return_val,temp2
+
+       integer :: i,j, b_tmp,b_used
+       integer,dimension(5) :: s
+
+       b_used=pminus(b_ref,b_pin)
+       s = unpackb(b_used,countb(b_used))
+
+
+       temp2=0
+       do j = 1, 5
+          b_tmp = ibset(b_pin,s(j))
+
+          temp2= temp2 + (b(s(j),b_pin)*inv_s(l5,l6,b_pin)- 0.5_ki*b(l5,b_pin)*inv_s(l6,s(j),b_pin) &
+                       - 0.5_ki*b(l6,b_pin)*inv_s(l5,s(j),b_pin) &
+                   )  / sym_parameters(1)  * fnp_generic(4,2,b_tmp,4,(/ l1,l2,l3,l4 /),1)
+
+
+
+       end do
+       return_val= temp2
+    end function
+
+    function test_A56h2(l1,l2,l3, l4, l5, l6, b_pin) result(return_val)
+       ! symm l1<->l2<->l3<->l4<->l5
+       implicit none
+       integer, intent(in) :: l1,l2,l3,l4,l5,l6,b_pin
+       type(form_factor) :: return_val,temp2
+
+       integer :: i,j, b_tmp,b_used
+       integer,dimension(5) :: s
+
+       b_used=pminus(b_ref,b_pin)
+       s = unpackb(b_used,countb(b_used))
+       temp2=0
+
+       do j = 1, 5
+          b_tmp = ibset(b_pin,s(j))
+          temp2 = temp2 + inv_s(s(j),l6,b_pin) *  &
+             &  fnp_generic(4,0,b_tmp,5,(/ l1,l2,l3,l4,l5/),1)
+       end do
+       return_val= temp2
+    end function
+
+
+
+    ! transforms a(lower:upper) to the next lexicographic higher permutation
+    ! and apply the same transformation to b(lower:upper)
+    ! returns the smallest position that were changed, else -1
+    function next_permutation_twice_pos(a,b, lower,upper) result(changed_pos)
+       implicit none
+       integer, intent(inout), dimension(:) :: a,b
+       integer, intent(in), optional :: lower,upper
+       integer :: lowerBound,upperBound
+       integer :: k,l, i,j , temp
+       integer :: changed_pos
+
+       if (present(lower)) then
+          lowerBound=lower
+       else
+          lowerBound=LBOUND(a,1)
+       end if
+       if (present(upper)) then
+          upperBound=upper
+       else
+          upperBound=UBOUND(a,1)
+       end if
+
+       ! algorithm from
+       ! http://en.wikipedia.org/wiki/Permutation#Generation_in_lexicographic_order
+
+       ! find largest k with a[k]<a[k+1]
+       do k = upperBound-1,lowerBound,-1
+          if (a(k) < a(k+1)) then
+             exit
+          end if
+       end do
+       if (k<lowerBound) then
+          ! nothing found
+          changed_pos=-1
+          return
+       end if
+       ! find largest l>k with a[k]<a[l]
+       do l = upperBound,k+1,-1
+          if (a(k) < a(l)) then
+             exit
+          end if
+       end do
+       ! swap a[k] with a[l]
+       temp=a(k)
+       a(k)=a(l)
+       a(l)=temp
+
+       ! same on b
+       temp=b(k)
+       b(k)=b(l)
+       b(l)=temp
+
+       ! reverse a[k+1] ... a[n]
+       j=(upperBound-(k+1))/2
+       do i=0,j
+          temp=a(k+1+i)
+          a(k+1+i) = a(upperBound-i)
+          a(upperBound-i) = temp
+
+          ! same on b
+          temp=b(k+1+i)
+          b(k+1+i) = b(upperBound-i)
+          b(upperBound-i) = temp
+       end do
+       changed_pos=k
+    end function next_permutation_twice_pos
+
+
+
+   pure integer function factorial(a)
+       implicit none
+       integer, intent(in) :: a
+       integer :: i,j
+
+       j=1
+       do i = 2, a
+          j=j*i
+       end do
+       factorial=j
+    end function factorial
 
 
 end module generic_function_np

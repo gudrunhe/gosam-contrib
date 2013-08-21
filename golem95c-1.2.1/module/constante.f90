@@ -56,4 +56,5 @@ module constante
   integer, dimension(0), parameter :: s_null = 0
   integer, dimension(0), parameter :: nullarray = 0
   !
+  public :: s_null
 end module constante
