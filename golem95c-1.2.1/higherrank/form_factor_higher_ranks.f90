@@ -2039,6 +2039,12 @@ use array
     module procedure d56_b, d56_s
   end interface d56
   public :: d56
+
+  interface d56tilde
+    module procedure d56tilde_b, d56tilde_s
+  end interface d56tilde
+  public :: d56tilde
+
 !
 !
 !
@@ -8509,6 +8515,25 @@ use array
    d56_s = d56_b(packb(set)) 
    !
   end function d56_s
+
+
+   function d56tilde_b(b_pin)
+   !
+   integer, intent(in) :: b_pin
+   type(form_factor) :: d56tilde_b
+   !
+   d56tilde_b = test_d56tilde(b_pin)
+   !
+  end function d56tilde_b
+
+  function d56tilde_s(set)
+   !
+   integer, intent (in), dimension(:) :: set
+   type(form_factor) :: d56tilde_s
+   !
+   d56tilde_s = d56tilde_b(packb(set)) 
+   !
+  end function d56tilde_s
 
   function my_a61_b(l1,b_pin)
    !

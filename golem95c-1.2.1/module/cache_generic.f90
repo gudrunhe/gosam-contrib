@@ -32,10 +32,13 @@ module cache_generic
   private :: ki
   !
 
-  integer(kind=8), dimension(10240):: cache_generic_tag;
-  integer,dimension(10240) :: cache_generic_next;
-  integer,dimension(1024) :: cache_table;
-  type(form_factor),dimension(10240) ::  cache_generic_val;
+  integer, parameter :: cache_generic_size = 65536*32;
+  integer, parameter :: cache_generic_lookup_table_size = 90107; ! choose prime number
+
+  integer(kind=8), dimension(cache_generic_size):: cache_generic_tag;
+  integer,dimension(cache_generic_size) :: cache_generic_next;
+  integer,dimension(cache_generic_lookup_table_size+1) :: cache_table;
+  type(form_factor),dimension(cache_generic_size) ::  cache_generic_val;
   integer :: cache_generic_count
 
   public :: allocate_cache_generic, clear_cache_generic, reset_cache_generic
@@ -96,7 +99,7 @@ module cache_generic
        logical :: found
 
        hash_val=get_hash_value(leg_count,dim_nplus,b_pin,l_count,l)
-       hash_index=mod(hash_val, 1021) + 1
+       hash_index=mod(hash_val, cache_generic_lookup_table_size) + 1
        i = cache_table(hash_index)
        found = .false.
        do while ((i/=0) .and. (.not. found))
@@ -128,7 +131,7 @@ module cache_generic
        logical :: found
 
        hash_val=get_hash_value(leg_count,dim_nplus,b_pin,l_count,l);
-       hash_index=mod(hash_val, 1021) + 1
+       hash_index=mod(hash_val, cache_generic_lookup_table_size) + 1
        i = cache_table(hash_index)
        found = .false.
        do while ((i/=0) .and. (.not. found))
@@ -144,7 +147,9 @@ module cache_generic
                !        write (*, *) "collision", cache_generic_tag(cache_table(hash_index))
                !        write (*, *) "current", hash_val, leg_count,dim_nplus,b_pin,l_count,l,val
                !end if
-               if (cache_generic_count>10240) then
+               if (cache_generic_count>cache_generic_size) then
+                       write (*, *) "Cache full"
+                       call clear_cache_generic()
                        return
                end if
                cache_generic_val(cache_generic_count) = val

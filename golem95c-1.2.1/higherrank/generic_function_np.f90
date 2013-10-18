@@ -64,7 +64,7 @@ module generic_function_np
   !
   private
   !
-public :: fnp_generic , test_D56, test_C56, test_B56, test_A56
+public :: fnp_generic , test_D56, test_C56, test_B56, test_A56, test_D56tilde
 private :: reduce_generic, reduce_pave_generic
 !
 !
@@ -75,7 +75,7 @@ logical ::  pave_mode;
 
 integer, dimension(0) :: no_feynmanparam
 
-! symmetric parameters for rank-6 pentagons
+! symmetry parameters for rank-6 pentagons
 real, dimension(6) :: sym_parameters = (/ 15._ki,15._ki,15._ki,7.5_ki,15._ki,5._ki  /)
 public :: sym_parameters
 
@@ -121,7 +121,6 @@ public :: sym_parameters
           cur_depth=0
        end if
 
-       b_used=pminus(b_ref,b_pin)
        pave_mode=.false.
 
 
@@ -580,46 +579,45 @@ public :: sym_parameters
           temp1%a=0
           temp1%b=0
           temp1%c=0
+          do k = 1, 6
+             l_tmp2(k)=k
+          end do
+          l_tmp1=l
 
-          do j = 1,6
-             b_tmp = ibset(b_pin,s(j))
-
-             do k = 1, 6
-                l_tmp2(k)=k
-             end do
-             l_tmp1=l
-
-             pos=99 ! initial
-             do while (pos>0)
-                do k=0,l_count-1,2  ! A5x, B5x, C5x, ...
-                   if ((pos<=k+1) .or. (pos==99)) then ! ignore permutation of irrelevant arguments
-                      usable=.true.
-                      ! check if current permutation is usable (=sorted)
-                      do kk=2,k+1,2
-                         if((l_tmp2(kk)>l_tmp2(kk+1)) .or. &
-                           ((kk>=4) .and. (l_tmp2(kk-2)>l_tmp2(kk)))) then
-                            usable=.false.
-                            exit
-                         end if
-                      end do
-                      if(usable) then
-                        tmp3=1._ki
-                        do kk=2,k+1,2 ! for each g -> -2*inv_s
-                           tmp3=tmp3*(-2._ki)*inv_s(l_tmp1(kk),l_tmp1(kk+1),b_pin)
-                        end do
-                        temp1 = temp1 - tmp3*(-1._ki)**(l_count-k-1)* (-0.5_ki)**((dim_nplus+k)/2)*&
-                          & inv_s(s(j),l_tmp1(1),b_pin)*   &
-                         & fnp_generic(leg_count-1,dim_nplus+k,b_tmp,l_count-k-1,l_tmp1(k+2:l_count),cur_depth+1)
+          pos=99 ! initial
+          do while (pos>0)
+             do k=0,l_count-1,2  ! A5x, B5x, C5x, ...
+                if ((pos<=k+1) .or. (pos==99)) then ! ignore permutation of irrelevant arguments
+                   usable=.true.
+                   ! check if current permutation is usable (=sorted)
+                   do kk=2,k+1,2
+                      if((l_tmp2(kk)>l_tmp2(kk+1)) .or. &
+                        ((kk>=4) .and. (l_tmp2(kk-2)>l_tmp2(kk)))) then
+                         usable=.false.
+                         exit
                       end if
+                   end do
+                   if(usable) then
+                     tmp3=1._ki
+                     do kk=2,k+1,2 ! for each g -> -2*inv_s
+                        tmp3=tmp3*(-2._ki)*inv_s(l_tmp1(kk),l_tmp1(kk+1),b_pin)
+                     end do
+                     do j = 1,6
+                         b_tmp = ibset(b_pin,s(j))
+                         temp1 = temp1 - tmp3*(-1._ki)**(l_count-k-1)* (-0.5_ki)**((dim_nplus+k)/2)*&
+                          & inv_s(s(j),l_tmp1(1),b_pin)*   &
+                          & fnp_generic(leg_count-1,dim_nplus+k,b_tmp,l_count-k-1,l_tmp1(k+2:l_count),cur_depth+1)
+                     end do
                    end if
-                end do
-                pos = next_permutation_twice_pos(l_tmp2, l_tmp1, 1, l_count)
-              end do
+                end if
+             end do
+             pos = next_permutation_twice_pos(l_tmp2, l_tmp1, 1, l_count)
            end do
            temp1 = temp1 / l_count
            return_val=(-1._ki)**(l_count)* (-2._ki)**(dim_nplus/2) * temp1
            return
         end if
+
 
         ! ====================================================
         !     Reduction of higher dimensional tensor integrals
@@ -1739,6 +1737,20 @@ recursive  function calc_determinant(mat_p,used_size,b_pin) result(detS)
 
       end if
     end function f2p_ndim_0p_generic
+
+
+    function test_D56tilde(b_pin) result(return_val)
+        implicit none
+        integer, intent(in) :: b_pin
+        type(form_factor) :: return_val
+        complex(ki), dimension(3) :: tmp4
+
+         tmp4(1) = 0
+         tmp4(2) = (0.5_ki)**3 * (-1._ki/24._ki)
+         tmp4(3) = 0
+
+         return_val=tmp4
+   end function test_D56tilde
 
     function test_D56(b_pin) result(return_val)
         implicit none
