@@ -1830,37 +1830,16 @@ module form_factor_5p
           if (modulo(ib,2) == 1)  then
             !
             b_pro_mj = ibclr(b_pro,j)
-            b_pin_pj = punion( b_pin,ibset(0,j) )
+            b_pin_pj = ibset(b_pin,j)
             !
-            temp1 = temp1 - b(j,b_pin)*f4p_np2(s_mat_p,b_pro_mj,b_pin_pj,l1,l2) &
-                           - ( inv_s(j,l1,b_pin)*f4p_np2(s_mat_p,b_pro_mj,b_pin_pj,l2) &
-                           +   inv_s(j,l2,b_pin)*f4p_np2(s_mat_p,b_pro_mj,b_pin_pj,l1) &
-                            )/3._ki
             temp2 = temp2 + mult_div(-2._ki/3._ki,f4p_np4(s_mat_p,b_pro_mj,b_pin_pj)) &
-                           *( 2._ki*inv_s(l1,l2,b_pin)*b(j,b_pin) &
-                                    - inv_s(j,l1,b_pin)*b(l2,b_pin) &
-                                    - inv_s(j,l2,b_pin)*b(l1,b_pin) &
-                                    - b(j,b_pin)*inv_s(l1,l2,b_pin_pj) )
+                    * (inv_s(l1,l2,b_pin)*b(j,b_pin) - 0.5_ki*inv_s(j,l1,b_pin)*b(l2,b_pin) &
+                                                   - 0.5_ki*inv_s(j,l2,b_pin)*b(l1,b_pin))
             !
-            ibj = b_pro_mj
-            k = 0
+            temp1 = temp1 - b(j,b_pin)*f4p_np2(s_mat_p,b_pro_mj,b_pin_pj,l1,l2)
+            temp1 = temp1 - 0.5_ki*(inv_s(j,l1,b_pin)*f4p_np2(s_mat_p,b_pro_mj,b_pin_pj,l2) &
+                  + inv_s(j,l2,b_pin)*f4p_np2(s_mat_p,b_pro_mj,b_pin_pj,l1))
             !
-            second_pinch: do while (ibj /= 0)
-              !
-              if (modulo(ibj,2) == 1) then
-                !
-                b_pro_mjk = ibclr(b_pro_mj,k)
-                !
-                temp2 = temp2 - ( inv_s(j,l1,b_pin)*inv_s(k,l2,b_pin_pj) &
-                                 + inv_s(j,l2,b_pin)*inv_s(k,l1,b_pin_pj) ) &
-                                *f3p_np2(s_mat_p,b_pro_mjk)/6._ki
-                !
-              end if
-              !
-              k = k+1
-              ibj = ishft(ibj,-1)
-              !
-            end do second_pinch
             !
           end if
           !
@@ -1990,6 +1969,7 @@ module form_factor_5p
       integer :: j
       complex(ki) :: temp1
       complex(ki), dimension(3) :: temp2
+      complex(ki), dimension(2) :: temp3
       integer :: ib
       integer :: b_pro_mj
       integer :: b_pin_pj
@@ -2009,9 +1989,20 @@ module form_factor_5p
           if (modulo(ib,2) == 1)  then
             !
             b_pro_mj = ibclr(b_pro_glob,j)
-            b_pin_pj = punion( b_pin_glob,ibset(0,j) )
+            b_pin_pj = ibset(b_pin_glob,j)
+
+            temp3 = temp3 + mult_div(-1._ki/2._ki,f4p_np4(s_mat_p,b_pro_mj,b_pin_pj,l1))* &
+             (0.5_ki*(inv_s(j,l3,b_pin)*b(l2,b_pin) + inv_s(j,l2,b_pin)*b(l3,b_pin)) - inv_s(l2,l3,b_pin)*b(j,b_pin))
+            temp3 = temp3 + mult_div(-1._ki/2._ki,f4p_np4(s_mat_p,b_pro_mj,b_pin_pj,l2))* &
+             (0.5_ki*(inv_s(j,l3,b_pin)*b(l1,b_pin) + inv_s(j,l1,b_pin)*b(l3,b_pin)) - inv_s(l1,l3,b_pin)*b(j,b_pin))
+            temp3 = temp3 + mult_div(-1._ki/2._ki,f4p_np4(s_mat_p,b_pro_mj,b_pin_pj,l3))* &
+             (0.5_ki*(inv_s(j,l1,b_pin)*b(l2,b_pin) + inv_s(j,l2,b_pin)*b(l1,b_pin)) - inv_s(l2,l1,b_pin)*b(j,b_pin))
+
             !
             temp1 = temp1 + b(j,b_pin_glob)*f4p_np2(s_mat_p,b_pro_mj,b_pin_pj,l1,l2,l3)
+            temp1 = temp1 + 0.5_ki* inv_s(j,l3,b_pin)*f4p_np2(s_mat_p,b_pro_mj,b_pin_pj,l1,l2)
+            temp1 = temp1 + 0.5_ki* inv_s(j,l2,b_pin)*f4p_np2(s_mat_p,b_pro_mj,b_pin_pj,l1,l3)
+            temp1 = temp1 + 0.5_ki* inv_s(j,l1,b_pin)*f4p_np2(s_mat_p,b_pro_mj,b_pin_pj,l2,l3)
             !
           end if
           !
@@ -2021,8 +2012,7 @@ module form_factor_5p
         end do first_pinch
         !
         temp2(:) = czero
-        temp2(2:3) =  fb55(l1,l2,l3) + fb55(l1,l3,l2) + fb55(l3,l2,l1) &
-                  + gb55(l1,l2,l3) + gb55(l2,l1,l3) + gb55(l3,l2,l1) 
+        temp2(2:3) =  temp3(1:2)
         temp2(3) = temp2(3) + temp1
         temp2 = temp2/5._ki
         b55_b = temp2
@@ -2091,179 +2081,6 @@ module form_factor_5p
       b55_s = b55_b(l1,l2,l3,packb(set))
       !
     end function b55_s
-    !
-    !****if* src/form_factor/form_factor_5p/fb55
-    ! NAME
-    !
-    !  Function fb55
-    !
-    ! USAGE
-    !
-    !  real_dim6 = fb55(k1,k2,k3)
-    !
-    ! DESCRIPTION
-    !
-    !  A function to simplify the writting of the function b55
-    !
-    ! INPUTS
-    !
-    !  * k1 -- an integer
-    !  * k2 -- an integer
-    !  * k3 -- an integer
-    !
-    ! SIDE EFFECTS
-    !
-    !  No side effect, it uses the global (to this module) variable b_pin_glob,b_pro_glob
-    !  defined in b55
-    !
-    ! RETURN VALUE
-    !
-    !  It returns an array of six reals (type ki) corresponding
-    !  to the real part, imaginary part of the coefficient in front 1/epsilon^2,
-    !  the real part, imaginary part of the 1/epsilon term and the real part,
-    !  imaginary part of the constant term.
-    !
-    ! EXAMPLE
-    !
-    !
-    !
-    !*****
-    function fb55(k1,k2,k3)
-      !
-      integer, intent(in) :: k1,k2,k3
-      complex(ki), dimension(2) :: fb55
-      !
-      integer :: j
-      complex(ki) :: temp1
-      integer :: ib
-      integer :: b_pro_mj
-      integer :: b_pin_pj
-      !
-      temp1 = czero
-      !
-      ib = b_pro_glob
-      j = 0
-      !
-      first_pinch: do while (ib /= 0)
-        !
-        if (modulo(ib,2) == 1)  then
-          !
-          b_pro_mj = ibclr(b_pro_glob,j)
-          b_pin_pj = punion( b_pin_glob,ibset(0,j) )
-          !
-          temp1 = temp1 + inv_s(j,k3,b_pin_glob) &
-                         *f4p_np2(s_mat_p,b_pro_mj,b_pin_pj,k1,k2) &
-                         /4._ki
-          !
-        end if
-        !
-        j = j+1
-        ib= ishft(ib,-1)
-        !
-      end do first_pinch
-      !
-      fb55(:) = czero
-      fb55(2) = fb55(2) + temp1
-      !
-    end function fb55
-    !
-    !****if* src/form_factor/form_factor_5p/gb55
-    ! NAME
-    !
-    !  Function gb55
-    !
-    ! USAGE
-    !
-    !  real_dim6 = gb55(k1,k2,k3)
-    !
-    ! DESCRIPTION
-    !
-    !  A function to simplify the writting of the function b55
-    !
-    ! INPUTS
-    !
-    !  * k1 -- an integer
-    !  * k2 -- an integer
-    !  * k3 -- an integer
-    !
-    ! SIDE EFFECTS
-    !
-    !  No side effect, it uses the global (to this module) variable b_pin_glob,b_pro_glob
-    !  defined in b55
-    !
-    ! RETURN VALUE
-    !
-    !  It returns an array of six reals (type ki) corresponding
-    !  to the real part, imaginary part of the coefficient in front 1/epsilon^2,
-    !  the real part, imaginary part of the 1/epsilon term and the real part,
-    !  imaginary part of the constant term.
-    !
-    ! EXAMPLE
-    !
-    !
-    !
-    !*****
-    function gb55(k1,k2,k3)
-      !
-      integer, intent(in) :: k1,k2,k3
-      complex(ki), dimension(2) :: gb55
-      !
-      integer :: j,k
-      complex(ki), dimension(2) :: temp2
-      integer :: ib,ibj
-      integer :: b_pro_mj,b_pro_mjk
-      integer :: b_pin_pj
-      !
-      temp2(:) = czero
-      !
-      ib = b_pro_glob
-      j = 0
-      !
-      first_pinch: do while (ib /= 0)
-        !
-        if (modulo(ib,2) == 1)  then
-          !
-          b_pro_mj = ibclr(b_pro_glob,j)
-          b_pin_pj = punion( b_pin_glob,ibset(0,j) )
-          !
-          temp2 = temp2 + mult_div(-1._ki/2._ki,f4p_np4(s_mat_p,b_pro_mj,b_pin_pj,k1)) &
-                         *( inv_s(j,k2,b_pin_glob)*b(k3,b_pin_glob) &
-                           + inv_s(j,k3,b_pin_glob)*b(k2,b_pin_glob) &
-                           - 2._ki*inv_s(k2,k3,b_pin_glob)*b(j,b_pin_glob) &
-                           + b(j,b_pin_glob)*inv_s(k2,k3,b_pin_pj) ) &
-                        - inv_s(j,k1,b_pin_glob)*inv_s(k2,k3,b_pin_pj) &
-                         *f4p_np4(s_mat_p,b_pro_mj,b_pin_pj)/4._ki
-          !
-          ibj = b_pro_mj
-          k = 0
-          !
-          second_pinch: do while (ibj /= 0)
-            !
-            if (modulo(ibj,2) == 1) then
-              !
-              b_pro_mjk = ibclr(b_pro_mj,k)
-              !
-              temp2 = temp2 + ( inv_s(j,k3,b_pin_glob)*inv_s(k,k2,b_pin_pj) &
-                               + inv_s(j,k2,b_pin_glob)*inv_s(k,k3,b_pin_pj) ) &
-                              *f3p_np2(s_mat_p,b_pro_mjk,k1)/8._ki
-              !
-            end if
-            !
-            k = k+1
-            ibj = ishft(ibj,-1)
-            !
-          end do second_pinch
-          !
-        end if
-        !
-        j = j+1
-        ib= ishft(ib,-1)
-        !
-      end do first_pinch
-      !
-      gb55 = temp2
-      !
-    end function gb55
     !
     !****f* src/form_factor/form_factor_5p/c54_b
     ! NAME

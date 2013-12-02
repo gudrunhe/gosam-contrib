@@ -21,65 +21,73 @@
 !
 ! USES
 !
-!  * TODO
 !  * array (src/module/array.f90)
 !  * cache_generic (src/module/cache_generic.f90)
 !  * constante (src/module/constante.f90)
 !  * equal (src/module/equal.f90)
 !  * form_factor_type (src/module/form_factor_type.f90)
+!  * generic_function_1p (src/form_factor/form_factor_1p)
+!  * generic_function_1p (src/integrals/one_point/generic_function_1p.f90)
+!  * generic_function_2p (src/form_factor/form_factor_2p)
+!  * generic_function_2p (src/integrals/two_point/generic_function_2p.f90)
+!  * generic_function_3p (src/form_factor/form_factor_3p)
 !  * generic_function_3p (src/integrals/generic_function_3p.f90)
+!  * generic_function_3p (src/integrals/three_point/generic_function_3p.f90)
+!  * generic_function_4p (src/form_factor/form_factor_4p)
+!  * generic_function_4p (src/integrals/four_point/generic_function_4p.f90)
+!  * generic_function_5p (src/form_factor/form_factor_5p)
+!  * inverse_matrice (src/kinematic/inverse_matrice.f90)
+!  * logical (src/module/z_log.f90)
 !  * matrice_s (src/kinematic/matrice_s.f90)
+!  * parametre (src/module/parametre.f90)
 !  * precision (src/module/precision_golem.f90)
 !  * s_matrix_type (src/module/s_matrix_type.f90)
 !  * sortie_erreur (src/module/sortie_erreur.f90)
-!  * tri_croissant (src/module/tri.f90)
 !
 !*****
 module generic_function_np
   !
-  use precision_golem
-  use form_factor_5p
-  use form_factor_4p
-  use form_factor_3p
-  use form_factor_2p
-  use form_factor_1p
-  use generic_function_4p
-  use generic_function_3p
-  use generic_function_2p
-  use generic_function_1p
-  use matrice_s
   use array
-  use inverse_matrice
-  use form_factor_type
-  use s_matrix_type
-  use constante, only: czero
-  use logarithme
-  use sortie_erreur
-  use parametre
-  use equal
   use cache_generic
+  use constante, only: czero
+  use equal
+  use form_factor_1p
+  use form_factor_2p
+  use form_factor_3p
+  use form_factor_4p
+  use form_factor_5p
+  use form_factor_type
+  use generic_function_1p
+  use generic_function_2p
+  use generic_function_3p
+  use generic_function_4p
+  use inverse_matrice
+  use logarithme
+  use matrice_s
+  use parametre
+  use precision_golem
+  use s_matrix_type
+  use sortie_erreur
   !
 
   implicit none
-  !
   private
   !
-public :: fnp_generic , test_D56, test_C56, test_B56, test_A56, test_D56tilde
-private :: reduce_generic, reduce_pave_generic
-!
-!
+  !
+  public :: fnp_generic , test_D56, test_C56, test_B56, test_A56, test_D56tilde
+  private :: reduce_generic, reduce_pave_generic
+  !
+  !
+  private ::  f2p_ndim_0p_generic;
 
-private ::  f2p_ndim_0p_generic;
+  logical ::  pave_mode;
 
-logical ::  pave_mode;
+  integer, dimension(0) :: no_feynmanparam
 
-integer, dimension(0) :: no_feynmanparam
-
-! symmetry parameters for rank-6 pentagons
-real, dimension(6) :: sym_parameters = (/ 15._ki,15._ki,15._ki,7.5_ki,15._ki,5._ki  /)
-public :: sym_parameters
-
-!
+  ! symmetry parameters for rank-6 pentagons
+  real(ki), dimension(8) :: sym_parameters = (/ 15._ki,15._ki,15._ki,7.5_ki,15._ki,5._ki, 15._ki, 15._ki  /)
+  public :: sym_parameters
+  !
   !
   contains
     !
@@ -170,13 +178,13 @@ public :: sym_parameters
            .and. (cur_depth<=100) .and. ( l_count+dim_nplus>leg_count) &
            .and. (.not. (leg_count ==4 .and. ((dim_nplus==2 .and. l_count<=3) .or. &
               (dim_nplus==4 .and. l_count<=1  )))) &
-        ) .or.  (pave_mode .and. (leg_count <= 4) .and. ((l_count>0) .or. (dim_nplus > 0 )))) then
+        ) .or.  (pave_mode .and. (leg_count <= 4) .and. (leg_count>1) .and. ((l_count>0) .or. (dim_nplus > 0 )))) then
           detS = calc_determinant(s_mat_p,leg_count,b_pin)
 
           abs_sumb = abs(sumb(b_pin))
 
-          ! test if detS is below threshold or if sumb is NaN
-          if (( abs(detS) <=limit_small_detS) .or. (.not. abs_sumb>=0._ki) .or. pave_mode) then
+          ! test if detS is below threshold or if sumb is NaN or 0
+          if (( abs(detS) <=limit_small_detS) .or. (.not. abs_sumb>=0._ki) .or. abs_sumb==0.0_ki .or. pave_mode) then
 
              return_val=reduce_pave_generic(leg_count,dim_nplus,b_pin,l_count,l,cur_depth)
 
@@ -416,7 +424,42 @@ public :: sym_parameters
              end select
        end if
 
-
+       if ( leg_count==5) then
+          if (dim_nplus==0 .and. l_count==1) then
+            return_val = -a51(l(1),b_pin)
+            return
+          else if (dim_nplus==0 .and. l_count==2) then
+            return_val = a52(l(1),l(2),b_pin)
+            return
+          else if (dim_nplus==2 .and. l_count==0) then
+              return_val = -2._ki*b52(b_pin)
+            return
+          else if (dim_nplus==0 .and. l_count==3) then
+            return_val = -a53(l(1),l(2),l(3),b_pin)
+            return
+          else if (dim_nplus==2 .and. l_count==1) then
+            return_val = 2._ki*b53(l(1),b_pin)
+            return
+          else if (dim_nplus==0 .and. l_count==4) then
+            return_val = a54(l(1),l(2),l(3),l(4),b_pin)
+            return
+          else if (dim_nplus==2 .and. l_count==2) then
+            return_val = -2._ki*b54(l(1),l(2),b_pin)
+            return
+          else if (dim_nplus==4 .and. l_count==0) then
+            return_val = 4._ki*c54(b_pin)
+            return
+          else if (dim_nplus==0 .and. l_count==5) then
+            return_val = -a55(l(1),l(2),l(3),l(4),l(5),b_pin)
+            return
+          else if (dim_nplus==2 .and. l_count==3) then
+            return_val = 2._ki*b55(l(1),l(2),l(3),b_pin)
+            return
+          else if (dim_nplus==4 .and. l_count==1) then
+            return_val = -4._ki*c55(l(1),b_pin)
+            return
+          end if
+       end if
 
 
        if (leg_count == 1 .and. dim_nplus==0) then
@@ -521,9 +564,48 @@ public :: sym_parameters
                     tmp4=tmp4  / multiplicity_g
 
                     tmp5 = tmp5 + tmp4
+
+                    ! missing term for B56 in C.103 for rank 6
+                    if (dim_nplus==2 .and. l_count==4) then
+                       temp2=0
+                       do k=1,l_count
+                          do jj=k+1,l_count
+                             if (k==jj) then
+                                cycle
+                             end if
+                             l_tmp3(1) = l(jj)
+                             l_tmp3(2) = l(k)
+                             i=3
+                             do kk=1,l_count
+                                if((kk /= k) .and. (kk/=jj)) then
+                                   l_tmp3(i)=l(kk)
+                                   i=i+1
+                                end if
+                             end do
+
+                             temp2 = temp2 + (b(s(j),b_pin)*inv_s(l_tmp3(2),l_tmp3(1),b_pin) *b(l_tmp3(4),b_pin) &
+                             &  - b(l_tmp3(1),b_pin)*inv_s(s(j),l_tmp3(2),b_pin)*b(l_tmp3(4),b_pin) /2._ki &
+                             &  - b(l_tmp3(2),b_pin)*inv_s(s(j),l_tmp3(1),b_pin)*b(l_tmp3(4),b_pin) / 2._ki &
+                             & )*fnp_generic(4,4,b_tmp,1, (/ l_tmp3(3) /),cur_depth+1)
+
+                             temp2 = temp2 + (b(s(j),b_pin)*inv_s(l_tmp3(1),l_tmp3(2),b_pin) *b(l_tmp3(3),b_pin) &
+                             &   - b(l_tmp3(1),b_pin)*inv_s(s(j),l_tmp3(2),b_pin)*b(l_tmp3(3),b_pin) / 2._ki &
+                             &   - b(l_tmp3(2),b_pin)*inv_s(s(j),l_tmp3(1),b_pin)*b(l_tmp3(3),b_pin) / 2._ki &
+                             &  )*fnp_generic(4,4,b_tmp,1, (/ l_tmp3(4) /),cur_depth+1)
+                        end do
+                      enddo
+                      tmp5(2) = tmp5(2) - 1._ki/(4._ki* sym_parameters(7))*temp2%a / sumb(b_pin)
+                      tmp5(3) = tmp5(3) - 1._ki/(4._ki* sym_parameters(7))*temp2%b / sumb(b_pin)
+                    end if
+
+                    ! missing term for C56 in C.103 for rank 6
+                    if (dim_nplus==4 .and. l_count==2) then
+                       temp2= b(s(j),b_pin)*b(l(1),b_pin) * fnp_generic(4,4,b_tmp,1, (/ l(2) /),cur_depth+1)
+                       temp2= temp2 + b(s(j),b_pin)*b(l(2),b_pin) * fnp_generic(4,4,b_tmp,1, (/ l(1) /),1)
+                       tmp5(2) = tmp5(2) - 1._ki/(4._ki* sym_parameters(8) ) * temp2%a / sumb(b_pin)
+                       tmp5(3) = tmp5(3) - 1._ki/(4._ki* sym_parameters(8) ) * temp2%b / sumb(b_pin)
+                    end if
                  end if
-
-
 
                  ! Second part of C.103 in  hep-ph/0504267
 
@@ -622,7 +704,7 @@ public :: sym_parameters
         ! ====================================================
         !     Reduction of higher dimensional tensor integrals
 
-        if ((l_count > 0) .and. (dim_nplus > 0)) then
+        if ((l_count > 0) .and. (dim_nplus > 0) .and. (leg_count<5)) then
 
            temp1 = -fnp_generic(leg_count,dim_nplus-2,b_pin,l_count,l,cur_depth+1)
 
@@ -983,9 +1065,59 @@ recursive  function calc_determinant(mat_p,used_size,b_pin) result(detS)
                mat_p%pt_real(s(2),s(1))*(-(mat_p%pt_real(s(3),s(4))*mat_p%pt_real(s(4),s(2))) &
                + mat_p%pt_real(s(3),s(2))*mat_p%pt_real(s(4),s(4))))
           end if
+
+       else if (used_size == 5) then ! only for testing
+          ! calculate det(S), use s_ij=s_ji
+          if (iand(mat_p%b_cmplx, b_used) .eq. 1 ) then
+            detS = -2._ki*(mat_p%pt_cmplx(1,5)**2*mat_p%pt_cmplx(2,3)*mat_p%pt_cmplx(2,4)*mat_p%pt_cmplx(3,4) &
+              + mat_p%pt_cmplx(1,4)*(mat_p%pt_cmplx(1,3)*mat_p%pt_cmplx(2,5)**2*mat_p%pt_cmplx(3,4) &
+              + mat_p%pt_cmplx(2,5)*(mat_p%pt_cmplx(1,4)*mat_p%pt_cmplx(2,3) - &
+              mat_p%pt_cmplx(1,3)*mat_p%pt_cmplx(2,4) - &
+              mat_p%pt_cmplx(1,2)*mat_p%pt_cmplx(3,4))*mat_p%pt_cmplx(3,5) + &
+              mat_p%pt_cmplx(1,2)*mat_p%pt_cmplx(2,4)*mat_p%pt_cmplx(3,5)**2) - &
+              (mat_p%pt_cmplx(1,3)*mat_p%pt_cmplx(2,5)*(mat_p%pt_cmplx(1,4)*mat_p%pt_cmplx(2,3) &
+              - mat_p%pt_cmplx(1,3)*mat_p%pt_cmplx(2,4) + &
+              mat_p%pt_cmplx(1,2)*mat_p%pt_cmplx(3,4)) + &
+              mat_p%pt_cmplx(1,2)*(mat_p%pt_cmplx(1,4)*mat_p%pt_cmplx(2,3) + &
+              mat_p%pt_cmplx(1,3)*mat_p%pt_cmplx(2,4) - &
+              mat_p%pt_cmplx(1,2)*mat_p%pt_cmplx(3,4))*mat_p%pt_cmplx(3,5))* &
+              mat_p%pt_cmplx(4,5) + &
+              mat_p%pt_cmplx(1,2)*mat_p%pt_cmplx(1,3)*mat_p%pt_cmplx(2,3)*mat_p%pt_cmplx(4,5)**2 &
+              + mat_p%pt_cmplx(1,5)* ((mat_p%pt_cmplx(1,3)*mat_p%pt_cmplx(2,4) - &
+              mat_p%pt_cmplx(1,2)*mat_p%pt_cmplx(3,4))*(-1._ki*(mat_p%pt_cmplx(2,5)*mat_p%pt_cmplx(3,4)) &
+              + mat_p%pt_cmplx(2,4)*mat_p%pt_cmplx(3,5)) - &
+              mat_p%pt_cmplx(2,3)*(mat_p%pt_cmplx(1,3)*mat_p%pt_cmplx(2,4) + &
+              mat_p%pt_cmplx(1,2)*mat_p%pt_cmplx(3,4))*mat_p%pt_cmplx(4,5) + &
+              mat_p%pt_cmplx(1,4)*mat_p%pt_cmplx(2,3)*(-1._ki*(mat_p%pt_cmplx(2,5)*mat_p%pt_cmplx(3,4)) &
+              - mat_p%pt_cmplx(2,4)*mat_p%pt_cmplx(3,5) + &
+              mat_p%pt_cmplx(2,3)*mat_p%pt_cmplx(4,5))))
+          else
+            detS = -2._ki*(mat_p%pt_real(1,5)**2*mat_p%pt_real(2,3)*mat_p%pt_real(2,4)*mat_p%pt_real(3,4) &
+              + mat_p%pt_real(1,4)*(mat_p%pt_real(1,3)*mat_p%pt_real(2,5)**2*mat_p%pt_real(3,4) &
+              + mat_p%pt_real(2,5)*(mat_p%pt_real(1,4)*mat_p%pt_real(2,3) - &
+              mat_p%pt_real(1,3)*mat_p%pt_real(2,4) - &
+              mat_p%pt_real(1,2)*mat_p%pt_real(3,4))*mat_p%pt_real(3,5) + &
+              mat_p%pt_real(1,2)*mat_p%pt_real(2,4)*mat_p%pt_real(3,5)**2) - &
+              (mat_p%pt_real(1,3)*mat_p%pt_real(2,5)*(mat_p%pt_real(1,4)*mat_p%pt_real(2,3) &
+              - mat_p%pt_real(1,3)*mat_p%pt_real(2,4) + &
+              mat_p%pt_real(1,2)*mat_p%pt_real(3,4)) + &
+              mat_p%pt_real(1,2)*(mat_p%pt_real(1,4)*mat_p%pt_real(2,3) + &
+              mat_p%pt_real(1,3)*mat_p%pt_real(2,4) - &
+              mat_p%pt_real(1,2)*mat_p%pt_real(3,4))*mat_p%pt_real(3,5))* &
+              mat_p%pt_real(4,5) + &
+              mat_p%pt_real(1,2)*mat_p%pt_real(1,3)*mat_p%pt_real(2,3)*mat_p%pt_real(4,5)**2 &
+              + mat_p%pt_real(1,5)* ((mat_p%pt_real(1,3)*mat_p%pt_real(2,4) - &
+              mat_p%pt_real(1,2)*mat_p%pt_real(3,4))*(-1._ki*(mat_p%pt_real(2,5)*mat_p%pt_real(3,4)) &
+              + mat_p%pt_real(2,4)*mat_p%pt_real(3,5)) - &
+              mat_p%pt_real(2,3)*(mat_p%pt_real(1,3)*mat_p%pt_real(2,4) + &
+              mat_p%pt_real(1,2)*mat_p%pt_real(3,4))*mat_p%pt_real(4,5) + &
+              mat_p%pt_real(1,4)*mat_p%pt_real(2,3)*(-1._ki*(mat_p%pt_real(2,5)*mat_p%pt_real(3,4)) &
+              - mat_p%pt_real(2,4)*mat_p%pt_real(3,5) + &
+              mat_p%pt_real(2,3)*mat_p%pt_real(4,5))))
+          end if
       else
           tab_erreur_par(1)%a_imprimer = .true.
-          tab_erreur_par(1)%chaine = 'Determinant calulcation for this case not implemented yet.'
+          tab_erreur_par(1)%chaine = 'Determinant calculation for this case not implemented yet.'
           call catch_exception(0)
           stop
        end if
@@ -1746,13 +1878,13 @@ recursive  function calc_determinant(mat_p,used_size,b_pin) result(detS)
         complex(ki), dimension(3) :: tmp4
 
          tmp4(1) = 0
-         tmp4(2) = (0.5_ki)**3 * (-1._ki/24._ki)
+         tmp4(2) =  (-0.5_ki)**3 * (-1._ki/24._ki) * 1._ki/3._ki
          tmp4(3) = 0
 
          return_val=tmp4
    end function test_D56tilde
 
-    function test_D56(b_pin) result(return_val)
+   function test_D56(b_pin) result(return_val)
         implicit none
         integer, intent(in) :: b_pin
         type(form_factor) :: return_val,temp2
@@ -1818,7 +1950,18 @@ recursive  function calc_determinant(mat_p,used_size,b_pin) result(detS)
                  tmp5 = tmp5 - inv_s(s(j),l2,b_pin)*tmp4 / 6._ki
 
        end do
-       return_val= tmp5
+
+      temp2=0._ki
+      do j=1, 5
+              b_tmp = ibset(b_pin,s(j))
+              temp2= temp2 + b(s(j),b_pin)*b(l1,b_pin) * fnp_generic(4,4,b_tmp,1, (/ l2 /),1)
+              temp2= temp2 + b(s(j),b_pin)*b(l2,b_pin) * fnp_generic(4,4,b_tmp,1, (/ l1 /),1)
+      enddo
+      tmp5(2) = tmp5(2) - 1._ki/(4._ki* sym_parameters(8) ) * temp2%a / sumb(b_pin)
+      tmp5(3) = tmp5(3) - 1._ki/(4._ki* sym_parameters(8) ) * temp2%b / sumb(b_pin)
+
+
+      return_val= tmp5
 
     end function
 
@@ -1852,6 +1995,16 @@ recursive  function calc_determinant(mat_p,used_size,b_pin) result(detS)
         temp2 = 1._ki/6._ki * ( test_B56h2(l1,l2,l3,l4,b_pin) + test_B56h2(l1,l2,l4,l3,b_pin) &
                     + test_B56h2(l1,l3,l4,l2,b_pin) + test_B56h2(l2,l3,l4,l1,b_pin) )
         tmp5 = tmp5 + (/ temp2%a, temp2%b, temp2%c /)
+
+        temp2 = test_B56h3(l1,l2,l3,l4,b_pin)  + test_B56h3(l1,l3,l2,l4,b_pin) &
+                    + test_B56h3(l1,l4,l2,l3,b_pin) + test_B56h3(l2,l3,l1,l4,b_pin) &
+                    + test_B56h3(l2,l4,l1,l3,b_pin) + test_B56h3(l3,l4,l1,l2,b_pin)
+
+
+      tmp5(2) = tmp5(2) - 1._ki/(4._ki* sym_parameters(7))*temp2%a / sumb(b_pin)
+      tmp5(3) = tmp5(3) - 1._ki/(4._ki* sym_parameters(7))*temp2%b / sumb(b_pin)
+
+
        return_val= tmp5
     end function
 
@@ -1900,6 +2053,32 @@ recursive  function calc_determinant(mat_p,used_size,b_pin) result(detS)
        return_val= temp2
     end function
 
+    function test_B56h3(l1,l2,l3,l4, b_pin) result(return_val)
+       ! symm l1<->l2, l3<->l4
+       implicit none
+       integer, intent(in) :: l1,l2,l3,l4,b_pin
+       type(form_factor) :: return_val,temp2
+       integer :: i,j, b_tmp,b_used
+       integer,dimension(5) :: s
+
+       b_used=pminus(b_ref,b_pin)
+       s = unpackb(b_used,countb(b_used))
+
+       temp2=0._ki
+       do j=1,5
+               b_tmp = ibset(b_pin,s(j))
+               temp2 = temp2 + (b(s(j),b_pin)*inv_s(l2,l1,b_pin) *b(l4,b_pin) &
+                             &  - b(l1,b_pin)*inv_s(s(j),l2,b_pin)*b(l4,b_pin) /2._ki &
+                             &  - b(l2,b_pin)*inv_s(s(j),l1,b_pin)*b(l4,b_pin) / 2._ki &
+                             & )*fnp_generic(4,4,b_tmp,1, (/ l3 /),1)
+
+               temp2 = temp2 + (b(s(j),b_pin)*inv_s(l1,l2,b_pin) *b(l3,b_pin) &
+                            &   - b(l1,b_pin)*inv_s(s(j),l2,b_pin)*b(l3,b_pin) / 2._ki &
+                            &   - b(l2,b_pin)*inv_s(s(j),l1,b_pin)*b(l3,b_pin) / 2._ki &
+                            &  )*fnp_generic(4,4,b_tmp,1, (/ l4 /),1)
+       end do
+       return_val = temp2
+    end function test_B56h3
 
     function test_a56(l1,l2,l3,l4,l5,l6,b_pin) result(return_val)
         implicit none
@@ -1914,7 +2093,7 @@ recursive  function calc_determinant(mat_p,used_size,b_pin) result(detS)
         tmp4=0
 
         temp2 = test_A56h1(l1,l2,l3,l4,l5,l6,b_pin) + test_A56h1(l5,l2,l3,l4,l1,l6,b_pin)
-        temp2 = temp2 + test_A56h1(l6,l2,l3,l4,l5,l1,b_pin)  + test_A56h1(l1,l5,l3,l4,l2,l6,b_pin)
+        temp2 = temp2 + test_A56h1(l6,l2,l3,l4,l5,l1,b_pin) + test_A56h1(l1,l5,l3,l4,l2,l6,b_pin)
         temp2 = temp2 + test_A56h1(l1,l6,l3,l4,l5,l2,b_pin) + test_A56h1(l1,l2,l5,l4,l3,l6,b_pin)
         temp2 = temp2 + test_A56h1(l1,l2,l6,l4,l5,l3,b_pin) + test_A56h1(l1,l2,l3,l5,l4,l6,b_pin)
         temp2 = temp2 + test_A56h1(l1,l2,l3,l6,l5,l4,b_pin) + test_A56h1(l5,l6,l3,l4,l1,l2,b_pin)
