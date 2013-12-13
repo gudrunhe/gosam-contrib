@@ -20,7 +20,6 @@
 ! OUTPUT
 !
 !  It exports functions:
-!  * my_a11  -- a function to compute A^{1,1}
 !  * a12  -- a function to compute A^{1,2}
 !  * b12  -- a function to compute B^{1,2}
 !  * a13  -- a function to compute A^{1,3}
@@ -91,9 +90,6 @@
 !  * f115  -- a function to compute F^{1,15}
 !  * g115  -- a function to compute G^{1,15}
 !  * h115  -- a function to compute H^{1,15}
-!  * my_a21  -- a function to compute A^{2,1}
-!  * my_a22  -- a function to compute A^{2,2}
-!  * my_b22  -- a function to compute B^{2,2}
 !  * a23  -- a function to compute A^{2,3}
 !  * b23  -- a function to compute B^{2,3}
 !  * a24  -- a function to compute A^{2,4}
@@ -171,11 +167,6 @@
 !  * g216  -- a function to compute G^{2,16}
 !  * h216  -- a function to compute H^{2,16}
 !  * i216  -- a function to compute I^{2,16}
-!  * my_a31  -- a function to compute A^{3,1}
-!  * my_a32  -- a function to compute A^{3,2}
-!  * my_b32  -- a function to compute B^{3,2}
-!  * my_a33  -- a function to compute A^{3,3}
-!  * my_b33  -- a function to compute B^{3,3}
 !  * a34  -- a function to compute A^{3,4}
 !  * b34  -- a function to compute B^{3,4}
 !  * c34  -- a function to compute C^{3,4}
@@ -260,14 +251,6 @@
 !  * g317  -- a function to compute G^{3,17}
 !  * h317  -- a function to compute H^{3,17}
 !  * i317  -- a function to compute I^{3,17}
-!  * my_a41  -- a function to compute A^{4,1}
-!  * my_a42  -- a function to compute A^{4,2}
-!  * my_b42  -- a function to compute B^{4,2}
-!  * my_a43  -- a function to compute A^{4,3}
-!  * my_b43  -- a function to compute B^{4,3}
-!  * my_a44  -- a function to compute A^{4,4}
-!  * my_b44  -- a function to compute B^{4,4}
-!  * my_c44  -- a function to compute C^{4,4}
 !  * a45  -- a function to compute A^{4,5}
 !  * b45  -- a function to compute B^{4,5}
 !  * c45  -- a function to compute C^{4,5}
@@ -359,27 +342,10 @@
 !  * h418  -- a function to compute H^{4,18}
 !  * i418  -- a function to compute I^{4,18}
 !  * j418  -- a function to compute J^{4,18}
-!  * my_a51  -- a function to compute A^{5,1}
-!  * my_a52  -- a function to compute A^{5,2}
-!  * my_b52  -- a function to compute B^{5,2}
-!  * my_a53  -- a function to compute A^{5,3}
-!  * my_b53  -- a function to compute B^{5,3}
-!  * my_a54  -- a function to compute A^{5,4}
-!  * my_b54  -- a function to compute B^{5,4}
-!  * my_c54  -- a function to compute C^{5,4}
-!  * my_a55  -- a function to compute A^{5,5}
-!  * my_b55  -- a function to compute B^{5,5}
-!  * my_c55  -- a function to compute C^{5,5}
 !  * a56  -- a function to compute A^{5,6}
 !  * b56  -- a function to compute B^{5,6}
 !  * c56  -- a function to compute C^{5,6}
 !  * d56  -- a function to compute D^{5,6}
-!  * my_a61  -- a function to compute A^{6,1}
-!  * my_a62  -- a function to compute A^{6,2}
-!  * my_a63  -- a function to compute A^{6,3}
-!  * my_a64  -- a function to compute A^{6,4}
-!  * my_a65  -- a function to compute A^{6,5}
-!  * my_a66  -- a function to compute A^{6,6}
 !  * a67  -- a function to compute A^{6,7}
 !
 !  Note that these are generic functions which can be called either with a
@@ -402,10 +368,6 @@ use array
   implicit none
   private
 !
-  interface my_a11
-    module procedure my_a11_b, my_a11_s
-  end interface my_a11
-  public :: my_a11
 !
 !
 !
@@ -733,21 +695,9 @@ use array
 !
 !
 !
-  interface my_a21
-    module procedure my_a21_b, my_a21_s
-  end interface my_a21
-  public :: my_a21
 !
 !
 !
-  interface my_a22
-    module procedure my_a22_b, my_a22_s
-  end interface my_a22
-  public :: my_a22
-  interface my_b22
-    module procedure my_b22_b, my_b22_s
-  end interface my_b22
-  public :: my_b22
 !
 !
 !
@@ -1103,32 +1053,12 @@ use array
 !
 !
 !
-  interface my_a31
-    module procedure my_a31_b, my_a31_s
-  end interface my_a31
-  public :: my_a31
 !
 !
 !
-  interface my_a32
-    module procedure my_a32_b, my_a32_s
-  end interface my_a32
-  public :: my_a32
-  interface my_b32
-    module procedure my_b32_b, my_b32_s
-  end interface my_b32
-  public :: my_b32
 !
 !
 !
-  interface my_a33
-    module procedure my_a33_b, my_a33_s
-  end interface my_a33
-  public :: my_a33
-  interface my_b33
-    module procedure my_b33_b, my_b33_s
-  end interface my_b33
-  public :: my_b33
 !
 !
 !
@@ -1512,47 +1442,15 @@ use array
 !
 !
 !
-  interface my_a41
-    module procedure my_a41_b, my_a41_s
-  end interface my_a41
-  public :: my_a41
 !
 !
 !
-  interface my_a42
-    module procedure my_a42_b, my_a42_s
-  end interface my_a42
-  public :: my_a42
-  interface my_b42
-    module procedure my_b42_b, my_b42_s
-  end interface my_b42
-  public :: my_b42
 !
 !
 !
-  interface my_a43
-    module procedure my_a43_b, my_a43_s
-  end interface my_a43
-  public :: my_a43
-  interface my_b43
-    module procedure my_b43_b, my_b43_s
-  end interface my_b43
-  public :: my_b43
 !
 !
 !
-  interface my_a44
-    module procedure my_a44_b, my_a44_s
-  end interface my_a44
-  public :: my_a44
-  interface my_b44
-    module procedure my_b44_b, my_b44_s
-  end interface my_b44
-  public :: my_b44
-  interface my_c44
-    module procedure my_c44_b, my_c44_s
-  end interface my_c44
-  public :: my_c44
 !
 !
 !
@@ -1964,62 +1862,18 @@ use array
 !
 !
 !
-  interface my_a51
-    module procedure my_a51_b, my_a51_s
-  end interface my_a51
-  public :: my_a51
 !
 !
 !
-  interface my_a52
-    module procedure my_a52_b, my_a52_s
-  end interface my_a52
-  public :: my_a52
-  interface my_b52
-    module procedure my_b52_b, my_b52_s
-  end interface my_b52
-  public :: my_b52
 !
 !
 !
-  interface my_a53
-    module procedure my_a53_b, my_a53_s
-  end interface my_a53
-  public :: my_a53
-  interface my_b53
-    module procedure my_b53_b, my_b53_s
-  end interface my_b53
-  public :: my_b53
 !
 !
 !
-  interface my_a54
-    module procedure my_a54_b, my_a54_s
-  end interface my_a54
-  public :: my_a54
-  interface my_b54
-    module procedure my_b54_b, my_b54_s
-  end interface my_b54
-  public :: my_b54
-  interface my_c54
-    module procedure my_c54_b, my_c54_s
-  end interface my_c54
-  public :: my_c54
 !
 !
 !
-  interface my_a55
-    module procedure my_a55_b, my_a55_s
-  end interface my_a55
-  public :: my_a55
-  interface my_b55
-    module procedure my_b55_b, my_b55_s
-  end interface my_b55
-  public :: my_b55
-  interface my_c55
-    module procedure my_c55_b, my_c55_s
-  end interface my_c55
-  public :: my_c55
 !
 !
 !
@@ -2039,56 +1893,26 @@ use array
     module procedure d56_b, d56_s
   end interface d56
   public :: d56
-
-  interface d56tilde
-    module procedure d56tilde_b, d56tilde_s
-  end interface d56tilde
-  public :: d56tilde
-
 !
 !
 !
 !
 !
-  interface my_a61
-    module procedure my_a61_b, my_a61_s
-  end interface my_a61
-  public :: my_a61
 !
 !
 !
-  interface my_a62
-    module procedure my_a62_b, my_a62_s
-  end interface my_a62
-  public :: my_a62
 !
 !
 !
-  interface my_a63
-    module procedure my_a63_b, my_a63_s
-  end interface my_a63
-  public :: my_a63
 !
 !
 !
-  interface my_a64
-    module procedure my_a64_b, my_a64_s
-  end interface my_a64
-  public :: my_a64
 !
 !
 !
-  interface my_a65
-    module procedure my_a65_b, my_a65_s
-  end interface my_a65
-  public :: my_a65
 !
 !
 !
-  interface my_a66
-    module procedure my_a66_b, my_a66_s
-  end interface my_a66
-  public :: my_a66
 !
 !
 !
@@ -2103,24 +1927,6 @@ use array
   integer, dimension(0) :: no_feynmanparam
   contains
 
-  function my_a11_b(l1,b_pin)
-   !
-   integer, intent(in) :: l1,b_pin
-   type(form_factor) :: my_a11_b
-   !
-   my_a11_b = -1.0_ki * fnp_generic(1,0,b_pin,1,(/ l1 /))
-   !
-  end function my_a11_b
-
-  function my_a11_s(l1,set)
-   !
-   integer, intent (in), dimension(:) :: set
-   integer, intent(in) :: l1
-   type(form_factor) :: my_a11_s
-   !
-   my_a11_s = my_a11_b(l1,packb(set)) 
-   !
-  end function my_a11_s
 
   function a12_b(l1,l2,b_pin)
    !
@@ -2137,7 +1943,7 @@ use array
    integer, intent(in) :: l1,l2
    type(form_factor) :: a12_s
    !
-   a12_s = a12_b(l1,l2,packb(set)) 
+   a12_s = a12_b(l1,l2,packb(set))
    !
   end function a12_s
   function b12_b(b_pin)
@@ -2154,7 +1960,7 @@ use array
    integer, intent (in), dimension(:) :: set
    type(form_factor) :: b12_s
    !
-   b12_s = b12_b(packb(set)) 
+   b12_s = b12_b(packb(set))
    !
   end function b12_s
 
@@ -2173,7 +1979,7 @@ use array
    integer, intent(in) :: l1,l2,l3
    type(form_factor) :: a13_s
    !
-   a13_s = a13_b(l1,l2,l3,packb(set)) 
+   a13_s = a13_b(l1,l2,l3,packb(set))
    !
   end function a13_s
   function b13_b(l1,b_pin)
@@ -2191,7 +1997,7 @@ use array
    integer, intent(in) :: l1
    type(form_factor) :: b13_s
    !
-   b13_s = b13_b(l1,packb(set)) 
+   b13_s = b13_b(l1,packb(set))
    !
   end function b13_s
 
@@ -2210,7 +2016,7 @@ use array
    integer, intent(in) :: l1,l2,l3,l4
    type(form_factor) :: a14_s
    !
-   a14_s = a14_b(l1,l2,l3,l4,packb(set)) 
+   a14_s = a14_b(l1,l2,l3,l4,packb(set))
    !
   end function a14_s
   function b14_b(l1,l2,b_pin)
@@ -2228,7 +2034,7 @@ use array
    integer, intent(in) :: l1,l2
    type(form_factor) :: b14_s
    !
-   b14_s = b14_b(l1,l2,packb(set)) 
+   b14_s = b14_b(l1,l2,packb(set))
    !
   end function b14_s
   function c14_b(b_pin)
@@ -2245,7 +2051,7 @@ use array
    integer, intent (in), dimension(:) :: set
    type(form_factor) :: c14_s
    !
-   c14_s = c14_b(packb(set)) 
+   c14_s = c14_b(packb(set))
    !
   end function c14_s
 
@@ -2264,7 +2070,7 @@ use array
    integer, intent(in) :: l1,l2,l3,l4,l5
    type(form_factor) :: a15_s
    !
-   a15_s = a15_b(l1,l2,l3,l4,l5,packb(set)) 
+   a15_s = a15_b(l1,l2,l3,l4,l5,packb(set))
    !
   end function a15_s
   function b15_b(l1,l2,l3,b_pin)
@@ -2282,7 +2088,7 @@ use array
    integer, intent(in) :: l1,l2,l3
    type(form_factor) :: b15_s
    !
-   b15_s = b15_b(l1,l2,l3,packb(set)) 
+   b15_s = b15_b(l1,l2,l3,packb(set))
    !
   end function b15_s
   function c15_b(l1,b_pin)
@@ -2300,7 +2106,7 @@ use array
    integer, intent(in) :: l1
    type(form_factor) :: c15_s
    !
-   c15_s = c15_b(l1,packb(set)) 
+   c15_s = c15_b(l1,packb(set))
    !
   end function c15_s
 
@@ -2319,7 +2125,7 @@ use array
    integer, intent(in) :: l1,l2,l3,l4,l5,l6
    type(form_factor) :: a16_s
    !
-   a16_s = a16_b(l1,l2,l3,l4,l5,l6,packb(set)) 
+   a16_s = a16_b(l1,l2,l3,l4,l5,l6,packb(set))
    !
   end function a16_s
   function b16_b(l1,l2,l3,l4,b_pin)
@@ -2337,7 +2143,7 @@ use array
    integer, intent(in) :: l1,l2,l3,l4
    type(form_factor) :: b16_s
    !
-   b16_s = b16_b(l1,l2,l3,l4,packb(set)) 
+   b16_s = b16_b(l1,l2,l3,l4,packb(set))
    !
   end function b16_s
   function c16_b(l1,l2,b_pin)
@@ -2355,7 +2161,7 @@ use array
    integer, intent(in) :: l1,l2
    type(form_factor) :: c16_s
    !
-   c16_s = c16_b(l1,l2,packb(set)) 
+   c16_s = c16_b(l1,l2,packb(set))
    !
   end function c16_s
   function d16_b(b_pin)
@@ -2372,7 +2178,7 @@ use array
    integer, intent (in), dimension(:) :: set
    type(form_factor) :: d16_s
    !
-   d16_s = d16_b(packb(set)) 
+   d16_s = d16_b(packb(set))
    !
   end function d16_s
 
@@ -2391,7 +2197,7 @@ use array
    integer, intent(in) :: l1,l2,l3,l4,l5,l6,l7
    type(form_factor) :: a17_s
    !
-   a17_s = a17_b(l1,l2,l3,l4,l5,l6,l7,packb(set)) 
+   a17_s = a17_b(l1,l2,l3,l4,l5,l6,l7,packb(set))
    !
   end function a17_s
   function b17_b(l1,l2,l3,l4,l5,b_pin)
@@ -2409,7 +2215,7 @@ use array
    integer, intent(in) :: l1,l2,l3,l4,l5
    type(form_factor) :: b17_s
    !
-   b17_s = b17_b(l1,l2,l3,l4,l5,packb(set)) 
+   b17_s = b17_b(l1,l2,l3,l4,l5,packb(set))
    !
   end function b17_s
   function c17_b(l1,l2,l3,b_pin)
@@ -2427,7 +2233,7 @@ use array
    integer, intent(in) :: l1,l2,l3
    type(form_factor) :: c17_s
    !
-   c17_s = c17_b(l1,l2,l3,packb(set)) 
+   c17_s = c17_b(l1,l2,l3,packb(set))
    !
   end function c17_s
   function d17_b(l1,b_pin)
@@ -2445,7 +2251,7 @@ use array
    integer, intent(in) :: l1
    type(form_factor) :: d17_s
    !
-   d17_s = d17_b(l1,packb(set)) 
+   d17_s = d17_b(l1,packb(set))
    !
   end function d17_s
 
@@ -2464,7 +2270,7 @@ use array
    integer, intent(in) :: l1,l2,l3,l4,l5,l6,l7,l8
    type(form_factor) :: a18_s
    !
-   a18_s = a18_b(l1,l2,l3,l4,l5,l6,l7,l8,packb(set)) 
+   a18_s = a18_b(l1,l2,l3,l4,l5,l6,l7,l8,packb(set))
    !
   end function a18_s
   function b18_b(l1,l2,l3,l4,l5,l6,b_pin)
@@ -2482,7 +2288,7 @@ use array
    integer, intent(in) :: l1,l2,l3,l4,l5,l6
    type(form_factor) :: b18_s
    !
-   b18_s = b18_b(l1,l2,l3,l4,l5,l6,packb(set)) 
+   b18_s = b18_b(l1,l2,l3,l4,l5,l6,packb(set))
    !
   end function b18_s
   function c18_b(l1,l2,l3,l4,b_pin)
@@ -2500,7 +2306,7 @@ use array
    integer, intent(in) :: l1,l2,l3,l4
    type(form_factor) :: c18_s
    !
-   c18_s = c18_b(l1,l2,l3,l4,packb(set)) 
+   c18_s = c18_b(l1,l2,l3,l4,packb(set))
    !
   end function c18_s
   function d18_b(l1,l2,b_pin)
@@ -2518,7 +2324,7 @@ use array
    integer, intent(in) :: l1,l2
    type(form_factor) :: d18_s
    !
-   d18_s = d18_b(l1,l2,packb(set)) 
+   d18_s = d18_b(l1,l2,packb(set))
    !
   end function d18_s
   function e18_b(b_pin)
@@ -2535,7 +2341,7 @@ use array
    integer, intent (in), dimension(:) :: set
    type(form_factor) :: e18_s
    !
-   e18_s = e18_b(packb(set)) 
+   e18_s = e18_b(packb(set))
    !
   end function e18_s
 
@@ -2554,7 +2360,7 @@ use array
    integer, intent(in) :: l1,l2,l3,l4,l5,l6,l7,l8,l9
    type(form_factor) :: a19_s
    !
-   a19_s = a19_b(l1,l2,l3,l4,l5,l6,l7,l8,l9,packb(set)) 
+   a19_s = a19_b(l1,l2,l3,l4,l5,l6,l7,l8,l9,packb(set))
    !
   end function a19_s
   function b19_b(l1,l2,l3,l4,l5,l6,l7,b_pin)
@@ -2572,7 +2378,7 @@ use array
    integer, intent(in) :: l1,l2,l3,l4,l5,l6,l7
    type(form_factor) :: b19_s
    !
-   b19_s = b19_b(l1,l2,l3,l4,l5,l6,l7,packb(set)) 
+   b19_s = b19_b(l1,l2,l3,l4,l5,l6,l7,packb(set))
    !
   end function b19_s
   function c19_b(l1,l2,l3,l4,l5,b_pin)
@@ -2590,7 +2396,7 @@ use array
    integer, intent(in) :: l1,l2,l3,l4,l5
    type(form_factor) :: c19_s
    !
-   c19_s = c19_b(l1,l2,l3,l4,l5,packb(set)) 
+   c19_s = c19_b(l1,l2,l3,l4,l5,packb(set))
    !
   end function c19_s
   function d19_b(l1,l2,l3,b_pin)
@@ -2608,7 +2414,7 @@ use array
    integer, intent(in) :: l1,l2,l3
    type(form_factor) :: d19_s
    !
-   d19_s = d19_b(l1,l2,l3,packb(set)) 
+   d19_s = d19_b(l1,l2,l3,packb(set))
    !
   end function d19_s
   function e19_b(l1,b_pin)
@@ -2626,7 +2432,7 @@ use array
    integer, intent(in) :: l1
    type(form_factor) :: e19_s
    !
-   e19_s = e19_b(l1,packb(set)) 
+   e19_s = e19_b(l1,packb(set))
    !
   end function e19_s
 
@@ -2645,7 +2451,7 @@ use array
    integer, intent(in) :: l1,l2,l3,l4,l5,l6,l7,l8,l9,l10
    type(form_factor) :: a110_s
    !
-   a110_s = a110_b(l1,l2,l3,l4,l5,l6,l7,l8,l9,l10,packb(set)) 
+   a110_s = a110_b(l1,l2,l3,l4,l5,l6,l7,l8,l9,l10,packb(set))
    !
   end function a110_s
   function b110_b(l1,l2,l3,l4,l5,l6,l7,l8,b_pin)
@@ -2663,7 +2469,7 @@ use array
    integer, intent(in) :: l1,l2,l3,l4,l5,l6,l7,l8
    type(form_factor) :: b110_s
    !
-   b110_s = b110_b(l1,l2,l3,l4,l5,l6,l7,l8,packb(set)) 
+   b110_s = b110_b(l1,l2,l3,l4,l5,l6,l7,l8,packb(set))
    !
   end function b110_s
   function c110_b(l1,l2,l3,l4,l5,l6,b_pin)
@@ -2681,7 +2487,7 @@ use array
    integer, intent(in) :: l1,l2,l3,l4,l5,l6
    type(form_factor) :: c110_s
    !
-   c110_s = c110_b(l1,l2,l3,l4,l5,l6,packb(set)) 
+   c110_s = c110_b(l1,l2,l3,l4,l5,l6,packb(set))
    !
   end function c110_s
   function d110_b(l1,l2,l3,l4,b_pin)
@@ -2699,7 +2505,7 @@ use array
    integer, intent(in) :: l1,l2,l3,l4
    type(form_factor) :: d110_s
    !
-   d110_s = d110_b(l1,l2,l3,l4,packb(set)) 
+   d110_s = d110_b(l1,l2,l3,l4,packb(set))
    !
   end function d110_s
   function e110_b(l1,l2,b_pin)
@@ -2717,7 +2523,7 @@ use array
    integer, intent(in) :: l1,l2
    type(form_factor) :: e110_s
    !
-   e110_s = e110_b(l1,l2,packb(set)) 
+   e110_s = e110_b(l1,l2,packb(set))
    !
   end function e110_s
   function f110_b(b_pin)
@@ -2734,7 +2540,7 @@ use array
    integer, intent (in), dimension(:) :: set
    type(form_factor) :: f110_s
    !
-   f110_s = f110_b(packb(set)) 
+   f110_s = f110_b(packb(set))
    !
   end function f110_s
 
@@ -2753,7 +2559,7 @@ use array
    integer, intent(in) :: l1,l2,l3,l4,l5,l6,l7,l8,l9,l10,l11
    type(form_factor) :: a111_s
    !
-   a111_s = a111_b(l1,l2,l3,l4,l5,l6,l7,l8,l9,l10,l11,packb(set)) 
+   a111_s = a111_b(l1,l2,l3,l4,l5,l6,l7,l8,l9,l10,l11,packb(set))
    !
   end function a111_s
   function b111_b(l1,l2,l3,l4,l5,l6,l7,l8,l9,b_pin)
@@ -2771,7 +2577,7 @@ use array
    integer, intent(in) :: l1,l2,l3,l4,l5,l6,l7,l8,l9
    type(form_factor) :: b111_s
    !
-   b111_s = b111_b(l1,l2,l3,l4,l5,l6,l7,l8,l9,packb(set)) 
+   b111_s = b111_b(l1,l2,l3,l4,l5,l6,l7,l8,l9,packb(set))
    !
   end function b111_s
   function c111_b(l1,l2,l3,l4,l5,l6,l7,b_pin)
@@ -2789,7 +2595,7 @@ use array
    integer, intent(in) :: l1,l2,l3,l4,l5,l6,l7
    type(form_factor) :: c111_s
    !
-   c111_s = c111_b(l1,l2,l3,l4,l5,l6,l7,packb(set)) 
+   c111_s = c111_b(l1,l2,l3,l4,l5,l6,l7,packb(set))
    !
   end function c111_s
   function d111_b(l1,l2,l3,l4,l5,b_pin)
@@ -2807,7 +2613,7 @@ use array
    integer, intent(in) :: l1,l2,l3,l4,l5
    type(form_factor) :: d111_s
    !
-   d111_s = d111_b(l1,l2,l3,l4,l5,packb(set)) 
+   d111_s = d111_b(l1,l2,l3,l4,l5,packb(set))
    !
   end function d111_s
   function e111_b(l1,l2,l3,b_pin)
@@ -2825,7 +2631,7 @@ use array
    integer, intent(in) :: l1,l2,l3
    type(form_factor) :: e111_s
    !
-   e111_s = e111_b(l1,l2,l3,packb(set)) 
+   e111_s = e111_b(l1,l2,l3,packb(set))
    !
   end function e111_s
   function f111_b(l1,b_pin)
@@ -2843,7 +2649,7 @@ use array
    integer, intent(in) :: l1
    type(form_factor) :: f111_s
    !
-   f111_s = f111_b(l1,packb(set)) 
+   f111_s = f111_b(l1,packb(set))
    !
   end function f111_s
 
@@ -2862,7 +2668,7 @@ use array
    integer, intent(in) :: l1,l2,l3,l4,l5,l6,l7,l8,l9,l10,l11,l12
    type(form_factor) :: a112_s
    !
-   a112_s = a112_b(l1,l2,l3,l4,l5,l6,l7,l8,l9,l10,l11,l12,packb(set)) 
+   a112_s = a112_b(l1,l2,l3,l4,l5,l6,l7,l8,l9,l10,l11,l12,packb(set))
    !
   end function a112_s
   function b112_b(l1,l2,l3,l4,l5,l6,l7,l8,l9,l10,b_pin)
@@ -2880,7 +2686,7 @@ use array
    integer, intent(in) :: l1,l2,l3,l4,l5,l6,l7,l8,l9,l10
    type(form_factor) :: b112_s
    !
-   b112_s = b112_b(l1,l2,l3,l4,l5,l6,l7,l8,l9,l10,packb(set)) 
+   b112_s = b112_b(l1,l2,l3,l4,l5,l6,l7,l8,l9,l10,packb(set))
    !
   end function b112_s
   function c112_b(l1,l2,l3,l4,l5,l6,l7,l8,b_pin)
@@ -2898,7 +2704,7 @@ use array
    integer, intent(in) :: l1,l2,l3,l4,l5,l6,l7,l8
    type(form_factor) :: c112_s
    !
-   c112_s = c112_b(l1,l2,l3,l4,l5,l6,l7,l8,packb(set)) 
+   c112_s = c112_b(l1,l2,l3,l4,l5,l6,l7,l8,packb(set))
    !
   end function c112_s
   function d112_b(l1,l2,l3,l4,l5,l6,b_pin)
@@ -2916,7 +2722,7 @@ use array
    integer, intent(in) :: l1,l2,l3,l4,l5,l6
    type(form_factor) :: d112_s
    !
-   d112_s = d112_b(l1,l2,l3,l4,l5,l6,packb(set)) 
+   d112_s = d112_b(l1,l2,l3,l4,l5,l6,packb(set))
    !
   end function d112_s
   function e112_b(l1,l2,l3,l4,b_pin)
@@ -2934,7 +2740,7 @@ use array
    integer, intent(in) :: l1,l2,l3,l4
    type(form_factor) :: e112_s
    !
-   e112_s = e112_b(l1,l2,l3,l4,packb(set)) 
+   e112_s = e112_b(l1,l2,l3,l4,packb(set))
    !
   end function e112_s
   function f112_b(l1,l2,b_pin)
@@ -2952,7 +2758,7 @@ use array
    integer, intent(in) :: l1,l2
    type(form_factor) :: f112_s
    !
-   f112_s = f112_b(l1,l2,packb(set)) 
+   f112_s = f112_b(l1,l2,packb(set))
    !
   end function f112_s
   function g112_b(b_pin)
@@ -2969,7 +2775,7 @@ use array
    integer, intent (in), dimension(:) :: set
    type(form_factor) :: g112_s
    !
-   g112_s = g112_b(packb(set)) 
+   g112_s = g112_b(packb(set))
    !
   end function g112_s
 
@@ -2988,7 +2794,7 @@ use array
    integer, intent(in) :: l1,l2,l3,l4,l5,l6,l7,l8,l9,l10,l11,l12,l13
    type(form_factor) :: a113_s
    !
-   a113_s = a113_b(l1,l2,l3,l4,l5,l6,l7,l8,l9,l10,l11,l12,l13,packb(set)) 
+   a113_s = a113_b(l1,l2,l3,l4,l5,l6,l7,l8,l9,l10,l11,l12,l13,packb(set))
    !
   end function a113_s
   function b113_b(l1,l2,l3,l4,l5,l6,l7,l8,l9,l10,l11,b_pin)
@@ -3006,7 +2812,7 @@ use array
    integer, intent(in) :: l1,l2,l3,l4,l5,l6,l7,l8,l9,l10,l11
    type(form_factor) :: b113_s
    !
-   b113_s = b113_b(l1,l2,l3,l4,l5,l6,l7,l8,l9,l10,l11,packb(set)) 
+   b113_s = b113_b(l1,l2,l3,l4,l5,l6,l7,l8,l9,l10,l11,packb(set))
    !
   end function b113_s
   function c113_b(l1,l2,l3,l4,l5,l6,l7,l8,l9,b_pin)
@@ -3024,7 +2830,7 @@ use array
    integer, intent(in) :: l1,l2,l3,l4,l5,l6,l7,l8,l9
    type(form_factor) :: c113_s
    !
-   c113_s = c113_b(l1,l2,l3,l4,l5,l6,l7,l8,l9,packb(set)) 
+   c113_s = c113_b(l1,l2,l3,l4,l5,l6,l7,l8,l9,packb(set))
    !
   end function c113_s
   function d113_b(l1,l2,l3,l4,l5,l6,l7,b_pin)
@@ -3042,7 +2848,7 @@ use array
    integer, intent(in) :: l1,l2,l3,l4,l5,l6,l7
    type(form_factor) :: d113_s
    !
-   d113_s = d113_b(l1,l2,l3,l4,l5,l6,l7,packb(set)) 
+   d113_s = d113_b(l1,l2,l3,l4,l5,l6,l7,packb(set))
    !
   end function d113_s
   function e113_b(l1,l2,l3,l4,l5,b_pin)
@@ -3060,7 +2866,7 @@ use array
    integer, intent(in) :: l1,l2,l3,l4,l5
    type(form_factor) :: e113_s
    !
-   e113_s = e113_b(l1,l2,l3,l4,l5,packb(set)) 
+   e113_s = e113_b(l1,l2,l3,l4,l5,packb(set))
    !
   end function e113_s
   function f113_b(l1,l2,l3,b_pin)
@@ -3078,7 +2884,7 @@ use array
    integer, intent(in) :: l1,l2,l3
    type(form_factor) :: f113_s
    !
-   f113_s = f113_b(l1,l2,l3,packb(set)) 
+   f113_s = f113_b(l1,l2,l3,packb(set))
    !
   end function f113_s
   function g113_b(l1,b_pin)
@@ -3096,7 +2902,7 @@ use array
    integer, intent(in) :: l1
    type(form_factor) :: g113_s
    !
-   g113_s = g113_b(l1,packb(set)) 
+   g113_s = g113_b(l1,packb(set))
    !
   end function g113_s
 
@@ -3115,7 +2921,7 @@ use array
    integer, intent(in) :: l1,l2,l3,l4,l5,l6,l7,l8,l9,l10,l11,l12,l13,l14
    type(form_factor) :: a114_s
    !
-   a114_s = a114_b(l1,l2,l3,l4,l5,l6,l7,l8,l9,l10,l11,l12,l13,l14,packb(set)) 
+   a114_s = a114_b(l1,l2,l3,l4,l5,l6,l7,l8,l9,l10,l11,l12,l13,l14,packb(set))
    !
   end function a114_s
   function b114_b(l1,l2,l3,l4,l5,l6,l7,l8,l9,l10,l11,l12,b_pin)
@@ -3133,7 +2939,7 @@ use array
    integer, intent(in) :: l1,l2,l3,l4,l5,l6,l7,l8,l9,l10,l11,l12
    type(form_factor) :: b114_s
    !
-   b114_s = b114_b(l1,l2,l3,l4,l5,l6,l7,l8,l9,l10,l11,l12,packb(set)) 
+   b114_s = b114_b(l1,l2,l3,l4,l5,l6,l7,l8,l9,l10,l11,l12,packb(set))
    !
   end function b114_s
   function c114_b(l1,l2,l3,l4,l5,l6,l7,l8,l9,l10,b_pin)
@@ -3151,7 +2957,7 @@ use array
    integer, intent(in) :: l1,l2,l3,l4,l5,l6,l7,l8,l9,l10
    type(form_factor) :: c114_s
    !
-   c114_s = c114_b(l1,l2,l3,l4,l5,l6,l7,l8,l9,l10,packb(set)) 
+   c114_s = c114_b(l1,l2,l3,l4,l5,l6,l7,l8,l9,l10,packb(set))
    !
   end function c114_s
   function d114_b(l1,l2,l3,l4,l5,l6,l7,l8,b_pin)
@@ -3169,7 +2975,7 @@ use array
    integer, intent(in) :: l1,l2,l3,l4,l5,l6,l7,l8
    type(form_factor) :: d114_s
    !
-   d114_s = d114_b(l1,l2,l3,l4,l5,l6,l7,l8,packb(set)) 
+   d114_s = d114_b(l1,l2,l3,l4,l5,l6,l7,l8,packb(set))
    !
   end function d114_s
   function e114_b(l1,l2,l3,l4,l5,l6,b_pin)
@@ -3187,7 +2993,7 @@ use array
    integer, intent(in) :: l1,l2,l3,l4,l5,l6
    type(form_factor) :: e114_s
    !
-   e114_s = e114_b(l1,l2,l3,l4,l5,l6,packb(set)) 
+   e114_s = e114_b(l1,l2,l3,l4,l5,l6,packb(set))
    !
   end function e114_s
   function f114_b(l1,l2,l3,l4,b_pin)
@@ -3205,7 +3011,7 @@ use array
    integer, intent(in) :: l1,l2,l3,l4
    type(form_factor) :: f114_s
    !
-   f114_s = f114_b(l1,l2,l3,l4,packb(set)) 
+   f114_s = f114_b(l1,l2,l3,l4,packb(set))
    !
   end function f114_s
   function g114_b(l1,l2,b_pin)
@@ -3223,7 +3029,7 @@ use array
    integer, intent(in) :: l1,l2
    type(form_factor) :: g114_s
    !
-   g114_s = g114_b(l1,l2,packb(set)) 
+   g114_s = g114_b(l1,l2,packb(set))
    !
   end function g114_s
   function h114_b(b_pin)
@@ -3240,7 +3046,7 @@ use array
    integer, intent (in), dimension(:) :: set
    type(form_factor) :: h114_s
    !
-   h114_s = h114_b(packb(set)) 
+   h114_s = h114_b(packb(set))
    !
   end function h114_s
 
@@ -3259,7 +3065,7 @@ use array
    integer, intent(in) :: l1,l2,l3,l4,l5,l6,l7,l8,l9,l10,l11,l12,l13,l14,l15
    type(form_factor) :: a115_s
    !
-   a115_s = a115_b(l1,l2,l3,l4,l5,l6,l7,l8,l9,l10,l11,l12,l13,l14,l15,packb(set)) 
+   a115_s = a115_b(l1,l2,l3,l4,l5,l6,l7,l8,l9,l10,l11,l12,l13,l14,l15,packb(set))
    !
   end function a115_s
   function b115_b(l1,l2,l3,l4,l5,l6,l7,l8,l9,l10,l11,l12,l13,b_pin)
@@ -3277,7 +3083,7 @@ use array
    integer, intent(in) :: l1,l2,l3,l4,l5,l6,l7,l8,l9,l10,l11,l12,l13
    type(form_factor) :: b115_s
    !
-   b115_s = b115_b(l1,l2,l3,l4,l5,l6,l7,l8,l9,l10,l11,l12,l13,packb(set)) 
+   b115_s = b115_b(l1,l2,l3,l4,l5,l6,l7,l8,l9,l10,l11,l12,l13,packb(set))
    !
   end function b115_s
   function c115_b(l1,l2,l3,l4,l5,l6,l7,l8,l9,l10,l11,b_pin)
@@ -3295,7 +3101,7 @@ use array
    integer, intent(in) :: l1,l2,l3,l4,l5,l6,l7,l8,l9,l10,l11
    type(form_factor) :: c115_s
    !
-   c115_s = c115_b(l1,l2,l3,l4,l5,l6,l7,l8,l9,l10,l11,packb(set)) 
+   c115_s = c115_b(l1,l2,l3,l4,l5,l6,l7,l8,l9,l10,l11,packb(set))
    !
   end function c115_s
   function d115_b(l1,l2,l3,l4,l5,l6,l7,l8,l9,b_pin)
@@ -3313,7 +3119,7 @@ use array
    integer, intent(in) :: l1,l2,l3,l4,l5,l6,l7,l8,l9
    type(form_factor) :: d115_s
    !
-   d115_s = d115_b(l1,l2,l3,l4,l5,l6,l7,l8,l9,packb(set)) 
+   d115_s = d115_b(l1,l2,l3,l4,l5,l6,l7,l8,l9,packb(set))
    !
   end function d115_s
   function e115_b(l1,l2,l3,l4,l5,l6,l7,b_pin)
@@ -3331,7 +3137,7 @@ use array
    integer, intent(in) :: l1,l2,l3,l4,l5,l6,l7
    type(form_factor) :: e115_s
    !
-   e115_s = e115_b(l1,l2,l3,l4,l5,l6,l7,packb(set)) 
+   e115_s = e115_b(l1,l2,l3,l4,l5,l6,l7,packb(set))
    !
   end function e115_s
   function f115_b(l1,l2,l3,l4,l5,b_pin)
@@ -3349,7 +3155,7 @@ use array
    integer, intent(in) :: l1,l2,l3,l4,l5
    type(form_factor) :: f115_s
    !
-   f115_s = f115_b(l1,l2,l3,l4,l5,packb(set)) 
+   f115_s = f115_b(l1,l2,l3,l4,l5,packb(set))
    !
   end function f115_s
   function g115_b(l1,l2,l3,b_pin)
@@ -3367,7 +3173,7 @@ use array
    integer, intent(in) :: l1,l2,l3
    type(form_factor) :: g115_s
    !
-   g115_s = g115_b(l1,l2,l3,packb(set)) 
+   g115_s = g115_b(l1,l2,l3,packb(set))
    !
   end function g115_s
   function h115_b(l1,b_pin)
@@ -3385,64 +3191,11 @@ use array
    integer, intent(in) :: l1
    type(form_factor) :: h115_s
    !
-   h115_s = h115_b(l1,packb(set)) 
+   h115_s = h115_b(l1,packb(set))
    !
   end function h115_s
 
-  function my_a21_b(l1,b_pin)
-   !
-   integer, intent(in) :: l1,b_pin
-   type(form_factor) :: my_a21_b
-   !
-   my_a21_b = -1.0_ki * fnp_generic(2,0,b_pin,1,(/ l1 /))
-   !
-  end function my_a21_b
 
-  function my_a21_s(l1,set)
-   !
-   integer, intent (in), dimension(:) :: set
-   integer, intent(in) :: l1
-   type(form_factor) :: my_a21_s
-   !
-   my_a21_s = my_a21_b(l1,packb(set)) 
-   !
-  end function my_a21_s
-
-  function my_a22_b(l1,l2,b_pin)
-   !
-   integer, intent(in) :: l1,l2,b_pin
-   type(form_factor) :: my_a22_b
-   !
-   my_a22_b = fnp_generic(2,0,b_pin,2,(/ l1,l2 /))
-   !
-  end function my_a22_b
-
-  function my_a22_s(l1,l2,set)
-   !
-   integer, intent (in), dimension(:) :: set
-   integer, intent(in) :: l1,l2
-   type(form_factor) :: my_a22_s
-   !
-   my_a22_s = my_a22_b(l1,l2,packb(set)) 
-   !
-  end function my_a22_s
-  function my_b22_b(b_pin)
-   !
-   integer, intent(in) :: b_pin
-   type(form_factor) :: my_b22_b
-   !
-   my_b22_b = -0.5_ki * fnp_generic(2,2,b_pin,0,no_feynmanparam)
-   !
-  end function my_b22_b
-
-  function my_b22_s(set)
-   !
-   integer, intent (in), dimension(:) :: set
-   type(form_factor) :: my_b22_s
-   !
-   my_b22_s = my_b22_b(packb(set)) 
-   !
-  end function my_b22_s
 
   function a23_b(l1,l2,l3,b_pin)
    !
@@ -3459,7 +3212,7 @@ use array
    integer, intent(in) :: l1,l2,l3
    type(form_factor) :: a23_s
    !
-   a23_s = a23_b(l1,l2,l3,packb(set)) 
+   a23_s = a23_b(l1,l2,l3,packb(set))
    !
   end function a23_s
   function b23_b(l1,b_pin)
@@ -3477,7 +3230,7 @@ use array
    integer, intent(in) :: l1
    type(form_factor) :: b23_s
    !
-   b23_s = b23_b(l1,packb(set)) 
+   b23_s = b23_b(l1,packb(set))
    !
   end function b23_s
 
@@ -3496,7 +3249,7 @@ use array
    integer, intent(in) :: l1,l2,l3,l4
    type(form_factor) :: a24_s
    !
-   a24_s = a24_b(l1,l2,l3,l4,packb(set)) 
+   a24_s = a24_b(l1,l2,l3,l4,packb(set))
    !
   end function a24_s
   function b24_b(l1,l2,b_pin)
@@ -3514,7 +3267,7 @@ use array
    integer, intent(in) :: l1,l2
    type(form_factor) :: b24_s
    !
-   b24_s = b24_b(l1,l2,packb(set)) 
+   b24_s = b24_b(l1,l2,packb(set))
    !
   end function b24_s
   function c24_b(b_pin)
@@ -3531,7 +3284,7 @@ use array
    integer, intent (in), dimension(:) :: set
    type(form_factor) :: c24_s
    !
-   c24_s = c24_b(packb(set)) 
+   c24_s = c24_b(packb(set))
    !
   end function c24_s
 
@@ -3550,7 +3303,7 @@ use array
    integer, intent(in) :: l1,l2,l3,l4,l5
    type(form_factor) :: a25_s
    !
-   a25_s = a25_b(l1,l2,l3,l4,l5,packb(set)) 
+   a25_s = a25_b(l1,l2,l3,l4,l5,packb(set))
    !
   end function a25_s
   function b25_b(l1,l2,l3,b_pin)
@@ -3568,7 +3321,7 @@ use array
    integer, intent(in) :: l1,l2,l3
    type(form_factor) :: b25_s
    !
-   b25_s = b25_b(l1,l2,l3,packb(set)) 
+   b25_s = b25_b(l1,l2,l3,packb(set))
    !
   end function b25_s
   function c25_b(l1,b_pin)
@@ -3586,7 +3339,7 @@ use array
    integer, intent(in) :: l1
    type(form_factor) :: c25_s
    !
-   c25_s = c25_b(l1,packb(set)) 
+   c25_s = c25_b(l1,packb(set))
    !
   end function c25_s
 
@@ -3605,7 +3358,7 @@ use array
    integer, intent(in) :: l1,l2,l3,l4,l5,l6
    type(form_factor) :: a26_s
    !
-   a26_s = a26_b(l1,l2,l3,l4,l5,l6,packb(set)) 
+   a26_s = a26_b(l1,l2,l3,l4,l5,l6,packb(set))
    !
   end function a26_s
   function b26_b(l1,l2,l3,l4,b_pin)
@@ -3623,7 +3376,7 @@ use array
    integer, intent(in) :: l1,l2,l3,l4
    type(form_factor) :: b26_s
    !
-   b26_s = b26_b(l1,l2,l3,l4,packb(set)) 
+   b26_s = b26_b(l1,l2,l3,l4,packb(set))
    !
   end function b26_s
   function c26_b(l1,l2,b_pin)
@@ -3641,7 +3394,7 @@ use array
    integer, intent(in) :: l1,l2
    type(form_factor) :: c26_s
    !
-   c26_s = c26_b(l1,l2,packb(set)) 
+   c26_s = c26_b(l1,l2,packb(set))
    !
   end function c26_s
   function d26_b(b_pin)
@@ -3658,7 +3411,7 @@ use array
    integer, intent (in), dimension(:) :: set
    type(form_factor) :: d26_s
    !
-   d26_s = d26_b(packb(set)) 
+   d26_s = d26_b(packb(set))
    !
   end function d26_s
 
@@ -3677,7 +3430,7 @@ use array
    integer, intent(in) :: l1,l2,l3,l4,l5,l6,l7
    type(form_factor) :: a27_s
    !
-   a27_s = a27_b(l1,l2,l3,l4,l5,l6,l7,packb(set)) 
+   a27_s = a27_b(l1,l2,l3,l4,l5,l6,l7,packb(set))
    !
   end function a27_s
   function b27_b(l1,l2,l3,l4,l5,b_pin)
@@ -3695,7 +3448,7 @@ use array
    integer, intent(in) :: l1,l2,l3,l4,l5
    type(form_factor) :: b27_s
    !
-   b27_s = b27_b(l1,l2,l3,l4,l5,packb(set)) 
+   b27_s = b27_b(l1,l2,l3,l4,l5,packb(set))
    !
   end function b27_s
   function c27_b(l1,l2,l3,b_pin)
@@ -3713,7 +3466,7 @@ use array
    integer, intent(in) :: l1,l2,l3
    type(form_factor) :: c27_s
    !
-   c27_s = c27_b(l1,l2,l3,packb(set)) 
+   c27_s = c27_b(l1,l2,l3,packb(set))
    !
   end function c27_s
   function d27_b(l1,b_pin)
@@ -3731,7 +3484,7 @@ use array
    integer, intent(in) :: l1
    type(form_factor) :: d27_s
    !
-   d27_s = d27_b(l1,packb(set)) 
+   d27_s = d27_b(l1,packb(set))
    !
   end function d27_s
 
@@ -3750,7 +3503,7 @@ use array
    integer, intent(in) :: l1,l2,l3,l4,l5,l6,l7,l8
    type(form_factor) :: a28_s
    !
-   a28_s = a28_b(l1,l2,l3,l4,l5,l6,l7,l8,packb(set)) 
+   a28_s = a28_b(l1,l2,l3,l4,l5,l6,l7,l8,packb(set))
    !
   end function a28_s
   function b28_b(l1,l2,l3,l4,l5,l6,b_pin)
@@ -3768,7 +3521,7 @@ use array
    integer, intent(in) :: l1,l2,l3,l4,l5,l6
    type(form_factor) :: b28_s
    !
-   b28_s = b28_b(l1,l2,l3,l4,l5,l6,packb(set)) 
+   b28_s = b28_b(l1,l2,l3,l4,l5,l6,packb(set))
    !
   end function b28_s
   function c28_b(l1,l2,l3,l4,b_pin)
@@ -3786,7 +3539,7 @@ use array
    integer, intent(in) :: l1,l2,l3,l4
    type(form_factor) :: c28_s
    !
-   c28_s = c28_b(l1,l2,l3,l4,packb(set)) 
+   c28_s = c28_b(l1,l2,l3,l4,packb(set))
    !
   end function c28_s
   function d28_b(l1,l2,b_pin)
@@ -3804,7 +3557,7 @@ use array
    integer, intent(in) :: l1,l2
    type(form_factor) :: d28_s
    !
-   d28_s = d28_b(l1,l2,packb(set)) 
+   d28_s = d28_b(l1,l2,packb(set))
    !
   end function d28_s
   function e28_b(b_pin)
@@ -3821,7 +3574,7 @@ use array
    integer, intent (in), dimension(:) :: set
    type(form_factor) :: e28_s
    !
-   e28_s = e28_b(packb(set)) 
+   e28_s = e28_b(packb(set))
    !
   end function e28_s
 
@@ -3840,7 +3593,7 @@ use array
    integer, intent(in) :: l1,l2,l3,l4,l5,l6,l7,l8,l9
    type(form_factor) :: a29_s
    !
-   a29_s = a29_b(l1,l2,l3,l4,l5,l6,l7,l8,l9,packb(set)) 
+   a29_s = a29_b(l1,l2,l3,l4,l5,l6,l7,l8,l9,packb(set))
    !
   end function a29_s
   function b29_b(l1,l2,l3,l4,l5,l6,l7,b_pin)
@@ -3858,7 +3611,7 @@ use array
    integer, intent(in) :: l1,l2,l3,l4,l5,l6,l7
    type(form_factor) :: b29_s
    !
-   b29_s = b29_b(l1,l2,l3,l4,l5,l6,l7,packb(set)) 
+   b29_s = b29_b(l1,l2,l3,l4,l5,l6,l7,packb(set))
    !
   end function b29_s
   function c29_b(l1,l2,l3,l4,l5,b_pin)
@@ -3876,7 +3629,7 @@ use array
    integer, intent(in) :: l1,l2,l3,l4,l5
    type(form_factor) :: c29_s
    !
-   c29_s = c29_b(l1,l2,l3,l4,l5,packb(set)) 
+   c29_s = c29_b(l1,l2,l3,l4,l5,packb(set))
    !
   end function c29_s
   function d29_b(l1,l2,l3,b_pin)
@@ -3894,7 +3647,7 @@ use array
    integer, intent(in) :: l1,l2,l3
    type(form_factor) :: d29_s
    !
-   d29_s = d29_b(l1,l2,l3,packb(set)) 
+   d29_s = d29_b(l1,l2,l3,packb(set))
    !
   end function d29_s
   function e29_b(l1,b_pin)
@@ -3912,7 +3665,7 @@ use array
    integer, intent(in) :: l1
    type(form_factor) :: e29_s
    !
-   e29_s = e29_b(l1,packb(set)) 
+   e29_s = e29_b(l1,packb(set))
    !
   end function e29_s
 
@@ -3931,7 +3684,7 @@ use array
    integer, intent(in) :: l1,l2,l3,l4,l5,l6,l7,l8,l9,l10
    type(form_factor) :: a210_s
    !
-   a210_s = a210_b(l1,l2,l3,l4,l5,l6,l7,l8,l9,l10,packb(set)) 
+   a210_s = a210_b(l1,l2,l3,l4,l5,l6,l7,l8,l9,l10,packb(set))
    !
   end function a210_s
   function b210_b(l1,l2,l3,l4,l5,l6,l7,l8,b_pin)
@@ -3949,7 +3702,7 @@ use array
    integer, intent(in) :: l1,l2,l3,l4,l5,l6,l7,l8
    type(form_factor) :: b210_s
    !
-   b210_s = b210_b(l1,l2,l3,l4,l5,l6,l7,l8,packb(set)) 
+   b210_s = b210_b(l1,l2,l3,l4,l5,l6,l7,l8,packb(set))
    !
   end function b210_s
   function c210_b(l1,l2,l3,l4,l5,l6,b_pin)
@@ -3967,7 +3720,7 @@ use array
    integer, intent(in) :: l1,l2,l3,l4,l5,l6
    type(form_factor) :: c210_s
    !
-   c210_s = c210_b(l1,l2,l3,l4,l5,l6,packb(set)) 
+   c210_s = c210_b(l1,l2,l3,l4,l5,l6,packb(set))
    !
   end function c210_s
   function d210_b(l1,l2,l3,l4,b_pin)
@@ -3985,7 +3738,7 @@ use array
    integer, intent(in) :: l1,l2,l3,l4
    type(form_factor) :: d210_s
    !
-   d210_s = d210_b(l1,l2,l3,l4,packb(set)) 
+   d210_s = d210_b(l1,l2,l3,l4,packb(set))
    !
   end function d210_s
   function e210_b(l1,l2,b_pin)
@@ -4003,7 +3756,7 @@ use array
    integer, intent(in) :: l1,l2
    type(form_factor) :: e210_s
    !
-   e210_s = e210_b(l1,l2,packb(set)) 
+   e210_s = e210_b(l1,l2,packb(set))
    !
   end function e210_s
   function f210_b(b_pin)
@@ -4020,7 +3773,7 @@ use array
    integer, intent (in), dimension(:) :: set
    type(form_factor) :: f210_s
    !
-   f210_s = f210_b(packb(set)) 
+   f210_s = f210_b(packb(set))
    !
   end function f210_s
 
@@ -4039,7 +3792,7 @@ use array
    integer, intent(in) :: l1,l2,l3,l4,l5,l6,l7,l8,l9,l10,l11
    type(form_factor) :: a211_s
    !
-   a211_s = a211_b(l1,l2,l3,l4,l5,l6,l7,l8,l9,l10,l11,packb(set)) 
+   a211_s = a211_b(l1,l2,l3,l4,l5,l6,l7,l8,l9,l10,l11,packb(set))
    !
   end function a211_s
   function b211_b(l1,l2,l3,l4,l5,l6,l7,l8,l9,b_pin)
@@ -4057,7 +3810,7 @@ use array
    integer, intent(in) :: l1,l2,l3,l4,l5,l6,l7,l8,l9
    type(form_factor) :: b211_s
    !
-   b211_s = b211_b(l1,l2,l3,l4,l5,l6,l7,l8,l9,packb(set)) 
+   b211_s = b211_b(l1,l2,l3,l4,l5,l6,l7,l8,l9,packb(set))
    !
   end function b211_s
   function c211_b(l1,l2,l3,l4,l5,l6,l7,b_pin)
@@ -4075,7 +3828,7 @@ use array
    integer, intent(in) :: l1,l2,l3,l4,l5,l6,l7
    type(form_factor) :: c211_s
    !
-   c211_s = c211_b(l1,l2,l3,l4,l5,l6,l7,packb(set)) 
+   c211_s = c211_b(l1,l2,l3,l4,l5,l6,l7,packb(set))
    !
   end function c211_s
   function d211_b(l1,l2,l3,l4,l5,b_pin)
@@ -4093,7 +3846,7 @@ use array
    integer, intent(in) :: l1,l2,l3,l4,l5
    type(form_factor) :: d211_s
    !
-   d211_s = d211_b(l1,l2,l3,l4,l5,packb(set)) 
+   d211_s = d211_b(l1,l2,l3,l4,l5,packb(set))
    !
   end function d211_s
   function e211_b(l1,l2,l3,b_pin)
@@ -4111,7 +3864,7 @@ use array
    integer, intent(in) :: l1,l2,l3
    type(form_factor) :: e211_s
    !
-   e211_s = e211_b(l1,l2,l3,packb(set)) 
+   e211_s = e211_b(l1,l2,l3,packb(set))
    !
   end function e211_s
   function f211_b(l1,b_pin)
@@ -4129,7 +3882,7 @@ use array
    integer, intent(in) :: l1
    type(form_factor) :: f211_s
    !
-   f211_s = f211_b(l1,packb(set)) 
+   f211_s = f211_b(l1,packb(set))
    !
   end function f211_s
 
@@ -4148,7 +3901,7 @@ use array
    integer, intent(in) :: l1,l2,l3,l4,l5,l6,l7,l8,l9,l10,l11,l12
    type(form_factor) :: a212_s
    !
-   a212_s = a212_b(l1,l2,l3,l4,l5,l6,l7,l8,l9,l10,l11,l12,packb(set)) 
+   a212_s = a212_b(l1,l2,l3,l4,l5,l6,l7,l8,l9,l10,l11,l12,packb(set))
    !
   end function a212_s
   function b212_b(l1,l2,l3,l4,l5,l6,l7,l8,l9,l10,b_pin)
@@ -4166,7 +3919,7 @@ use array
    integer, intent(in) :: l1,l2,l3,l4,l5,l6,l7,l8,l9,l10
    type(form_factor) :: b212_s
    !
-   b212_s = b212_b(l1,l2,l3,l4,l5,l6,l7,l8,l9,l10,packb(set)) 
+   b212_s = b212_b(l1,l2,l3,l4,l5,l6,l7,l8,l9,l10,packb(set))
    !
   end function b212_s
   function c212_b(l1,l2,l3,l4,l5,l6,l7,l8,b_pin)
@@ -4184,7 +3937,7 @@ use array
    integer, intent(in) :: l1,l2,l3,l4,l5,l6,l7,l8
    type(form_factor) :: c212_s
    !
-   c212_s = c212_b(l1,l2,l3,l4,l5,l6,l7,l8,packb(set)) 
+   c212_s = c212_b(l1,l2,l3,l4,l5,l6,l7,l8,packb(set))
    !
   end function c212_s
   function d212_b(l1,l2,l3,l4,l5,l6,b_pin)
@@ -4202,7 +3955,7 @@ use array
    integer, intent(in) :: l1,l2,l3,l4,l5,l6
    type(form_factor) :: d212_s
    !
-   d212_s = d212_b(l1,l2,l3,l4,l5,l6,packb(set)) 
+   d212_s = d212_b(l1,l2,l3,l4,l5,l6,packb(set))
    !
   end function d212_s
   function e212_b(l1,l2,l3,l4,b_pin)
@@ -4220,7 +3973,7 @@ use array
    integer, intent(in) :: l1,l2,l3,l4
    type(form_factor) :: e212_s
    !
-   e212_s = e212_b(l1,l2,l3,l4,packb(set)) 
+   e212_s = e212_b(l1,l2,l3,l4,packb(set))
    !
   end function e212_s
   function f212_b(l1,l2,b_pin)
@@ -4238,7 +3991,7 @@ use array
    integer, intent(in) :: l1,l2
    type(form_factor) :: f212_s
    !
-   f212_s = f212_b(l1,l2,packb(set)) 
+   f212_s = f212_b(l1,l2,packb(set))
    !
   end function f212_s
   function g212_b(b_pin)
@@ -4255,7 +4008,7 @@ use array
    integer, intent (in), dimension(:) :: set
    type(form_factor) :: g212_s
    !
-   g212_s = g212_b(packb(set)) 
+   g212_s = g212_b(packb(set))
    !
   end function g212_s
 
@@ -4274,7 +4027,7 @@ use array
    integer, intent(in) :: l1,l2,l3,l4,l5,l6,l7,l8,l9,l10,l11,l12,l13
    type(form_factor) :: a213_s
    !
-   a213_s = a213_b(l1,l2,l3,l4,l5,l6,l7,l8,l9,l10,l11,l12,l13,packb(set)) 
+   a213_s = a213_b(l1,l2,l3,l4,l5,l6,l7,l8,l9,l10,l11,l12,l13,packb(set))
    !
   end function a213_s
   function b213_b(l1,l2,l3,l4,l5,l6,l7,l8,l9,l10,l11,b_pin)
@@ -4292,7 +4045,7 @@ use array
    integer, intent(in) :: l1,l2,l3,l4,l5,l6,l7,l8,l9,l10,l11
    type(form_factor) :: b213_s
    !
-   b213_s = b213_b(l1,l2,l3,l4,l5,l6,l7,l8,l9,l10,l11,packb(set)) 
+   b213_s = b213_b(l1,l2,l3,l4,l5,l6,l7,l8,l9,l10,l11,packb(set))
    !
   end function b213_s
   function c213_b(l1,l2,l3,l4,l5,l6,l7,l8,l9,b_pin)
@@ -4310,7 +4063,7 @@ use array
    integer, intent(in) :: l1,l2,l3,l4,l5,l6,l7,l8,l9
    type(form_factor) :: c213_s
    !
-   c213_s = c213_b(l1,l2,l3,l4,l5,l6,l7,l8,l9,packb(set)) 
+   c213_s = c213_b(l1,l2,l3,l4,l5,l6,l7,l8,l9,packb(set))
    !
   end function c213_s
   function d213_b(l1,l2,l3,l4,l5,l6,l7,b_pin)
@@ -4328,7 +4081,7 @@ use array
    integer, intent(in) :: l1,l2,l3,l4,l5,l6,l7
    type(form_factor) :: d213_s
    !
-   d213_s = d213_b(l1,l2,l3,l4,l5,l6,l7,packb(set)) 
+   d213_s = d213_b(l1,l2,l3,l4,l5,l6,l7,packb(set))
    !
   end function d213_s
   function e213_b(l1,l2,l3,l4,l5,b_pin)
@@ -4346,7 +4099,7 @@ use array
    integer, intent(in) :: l1,l2,l3,l4,l5
    type(form_factor) :: e213_s
    !
-   e213_s = e213_b(l1,l2,l3,l4,l5,packb(set)) 
+   e213_s = e213_b(l1,l2,l3,l4,l5,packb(set))
    !
   end function e213_s
   function f213_b(l1,l2,l3,b_pin)
@@ -4364,7 +4117,7 @@ use array
    integer, intent(in) :: l1,l2,l3
    type(form_factor) :: f213_s
    !
-   f213_s = f213_b(l1,l2,l3,packb(set)) 
+   f213_s = f213_b(l1,l2,l3,packb(set))
    !
   end function f213_s
   function g213_b(l1,b_pin)
@@ -4382,7 +4135,7 @@ use array
    integer, intent(in) :: l1
    type(form_factor) :: g213_s
    !
-   g213_s = g213_b(l1,packb(set)) 
+   g213_s = g213_b(l1,packb(set))
    !
   end function g213_s
 
@@ -4401,7 +4154,7 @@ use array
    integer, intent(in) :: l1,l2,l3,l4,l5,l6,l7,l8,l9,l10,l11,l12,l13,l14
    type(form_factor) :: a214_s
    !
-   a214_s = a214_b(l1,l2,l3,l4,l5,l6,l7,l8,l9,l10,l11,l12,l13,l14,packb(set)) 
+   a214_s = a214_b(l1,l2,l3,l4,l5,l6,l7,l8,l9,l10,l11,l12,l13,l14,packb(set))
    !
   end function a214_s
   function b214_b(l1,l2,l3,l4,l5,l6,l7,l8,l9,l10,l11,l12,b_pin)
@@ -4419,7 +4172,7 @@ use array
    integer, intent(in) :: l1,l2,l3,l4,l5,l6,l7,l8,l9,l10,l11,l12
    type(form_factor) :: b214_s
    !
-   b214_s = b214_b(l1,l2,l3,l4,l5,l6,l7,l8,l9,l10,l11,l12,packb(set)) 
+   b214_s = b214_b(l1,l2,l3,l4,l5,l6,l7,l8,l9,l10,l11,l12,packb(set))
    !
   end function b214_s
   function c214_b(l1,l2,l3,l4,l5,l6,l7,l8,l9,l10,b_pin)
@@ -4437,7 +4190,7 @@ use array
    integer, intent(in) :: l1,l2,l3,l4,l5,l6,l7,l8,l9,l10
    type(form_factor) :: c214_s
    !
-   c214_s = c214_b(l1,l2,l3,l4,l5,l6,l7,l8,l9,l10,packb(set)) 
+   c214_s = c214_b(l1,l2,l3,l4,l5,l6,l7,l8,l9,l10,packb(set))
    !
   end function c214_s
   function d214_b(l1,l2,l3,l4,l5,l6,l7,l8,b_pin)
@@ -4455,7 +4208,7 @@ use array
    integer, intent(in) :: l1,l2,l3,l4,l5,l6,l7,l8
    type(form_factor) :: d214_s
    !
-   d214_s = d214_b(l1,l2,l3,l4,l5,l6,l7,l8,packb(set)) 
+   d214_s = d214_b(l1,l2,l3,l4,l5,l6,l7,l8,packb(set))
    !
   end function d214_s
   function e214_b(l1,l2,l3,l4,l5,l6,b_pin)
@@ -4473,7 +4226,7 @@ use array
    integer, intent(in) :: l1,l2,l3,l4,l5,l6
    type(form_factor) :: e214_s
    !
-   e214_s = e214_b(l1,l2,l3,l4,l5,l6,packb(set)) 
+   e214_s = e214_b(l1,l2,l3,l4,l5,l6,packb(set))
    !
   end function e214_s
   function f214_b(l1,l2,l3,l4,b_pin)
@@ -4491,7 +4244,7 @@ use array
    integer, intent(in) :: l1,l2,l3,l4
    type(form_factor) :: f214_s
    !
-   f214_s = f214_b(l1,l2,l3,l4,packb(set)) 
+   f214_s = f214_b(l1,l2,l3,l4,packb(set))
    !
   end function f214_s
   function g214_b(l1,l2,b_pin)
@@ -4509,7 +4262,7 @@ use array
    integer, intent(in) :: l1,l2
    type(form_factor) :: g214_s
    !
-   g214_s = g214_b(l1,l2,packb(set)) 
+   g214_s = g214_b(l1,l2,packb(set))
    !
   end function g214_s
   function h214_b(b_pin)
@@ -4526,7 +4279,7 @@ use array
    integer, intent (in), dimension(:) :: set
    type(form_factor) :: h214_s
    !
-   h214_s = h214_b(packb(set)) 
+   h214_s = h214_b(packb(set))
    !
   end function h214_s
 
@@ -4545,7 +4298,7 @@ use array
    integer, intent(in) :: l1,l2,l3,l4,l5,l6,l7,l8,l9,l10,l11,l12,l13,l14,l15
    type(form_factor) :: a215_s
    !
-   a215_s = a215_b(l1,l2,l3,l4,l5,l6,l7,l8,l9,l10,l11,l12,l13,l14,l15,packb(set)) 
+   a215_s = a215_b(l1,l2,l3,l4,l5,l6,l7,l8,l9,l10,l11,l12,l13,l14,l15,packb(set))
    !
   end function a215_s
   function b215_b(l1,l2,l3,l4,l5,l6,l7,l8,l9,l10,l11,l12,l13,b_pin)
@@ -4563,7 +4316,7 @@ use array
    integer, intent(in) :: l1,l2,l3,l4,l5,l6,l7,l8,l9,l10,l11,l12,l13
    type(form_factor) :: b215_s
    !
-   b215_s = b215_b(l1,l2,l3,l4,l5,l6,l7,l8,l9,l10,l11,l12,l13,packb(set)) 
+   b215_s = b215_b(l1,l2,l3,l4,l5,l6,l7,l8,l9,l10,l11,l12,l13,packb(set))
    !
   end function b215_s
   function c215_b(l1,l2,l3,l4,l5,l6,l7,l8,l9,l10,l11,b_pin)
@@ -4581,7 +4334,7 @@ use array
    integer, intent(in) :: l1,l2,l3,l4,l5,l6,l7,l8,l9,l10,l11
    type(form_factor) :: c215_s
    !
-   c215_s = c215_b(l1,l2,l3,l4,l5,l6,l7,l8,l9,l10,l11,packb(set)) 
+   c215_s = c215_b(l1,l2,l3,l4,l5,l6,l7,l8,l9,l10,l11,packb(set))
    !
   end function c215_s
   function d215_b(l1,l2,l3,l4,l5,l6,l7,l8,l9,b_pin)
@@ -4599,7 +4352,7 @@ use array
    integer, intent(in) :: l1,l2,l3,l4,l5,l6,l7,l8,l9
    type(form_factor) :: d215_s
    !
-   d215_s = d215_b(l1,l2,l3,l4,l5,l6,l7,l8,l9,packb(set)) 
+   d215_s = d215_b(l1,l2,l3,l4,l5,l6,l7,l8,l9,packb(set))
    !
   end function d215_s
   function e215_b(l1,l2,l3,l4,l5,l6,l7,b_pin)
@@ -4617,7 +4370,7 @@ use array
    integer, intent(in) :: l1,l2,l3,l4,l5,l6,l7
    type(form_factor) :: e215_s
    !
-   e215_s = e215_b(l1,l2,l3,l4,l5,l6,l7,packb(set)) 
+   e215_s = e215_b(l1,l2,l3,l4,l5,l6,l7,packb(set))
    !
   end function e215_s
   function f215_b(l1,l2,l3,l4,l5,b_pin)
@@ -4635,7 +4388,7 @@ use array
    integer, intent(in) :: l1,l2,l3,l4,l5
    type(form_factor) :: f215_s
    !
-   f215_s = f215_b(l1,l2,l3,l4,l5,packb(set)) 
+   f215_s = f215_b(l1,l2,l3,l4,l5,packb(set))
    !
   end function f215_s
   function g215_b(l1,l2,l3,b_pin)
@@ -4653,7 +4406,7 @@ use array
    integer, intent(in) :: l1,l2,l3
    type(form_factor) :: g215_s
    !
-   g215_s = g215_b(l1,l2,l3,packb(set)) 
+   g215_s = g215_b(l1,l2,l3,packb(set))
    !
   end function g215_s
   function h215_b(l1,b_pin)
@@ -4671,7 +4424,7 @@ use array
    integer, intent(in) :: l1
    type(form_factor) :: h215_s
    !
-   h215_s = h215_b(l1,packb(set)) 
+   h215_s = h215_b(l1,packb(set))
    !
   end function h215_s
 
@@ -4690,7 +4443,7 @@ use array
    integer, intent(in) :: l1,l2,l3,l4,l5,l6,l7,l8,l9,l10,l11,l12,l13,l14,l15,l16
    type(form_factor) :: a216_s
    !
-   a216_s = a216_b(l1,l2,l3,l4,l5,l6,l7,l8,l9,l10,l11,l12,l13,l14,l15,l16,packb(set)) 
+   a216_s = a216_b(l1,l2,l3,l4,l5,l6,l7,l8,l9,l10,l11,l12,l13,l14,l15,l16,packb(set))
    !
   end function a216_s
   function b216_b(l1,l2,l3,l4,l5,l6,l7,l8,l9,l10,l11,l12,l13,l14,b_pin)
@@ -4708,7 +4461,7 @@ use array
    integer, intent(in) :: l1,l2,l3,l4,l5,l6,l7,l8,l9,l10,l11,l12,l13,l14
    type(form_factor) :: b216_s
    !
-   b216_s = b216_b(l1,l2,l3,l4,l5,l6,l7,l8,l9,l10,l11,l12,l13,l14,packb(set)) 
+   b216_s = b216_b(l1,l2,l3,l4,l5,l6,l7,l8,l9,l10,l11,l12,l13,l14,packb(set))
    !
   end function b216_s
   function c216_b(l1,l2,l3,l4,l5,l6,l7,l8,l9,l10,l11,l12,b_pin)
@@ -4726,7 +4479,7 @@ use array
    integer, intent(in) :: l1,l2,l3,l4,l5,l6,l7,l8,l9,l10,l11,l12
    type(form_factor) :: c216_s
    !
-   c216_s = c216_b(l1,l2,l3,l4,l5,l6,l7,l8,l9,l10,l11,l12,packb(set)) 
+   c216_s = c216_b(l1,l2,l3,l4,l5,l6,l7,l8,l9,l10,l11,l12,packb(set))
    !
   end function c216_s
   function d216_b(l1,l2,l3,l4,l5,l6,l7,l8,l9,l10,b_pin)
@@ -4744,7 +4497,7 @@ use array
    integer, intent(in) :: l1,l2,l3,l4,l5,l6,l7,l8,l9,l10
    type(form_factor) :: d216_s
    !
-   d216_s = d216_b(l1,l2,l3,l4,l5,l6,l7,l8,l9,l10,packb(set)) 
+   d216_s = d216_b(l1,l2,l3,l4,l5,l6,l7,l8,l9,l10,packb(set))
    !
   end function d216_s
   function e216_b(l1,l2,l3,l4,l5,l6,l7,l8,b_pin)
@@ -4762,7 +4515,7 @@ use array
    integer, intent(in) :: l1,l2,l3,l4,l5,l6,l7,l8
    type(form_factor) :: e216_s
    !
-   e216_s = e216_b(l1,l2,l3,l4,l5,l6,l7,l8,packb(set)) 
+   e216_s = e216_b(l1,l2,l3,l4,l5,l6,l7,l8,packb(set))
    !
   end function e216_s
   function f216_b(l1,l2,l3,l4,l5,l6,b_pin)
@@ -4780,7 +4533,7 @@ use array
    integer, intent(in) :: l1,l2,l3,l4,l5,l6
    type(form_factor) :: f216_s
    !
-   f216_s = f216_b(l1,l2,l3,l4,l5,l6,packb(set)) 
+   f216_s = f216_b(l1,l2,l3,l4,l5,l6,packb(set))
    !
   end function f216_s
   function g216_b(l1,l2,l3,l4,b_pin)
@@ -4798,7 +4551,7 @@ use array
    integer, intent(in) :: l1,l2,l3,l4
    type(form_factor) :: g216_s
    !
-   g216_s = g216_b(l1,l2,l3,l4,packb(set)) 
+   g216_s = g216_b(l1,l2,l3,l4,packb(set))
    !
   end function g216_s
   function h216_b(l1,l2,b_pin)
@@ -4816,7 +4569,7 @@ use array
    integer, intent(in) :: l1,l2
    type(form_factor) :: h216_s
    !
-   h216_s = h216_b(l1,l2,packb(set)) 
+   h216_s = h216_b(l1,l2,packb(set))
    !
   end function h216_s
   function i216_b(b_pin)
@@ -4833,101 +4586,12 @@ use array
    integer, intent (in), dimension(:) :: set
    type(form_factor) :: i216_s
    !
-   i216_s = i216_b(packb(set)) 
+   i216_s = i216_b(packb(set))
    !
   end function i216_s
 
-  function my_a31_b(l1,b_pin)
-   !
-   integer, intent(in) :: l1,b_pin
-   type(form_factor) :: my_a31_b
-   !
-   my_a31_b = -1.0_ki * fnp_generic(3,0,b_pin,1,(/ l1 /))
-   !
-  end function my_a31_b
 
-  function my_a31_s(l1,set)
-   !
-   integer, intent (in), dimension(:) :: set
-   integer, intent(in) :: l1
-   type(form_factor) :: my_a31_s
-   !
-   my_a31_s = my_a31_b(l1,packb(set)) 
-   !
-  end function my_a31_s
 
-  function my_a32_b(l1,l2,b_pin)
-   !
-   integer, intent(in) :: l1,l2,b_pin
-   type(form_factor) :: my_a32_b
-   !
-   my_a32_b = fnp_generic(3,0,b_pin,2,(/ l1,l2 /))
-   !
-  end function my_a32_b
-
-  function my_a32_s(l1,l2,set)
-   !
-   integer, intent (in), dimension(:) :: set
-   integer, intent(in) :: l1,l2
-   type(form_factor) :: my_a32_s
-   !
-   my_a32_s = my_a32_b(l1,l2,packb(set)) 
-   !
-  end function my_a32_s
-  function my_b32_b(b_pin)
-   !
-   integer, intent(in) :: b_pin
-   type(form_factor) :: my_b32_b
-   !
-   my_b32_b = -0.5_ki * fnp_generic(3,2,b_pin,0,no_feynmanparam)
-   !
-  end function my_b32_b
-
-  function my_b32_s(set)
-   !
-   integer, intent (in), dimension(:) :: set
-   type(form_factor) :: my_b32_s
-   !
-   my_b32_s = my_b32_b(packb(set)) 
-   !
-  end function my_b32_s
-
-  function my_a33_b(l1,l2,l3,b_pin)
-   !
-   integer, intent(in) :: l1,l2,l3,b_pin
-   type(form_factor) :: my_a33_b
-   !
-   my_a33_b = -1.0_ki * fnp_generic(3,0,b_pin,3,(/ l1,l2,l3 /))
-   !
-  end function my_a33_b
-
-  function my_a33_s(l1,l2,l3,set)
-   !
-   integer, intent (in), dimension(:) :: set
-   integer, intent(in) :: l1,l2,l3
-   type(form_factor) :: my_a33_s
-   !
-   my_a33_s = my_a33_b(l1,l2,l3,packb(set)) 
-   !
-  end function my_a33_s
-  function my_b33_b(l1,b_pin)
-   !
-   integer, intent(in) :: l1,b_pin
-   type(form_factor) :: my_b33_b
-   !
-   my_b33_b = 0.5_ki * fnp_generic(3,2,b_pin,1,(/ l1 /))
-   !
-  end function my_b33_b
-
-  function my_b33_s(l1,set)
-   !
-   integer, intent (in), dimension(:) :: set
-   integer, intent(in) :: l1
-   type(form_factor) :: my_b33_s
-   !
-   my_b33_s = my_b33_b(l1,packb(set)) 
-   !
-  end function my_b33_s
 
   function a34_b(l1,l2,l3,l4,b_pin)
    !
@@ -4944,7 +4608,7 @@ use array
    integer, intent(in) :: l1,l2,l3,l4
    type(form_factor) :: a34_s
    !
-   a34_s = a34_b(l1,l2,l3,l4,packb(set)) 
+   a34_s = a34_b(l1,l2,l3,l4,packb(set))
    !
   end function a34_s
   function b34_b(l1,l2,b_pin)
@@ -4962,7 +4626,7 @@ use array
    integer, intent(in) :: l1,l2
    type(form_factor) :: b34_s
    !
-   b34_s = b34_b(l1,l2,packb(set)) 
+   b34_s = b34_b(l1,l2,packb(set))
    !
   end function b34_s
   function c34_b(b_pin)
@@ -4979,7 +4643,7 @@ use array
    integer, intent (in), dimension(:) :: set
    type(form_factor) :: c34_s
    !
-   c34_s = c34_b(packb(set)) 
+   c34_s = c34_b(packb(set))
    !
   end function c34_s
 
@@ -4998,7 +4662,7 @@ use array
    integer, intent(in) :: l1,l2,l3,l4,l5
    type(form_factor) :: a35_s
    !
-   a35_s = a35_b(l1,l2,l3,l4,l5,packb(set)) 
+   a35_s = a35_b(l1,l2,l3,l4,l5,packb(set))
    !
   end function a35_s
   function b35_b(l1,l2,l3,b_pin)
@@ -5016,7 +4680,7 @@ use array
    integer, intent(in) :: l1,l2,l3
    type(form_factor) :: b35_s
    !
-   b35_s = b35_b(l1,l2,l3,packb(set)) 
+   b35_s = b35_b(l1,l2,l3,packb(set))
    !
   end function b35_s
   function c35_b(l1,b_pin)
@@ -5034,7 +4698,7 @@ use array
    integer, intent(in) :: l1
    type(form_factor) :: c35_s
    !
-   c35_s = c35_b(l1,packb(set)) 
+   c35_s = c35_b(l1,packb(set))
    !
   end function c35_s
 
@@ -5053,7 +4717,7 @@ use array
    integer, intent(in) :: l1,l2,l3,l4,l5,l6
    type(form_factor) :: a36_s
    !
-   a36_s = a36_b(l1,l2,l3,l4,l5,l6,packb(set)) 
+   a36_s = a36_b(l1,l2,l3,l4,l5,l6,packb(set))
    !
   end function a36_s
   function b36_b(l1,l2,l3,l4,b_pin)
@@ -5071,7 +4735,7 @@ use array
    integer, intent(in) :: l1,l2,l3,l4
    type(form_factor) :: b36_s
    !
-   b36_s = b36_b(l1,l2,l3,l4,packb(set)) 
+   b36_s = b36_b(l1,l2,l3,l4,packb(set))
    !
   end function b36_s
   function c36_b(l1,l2,b_pin)
@@ -5089,7 +4753,7 @@ use array
    integer, intent(in) :: l1,l2
    type(form_factor) :: c36_s
    !
-   c36_s = c36_b(l1,l2,packb(set)) 
+   c36_s = c36_b(l1,l2,packb(set))
    !
   end function c36_s
   function d36_b(b_pin)
@@ -5106,7 +4770,7 @@ use array
    integer, intent (in), dimension(:) :: set
    type(form_factor) :: d36_s
    !
-   d36_s = d36_b(packb(set)) 
+   d36_s = d36_b(packb(set))
    !
   end function d36_s
 
@@ -5125,7 +4789,7 @@ use array
    integer, intent(in) :: l1,l2,l3,l4,l5,l6,l7
    type(form_factor) :: a37_s
    !
-   a37_s = a37_b(l1,l2,l3,l4,l5,l6,l7,packb(set)) 
+   a37_s = a37_b(l1,l2,l3,l4,l5,l6,l7,packb(set))
    !
   end function a37_s
   function b37_b(l1,l2,l3,l4,l5,b_pin)
@@ -5143,7 +4807,7 @@ use array
    integer, intent(in) :: l1,l2,l3,l4,l5
    type(form_factor) :: b37_s
    !
-   b37_s = b37_b(l1,l2,l3,l4,l5,packb(set)) 
+   b37_s = b37_b(l1,l2,l3,l4,l5,packb(set))
    !
   end function b37_s
   function c37_b(l1,l2,l3,b_pin)
@@ -5161,7 +4825,7 @@ use array
    integer, intent(in) :: l1,l2,l3
    type(form_factor) :: c37_s
    !
-   c37_s = c37_b(l1,l2,l3,packb(set)) 
+   c37_s = c37_b(l1,l2,l3,packb(set))
    !
   end function c37_s
   function d37_b(l1,b_pin)
@@ -5179,7 +4843,7 @@ use array
    integer, intent(in) :: l1
    type(form_factor) :: d37_s
    !
-   d37_s = d37_b(l1,packb(set)) 
+   d37_s = d37_b(l1,packb(set))
    !
   end function d37_s
 
@@ -5198,7 +4862,7 @@ use array
    integer, intent(in) :: l1,l2,l3,l4,l5,l6,l7,l8
    type(form_factor) :: a38_s
    !
-   a38_s = a38_b(l1,l2,l3,l4,l5,l6,l7,l8,packb(set)) 
+   a38_s = a38_b(l1,l2,l3,l4,l5,l6,l7,l8,packb(set))
    !
   end function a38_s
   function b38_b(l1,l2,l3,l4,l5,l6,b_pin)
@@ -5216,7 +4880,7 @@ use array
    integer, intent(in) :: l1,l2,l3,l4,l5,l6
    type(form_factor) :: b38_s
    !
-   b38_s = b38_b(l1,l2,l3,l4,l5,l6,packb(set)) 
+   b38_s = b38_b(l1,l2,l3,l4,l5,l6,packb(set))
    !
   end function b38_s
   function c38_b(l1,l2,l3,l4,b_pin)
@@ -5234,7 +4898,7 @@ use array
    integer, intent(in) :: l1,l2,l3,l4
    type(form_factor) :: c38_s
    !
-   c38_s = c38_b(l1,l2,l3,l4,packb(set)) 
+   c38_s = c38_b(l1,l2,l3,l4,packb(set))
    !
   end function c38_s
   function d38_b(l1,l2,b_pin)
@@ -5252,7 +4916,7 @@ use array
    integer, intent(in) :: l1,l2
    type(form_factor) :: d38_s
    !
-   d38_s = d38_b(l1,l2,packb(set)) 
+   d38_s = d38_b(l1,l2,packb(set))
    !
   end function d38_s
   function e38_b(b_pin)
@@ -5269,7 +4933,7 @@ use array
    integer, intent (in), dimension(:) :: set
    type(form_factor) :: e38_s
    !
-   e38_s = e38_b(packb(set)) 
+   e38_s = e38_b(packb(set))
    !
   end function e38_s
 
@@ -5288,7 +4952,7 @@ use array
    integer, intent(in) :: l1,l2,l3,l4,l5,l6,l7,l8,l9
    type(form_factor) :: a39_s
    !
-   a39_s = a39_b(l1,l2,l3,l4,l5,l6,l7,l8,l9,packb(set)) 
+   a39_s = a39_b(l1,l2,l3,l4,l5,l6,l7,l8,l9,packb(set))
    !
   end function a39_s
   function b39_b(l1,l2,l3,l4,l5,l6,l7,b_pin)
@@ -5306,7 +4970,7 @@ use array
    integer, intent(in) :: l1,l2,l3,l4,l5,l6,l7
    type(form_factor) :: b39_s
    !
-   b39_s = b39_b(l1,l2,l3,l4,l5,l6,l7,packb(set)) 
+   b39_s = b39_b(l1,l2,l3,l4,l5,l6,l7,packb(set))
    !
   end function b39_s
   function c39_b(l1,l2,l3,l4,l5,b_pin)
@@ -5324,7 +4988,7 @@ use array
    integer, intent(in) :: l1,l2,l3,l4,l5
    type(form_factor) :: c39_s
    !
-   c39_s = c39_b(l1,l2,l3,l4,l5,packb(set)) 
+   c39_s = c39_b(l1,l2,l3,l4,l5,packb(set))
    !
   end function c39_s
   function d39_b(l1,l2,l3,b_pin)
@@ -5342,7 +5006,7 @@ use array
    integer, intent(in) :: l1,l2,l3
    type(form_factor) :: d39_s
    !
-   d39_s = d39_b(l1,l2,l3,packb(set)) 
+   d39_s = d39_b(l1,l2,l3,packb(set))
    !
   end function d39_s
   function e39_b(l1,b_pin)
@@ -5360,7 +5024,7 @@ use array
    integer, intent(in) :: l1
    type(form_factor) :: e39_s
    !
-   e39_s = e39_b(l1,packb(set)) 
+   e39_s = e39_b(l1,packb(set))
    !
   end function e39_s
 
@@ -5379,7 +5043,7 @@ use array
    integer, intent(in) :: l1,l2,l3,l4,l5,l6,l7,l8,l9,l10
    type(form_factor) :: a310_s
    !
-   a310_s = a310_b(l1,l2,l3,l4,l5,l6,l7,l8,l9,l10,packb(set)) 
+   a310_s = a310_b(l1,l2,l3,l4,l5,l6,l7,l8,l9,l10,packb(set))
    !
   end function a310_s
   function b310_b(l1,l2,l3,l4,l5,l6,l7,l8,b_pin)
@@ -5397,7 +5061,7 @@ use array
    integer, intent(in) :: l1,l2,l3,l4,l5,l6,l7,l8
    type(form_factor) :: b310_s
    !
-   b310_s = b310_b(l1,l2,l3,l4,l5,l6,l7,l8,packb(set)) 
+   b310_s = b310_b(l1,l2,l3,l4,l5,l6,l7,l8,packb(set))
    !
   end function b310_s
   function c310_b(l1,l2,l3,l4,l5,l6,b_pin)
@@ -5415,7 +5079,7 @@ use array
    integer, intent(in) :: l1,l2,l3,l4,l5,l6
    type(form_factor) :: c310_s
    !
-   c310_s = c310_b(l1,l2,l3,l4,l5,l6,packb(set)) 
+   c310_s = c310_b(l1,l2,l3,l4,l5,l6,packb(set))
    !
   end function c310_s
   function d310_b(l1,l2,l3,l4,b_pin)
@@ -5433,7 +5097,7 @@ use array
    integer, intent(in) :: l1,l2,l3,l4
    type(form_factor) :: d310_s
    !
-   d310_s = d310_b(l1,l2,l3,l4,packb(set)) 
+   d310_s = d310_b(l1,l2,l3,l4,packb(set))
    !
   end function d310_s
   function e310_b(l1,l2,b_pin)
@@ -5451,7 +5115,7 @@ use array
    integer, intent(in) :: l1,l2
    type(form_factor) :: e310_s
    !
-   e310_s = e310_b(l1,l2,packb(set)) 
+   e310_s = e310_b(l1,l2,packb(set))
    !
   end function e310_s
   function f310_b(b_pin)
@@ -5468,7 +5132,7 @@ use array
    integer, intent (in), dimension(:) :: set
    type(form_factor) :: f310_s
    !
-   f310_s = f310_b(packb(set)) 
+   f310_s = f310_b(packb(set))
    !
   end function f310_s
 
@@ -5487,7 +5151,7 @@ use array
    integer, intent(in) :: l1,l2,l3,l4,l5,l6,l7,l8,l9,l10,l11
    type(form_factor) :: a311_s
    !
-   a311_s = a311_b(l1,l2,l3,l4,l5,l6,l7,l8,l9,l10,l11,packb(set)) 
+   a311_s = a311_b(l1,l2,l3,l4,l5,l6,l7,l8,l9,l10,l11,packb(set))
    !
   end function a311_s
   function b311_b(l1,l2,l3,l4,l5,l6,l7,l8,l9,b_pin)
@@ -5505,7 +5169,7 @@ use array
    integer, intent(in) :: l1,l2,l3,l4,l5,l6,l7,l8,l9
    type(form_factor) :: b311_s
    !
-   b311_s = b311_b(l1,l2,l3,l4,l5,l6,l7,l8,l9,packb(set)) 
+   b311_s = b311_b(l1,l2,l3,l4,l5,l6,l7,l8,l9,packb(set))
    !
   end function b311_s
   function c311_b(l1,l2,l3,l4,l5,l6,l7,b_pin)
@@ -5523,7 +5187,7 @@ use array
    integer, intent(in) :: l1,l2,l3,l4,l5,l6,l7
    type(form_factor) :: c311_s
    !
-   c311_s = c311_b(l1,l2,l3,l4,l5,l6,l7,packb(set)) 
+   c311_s = c311_b(l1,l2,l3,l4,l5,l6,l7,packb(set))
    !
   end function c311_s
   function d311_b(l1,l2,l3,l4,l5,b_pin)
@@ -5541,7 +5205,7 @@ use array
    integer, intent(in) :: l1,l2,l3,l4,l5
    type(form_factor) :: d311_s
    !
-   d311_s = d311_b(l1,l2,l3,l4,l5,packb(set)) 
+   d311_s = d311_b(l1,l2,l3,l4,l5,packb(set))
    !
   end function d311_s
   function e311_b(l1,l2,l3,b_pin)
@@ -5559,7 +5223,7 @@ use array
    integer, intent(in) :: l1,l2,l3
    type(form_factor) :: e311_s
    !
-   e311_s = e311_b(l1,l2,l3,packb(set)) 
+   e311_s = e311_b(l1,l2,l3,packb(set))
    !
   end function e311_s
   function f311_b(l1,b_pin)
@@ -5577,7 +5241,7 @@ use array
    integer, intent(in) :: l1
    type(form_factor) :: f311_s
    !
-   f311_s = f311_b(l1,packb(set)) 
+   f311_s = f311_b(l1,packb(set))
    !
   end function f311_s
 
@@ -5596,7 +5260,7 @@ use array
    integer, intent(in) :: l1,l2,l3,l4,l5,l6,l7,l8,l9,l10,l11,l12
    type(form_factor) :: a312_s
    !
-   a312_s = a312_b(l1,l2,l3,l4,l5,l6,l7,l8,l9,l10,l11,l12,packb(set)) 
+   a312_s = a312_b(l1,l2,l3,l4,l5,l6,l7,l8,l9,l10,l11,l12,packb(set))
    !
   end function a312_s
   function b312_b(l1,l2,l3,l4,l5,l6,l7,l8,l9,l10,b_pin)
@@ -5614,7 +5278,7 @@ use array
    integer, intent(in) :: l1,l2,l3,l4,l5,l6,l7,l8,l9,l10
    type(form_factor) :: b312_s
    !
-   b312_s = b312_b(l1,l2,l3,l4,l5,l6,l7,l8,l9,l10,packb(set)) 
+   b312_s = b312_b(l1,l2,l3,l4,l5,l6,l7,l8,l9,l10,packb(set))
    !
   end function b312_s
   function c312_b(l1,l2,l3,l4,l5,l6,l7,l8,b_pin)
@@ -5632,7 +5296,7 @@ use array
    integer, intent(in) :: l1,l2,l3,l4,l5,l6,l7,l8
    type(form_factor) :: c312_s
    !
-   c312_s = c312_b(l1,l2,l3,l4,l5,l6,l7,l8,packb(set)) 
+   c312_s = c312_b(l1,l2,l3,l4,l5,l6,l7,l8,packb(set))
    !
   end function c312_s
   function d312_b(l1,l2,l3,l4,l5,l6,b_pin)
@@ -5650,7 +5314,7 @@ use array
    integer, intent(in) :: l1,l2,l3,l4,l5,l6
    type(form_factor) :: d312_s
    !
-   d312_s = d312_b(l1,l2,l3,l4,l5,l6,packb(set)) 
+   d312_s = d312_b(l1,l2,l3,l4,l5,l6,packb(set))
    !
   end function d312_s
   function e312_b(l1,l2,l3,l4,b_pin)
@@ -5668,7 +5332,7 @@ use array
    integer, intent(in) :: l1,l2,l3,l4
    type(form_factor) :: e312_s
    !
-   e312_s = e312_b(l1,l2,l3,l4,packb(set)) 
+   e312_s = e312_b(l1,l2,l3,l4,packb(set))
    !
   end function e312_s
   function f312_b(l1,l2,b_pin)
@@ -5686,7 +5350,7 @@ use array
    integer, intent(in) :: l1,l2
    type(form_factor) :: f312_s
    !
-   f312_s = f312_b(l1,l2,packb(set)) 
+   f312_s = f312_b(l1,l2,packb(set))
    !
   end function f312_s
   function g312_b(b_pin)
@@ -5703,7 +5367,7 @@ use array
    integer, intent (in), dimension(:) :: set
    type(form_factor) :: g312_s
    !
-   g312_s = g312_b(packb(set)) 
+   g312_s = g312_b(packb(set))
    !
   end function g312_s
 
@@ -5722,7 +5386,7 @@ use array
    integer, intent(in) :: l1,l2,l3,l4,l5,l6,l7,l8,l9,l10,l11,l12,l13
    type(form_factor) :: a313_s
    !
-   a313_s = a313_b(l1,l2,l3,l4,l5,l6,l7,l8,l9,l10,l11,l12,l13,packb(set)) 
+   a313_s = a313_b(l1,l2,l3,l4,l5,l6,l7,l8,l9,l10,l11,l12,l13,packb(set))
    !
   end function a313_s
   function b313_b(l1,l2,l3,l4,l5,l6,l7,l8,l9,l10,l11,b_pin)
@@ -5740,7 +5404,7 @@ use array
    integer, intent(in) :: l1,l2,l3,l4,l5,l6,l7,l8,l9,l10,l11
    type(form_factor) :: b313_s
    !
-   b313_s = b313_b(l1,l2,l3,l4,l5,l6,l7,l8,l9,l10,l11,packb(set)) 
+   b313_s = b313_b(l1,l2,l3,l4,l5,l6,l7,l8,l9,l10,l11,packb(set))
    !
   end function b313_s
   function c313_b(l1,l2,l3,l4,l5,l6,l7,l8,l9,b_pin)
@@ -5758,7 +5422,7 @@ use array
    integer, intent(in) :: l1,l2,l3,l4,l5,l6,l7,l8,l9
    type(form_factor) :: c313_s
    !
-   c313_s = c313_b(l1,l2,l3,l4,l5,l6,l7,l8,l9,packb(set)) 
+   c313_s = c313_b(l1,l2,l3,l4,l5,l6,l7,l8,l9,packb(set))
    !
   end function c313_s
   function d313_b(l1,l2,l3,l4,l5,l6,l7,b_pin)
@@ -5776,7 +5440,7 @@ use array
    integer, intent(in) :: l1,l2,l3,l4,l5,l6,l7
    type(form_factor) :: d313_s
    !
-   d313_s = d313_b(l1,l2,l3,l4,l5,l6,l7,packb(set)) 
+   d313_s = d313_b(l1,l2,l3,l4,l5,l6,l7,packb(set))
    !
   end function d313_s
   function e313_b(l1,l2,l3,l4,l5,b_pin)
@@ -5794,7 +5458,7 @@ use array
    integer, intent(in) :: l1,l2,l3,l4,l5
    type(form_factor) :: e313_s
    !
-   e313_s = e313_b(l1,l2,l3,l4,l5,packb(set)) 
+   e313_s = e313_b(l1,l2,l3,l4,l5,packb(set))
    !
   end function e313_s
   function f313_b(l1,l2,l3,b_pin)
@@ -5812,7 +5476,7 @@ use array
    integer, intent(in) :: l1,l2,l3
    type(form_factor) :: f313_s
    !
-   f313_s = f313_b(l1,l2,l3,packb(set)) 
+   f313_s = f313_b(l1,l2,l3,packb(set))
    !
   end function f313_s
   function g313_b(l1,b_pin)
@@ -5830,7 +5494,7 @@ use array
    integer, intent(in) :: l1
    type(form_factor) :: g313_s
    !
-   g313_s = g313_b(l1,packb(set)) 
+   g313_s = g313_b(l1,packb(set))
    !
   end function g313_s
 
@@ -5849,7 +5513,7 @@ use array
    integer, intent(in) :: l1,l2,l3,l4,l5,l6,l7,l8,l9,l10,l11,l12,l13,l14
    type(form_factor) :: a314_s
    !
-   a314_s = a314_b(l1,l2,l3,l4,l5,l6,l7,l8,l9,l10,l11,l12,l13,l14,packb(set)) 
+   a314_s = a314_b(l1,l2,l3,l4,l5,l6,l7,l8,l9,l10,l11,l12,l13,l14,packb(set))
    !
   end function a314_s
   function b314_b(l1,l2,l3,l4,l5,l6,l7,l8,l9,l10,l11,l12,b_pin)
@@ -5867,7 +5531,7 @@ use array
    integer, intent(in) :: l1,l2,l3,l4,l5,l6,l7,l8,l9,l10,l11,l12
    type(form_factor) :: b314_s
    !
-   b314_s = b314_b(l1,l2,l3,l4,l5,l6,l7,l8,l9,l10,l11,l12,packb(set)) 
+   b314_s = b314_b(l1,l2,l3,l4,l5,l6,l7,l8,l9,l10,l11,l12,packb(set))
    !
   end function b314_s
   function c314_b(l1,l2,l3,l4,l5,l6,l7,l8,l9,l10,b_pin)
@@ -5885,7 +5549,7 @@ use array
    integer, intent(in) :: l1,l2,l3,l4,l5,l6,l7,l8,l9,l10
    type(form_factor) :: c314_s
    !
-   c314_s = c314_b(l1,l2,l3,l4,l5,l6,l7,l8,l9,l10,packb(set)) 
+   c314_s = c314_b(l1,l2,l3,l4,l5,l6,l7,l8,l9,l10,packb(set))
    !
   end function c314_s
   function d314_b(l1,l2,l3,l4,l5,l6,l7,l8,b_pin)
@@ -5903,7 +5567,7 @@ use array
    integer, intent(in) :: l1,l2,l3,l4,l5,l6,l7,l8
    type(form_factor) :: d314_s
    !
-   d314_s = d314_b(l1,l2,l3,l4,l5,l6,l7,l8,packb(set)) 
+   d314_s = d314_b(l1,l2,l3,l4,l5,l6,l7,l8,packb(set))
    !
   end function d314_s
   function e314_b(l1,l2,l3,l4,l5,l6,b_pin)
@@ -5921,7 +5585,7 @@ use array
    integer, intent(in) :: l1,l2,l3,l4,l5,l6
    type(form_factor) :: e314_s
    !
-   e314_s = e314_b(l1,l2,l3,l4,l5,l6,packb(set)) 
+   e314_s = e314_b(l1,l2,l3,l4,l5,l6,packb(set))
    !
   end function e314_s
   function f314_b(l1,l2,l3,l4,b_pin)
@@ -5939,7 +5603,7 @@ use array
    integer, intent(in) :: l1,l2,l3,l4
    type(form_factor) :: f314_s
    !
-   f314_s = f314_b(l1,l2,l3,l4,packb(set)) 
+   f314_s = f314_b(l1,l2,l3,l4,packb(set))
    !
   end function f314_s
   function g314_b(l1,l2,b_pin)
@@ -5957,7 +5621,7 @@ use array
    integer, intent(in) :: l1,l2
    type(form_factor) :: g314_s
    !
-   g314_s = g314_b(l1,l2,packb(set)) 
+   g314_s = g314_b(l1,l2,packb(set))
    !
   end function g314_s
   function h314_b(b_pin)
@@ -5974,7 +5638,7 @@ use array
    integer, intent (in), dimension(:) :: set
    type(form_factor) :: h314_s
    !
-   h314_s = h314_b(packb(set)) 
+   h314_s = h314_b(packb(set))
    !
   end function h314_s
 
@@ -5993,7 +5657,7 @@ use array
    integer, intent(in) :: l1,l2,l3,l4,l5,l6,l7,l8,l9,l10,l11,l12,l13,l14,l15
    type(form_factor) :: a315_s
    !
-   a315_s = a315_b(l1,l2,l3,l4,l5,l6,l7,l8,l9,l10,l11,l12,l13,l14,l15,packb(set)) 
+   a315_s = a315_b(l1,l2,l3,l4,l5,l6,l7,l8,l9,l10,l11,l12,l13,l14,l15,packb(set))
    !
   end function a315_s
   function b315_b(l1,l2,l3,l4,l5,l6,l7,l8,l9,l10,l11,l12,l13,b_pin)
@@ -6011,7 +5675,7 @@ use array
    integer, intent(in) :: l1,l2,l3,l4,l5,l6,l7,l8,l9,l10,l11,l12,l13
    type(form_factor) :: b315_s
    !
-   b315_s = b315_b(l1,l2,l3,l4,l5,l6,l7,l8,l9,l10,l11,l12,l13,packb(set)) 
+   b315_s = b315_b(l1,l2,l3,l4,l5,l6,l7,l8,l9,l10,l11,l12,l13,packb(set))
    !
   end function b315_s
   function c315_b(l1,l2,l3,l4,l5,l6,l7,l8,l9,l10,l11,b_pin)
@@ -6029,7 +5693,7 @@ use array
    integer, intent(in) :: l1,l2,l3,l4,l5,l6,l7,l8,l9,l10,l11
    type(form_factor) :: c315_s
    !
-   c315_s = c315_b(l1,l2,l3,l4,l5,l6,l7,l8,l9,l10,l11,packb(set)) 
+   c315_s = c315_b(l1,l2,l3,l4,l5,l6,l7,l8,l9,l10,l11,packb(set))
    !
   end function c315_s
   function d315_b(l1,l2,l3,l4,l5,l6,l7,l8,l9,b_pin)
@@ -6047,7 +5711,7 @@ use array
    integer, intent(in) :: l1,l2,l3,l4,l5,l6,l7,l8,l9
    type(form_factor) :: d315_s
    !
-   d315_s = d315_b(l1,l2,l3,l4,l5,l6,l7,l8,l9,packb(set)) 
+   d315_s = d315_b(l1,l2,l3,l4,l5,l6,l7,l8,l9,packb(set))
    !
   end function d315_s
   function e315_b(l1,l2,l3,l4,l5,l6,l7,b_pin)
@@ -6065,7 +5729,7 @@ use array
    integer, intent(in) :: l1,l2,l3,l4,l5,l6,l7
    type(form_factor) :: e315_s
    !
-   e315_s = e315_b(l1,l2,l3,l4,l5,l6,l7,packb(set)) 
+   e315_s = e315_b(l1,l2,l3,l4,l5,l6,l7,packb(set))
    !
   end function e315_s
   function f315_b(l1,l2,l3,l4,l5,b_pin)
@@ -6083,7 +5747,7 @@ use array
    integer, intent(in) :: l1,l2,l3,l4,l5
    type(form_factor) :: f315_s
    !
-   f315_s = f315_b(l1,l2,l3,l4,l5,packb(set)) 
+   f315_s = f315_b(l1,l2,l3,l4,l5,packb(set))
    !
   end function f315_s
   function g315_b(l1,l2,l3,b_pin)
@@ -6101,7 +5765,7 @@ use array
    integer, intent(in) :: l1,l2,l3
    type(form_factor) :: g315_s
    !
-   g315_s = g315_b(l1,l2,l3,packb(set)) 
+   g315_s = g315_b(l1,l2,l3,packb(set))
    !
   end function g315_s
   function h315_b(l1,b_pin)
@@ -6119,7 +5783,7 @@ use array
    integer, intent(in) :: l1
    type(form_factor) :: h315_s
    !
-   h315_s = h315_b(l1,packb(set)) 
+   h315_s = h315_b(l1,packb(set))
    !
   end function h315_s
 
@@ -6138,7 +5802,7 @@ use array
    integer, intent(in) :: l1,l2,l3,l4,l5,l6,l7,l8,l9,l10,l11,l12,l13,l14,l15,l16
    type(form_factor) :: a316_s
    !
-   a316_s = a316_b(l1,l2,l3,l4,l5,l6,l7,l8,l9,l10,l11,l12,l13,l14,l15,l16,packb(set)) 
+   a316_s = a316_b(l1,l2,l3,l4,l5,l6,l7,l8,l9,l10,l11,l12,l13,l14,l15,l16,packb(set))
    !
   end function a316_s
   function b316_b(l1,l2,l3,l4,l5,l6,l7,l8,l9,l10,l11,l12,l13,l14,b_pin)
@@ -6156,7 +5820,7 @@ use array
    integer, intent(in) :: l1,l2,l3,l4,l5,l6,l7,l8,l9,l10,l11,l12,l13,l14
    type(form_factor) :: b316_s
    !
-   b316_s = b316_b(l1,l2,l3,l4,l5,l6,l7,l8,l9,l10,l11,l12,l13,l14,packb(set)) 
+   b316_s = b316_b(l1,l2,l3,l4,l5,l6,l7,l8,l9,l10,l11,l12,l13,l14,packb(set))
    !
   end function b316_s
   function c316_b(l1,l2,l3,l4,l5,l6,l7,l8,l9,l10,l11,l12,b_pin)
@@ -6174,7 +5838,7 @@ use array
    integer, intent(in) :: l1,l2,l3,l4,l5,l6,l7,l8,l9,l10,l11,l12
    type(form_factor) :: c316_s
    !
-   c316_s = c316_b(l1,l2,l3,l4,l5,l6,l7,l8,l9,l10,l11,l12,packb(set)) 
+   c316_s = c316_b(l1,l2,l3,l4,l5,l6,l7,l8,l9,l10,l11,l12,packb(set))
    !
   end function c316_s
   function d316_b(l1,l2,l3,l4,l5,l6,l7,l8,l9,l10,b_pin)
@@ -6192,7 +5856,7 @@ use array
    integer, intent(in) :: l1,l2,l3,l4,l5,l6,l7,l8,l9,l10
    type(form_factor) :: d316_s
    !
-   d316_s = d316_b(l1,l2,l3,l4,l5,l6,l7,l8,l9,l10,packb(set)) 
+   d316_s = d316_b(l1,l2,l3,l4,l5,l6,l7,l8,l9,l10,packb(set))
    !
   end function d316_s
   function e316_b(l1,l2,l3,l4,l5,l6,l7,l8,b_pin)
@@ -6210,7 +5874,7 @@ use array
    integer, intent(in) :: l1,l2,l3,l4,l5,l6,l7,l8
    type(form_factor) :: e316_s
    !
-   e316_s = e316_b(l1,l2,l3,l4,l5,l6,l7,l8,packb(set)) 
+   e316_s = e316_b(l1,l2,l3,l4,l5,l6,l7,l8,packb(set))
    !
   end function e316_s
   function f316_b(l1,l2,l3,l4,l5,l6,b_pin)
@@ -6228,7 +5892,7 @@ use array
    integer, intent(in) :: l1,l2,l3,l4,l5,l6
    type(form_factor) :: f316_s
    !
-   f316_s = f316_b(l1,l2,l3,l4,l5,l6,packb(set)) 
+   f316_s = f316_b(l1,l2,l3,l4,l5,l6,packb(set))
    !
   end function f316_s
   function g316_b(l1,l2,l3,l4,b_pin)
@@ -6246,7 +5910,7 @@ use array
    integer, intent(in) :: l1,l2,l3,l4
    type(form_factor) :: g316_s
    !
-   g316_s = g316_b(l1,l2,l3,l4,packb(set)) 
+   g316_s = g316_b(l1,l2,l3,l4,packb(set))
    !
   end function g316_s
   function h316_b(l1,l2,b_pin)
@@ -6264,7 +5928,7 @@ use array
    integer, intent(in) :: l1,l2
    type(form_factor) :: h316_s
    !
-   h316_s = h316_b(l1,l2,packb(set)) 
+   h316_s = h316_b(l1,l2,packb(set))
    !
   end function h316_s
   function i316_b(b_pin)
@@ -6281,7 +5945,7 @@ use array
    integer, intent (in), dimension(:) :: set
    type(form_factor) :: i316_s
    !
-   i316_s = i316_b(packb(set)) 
+   i316_s = i316_b(packb(set))
    !
   end function i316_s
 
@@ -6300,7 +5964,7 @@ use array
    integer, intent(in) :: l1,l2,l3,l4,l5,l6,l7,l8,l9,l10,l11,l12,l13,l14,l15,l16,l17
    type(form_factor) :: a317_s
    !
-   a317_s = a317_b(l1,l2,l3,l4,l5,l6,l7,l8,l9,l10,l11,l12,l13,l14,l15,l16,l17,packb(set)) 
+   a317_s = a317_b(l1,l2,l3,l4,l5,l6,l7,l8,l9,l10,l11,l12,l13,l14,l15,l16,l17,packb(set))
    !
   end function a317_s
   function b317_b(l1,l2,l3,l4,l5,l6,l7,l8,l9,l10,l11,l12,l13,l14,l15,b_pin)
@@ -6318,7 +5982,7 @@ use array
    integer, intent(in) :: l1,l2,l3,l4,l5,l6,l7,l8,l9,l10,l11,l12,l13,l14,l15
    type(form_factor) :: b317_s
    !
-   b317_s = b317_b(l1,l2,l3,l4,l5,l6,l7,l8,l9,l10,l11,l12,l13,l14,l15,packb(set)) 
+   b317_s = b317_b(l1,l2,l3,l4,l5,l6,l7,l8,l9,l10,l11,l12,l13,l14,l15,packb(set))
    !
   end function b317_s
   function c317_b(l1,l2,l3,l4,l5,l6,l7,l8,l9,l10,l11,l12,l13,b_pin)
@@ -6336,7 +6000,7 @@ use array
    integer, intent(in) :: l1,l2,l3,l4,l5,l6,l7,l8,l9,l10,l11,l12,l13
    type(form_factor) :: c317_s
    !
-   c317_s = c317_b(l1,l2,l3,l4,l5,l6,l7,l8,l9,l10,l11,l12,l13,packb(set)) 
+   c317_s = c317_b(l1,l2,l3,l4,l5,l6,l7,l8,l9,l10,l11,l12,l13,packb(set))
    !
   end function c317_s
   function d317_b(l1,l2,l3,l4,l5,l6,l7,l8,l9,l10,l11,b_pin)
@@ -6354,7 +6018,7 @@ use array
    integer, intent(in) :: l1,l2,l3,l4,l5,l6,l7,l8,l9,l10,l11
    type(form_factor) :: d317_s
    !
-   d317_s = d317_b(l1,l2,l3,l4,l5,l6,l7,l8,l9,l10,l11,packb(set)) 
+   d317_s = d317_b(l1,l2,l3,l4,l5,l6,l7,l8,l9,l10,l11,packb(set))
    !
   end function d317_s
   function e317_b(l1,l2,l3,l4,l5,l6,l7,l8,l9,b_pin)
@@ -6372,7 +6036,7 @@ use array
    integer, intent(in) :: l1,l2,l3,l4,l5,l6,l7,l8,l9
    type(form_factor) :: e317_s
    !
-   e317_s = e317_b(l1,l2,l3,l4,l5,l6,l7,l8,l9,packb(set)) 
+   e317_s = e317_b(l1,l2,l3,l4,l5,l6,l7,l8,l9,packb(set))
    !
   end function e317_s
   function f317_b(l1,l2,l3,l4,l5,l6,l7,b_pin)
@@ -6390,7 +6054,7 @@ use array
    integer, intent(in) :: l1,l2,l3,l4,l5,l6,l7
    type(form_factor) :: f317_s
    !
-   f317_s = f317_b(l1,l2,l3,l4,l5,l6,l7,packb(set)) 
+   f317_s = f317_b(l1,l2,l3,l4,l5,l6,l7,packb(set))
    !
   end function f317_s
   function g317_b(l1,l2,l3,l4,l5,b_pin)
@@ -6408,7 +6072,7 @@ use array
    integer, intent(in) :: l1,l2,l3,l4,l5
    type(form_factor) :: g317_s
    !
-   g317_s = g317_b(l1,l2,l3,l4,l5,packb(set)) 
+   g317_s = g317_b(l1,l2,l3,l4,l5,packb(set))
    !
   end function g317_s
   function h317_b(l1,l2,l3,b_pin)
@@ -6426,7 +6090,7 @@ use array
    integer, intent(in) :: l1,l2,l3
    type(form_factor) :: h317_s
    !
-   h317_s = h317_b(l1,l2,l3,packb(set)) 
+   h317_s = h317_b(l1,l2,l3,packb(set))
    !
   end function h317_s
   function i317_b(l1,b_pin)
@@ -6444,155 +6108,13 @@ use array
    integer, intent(in) :: l1
    type(form_factor) :: i317_s
    !
-   i317_s = i317_b(l1,packb(set)) 
+   i317_s = i317_b(l1,packb(set))
    !
   end function i317_s
 
-  function my_a41_b(l1,b_pin)
-   !
-   integer, intent(in) :: l1,b_pin
-   type(form_factor) :: my_a41_b
-   !
-   my_a41_b = -1.0_ki * fnp_generic(4,0,b_pin,1,(/ l1 /))
-   !
-  end function my_a41_b
 
-  function my_a41_s(l1,set)
-   !
-   integer, intent (in), dimension(:) :: set
-   integer, intent(in) :: l1
-   type(form_factor) :: my_a41_s
-   !
-   my_a41_s = my_a41_b(l1,packb(set)) 
-   !
-  end function my_a41_s
 
-  function my_a42_b(l1,l2,b_pin)
-   !
-   integer, intent(in) :: l1,l2,b_pin
-   type(form_factor) :: my_a42_b
-   !
-   my_a42_b = fnp_generic(4,0,b_pin,2,(/ l1,l2 /))
-   !
-  end function my_a42_b
 
-  function my_a42_s(l1,l2,set)
-   !
-   integer, intent (in), dimension(:) :: set
-   integer, intent(in) :: l1,l2
-   type(form_factor) :: my_a42_s
-   !
-   my_a42_s = my_a42_b(l1,l2,packb(set)) 
-   !
-  end function my_a42_s
-  function my_b42_b(b_pin)
-   !
-   integer, intent(in) :: b_pin
-   type(form_factor) :: my_b42_b
-   !
-   my_b42_b = -0.5_ki * fnp_generic(4,2,b_pin,0,no_feynmanparam)
-   !
-  end function my_b42_b
-
-  function my_b42_s(set)
-   !
-   integer, intent (in), dimension(:) :: set
-   type(form_factor) :: my_b42_s
-   !
-   my_b42_s = my_b42_b(packb(set)) 
-   !
-  end function my_b42_s
-
-  function my_a43_b(l1,l2,l3,b_pin)
-   !
-   integer, intent(in) :: l1,l2,l3,b_pin
-   type(form_factor) :: my_a43_b
-   !
-   my_a43_b = -1.0_ki * fnp_generic(4,0,b_pin,3,(/ l1,l2,l3 /))
-   !
-  end function my_a43_b
-
-  function my_a43_s(l1,l2,l3,set)
-   !
-   integer, intent (in), dimension(:) :: set
-   integer, intent(in) :: l1,l2,l3
-   type(form_factor) :: my_a43_s
-   !
-   my_a43_s = my_a43_b(l1,l2,l3,packb(set)) 
-   !
-  end function my_a43_s
-  function my_b43_b(l1,b_pin)
-   !
-   integer, intent(in) :: l1,b_pin
-   type(form_factor) :: my_b43_b
-   !
-   my_b43_b = 0.5_ki * fnp_generic(4,2,b_pin,1,(/ l1 /))
-   !
-  end function my_b43_b
-
-  function my_b43_s(l1,set)
-   !
-   integer, intent (in), dimension(:) :: set
-   integer, intent(in) :: l1
-   type(form_factor) :: my_b43_s
-   !
-   my_b43_s = my_b43_b(l1,packb(set)) 
-   !
-  end function my_b43_s
-
-  function my_a44_b(l1,l2,l3,l4,b_pin)
-   !
-   integer, intent(in) :: l1,l2,l3,l4,b_pin
-   type(form_factor) :: my_a44_b
-   !
-   my_a44_b = fnp_generic(4,0,b_pin,4,(/ l1,l2,l3,l4 /))
-   !
-  end function my_a44_b
-
-  function my_a44_s(l1,l2,l3,l4,set)
-   !
-   integer, intent (in), dimension(:) :: set
-   integer, intent(in) :: l1,l2,l3,l4
-   type(form_factor) :: my_a44_s
-   !
-   my_a44_s = my_a44_b(l1,l2,l3,l4,packb(set)) 
-   !
-  end function my_a44_s
-  function my_b44_b(l1,l2,b_pin)
-   !
-   integer, intent(in) :: l1,l2,b_pin
-   type(form_factor) :: my_b44_b
-   !
-   my_b44_b = -0.5_ki * fnp_generic(4,2,b_pin,2,(/ l1,l2 /))
-   !
-  end function my_b44_b
-
-  function my_b44_s(l1,l2,set)
-   !
-   integer, intent (in), dimension(:) :: set
-   integer, intent(in) :: l1,l2
-   type(form_factor) :: my_b44_s
-   !
-   my_b44_s = my_b44_b(l1,l2,packb(set)) 
-   !
-  end function my_b44_s
-  function my_c44_b(b_pin)
-   !
-   integer, intent(in) :: b_pin
-   type(form_factor) :: my_c44_b
-   !
-   my_c44_b = 0.25_ki * fnp_generic(4,4,b_pin,0,no_feynmanparam)
-   !
-  end function my_c44_b
-
-  function my_c44_s(set)
-   !
-   integer, intent (in), dimension(:) :: set
-   type(form_factor) :: my_c44_s
-   !
-   my_c44_s = my_c44_b(packb(set)) 
-   !
-  end function my_c44_s
 
   function a45_b(l1,l2,l3,l4,l5,b_pin)
    !
@@ -6609,7 +6131,7 @@ use array
    integer, intent(in) :: l1,l2,l3,l4,l5
    type(form_factor) :: a45_s
    !
-   a45_s = a45_b(l1,l2,l3,l4,l5,packb(set)) 
+   a45_s = a45_b(l1,l2,l3,l4,l5,packb(set))
    !
   end function a45_s
   function b45_b(l1,l2,l3,b_pin)
@@ -6627,7 +6149,7 @@ use array
    integer, intent(in) :: l1,l2,l3
    type(form_factor) :: b45_s
    !
-   b45_s = b45_b(l1,l2,l3,packb(set)) 
+   b45_s = b45_b(l1,l2,l3,packb(set))
    !
   end function b45_s
   function c45_b(l1,b_pin)
@@ -6645,7 +6167,7 @@ use array
    integer, intent(in) :: l1
    type(form_factor) :: c45_s
    !
-   c45_s = c45_b(l1,packb(set)) 
+   c45_s = c45_b(l1,packb(set))
    !
   end function c45_s
 
@@ -6664,7 +6186,7 @@ use array
    integer, intent(in) :: l1,l2,l3,l4,l5,l6
    type(form_factor) :: a46_s
    !
-   a46_s = a46_b(l1,l2,l3,l4,l5,l6,packb(set)) 
+   a46_s = a46_b(l1,l2,l3,l4,l5,l6,packb(set))
    !
   end function a46_s
   function b46_b(l1,l2,l3,l4,b_pin)
@@ -6682,7 +6204,7 @@ use array
    integer, intent(in) :: l1,l2,l3,l4
    type(form_factor) :: b46_s
    !
-   b46_s = b46_b(l1,l2,l3,l4,packb(set)) 
+   b46_s = b46_b(l1,l2,l3,l4,packb(set))
    !
   end function b46_s
   function c46_b(l1,l2,b_pin)
@@ -6700,7 +6222,7 @@ use array
    integer, intent(in) :: l1,l2
    type(form_factor) :: c46_s
    !
-   c46_s = c46_b(l1,l2,packb(set)) 
+   c46_s = c46_b(l1,l2,packb(set))
    !
   end function c46_s
   function d46_b(b_pin)
@@ -6717,7 +6239,7 @@ use array
    integer, intent (in), dimension(:) :: set
    type(form_factor) :: d46_s
    !
-   d46_s = d46_b(packb(set)) 
+   d46_s = d46_b(packb(set))
    !
   end function d46_s
 
@@ -6736,7 +6258,7 @@ use array
    integer, intent(in) :: l1,l2,l3,l4,l5,l6,l7
    type(form_factor) :: a47_s
    !
-   a47_s = a47_b(l1,l2,l3,l4,l5,l6,l7,packb(set)) 
+   a47_s = a47_b(l1,l2,l3,l4,l5,l6,l7,packb(set))
    !
   end function a47_s
   function b47_b(l1,l2,l3,l4,l5,b_pin)
@@ -6754,7 +6276,7 @@ use array
    integer, intent(in) :: l1,l2,l3,l4,l5
    type(form_factor) :: b47_s
    !
-   b47_s = b47_b(l1,l2,l3,l4,l5,packb(set)) 
+   b47_s = b47_b(l1,l2,l3,l4,l5,packb(set))
    !
   end function b47_s
   function c47_b(l1,l2,l3,b_pin)
@@ -6772,7 +6294,7 @@ use array
    integer, intent(in) :: l1,l2,l3
    type(form_factor) :: c47_s
    !
-   c47_s = c47_b(l1,l2,l3,packb(set)) 
+   c47_s = c47_b(l1,l2,l3,packb(set))
    !
   end function c47_s
   function d47_b(l1,b_pin)
@@ -6790,7 +6312,7 @@ use array
    integer, intent(in) :: l1
    type(form_factor) :: d47_s
    !
-   d47_s = d47_b(l1,packb(set)) 
+   d47_s = d47_b(l1,packb(set))
    !
   end function d47_s
 
@@ -6809,7 +6331,7 @@ use array
    integer, intent(in) :: l1,l2,l3,l4,l5,l6,l7,l8
    type(form_factor) :: a48_s
    !
-   a48_s = a48_b(l1,l2,l3,l4,l5,l6,l7,l8,packb(set)) 
+   a48_s = a48_b(l1,l2,l3,l4,l5,l6,l7,l8,packb(set))
    !
   end function a48_s
   function b48_b(l1,l2,l3,l4,l5,l6,b_pin)
@@ -6827,7 +6349,7 @@ use array
    integer, intent(in) :: l1,l2,l3,l4,l5,l6
    type(form_factor) :: b48_s
    !
-   b48_s = b48_b(l1,l2,l3,l4,l5,l6,packb(set)) 
+   b48_s = b48_b(l1,l2,l3,l4,l5,l6,packb(set))
    !
   end function b48_s
   function c48_b(l1,l2,l3,l4,b_pin)
@@ -6845,7 +6367,7 @@ use array
    integer, intent(in) :: l1,l2,l3,l4
    type(form_factor) :: c48_s
    !
-   c48_s = c48_b(l1,l2,l3,l4,packb(set)) 
+   c48_s = c48_b(l1,l2,l3,l4,packb(set))
    !
   end function c48_s
   function d48_b(l1,l2,b_pin)
@@ -6863,7 +6385,7 @@ use array
    integer, intent(in) :: l1,l2
    type(form_factor) :: d48_s
    !
-   d48_s = d48_b(l1,l2,packb(set)) 
+   d48_s = d48_b(l1,l2,packb(set))
    !
   end function d48_s
   function e48_b(b_pin)
@@ -6880,7 +6402,7 @@ use array
    integer, intent (in), dimension(:) :: set
    type(form_factor) :: e48_s
    !
-   e48_s = e48_b(packb(set)) 
+   e48_s = e48_b(packb(set))
    !
   end function e48_s
 
@@ -6899,7 +6421,7 @@ use array
    integer, intent(in) :: l1,l2,l3,l4,l5,l6,l7,l8,l9
    type(form_factor) :: a49_s
    !
-   a49_s = a49_b(l1,l2,l3,l4,l5,l6,l7,l8,l9,packb(set)) 
+   a49_s = a49_b(l1,l2,l3,l4,l5,l6,l7,l8,l9,packb(set))
    !
   end function a49_s
   function b49_b(l1,l2,l3,l4,l5,l6,l7,b_pin)
@@ -6917,7 +6439,7 @@ use array
    integer, intent(in) :: l1,l2,l3,l4,l5,l6,l7
    type(form_factor) :: b49_s
    !
-   b49_s = b49_b(l1,l2,l3,l4,l5,l6,l7,packb(set)) 
+   b49_s = b49_b(l1,l2,l3,l4,l5,l6,l7,packb(set))
    !
   end function b49_s
   function c49_b(l1,l2,l3,l4,l5,b_pin)
@@ -6935,7 +6457,7 @@ use array
    integer, intent(in) :: l1,l2,l3,l4,l5
    type(form_factor) :: c49_s
    !
-   c49_s = c49_b(l1,l2,l3,l4,l5,packb(set)) 
+   c49_s = c49_b(l1,l2,l3,l4,l5,packb(set))
    !
   end function c49_s
   function d49_b(l1,l2,l3,b_pin)
@@ -6953,7 +6475,7 @@ use array
    integer, intent(in) :: l1,l2,l3
    type(form_factor) :: d49_s
    !
-   d49_s = d49_b(l1,l2,l3,packb(set)) 
+   d49_s = d49_b(l1,l2,l3,packb(set))
    !
   end function d49_s
   function e49_b(l1,b_pin)
@@ -6971,7 +6493,7 @@ use array
    integer, intent(in) :: l1
    type(form_factor) :: e49_s
    !
-   e49_s = e49_b(l1,packb(set)) 
+   e49_s = e49_b(l1,packb(set))
    !
   end function e49_s
 
@@ -6990,7 +6512,7 @@ use array
    integer, intent(in) :: l1,l2,l3,l4,l5,l6,l7,l8,l9,l10
    type(form_factor) :: a410_s
    !
-   a410_s = a410_b(l1,l2,l3,l4,l5,l6,l7,l8,l9,l10,packb(set)) 
+   a410_s = a410_b(l1,l2,l3,l4,l5,l6,l7,l8,l9,l10,packb(set))
    !
   end function a410_s
   function b410_b(l1,l2,l3,l4,l5,l6,l7,l8,b_pin)
@@ -7008,7 +6530,7 @@ use array
    integer, intent(in) :: l1,l2,l3,l4,l5,l6,l7,l8
    type(form_factor) :: b410_s
    !
-   b410_s = b410_b(l1,l2,l3,l4,l5,l6,l7,l8,packb(set)) 
+   b410_s = b410_b(l1,l2,l3,l4,l5,l6,l7,l8,packb(set))
    !
   end function b410_s
   function c410_b(l1,l2,l3,l4,l5,l6,b_pin)
@@ -7026,7 +6548,7 @@ use array
    integer, intent(in) :: l1,l2,l3,l4,l5,l6
    type(form_factor) :: c410_s
    !
-   c410_s = c410_b(l1,l2,l3,l4,l5,l6,packb(set)) 
+   c410_s = c410_b(l1,l2,l3,l4,l5,l6,packb(set))
    !
   end function c410_s
   function d410_b(l1,l2,l3,l4,b_pin)
@@ -7044,7 +6566,7 @@ use array
    integer, intent(in) :: l1,l2,l3,l4
    type(form_factor) :: d410_s
    !
-   d410_s = d410_b(l1,l2,l3,l4,packb(set)) 
+   d410_s = d410_b(l1,l2,l3,l4,packb(set))
    !
   end function d410_s
   function e410_b(l1,l2,b_pin)
@@ -7062,7 +6584,7 @@ use array
    integer, intent(in) :: l1,l2
    type(form_factor) :: e410_s
    !
-   e410_s = e410_b(l1,l2,packb(set)) 
+   e410_s = e410_b(l1,l2,packb(set))
    !
   end function e410_s
   function f410_b(b_pin)
@@ -7079,7 +6601,7 @@ use array
    integer, intent (in), dimension(:) :: set
    type(form_factor) :: f410_s
    !
-   f410_s = f410_b(packb(set)) 
+   f410_s = f410_b(packb(set))
    !
   end function f410_s
 
@@ -7098,7 +6620,7 @@ use array
    integer, intent(in) :: l1,l2,l3,l4,l5,l6,l7,l8,l9,l10,l11
    type(form_factor) :: a411_s
    !
-   a411_s = a411_b(l1,l2,l3,l4,l5,l6,l7,l8,l9,l10,l11,packb(set)) 
+   a411_s = a411_b(l1,l2,l3,l4,l5,l6,l7,l8,l9,l10,l11,packb(set))
    !
   end function a411_s
   function b411_b(l1,l2,l3,l4,l5,l6,l7,l8,l9,b_pin)
@@ -7116,7 +6638,7 @@ use array
    integer, intent(in) :: l1,l2,l3,l4,l5,l6,l7,l8,l9
    type(form_factor) :: b411_s
    !
-   b411_s = b411_b(l1,l2,l3,l4,l5,l6,l7,l8,l9,packb(set)) 
+   b411_s = b411_b(l1,l2,l3,l4,l5,l6,l7,l8,l9,packb(set))
    !
   end function b411_s
   function c411_b(l1,l2,l3,l4,l5,l6,l7,b_pin)
@@ -7134,7 +6656,7 @@ use array
    integer, intent(in) :: l1,l2,l3,l4,l5,l6,l7
    type(form_factor) :: c411_s
    !
-   c411_s = c411_b(l1,l2,l3,l4,l5,l6,l7,packb(set)) 
+   c411_s = c411_b(l1,l2,l3,l4,l5,l6,l7,packb(set))
    !
   end function c411_s
   function d411_b(l1,l2,l3,l4,l5,b_pin)
@@ -7152,7 +6674,7 @@ use array
    integer, intent(in) :: l1,l2,l3,l4,l5
    type(form_factor) :: d411_s
    !
-   d411_s = d411_b(l1,l2,l3,l4,l5,packb(set)) 
+   d411_s = d411_b(l1,l2,l3,l4,l5,packb(set))
    !
   end function d411_s
   function e411_b(l1,l2,l3,b_pin)
@@ -7170,7 +6692,7 @@ use array
    integer, intent(in) :: l1,l2,l3
    type(form_factor) :: e411_s
    !
-   e411_s = e411_b(l1,l2,l3,packb(set)) 
+   e411_s = e411_b(l1,l2,l3,packb(set))
    !
   end function e411_s
   function f411_b(l1,b_pin)
@@ -7188,7 +6710,7 @@ use array
    integer, intent(in) :: l1
    type(form_factor) :: f411_s
    !
-   f411_s = f411_b(l1,packb(set)) 
+   f411_s = f411_b(l1,packb(set))
    !
   end function f411_s
 
@@ -7207,7 +6729,7 @@ use array
    integer, intent(in) :: l1,l2,l3,l4,l5,l6,l7,l8,l9,l10,l11,l12
    type(form_factor) :: a412_s
    !
-   a412_s = a412_b(l1,l2,l3,l4,l5,l6,l7,l8,l9,l10,l11,l12,packb(set)) 
+   a412_s = a412_b(l1,l2,l3,l4,l5,l6,l7,l8,l9,l10,l11,l12,packb(set))
    !
   end function a412_s
   function b412_b(l1,l2,l3,l4,l5,l6,l7,l8,l9,l10,b_pin)
@@ -7225,7 +6747,7 @@ use array
    integer, intent(in) :: l1,l2,l3,l4,l5,l6,l7,l8,l9,l10
    type(form_factor) :: b412_s
    !
-   b412_s = b412_b(l1,l2,l3,l4,l5,l6,l7,l8,l9,l10,packb(set)) 
+   b412_s = b412_b(l1,l2,l3,l4,l5,l6,l7,l8,l9,l10,packb(set))
    !
   end function b412_s
   function c412_b(l1,l2,l3,l4,l5,l6,l7,l8,b_pin)
@@ -7243,7 +6765,7 @@ use array
    integer, intent(in) :: l1,l2,l3,l4,l5,l6,l7,l8
    type(form_factor) :: c412_s
    !
-   c412_s = c412_b(l1,l2,l3,l4,l5,l6,l7,l8,packb(set)) 
+   c412_s = c412_b(l1,l2,l3,l4,l5,l6,l7,l8,packb(set))
    !
   end function c412_s
   function d412_b(l1,l2,l3,l4,l5,l6,b_pin)
@@ -7261,7 +6783,7 @@ use array
    integer, intent(in) :: l1,l2,l3,l4,l5,l6
    type(form_factor) :: d412_s
    !
-   d412_s = d412_b(l1,l2,l3,l4,l5,l6,packb(set)) 
+   d412_s = d412_b(l1,l2,l3,l4,l5,l6,packb(set))
    !
   end function d412_s
   function e412_b(l1,l2,l3,l4,b_pin)
@@ -7279,7 +6801,7 @@ use array
    integer, intent(in) :: l1,l2,l3,l4
    type(form_factor) :: e412_s
    !
-   e412_s = e412_b(l1,l2,l3,l4,packb(set)) 
+   e412_s = e412_b(l1,l2,l3,l4,packb(set))
    !
   end function e412_s
   function f412_b(l1,l2,b_pin)
@@ -7297,7 +6819,7 @@ use array
    integer, intent(in) :: l1,l2
    type(form_factor) :: f412_s
    !
-   f412_s = f412_b(l1,l2,packb(set)) 
+   f412_s = f412_b(l1,l2,packb(set))
    !
   end function f412_s
   function g412_b(b_pin)
@@ -7314,7 +6836,7 @@ use array
    integer, intent (in), dimension(:) :: set
    type(form_factor) :: g412_s
    !
-   g412_s = g412_b(packb(set)) 
+   g412_s = g412_b(packb(set))
    !
   end function g412_s
 
@@ -7333,7 +6855,7 @@ use array
    integer, intent(in) :: l1,l2,l3,l4,l5,l6,l7,l8,l9,l10,l11,l12,l13
    type(form_factor) :: a413_s
    !
-   a413_s = a413_b(l1,l2,l3,l4,l5,l6,l7,l8,l9,l10,l11,l12,l13,packb(set)) 
+   a413_s = a413_b(l1,l2,l3,l4,l5,l6,l7,l8,l9,l10,l11,l12,l13,packb(set))
    !
   end function a413_s
   function b413_b(l1,l2,l3,l4,l5,l6,l7,l8,l9,l10,l11,b_pin)
@@ -7351,7 +6873,7 @@ use array
    integer, intent(in) :: l1,l2,l3,l4,l5,l6,l7,l8,l9,l10,l11
    type(form_factor) :: b413_s
    !
-   b413_s = b413_b(l1,l2,l3,l4,l5,l6,l7,l8,l9,l10,l11,packb(set)) 
+   b413_s = b413_b(l1,l2,l3,l4,l5,l6,l7,l8,l9,l10,l11,packb(set))
    !
   end function b413_s
   function c413_b(l1,l2,l3,l4,l5,l6,l7,l8,l9,b_pin)
@@ -7369,7 +6891,7 @@ use array
    integer, intent(in) :: l1,l2,l3,l4,l5,l6,l7,l8,l9
    type(form_factor) :: c413_s
    !
-   c413_s = c413_b(l1,l2,l3,l4,l5,l6,l7,l8,l9,packb(set)) 
+   c413_s = c413_b(l1,l2,l3,l4,l5,l6,l7,l8,l9,packb(set))
    !
   end function c413_s
   function d413_b(l1,l2,l3,l4,l5,l6,l7,b_pin)
@@ -7387,7 +6909,7 @@ use array
    integer, intent(in) :: l1,l2,l3,l4,l5,l6,l7
    type(form_factor) :: d413_s
    !
-   d413_s = d413_b(l1,l2,l3,l4,l5,l6,l7,packb(set)) 
+   d413_s = d413_b(l1,l2,l3,l4,l5,l6,l7,packb(set))
    !
   end function d413_s
   function e413_b(l1,l2,l3,l4,l5,b_pin)
@@ -7405,7 +6927,7 @@ use array
    integer, intent(in) :: l1,l2,l3,l4,l5
    type(form_factor) :: e413_s
    !
-   e413_s = e413_b(l1,l2,l3,l4,l5,packb(set)) 
+   e413_s = e413_b(l1,l2,l3,l4,l5,packb(set))
    !
   end function e413_s
   function f413_b(l1,l2,l3,b_pin)
@@ -7423,7 +6945,7 @@ use array
    integer, intent(in) :: l1,l2,l3
    type(form_factor) :: f413_s
    !
-   f413_s = f413_b(l1,l2,l3,packb(set)) 
+   f413_s = f413_b(l1,l2,l3,packb(set))
    !
   end function f413_s
   function g413_b(l1,b_pin)
@@ -7441,7 +6963,7 @@ use array
    integer, intent(in) :: l1
    type(form_factor) :: g413_s
    !
-   g413_s = g413_b(l1,packb(set)) 
+   g413_s = g413_b(l1,packb(set))
    !
   end function g413_s
 
@@ -7460,7 +6982,7 @@ use array
    integer, intent(in) :: l1,l2,l3,l4,l5,l6,l7,l8,l9,l10,l11,l12,l13,l14
    type(form_factor) :: a414_s
    !
-   a414_s = a414_b(l1,l2,l3,l4,l5,l6,l7,l8,l9,l10,l11,l12,l13,l14,packb(set)) 
+   a414_s = a414_b(l1,l2,l3,l4,l5,l6,l7,l8,l9,l10,l11,l12,l13,l14,packb(set))
    !
   end function a414_s
   function b414_b(l1,l2,l3,l4,l5,l6,l7,l8,l9,l10,l11,l12,b_pin)
@@ -7478,7 +7000,7 @@ use array
    integer, intent(in) :: l1,l2,l3,l4,l5,l6,l7,l8,l9,l10,l11,l12
    type(form_factor) :: b414_s
    !
-   b414_s = b414_b(l1,l2,l3,l4,l5,l6,l7,l8,l9,l10,l11,l12,packb(set)) 
+   b414_s = b414_b(l1,l2,l3,l4,l5,l6,l7,l8,l9,l10,l11,l12,packb(set))
    !
   end function b414_s
   function c414_b(l1,l2,l3,l4,l5,l6,l7,l8,l9,l10,b_pin)
@@ -7496,7 +7018,7 @@ use array
    integer, intent(in) :: l1,l2,l3,l4,l5,l6,l7,l8,l9,l10
    type(form_factor) :: c414_s
    !
-   c414_s = c414_b(l1,l2,l3,l4,l5,l6,l7,l8,l9,l10,packb(set)) 
+   c414_s = c414_b(l1,l2,l3,l4,l5,l6,l7,l8,l9,l10,packb(set))
    !
   end function c414_s
   function d414_b(l1,l2,l3,l4,l5,l6,l7,l8,b_pin)
@@ -7514,7 +7036,7 @@ use array
    integer, intent(in) :: l1,l2,l3,l4,l5,l6,l7,l8
    type(form_factor) :: d414_s
    !
-   d414_s = d414_b(l1,l2,l3,l4,l5,l6,l7,l8,packb(set)) 
+   d414_s = d414_b(l1,l2,l3,l4,l5,l6,l7,l8,packb(set))
    !
   end function d414_s
   function e414_b(l1,l2,l3,l4,l5,l6,b_pin)
@@ -7532,7 +7054,7 @@ use array
    integer, intent(in) :: l1,l2,l3,l4,l5,l6
    type(form_factor) :: e414_s
    !
-   e414_s = e414_b(l1,l2,l3,l4,l5,l6,packb(set)) 
+   e414_s = e414_b(l1,l2,l3,l4,l5,l6,packb(set))
    !
   end function e414_s
   function f414_b(l1,l2,l3,l4,b_pin)
@@ -7550,7 +7072,7 @@ use array
    integer, intent(in) :: l1,l2,l3,l4
    type(form_factor) :: f414_s
    !
-   f414_s = f414_b(l1,l2,l3,l4,packb(set)) 
+   f414_s = f414_b(l1,l2,l3,l4,packb(set))
    !
   end function f414_s
   function g414_b(l1,l2,b_pin)
@@ -7568,7 +7090,7 @@ use array
    integer, intent(in) :: l1,l2
    type(form_factor) :: g414_s
    !
-   g414_s = g414_b(l1,l2,packb(set)) 
+   g414_s = g414_b(l1,l2,packb(set))
    !
   end function g414_s
   function h414_b(b_pin)
@@ -7585,7 +7107,7 @@ use array
    integer, intent (in), dimension(:) :: set
    type(form_factor) :: h414_s
    !
-   h414_s = h414_b(packb(set)) 
+   h414_s = h414_b(packb(set))
    !
   end function h414_s
 
@@ -7604,7 +7126,7 @@ use array
    integer, intent(in) :: l1,l2,l3,l4,l5,l6,l7,l8,l9,l10,l11,l12,l13,l14,l15
    type(form_factor) :: a415_s
    !
-   a415_s = a415_b(l1,l2,l3,l4,l5,l6,l7,l8,l9,l10,l11,l12,l13,l14,l15,packb(set)) 
+   a415_s = a415_b(l1,l2,l3,l4,l5,l6,l7,l8,l9,l10,l11,l12,l13,l14,l15,packb(set))
    !
   end function a415_s
   function b415_b(l1,l2,l3,l4,l5,l6,l7,l8,l9,l10,l11,l12,l13,b_pin)
@@ -7622,7 +7144,7 @@ use array
    integer, intent(in) :: l1,l2,l3,l4,l5,l6,l7,l8,l9,l10,l11,l12,l13
    type(form_factor) :: b415_s
    !
-   b415_s = b415_b(l1,l2,l3,l4,l5,l6,l7,l8,l9,l10,l11,l12,l13,packb(set)) 
+   b415_s = b415_b(l1,l2,l3,l4,l5,l6,l7,l8,l9,l10,l11,l12,l13,packb(set))
    !
   end function b415_s
   function c415_b(l1,l2,l3,l4,l5,l6,l7,l8,l9,l10,l11,b_pin)
@@ -7640,7 +7162,7 @@ use array
    integer, intent(in) :: l1,l2,l3,l4,l5,l6,l7,l8,l9,l10,l11
    type(form_factor) :: c415_s
    !
-   c415_s = c415_b(l1,l2,l3,l4,l5,l6,l7,l8,l9,l10,l11,packb(set)) 
+   c415_s = c415_b(l1,l2,l3,l4,l5,l6,l7,l8,l9,l10,l11,packb(set))
    !
   end function c415_s
   function d415_b(l1,l2,l3,l4,l5,l6,l7,l8,l9,b_pin)
@@ -7658,7 +7180,7 @@ use array
    integer, intent(in) :: l1,l2,l3,l4,l5,l6,l7,l8,l9
    type(form_factor) :: d415_s
    !
-   d415_s = d415_b(l1,l2,l3,l4,l5,l6,l7,l8,l9,packb(set)) 
+   d415_s = d415_b(l1,l2,l3,l4,l5,l6,l7,l8,l9,packb(set))
    !
   end function d415_s
   function e415_b(l1,l2,l3,l4,l5,l6,l7,b_pin)
@@ -7676,7 +7198,7 @@ use array
    integer, intent(in) :: l1,l2,l3,l4,l5,l6,l7
    type(form_factor) :: e415_s
    !
-   e415_s = e415_b(l1,l2,l3,l4,l5,l6,l7,packb(set)) 
+   e415_s = e415_b(l1,l2,l3,l4,l5,l6,l7,packb(set))
    !
   end function e415_s
   function f415_b(l1,l2,l3,l4,l5,b_pin)
@@ -7694,7 +7216,7 @@ use array
    integer, intent(in) :: l1,l2,l3,l4,l5
    type(form_factor) :: f415_s
    !
-   f415_s = f415_b(l1,l2,l3,l4,l5,packb(set)) 
+   f415_s = f415_b(l1,l2,l3,l4,l5,packb(set))
    !
   end function f415_s
   function g415_b(l1,l2,l3,b_pin)
@@ -7712,7 +7234,7 @@ use array
    integer, intent(in) :: l1,l2,l3
    type(form_factor) :: g415_s
    !
-   g415_s = g415_b(l1,l2,l3,packb(set)) 
+   g415_s = g415_b(l1,l2,l3,packb(set))
    !
   end function g415_s
   function h415_b(l1,b_pin)
@@ -7730,7 +7252,7 @@ use array
    integer, intent(in) :: l1
    type(form_factor) :: h415_s
    !
-   h415_s = h415_b(l1,packb(set)) 
+   h415_s = h415_b(l1,packb(set))
    !
   end function h415_s
 
@@ -7749,7 +7271,7 @@ use array
    integer, intent(in) :: l1,l2,l3,l4,l5,l6,l7,l8,l9,l10,l11,l12,l13,l14,l15,l16
    type(form_factor) :: a416_s
    !
-   a416_s = a416_b(l1,l2,l3,l4,l5,l6,l7,l8,l9,l10,l11,l12,l13,l14,l15,l16,packb(set)) 
+   a416_s = a416_b(l1,l2,l3,l4,l5,l6,l7,l8,l9,l10,l11,l12,l13,l14,l15,l16,packb(set))
    !
   end function a416_s
   function b416_b(l1,l2,l3,l4,l5,l6,l7,l8,l9,l10,l11,l12,l13,l14,b_pin)
@@ -7767,7 +7289,7 @@ use array
    integer, intent(in) :: l1,l2,l3,l4,l5,l6,l7,l8,l9,l10,l11,l12,l13,l14
    type(form_factor) :: b416_s
    !
-   b416_s = b416_b(l1,l2,l3,l4,l5,l6,l7,l8,l9,l10,l11,l12,l13,l14,packb(set)) 
+   b416_s = b416_b(l1,l2,l3,l4,l5,l6,l7,l8,l9,l10,l11,l12,l13,l14,packb(set))
    !
   end function b416_s
   function c416_b(l1,l2,l3,l4,l5,l6,l7,l8,l9,l10,l11,l12,b_pin)
@@ -7785,7 +7307,7 @@ use array
    integer, intent(in) :: l1,l2,l3,l4,l5,l6,l7,l8,l9,l10,l11,l12
    type(form_factor) :: c416_s
    !
-   c416_s = c416_b(l1,l2,l3,l4,l5,l6,l7,l8,l9,l10,l11,l12,packb(set)) 
+   c416_s = c416_b(l1,l2,l3,l4,l5,l6,l7,l8,l9,l10,l11,l12,packb(set))
    !
   end function c416_s
   function d416_b(l1,l2,l3,l4,l5,l6,l7,l8,l9,l10,b_pin)
@@ -7803,7 +7325,7 @@ use array
    integer, intent(in) :: l1,l2,l3,l4,l5,l6,l7,l8,l9,l10
    type(form_factor) :: d416_s
    !
-   d416_s = d416_b(l1,l2,l3,l4,l5,l6,l7,l8,l9,l10,packb(set)) 
+   d416_s = d416_b(l1,l2,l3,l4,l5,l6,l7,l8,l9,l10,packb(set))
    !
   end function d416_s
   function e416_b(l1,l2,l3,l4,l5,l6,l7,l8,b_pin)
@@ -7821,7 +7343,7 @@ use array
    integer, intent(in) :: l1,l2,l3,l4,l5,l6,l7,l8
    type(form_factor) :: e416_s
    !
-   e416_s = e416_b(l1,l2,l3,l4,l5,l6,l7,l8,packb(set)) 
+   e416_s = e416_b(l1,l2,l3,l4,l5,l6,l7,l8,packb(set))
    !
   end function e416_s
   function f416_b(l1,l2,l3,l4,l5,l6,b_pin)
@@ -7839,7 +7361,7 @@ use array
    integer, intent(in) :: l1,l2,l3,l4,l5,l6
    type(form_factor) :: f416_s
    !
-   f416_s = f416_b(l1,l2,l3,l4,l5,l6,packb(set)) 
+   f416_s = f416_b(l1,l2,l3,l4,l5,l6,packb(set))
    !
   end function f416_s
   function g416_b(l1,l2,l3,l4,b_pin)
@@ -7857,7 +7379,7 @@ use array
    integer, intent(in) :: l1,l2,l3,l4
    type(form_factor) :: g416_s
    !
-   g416_s = g416_b(l1,l2,l3,l4,packb(set)) 
+   g416_s = g416_b(l1,l2,l3,l4,packb(set))
    !
   end function g416_s
   function h416_b(l1,l2,b_pin)
@@ -7875,7 +7397,7 @@ use array
    integer, intent(in) :: l1,l2
    type(form_factor) :: h416_s
    !
-   h416_s = h416_b(l1,l2,packb(set)) 
+   h416_s = h416_b(l1,l2,packb(set))
    !
   end function h416_s
   function i416_b(b_pin)
@@ -7892,7 +7414,7 @@ use array
    integer, intent (in), dimension(:) :: set
    type(form_factor) :: i416_s
    !
-   i416_s = i416_b(packb(set)) 
+   i416_s = i416_b(packb(set))
    !
   end function i416_s
 
@@ -7911,7 +7433,7 @@ use array
    integer, intent(in) :: l1,l2,l3,l4,l5,l6,l7,l8,l9,l10,l11,l12,l13,l14,l15,l16,l17
    type(form_factor) :: a417_s
    !
-   a417_s = a417_b(l1,l2,l3,l4,l5,l6,l7,l8,l9,l10,l11,l12,l13,l14,l15,l16,l17,packb(set)) 
+   a417_s = a417_b(l1,l2,l3,l4,l5,l6,l7,l8,l9,l10,l11,l12,l13,l14,l15,l16,l17,packb(set))
    !
   end function a417_s
   function b417_b(l1,l2,l3,l4,l5,l6,l7,l8,l9,l10,l11,l12,l13,l14,l15,b_pin)
@@ -7929,7 +7451,7 @@ use array
    integer, intent(in) :: l1,l2,l3,l4,l5,l6,l7,l8,l9,l10,l11,l12,l13,l14,l15
    type(form_factor) :: b417_s
    !
-   b417_s = b417_b(l1,l2,l3,l4,l5,l6,l7,l8,l9,l10,l11,l12,l13,l14,l15,packb(set)) 
+   b417_s = b417_b(l1,l2,l3,l4,l5,l6,l7,l8,l9,l10,l11,l12,l13,l14,l15,packb(set))
    !
   end function b417_s
   function c417_b(l1,l2,l3,l4,l5,l6,l7,l8,l9,l10,l11,l12,l13,b_pin)
@@ -7947,7 +7469,7 @@ use array
    integer, intent(in) :: l1,l2,l3,l4,l5,l6,l7,l8,l9,l10,l11,l12,l13
    type(form_factor) :: c417_s
    !
-   c417_s = c417_b(l1,l2,l3,l4,l5,l6,l7,l8,l9,l10,l11,l12,l13,packb(set)) 
+   c417_s = c417_b(l1,l2,l3,l4,l5,l6,l7,l8,l9,l10,l11,l12,l13,packb(set))
    !
   end function c417_s
   function d417_b(l1,l2,l3,l4,l5,l6,l7,l8,l9,l10,l11,b_pin)
@@ -7965,7 +7487,7 @@ use array
    integer, intent(in) :: l1,l2,l3,l4,l5,l6,l7,l8,l9,l10,l11
    type(form_factor) :: d417_s
    !
-   d417_s = d417_b(l1,l2,l3,l4,l5,l6,l7,l8,l9,l10,l11,packb(set)) 
+   d417_s = d417_b(l1,l2,l3,l4,l5,l6,l7,l8,l9,l10,l11,packb(set))
    !
   end function d417_s
   function e417_b(l1,l2,l3,l4,l5,l6,l7,l8,l9,b_pin)
@@ -7983,7 +7505,7 @@ use array
    integer, intent(in) :: l1,l2,l3,l4,l5,l6,l7,l8,l9
    type(form_factor) :: e417_s
    !
-   e417_s = e417_b(l1,l2,l3,l4,l5,l6,l7,l8,l9,packb(set)) 
+   e417_s = e417_b(l1,l2,l3,l4,l5,l6,l7,l8,l9,packb(set))
    !
   end function e417_s
   function f417_b(l1,l2,l3,l4,l5,l6,l7,b_pin)
@@ -8001,7 +7523,7 @@ use array
    integer, intent(in) :: l1,l2,l3,l4,l5,l6,l7
    type(form_factor) :: f417_s
    !
-   f417_s = f417_b(l1,l2,l3,l4,l5,l6,l7,packb(set)) 
+   f417_s = f417_b(l1,l2,l3,l4,l5,l6,l7,packb(set))
    !
   end function f417_s
   function g417_b(l1,l2,l3,l4,l5,b_pin)
@@ -8019,7 +7541,7 @@ use array
    integer, intent(in) :: l1,l2,l3,l4,l5
    type(form_factor) :: g417_s
    !
-   g417_s = g417_b(l1,l2,l3,l4,l5,packb(set)) 
+   g417_s = g417_b(l1,l2,l3,l4,l5,packb(set))
    !
   end function g417_s
   function h417_b(l1,l2,l3,b_pin)
@@ -8037,7 +7559,7 @@ use array
    integer, intent(in) :: l1,l2,l3
    type(form_factor) :: h417_s
    !
-   h417_s = h417_b(l1,l2,l3,packb(set)) 
+   h417_s = h417_b(l1,l2,l3,packb(set))
    !
   end function h417_s
   function i417_b(l1,b_pin)
@@ -8055,7 +7577,7 @@ use array
    integer, intent(in) :: l1
    type(form_factor) :: i417_s
    !
-   i417_s = i417_b(l1,packb(set)) 
+   i417_s = i417_b(l1,packb(set))
    !
   end function i417_s
 
@@ -8074,7 +7596,7 @@ use array
    integer, intent(in) :: l1,l2,l3,l4,l5,l6,l7,l8,l9,l10,l11,l12,l13,l14,l15,l16,l17,l18
    type(form_factor) :: a418_s
    !
-   a418_s = a418_b(l1,l2,l3,l4,l5,l6,l7,l8,l9,l10,l11,l12,l13,l14,l15,l16,l17,l18,packb(set)) 
+   a418_s = a418_b(l1,l2,l3,l4,l5,l6,l7,l8,l9,l10,l11,l12,l13,l14,l15,l16,l17,l18,packb(set))
    !
   end function a418_s
   function b418_b(l1,l2,l3,l4,l5,l6,l7,l8,l9,l10,l11,l12,l13,l14,l15,l16,b_pin)
@@ -8092,7 +7614,7 @@ use array
    integer, intent(in) :: l1,l2,l3,l4,l5,l6,l7,l8,l9,l10,l11,l12,l13,l14,l15,l16
    type(form_factor) :: b418_s
    !
-   b418_s = b418_b(l1,l2,l3,l4,l5,l6,l7,l8,l9,l10,l11,l12,l13,l14,l15,l16,packb(set)) 
+   b418_s = b418_b(l1,l2,l3,l4,l5,l6,l7,l8,l9,l10,l11,l12,l13,l14,l15,l16,packb(set))
    !
   end function b418_s
   function c418_b(l1,l2,l3,l4,l5,l6,l7,l8,l9,l10,l11,l12,l13,l14,b_pin)
@@ -8110,7 +7632,7 @@ use array
    integer, intent(in) :: l1,l2,l3,l4,l5,l6,l7,l8,l9,l10,l11,l12,l13,l14
    type(form_factor) :: c418_s
    !
-   c418_s = c418_b(l1,l2,l3,l4,l5,l6,l7,l8,l9,l10,l11,l12,l13,l14,packb(set)) 
+   c418_s = c418_b(l1,l2,l3,l4,l5,l6,l7,l8,l9,l10,l11,l12,l13,l14,packb(set))
    !
   end function c418_s
   function d418_b(l1,l2,l3,l4,l5,l6,l7,l8,l9,l10,l11,l12,b_pin)
@@ -8128,7 +7650,7 @@ use array
    integer, intent(in) :: l1,l2,l3,l4,l5,l6,l7,l8,l9,l10,l11,l12
    type(form_factor) :: d418_s
    !
-   d418_s = d418_b(l1,l2,l3,l4,l5,l6,l7,l8,l9,l10,l11,l12,packb(set)) 
+   d418_s = d418_b(l1,l2,l3,l4,l5,l6,l7,l8,l9,l10,l11,l12,packb(set))
    !
   end function d418_s
   function e418_b(l1,l2,l3,l4,l5,l6,l7,l8,l9,l10,b_pin)
@@ -8146,7 +7668,7 @@ use array
    integer, intent(in) :: l1,l2,l3,l4,l5,l6,l7,l8,l9,l10
    type(form_factor) :: e418_s
    !
-   e418_s = e418_b(l1,l2,l3,l4,l5,l6,l7,l8,l9,l10,packb(set)) 
+   e418_s = e418_b(l1,l2,l3,l4,l5,l6,l7,l8,l9,l10,packb(set))
    !
   end function e418_s
   function f418_b(l1,l2,l3,l4,l5,l6,l7,l8,b_pin)
@@ -8164,7 +7686,7 @@ use array
    integer, intent(in) :: l1,l2,l3,l4,l5,l6,l7,l8
    type(form_factor) :: f418_s
    !
-   f418_s = f418_b(l1,l2,l3,l4,l5,l6,l7,l8,packb(set)) 
+   f418_s = f418_b(l1,l2,l3,l4,l5,l6,l7,l8,packb(set))
    !
   end function f418_s
   function g418_b(l1,l2,l3,l4,l5,l6,b_pin)
@@ -8182,7 +7704,7 @@ use array
    integer, intent(in) :: l1,l2,l3,l4,l5,l6
    type(form_factor) :: g418_s
    !
-   g418_s = g418_b(l1,l2,l3,l4,l5,l6,packb(set)) 
+   g418_s = g418_b(l1,l2,l3,l4,l5,l6,packb(set))
    !
   end function g418_s
   function h418_b(l1,l2,l3,l4,b_pin)
@@ -8200,7 +7722,7 @@ use array
    integer, intent(in) :: l1,l2,l3,l4
    type(form_factor) :: h418_s
    !
-   h418_s = h418_b(l1,l2,l3,l4,packb(set)) 
+   h418_s = h418_b(l1,l2,l3,l4,packb(set))
    !
   end function h418_s
   function i418_b(l1,l2,b_pin)
@@ -8218,7 +7740,7 @@ use array
    integer, intent(in) :: l1,l2
    type(form_factor) :: i418_s
    !
-   i418_s = i418_b(l1,l2,packb(set)) 
+   i418_s = i418_b(l1,l2,packb(set))
    !
   end function i418_s
   function j418_b(b_pin)
@@ -8235,218 +7757,21 @@ use array
    integer, intent (in), dimension(:) :: set
    type(form_factor) :: j418_s
    !
-   j418_s = j418_b(packb(set)) 
+   j418_s = j418_b(packb(set))
    !
   end function j418_s
 
-  function my_a51_b(l1,b_pin)
-   !
-   integer, intent(in) :: l1,b_pin
-   type(form_factor) :: my_a51_b
-   !
-   my_a51_b = -1.0_ki * fnp_generic(5,0,b_pin,1,(/ l1 /))
-   !
-  end function my_a51_b
 
-  function my_a51_s(l1,set)
-   !
-   integer, intent (in), dimension(:) :: set
-   integer, intent(in) :: l1
-   type(form_factor) :: my_a51_s
-   !
-   my_a51_s = my_a51_b(l1,packb(set)) 
-   !
-  end function my_a51_s
 
-  function my_a52_b(l1,l2,b_pin)
-   !
-   integer, intent(in) :: l1,l2,b_pin
-   type(form_factor) :: my_a52_b
-   !
-   my_a52_b = fnp_generic(5,0,b_pin,2,(/ l1,l2 /))
-   !
-  end function my_a52_b
 
-  function my_a52_s(l1,l2,set)
-   !
-   integer, intent (in), dimension(:) :: set
-   integer, intent(in) :: l1,l2
-   type(form_factor) :: my_a52_s
-   !
-   my_a52_s = my_a52_b(l1,l2,packb(set)) 
-   !
-  end function my_a52_s
-  function my_b52_b(b_pin)
-   !
-   integer, intent(in) :: b_pin
-   type(form_factor) :: my_b52_b
-   !
-   my_b52_b = -0.5_ki * fnp_generic(5,2,b_pin,0,no_feynmanparam)
-   !
-  end function my_b52_b
 
-  function my_b52_s(set)
-   !
-   integer, intent (in), dimension(:) :: set
-   type(form_factor) :: my_b52_s
-   !
-   my_b52_s = my_b52_b(packb(set)) 
-   !
-  end function my_b52_s
-
-  function my_a53_b(l1,l2,l3,b_pin)
-   !
-   integer, intent(in) :: l1,l2,l3,b_pin
-   type(form_factor) :: my_a53_b
-   !
-   my_a53_b = -1.0_ki * fnp_generic(5,0,b_pin,3,(/ l1,l2,l3 /))
-   !
-  end function my_a53_b
-
-  function my_a53_s(l1,l2,l3,set)
-   !
-   integer, intent (in), dimension(:) :: set
-   integer, intent(in) :: l1,l2,l3
-   type(form_factor) :: my_a53_s
-   !
-   my_a53_s = my_a53_b(l1,l2,l3,packb(set)) 
-   !
-  end function my_a53_s
-  function my_b53_b(l1,b_pin)
-   !
-   integer, intent(in) :: l1,b_pin
-   type(form_factor) :: my_b53_b
-   !
-   my_b53_b = 0.5_ki * fnp_generic(5,2,b_pin,1,(/ l1 /))
-   !
-  end function my_b53_b
-
-  function my_b53_s(l1,set)
-   !
-   integer, intent (in), dimension(:) :: set
-   integer, intent(in) :: l1
-   type(form_factor) :: my_b53_s
-   !
-   my_b53_s = my_b53_b(l1,packb(set)) 
-   !
-  end function my_b53_s
-
-  function my_a54_b(l1,l2,l3,l4,b_pin)
-   !
-   integer, intent(in) :: l1,l2,l3,l4,b_pin
-   type(form_factor) :: my_a54_b
-   !
-   my_a54_b = fnp_generic(5,0,b_pin,4,(/ l1,l2,l3,l4 /))
-   !
-  end function my_a54_b
-
-  function my_a54_s(l1,l2,l3,l4,set)
-   !
-   integer, intent (in), dimension(:) :: set
-   integer, intent(in) :: l1,l2,l3,l4
-   type(form_factor) :: my_a54_s
-   !
-   my_a54_s = my_a54_b(l1,l2,l3,l4,packb(set)) 
-   !
-  end function my_a54_s
-  function my_b54_b(l1,l2,b_pin)
-   !
-   integer, intent(in) :: l1,l2,b_pin
-   type(form_factor) :: my_b54_b
-   !
-   my_b54_b = -0.5_ki * fnp_generic(5,2,b_pin,2,(/ l1,l2 /))
-   !
-  end function my_b54_b
-
-  function my_b54_s(l1,l2,set)
-   !
-   integer, intent (in), dimension(:) :: set
-   integer, intent(in) :: l1,l2
-   type(form_factor) :: my_b54_s
-   !
-   my_b54_s = my_b54_b(l1,l2,packb(set)) 
-   !
-  end function my_b54_s
-  function my_c54_b(b_pin)
-   !
-   integer, intent(in) :: b_pin
-   type(form_factor) :: my_c54_b
-   !
-   my_c54_b = 0.25_ki * fnp_generic(5,4,b_pin,0,no_feynmanparam)
-   !
-  end function my_c54_b
-
-  function my_c54_s(set)
-   !
-   integer, intent (in), dimension(:) :: set
-   type(form_factor) :: my_c54_s
-   !
-   my_c54_s = my_c54_b(packb(set)) 
-   !
-  end function my_c54_s
-
-  function my_a55_b(l1,l2,l3,l4,l5,b_pin)
-   !
-   integer, intent(in) :: l1,l2,l3,l4,l5,b_pin
-   type(form_factor) :: my_a55_b
-   !
-   my_a55_b = -1.0_ki * fnp_generic(5,0,b_pin,5,(/ l1,l2,l3,l4,l5 /))
-   !
-  end function my_a55_b
-
-  function my_a55_s(l1,l2,l3,l4,l5,set)
-   !
-   integer, intent (in), dimension(:) :: set
-   integer, intent(in) :: l1,l2,l3,l4,l5
-   type(form_factor) :: my_a55_s
-   !
-   my_a55_s = my_a55_b(l1,l2,l3,l4,l5,packb(set)) 
-   !
-  end function my_a55_s
-  function my_b55_b(l1,l2,l3,b_pin)
-   !
-   integer, intent(in) :: l1,l2,l3,b_pin
-   type(form_factor) :: my_b55_b
-   !
-   my_b55_b = 0.5_ki * fnp_generic(5,2,b_pin,3,(/ l1,l2,l3 /))
-   !
-  end function my_b55_b
-
-  function my_b55_s(l1,l2,l3,set)
-   !
-   integer, intent (in), dimension(:) :: set
-   integer, intent(in) :: l1,l2,l3
-   type(form_factor) :: my_b55_s
-   !
-   my_b55_s = my_b55_b(l1,l2,l3,packb(set)) 
-   !
-  end function my_b55_s
-  function my_c55_b(l1,b_pin)
-   !
-   integer, intent(in) :: l1,b_pin
-   type(form_factor) :: my_c55_b
-   !
-   my_c55_b = -0.25_ki * fnp_generic(5,4,b_pin,1,(/ l1 /))
-   !
-  end function my_c55_b
-
-  function my_c55_s(l1,set)
-   !
-   integer, intent (in), dimension(:) :: set
-   integer, intent(in) :: l1
-   type(form_factor) :: my_c55_s
-   !
-   my_c55_s = my_c55_b(l1,packb(set)) 
-   !
-  end function my_c55_s
 
   function a56_b(l1,l2,l3,l4,l5,l6,b_pin)
    !
    integer, intent(in) :: l1,l2,l3,l4,l5,l6,b_pin
    type(form_factor) :: a56_b
    !
-   !a56_b = fnp_generic(5,0,b_pin,6,(/ l1,l2,l3,l4,l5,l6 /))
-   a56_b = test_a56(l1,l2,l3,l4,l5,l6,b_pin)
+   a56_b = fnp_generic(5,0,b_pin,6,(/ l1,l2,l3,l4,l5,l6 /))
    !
   end function a56_b
 
@@ -8456,7 +7781,7 @@ use array
    integer, intent(in) :: l1,l2,l3,l4,l5,l6
    type(form_factor) :: a56_s
    !
-   a56_s = a56_b(l1,l2,l3,l4,l5,l6,packb(set)) 
+   a56_s = a56_b(l1,l2,l3,l4,l5,l6,packb(set))
    !
   end function a56_s
   function b56_b(l1,l2,l3,l4,b_pin)
@@ -8464,8 +7789,7 @@ use array
    integer, intent(in) :: l1,l2,l3,l4,b_pin
    type(form_factor) :: b56_b
    !
-   !b56_b = -0.5_ki * fnp_generic(5,2,b_pin,4,(/ l1,l2,l3,l4 /))
-   b56_b = test_b56(l1,l2,l3,l4,b_pin)
+   b56_b = -0.5_ki * fnp_generic(5,2,b_pin,4,(/ l1,l2,l3,l4 /))
    !
   end function b56_b
 
@@ -8475,7 +7799,7 @@ use array
    integer, intent(in) :: l1,l2,l3,l4
    type(form_factor) :: b56_s
    !
-   b56_s = b56_b(l1,l2,l3,l4,packb(set)) 
+   b56_s = b56_b(l1,l2,l3,l4,packb(set))
    !
   end function b56_s
   function c56_b(l1,l2,b_pin)
@@ -8483,8 +7807,7 @@ use array
    integer, intent(in) :: l1,l2,b_pin
    type(form_factor) :: c56_b
    !
-   !c56_b = 0.25_ki * fnp_generic(5,4,b_pin,2,(/ l1,l2 /))
-   c56_b = test_c56(l1,l2,b_pin)
+   c56_b = 0.25_ki * fnp_generic(5,4,b_pin,2,(/ l1,l2 /))
    !
   end function c56_b
 
@@ -8494,7 +7817,7 @@ use array
    integer, intent(in) :: l1,l2
    type(form_factor) :: c56_s
    !
-   c56_s = c56_b(l1,l2,packb(set)) 
+   c56_s = c56_b(l1,l2,packb(set))
    !
   end function c56_s
   function d56_b(b_pin)
@@ -8502,8 +7825,7 @@ use array
    integer, intent(in) :: b_pin
    type(form_factor) :: d56_b
    !
-   !d56_b = -0.125_ki * fnp_generic(5,6,b_pin,0,no_feynmanparam)
-   d56_b = test_d56(b_pin)
+   d56_b = -0.125_ki * fnp_generic(5,6,b_pin,0,no_feynmanparam)
    !
   end function d56_b
 
@@ -8512,142 +7834,15 @@ use array
    integer, intent (in), dimension(:) :: set
    type(form_factor) :: d56_s
    !
-   d56_s = d56_b(packb(set)) 
+   d56_s = d56_b(packb(set))
    !
   end function d56_s
 
 
-   function d56tilde_b(b_pin)
-   !
-   integer, intent(in) :: b_pin
-   type(form_factor) :: d56tilde_b
-   !
-   d56tilde_b = test_d56tilde(b_pin)
-   !
-  end function d56tilde_b
 
-  function d56tilde_s(set)
-   !
-   integer, intent (in), dimension(:) :: set
-   type(form_factor) :: d56tilde_s
-   !
-   d56tilde_s = d56tilde_b(packb(set)) 
-   !
-  end function d56tilde_s
 
-  function my_a61_b(l1,b_pin)
-   !
-   integer, intent(in) :: l1,b_pin
-   type(form_factor) :: my_a61_b
-   !
-   my_a61_b = -1.0_ki * fnp_generic(6,0,b_pin,1,(/ l1 /))
-   !
-  end function my_a61_b
 
-  function my_a61_s(l1,set)
-   !
-   integer, intent (in), dimension(:) :: set
-   integer, intent(in) :: l1
-   type(form_factor) :: my_a61_s
-   !
-   my_a61_s = my_a61_b(l1,packb(set)) 
-   !
-  end function my_a61_s
 
-  function my_a62_b(l1,l2,b_pin)
-   !
-   integer, intent(in) :: l1,l2,b_pin
-   type(form_factor) :: my_a62_b
-   !
-   my_a62_b = fnp_generic(6,0,b_pin,2,(/ l1,l2 /))
-   !
-  end function my_a62_b
-
-  function my_a62_s(l1,l2,set)
-   !
-   integer, intent (in), dimension(:) :: set
-   integer, intent(in) :: l1,l2
-   type(form_factor) :: my_a62_s
-   !
-   my_a62_s = my_a62_b(l1,l2,packb(set)) 
-   !
-  end function my_a62_s
-
-  function my_a63_b(l1,l2,l3,b_pin)
-   !
-   integer, intent(in) :: l1,l2,l3,b_pin
-   type(form_factor) :: my_a63_b
-   !
-   my_a63_b = -1.0_ki * fnp_generic(6,0,b_pin,3,(/ l1,l2,l3 /))
-   !
-  end function my_a63_b
-
-  function my_a63_s(l1,l2,l3,set)
-   !
-   integer, intent (in), dimension(:) :: set
-   integer, intent(in) :: l1,l2,l3
-   type(form_factor) :: my_a63_s
-   !
-   my_a63_s = my_a63_b(l1,l2,l3,packb(set)) 
-   !
-  end function my_a63_s
-
-  function my_a64_b(l1,l2,l3,l4,b_pin)
-   !
-   integer, intent(in) :: l1,l2,l3,l4,b_pin
-   type(form_factor) :: my_a64_b
-   !
-   my_a64_b = fnp_generic(6,0,b_pin,4,(/ l1,l2,l3,l4 /))
-   !
-  end function my_a64_b
-
-  function my_a64_s(l1,l2,l3,l4,set)
-   !
-   integer, intent (in), dimension(:) :: set
-   integer, intent(in) :: l1,l2,l3,l4
-   type(form_factor) :: my_a64_s
-   !
-   my_a64_s = my_a64_b(l1,l2,l3,l4,packb(set)) 
-   !
-  end function my_a64_s
-
-  function my_a65_b(l1,l2,l3,l4,l5,b_pin)
-   !
-   integer, intent(in) :: l1,l2,l3,l4,l5,b_pin
-   type(form_factor) :: my_a65_b
-   !
-   my_a65_b = -1.0_ki * fnp_generic(6,0,b_pin,5,(/ l1,l2,l3,l4,l5 /))
-   !
-  end function my_a65_b
-
-  function my_a65_s(l1,l2,l3,l4,l5,set)
-   !
-   integer, intent (in), dimension(:) :: set
-   integer, intent(in) :: l1,l2,l3,l4,l5
-   type(form_factor) :: my_a65_s
-   !
-   my_a65_s = my_a65_b(l1,l2,l3,l4,l5,packb(set)) 
-   !
-  end function my_a65_s
-
-  function my_a66_b(l1,l2,l3,l4,l5,l6,b_pin)
-   !
-   integer, intent(in) :: l1,l2,l3,l4,l5,l6,b_pin
-   type(form_factor) :: my_a66_b
-   !
-   my_a66_b = fnp_generic(6,0,b_pin,6,(/ l1,l2,l3,l4,l5,l6 /))
-   !
-  end function my_a66_b
-
-  function my_a66_s(l1,l2,l3,l4,l5,l6,set)
-   !
-   integer, intent (in), dimension(:) :: set
-   integer, intent(in) :: l1,l2,l3,l4,l5,l6
-   type(form_factor) :: my_a66_s
-   !
-   my_a66_s = my_a66_b(l1,l2,l3,l4,l5,l6,packb(set)) 
-   !
-  end function my_a66_s
 
   function a67_b(l1,l2,l3,l4,l5,l6,l7,b_pin)
    !
@@ -8664,7 +7859,7 @@ use array
    integer, intent(in) :: l1,l2,l3,l4,l5,l6,l7
    type(form_factor) :: a67_s
    !
-   a67_s = a67_b(l1,l2,l3,l4,l5,l6,l7,packb(set)) 
+   a67_s = a67_b(l1,l2,l3,l4,l5,l6,l7,packb(set))
    !
   end function a67_s
 

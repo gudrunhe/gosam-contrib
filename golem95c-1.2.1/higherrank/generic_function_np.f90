@@ -538,7 +538,8 @@ module generic_function_np
                           tmp3 = 0.5_ki*(b(s(j),b_pin) * inv_s(l_tmp3(l_count),l_tmp3(l_count-1),b_pin) - &
                              &  b(l_tmp3(l_count),b_pin) * inv_s(s(j),l_tmp3(l_count-1),b_pin))
 
-                          temp2= (-1._ki)**(l_count-2)*(-0.5_ki)**((dim_nplus)/2) *fnp_generic(4,dim_nplus+2,b_tmp,l_count-2,l_tmp3(1:l_count-2),cur_depth+1)
+                          temp2= (-1._ki)**(l_count-2)*(-0.5_ki)**((dim_nplus)/2) * & 
+                             fnp_generic(4,dim_nplus+2,b_tmp,l_count-2,l_tmp3(1:l_count-2),cur_depth+1)
                           tmp4 = (/ temp2%a, temp2%b, temp2%c /)
 
                           ! TODO simplify formula, factor can be cancelled
@@ -850,7 +851,8 @@ module generic_function_np
                    l_tmp1(k+1:l_count) = l(k+1:l_count)
 
                    i=max(l_count-2,0)
-                   temp1=temp1-inv_s(l_tmp1(1),l_tmp1(2),b_pin)*fnp_generic(leg_count,dim_nplus+2,b_pin,i,l_tmp1(3:l_count),cur_depth+1) ! / (l_count-1)
+                   temp1=temp1-inv_s(l_tmp1(1),l_tmp1(2),b_pin)*&
+                      & fnp_generic(leg_count,dim_nplus+2,b_pin,i,l_tmp1(3:l_count),cur_depth+1) ! / (l_count-1)
             end do
            end do
 
@@ -1853,7 +1855,8 @@ recursive  function calc_determinant(mat_p,used_size,b_pin) result(detS)
                end if
             else
                tab_erreur_par(1)%a_imprimer = .true.
-               tab_erreur_par(1)%chaine = 'Assert failed: f2p_ndim_0p_generic case (m2=0 or m1=0,dim>14,l_count>0) not implemented.'
+               tab_erreur_par(1)%chaine = & 
+                  'Assert failed: f2p_ndim_0p_generic case (m2=0 or m1=0,dim>14,l_count>0) not implemented.'
                call catch_exception(0)
                stop
             end if
@@ -1928,7 +1931,8 @@ recursive  function calc_determinant(mat_p,used_size,b_pin) result(detS)
                    temp2= -0.5_ki*b(s(j),b_pin) / sym_parameters(4) * fnp_generic(4,4,b_tmp,2,(/ l1,l2 /),1) / 2._ki ! C46
                    tmp4 = tmp4 + (/ temp2%a, temp2%b, temp2%c /)
 
-                   temp2 = 0.25*( b(s(j),b_pin)*inv_s(l1,l2,b_pin) - 0.5*b(l1,b_pin)*inv_s(l2,s(j),b_pin) - 0.5*b(l2,b_pin)*inv_s(l1,s(j),b_pin))  / sym_parameters(5) &
+                   temp2 = 0.25*( b(s(j),b_pin)*inv_s(l1,l2,b_pin) - 0.5*b(l1,b_pin)*inv_s(l2,s(j),b_pin) &
+                      - 0.5*b(l2,b_pin)*inv_s(l1,s(j),b_pin))  / sym_parameters(5) &
                    *  fnp_generic(4,6,b_tmp,0, no_feynmanparam,1 )
                    tmp4 = tmp4 + (/ temp2%a, temp2%b, temp2%c /)  ! D46
         end do

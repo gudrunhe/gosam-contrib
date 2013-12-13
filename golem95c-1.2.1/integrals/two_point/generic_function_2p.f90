@@ -53,15 +53,15 @@ module generic_function_2p
   private
   !
   interface f2p
-     !
-     module procedure f2p_p
-     !
+    !
+    module procedure f2p_p
+    !
   end interface
   !
   interface f2p_np2
-     !
-     module procedure f2p_np2_p
-     !
+    !
+    module procedure f2p_np2_p
+    !
   end interface
   !
   public :: f2p, f2p_np2
@@ -126,13 +126,13 @@ contains
     complex(ki), dimension(2) :: f2p_p
     !
     if (iand(s_mat_p%b_cmplx, b_pro) .eq. 0 ) then
-       !
-       f2p_p = f2p_r(s_mat_p%pt_real, b_pro, parf1=parf1, parf2=parf2)
-       !
+      !
+      f2p_p = f2p_r(s_mat_p%pt_real, b_pro, parf1=parf1, parf2=parf2)
+      !
     else
-       !
-       f2p_p = f2p_c(s_mat_p%pt_cmplx, b_pro, parf1=parf1, parf2=parf2)
-       !
+      !
+      f2p_p = f2p_c(s_mat_p%pt_cmplx, b_pro, parf1=parf1, parf2=parf2)
+      !
     end if
     !
   end function f2p_p
@@ -161,684 +161,676 @@ contains
     z_param_ini = (/ par1,par2 /)
     !
     where (z_param_ini /= 0)
-       !
-       z_param_ini = locateb(z_param_ini,b_pro)
-       !
+      !
+      z_param_ini = locateb(z_param_ini,b_pro)
+      !
     elsewhere
-       !
-       z_param_ini = 0
-       !
+      !
+      z_param_ini = 0
+      !
     end where
     !
     if ( minval(z_param_ini) == -1 ) then
-       !
-       f2p_rr(:) = 0._ki
-       !
-    else
-       !
-       call tri_int2(z_param_ini,z_param_out)
-       !
-       if (b_pro<256) then
-          dim_pro = bit_count(b_pro)
-          s = bit_sets(8*b_pro:8*b_pro+dim_pro-1)
-       else
-          dim_pro = countb(b_pro)
-          s = unpackb(b_pro,dim_pro)
-       end if
-       !
-       m1 = s(1)
-       m2 = s(2)
-       !
-       arg1 = s_mat_r(m1,m2)
-       !
-       ! internal masses	
-       mass1 = -s_mat_r(m1,m1)/2._ki
-       mass2 = -s_mat_r(m2,m2)/2._ki
-       s12 = arg1+mass1+mass2
-       !
-       call cut_s(s12,mass1,mass2)
-       !
-       mz1 = equal_real(mass1, zero)
-       mz2 = equal_real(mass2, zero)
-       sz = equal_real(s12,zero)
-       !
-       diffm=mass1-mass2
-       !	
-       if ( (sz) .and. (mz1) .and. (mz2) ) then
-          !
-          f2p_rr(:) = 0._ki
-          !  (scaleless two-point function is zero)
-          !
-       else if ( .not.(sz) .and. (mz1) .and. (mz2) ) then 
-	  ! massless case
-          !
-          if ( (z_param_out(1) == 0) .and. (z_param_out(2) == 0) ) then
-             !
-             f2p_rr(1) = 1._ki
-             f2p_rr(2) = 0._ki
-             !
-             if (rat_or_tot_par%tot_selected) then
-                !
-                f2p_rr(3) = 2._ki-real(z_log(-s12/mu2_scale_par,-1._ki))
-                f2p_rr(4) = -aimag(z_log(-s12/mu2_scale_par,-1._ki))
-                !
-             else if (rat_or_tot_par%rat_selected) then
-                !
-                f2p_rr(3) = 2._ki
-                f2p_rr(4) = 0._ki
-                !
-             end if
-             !
-          else if ( (z_param_out(1) == 0) .and. (z_param_out(2) /= 0) ) then
-             !
-             f2p_rr(1) = 1._ki/2._ki
-             f2p_rr(2) = 0._ki
-             !
-             if (rat_or_tot_par%tot_selected) then
-                !
-                f2p_rr(3) = 1._ki-real(z_log(-s12/mu2_scale_par,-1._ki))/2._ki
-                f2p_rr(4) = -aimag(z_log(-s12/mu2_scale_par,-1._ki))/2._ki
-                !
-             else if (rat_or_tot_par%rat_selected) then
-                !
-                f2p_rr(3) = 1._ki
-                f2p_rr(4) = 0._ki
-                !
-             end if
-             !
-          else if ( (z_param_out(1) /= 0) .and. (z_param_out(2) /= 0) ) then
-             !
-             if (z_param_out(1) == z_param_out(2)) then
-                !
-                f2p_rr(1) = 1._ki/3._ki
-                f2p_rr(2) = 0._ki
-                !
-                if (rat_or_tot_par%tot_selected) then
-                   !
-                   f2p_rr(3) = 13._ki/18._ki-real(z_log(-s12/mu2_scale_par,-1._ki))/3._ki
-                   f2p_rr(4) = -aimag(z_log(-s12/mu2_scale_par,-1._ki))/3._ki
-                   !
-                else if (rat_or_tot_par%rat_selected) then
-                   !
-                   f2p_rr(3) = 13._ki/18._ki
-                   f2p_rr(4) = 0._ki
-                   !
-                end if
-                !
-             else
-                !
-                f2p_rr(1) = 1._ki/6._ki
-                f2p_rr(2) = 0._ki
-                !
-                if (rat_or_tot_par%tot_selected) then
-                   !
-                   f2p_rr(3) = 5._ki/18._ki-real(z_log(-s12/mu2_scale_par,-1._ki),ki)/6._ki
-                   f2p_rr(4) = -aimag(z_log(-s12/mu2_scale_par,-1._ki))/6._ki
-                   !
-                else if (rat_or_tot_par%rat_selected) then
-                   !
-                   f2p_rr(3) = 5._ki/18._ki
-                   f2p_rr(4) = 0._ki
-                   !
-                end if  ! end if rat or tot
-                !
-             end if ! end if z1==z2
-             !
-          end if  ! end test value of z1,z2
-          !
-          !
-          !*************** massive cases *******************************
-          ! added 07.08.09
-          ! assumes real masses in numerator
-          ! ************************************************************
-      else if (  (sz) .and. (.not.(mz1)) .and. (mz2) ) then 
-          ! case p^2=0, m1 nonzero, m2=0
-          ! write(6,*) 'case (2b): s12 =0, m2 =0, m1  nonzero'
-          !
-          if ( (z_param_out(1) == 0) .and. (z_param_out(2) == 0) ) then
-             !
-             f2p_rr = i20m1(mass1)
-             !   
-          else  if ( (z_param_out(1) == 0) .and. (z_param_out(2) == 1) ) then
-             !
-             f2p_rr(1) = 1._ki/2._ki
-             f2p_rr(2) = 0._ki
-             !
-             if (rat_or_tot_par%tot_selected) then
-                !
-                f2p_rr(3) = -(-1._ki + 2._ki*real(z_log(mass1/mu2_scale_par,-1._ki)))/4._ki
-                f2p_rr(4) = -aimag(z_log(mass1/mu2_scale_par,-1._ki))/2._ki
-                !
-             else if (rat_or_tot_par%rat_selected) then
-                !
-                f2p_rr(3) = 1._ki/4._ki
-                f2p_rr(4) = 0._ki
-                !
-             end if  ! end if rat or tot
-             !
-          else  if ( (z_param_out(1) == 0) .and. (z_param_out(2) == 2) ) then
-             !
-             f2p_rr(1) = 1._ki/2._ki
-             f2p_rr(2) = 0._ki
-             !
-             if (rat_or_tot_par%tot_selected) then
-                !
-                f2p_rr(3) = -(-3._ki + 2._ki*real(z_log(mass1/mu2_scale_par,-1._ki)))/4._ki
-                f2p_rr(4) = -aimag(z_log(mass1/mu2_scale_par,-1._ki))/2._ki
-                !
-	     else if (rat_or_tot_par%rat_selected) then
-         !
-                f2p_rr(3) = 3._ki/4._ki
-                f2p_rr(4) = 0._ki
-                !
-             end if  ! end if rat or tot
-             !
-          else  if ( (z_param_out(1) == 1) .and. (z_param_out(2) == 1) ) then
-             !
-             f2p_rr(1) = 1._ki/3._ki
-             f2p_rr(2) = 0._ki
-             !
-             if (rat_or_tot_par%tot_selected) then
-                !
-                f2p_rr(3) = (1._ki - 3._ki*real(z_log(mass1/mu2_scale_par,-1._ki)))/9._ki
-                f2p_rr(4) =  - aimag(z_log(mass1/mu2_scale_par,-1._ki))/3._ki
-                !
-	     else if (rat_or_tot_par%rat_selected) then
-         !
-         f2p_rr(3) = 1._ki/9._ki
-                f2p_rr(4) = 0._ki
-                !
-             end if  ! end if rat or tot
-             !
-          else  if ( (z_param_out(1) == 1) .and. (z_param_out(2) == 2) ) then
-             !
-             f2p_rr(1) = 1._ki/6._ki
-             f2p_rr(2) = 0._ki
-             !
-             if (rat_or_tot_par%tot_selected) then
-                !
-                f2p_rr(3) = (5._ki - 6._ki*real(z_log(mass1/mu2_scale_par,-1._ki)))/36._ki
-                f2p_rr(4) =  - aimag(z_log(mass1/mu2_scale_par,-1._ki))/6._ki
-                !
-	     else if (rat_or_tot_par%rat_selected) then
-         !
-                f2p_rr(3) = 5._ki/36._ki
-                f2p_rr(4) = 0._ki
-                !
-             end if  ! end if rat or tot
-             !
-          else  if ( (z_param_out(1) == 2) .and. (z_param_out(2) == 2) ) then
-             !
-             f2p_rr(1) = 1._ki/3._ki
-             f2p_rr(2) = 0._ki
-             !
-             if (rat_or_tot_par%tot_selected) then
-                !
-                f2p_rr(3) = (11 - 6*real(z_log(mass1/mu2_scale_par,-1._ki)))/18._ki
-                f2p_rr(4) =  - aimag(z_log(mass1/mu2_scale_par,-1._ki))/3._ki
-                !
-	     else if (rat_or_tot_par%rat_selected) then
-         !
-                f2p_rr(3) = 11._ki/18._ki
-                f2p_rr(4) = 0._ki
-                !
-             end if  ! end if rat or tot
-             !
-          end if  ! end test value of z1,z2
-          !
-          ! ******************
-       else if (  (sz) .and. (mz1) .and. (.not.(mz2)) ) then 
-          ! case p^2=0, m2 nonzero, m1=0
-          ! write(6,*) 'case (2a) s12 =0, m1 =0, m2  nonzero'
-          !
-          if ( (z_param_out(1) == 0) .and. (z_param_out(2) == 0) ) then
-             !
-             f2p_rr = i20m1(mass2)
-             !   
-          else  if ( (z_param_out(1) == 0) .and. (z_param_out(2) == 1) ) then
-             !
-             f2p_rr(1) = 1._ki/2._ki
-             f2p_rr(2) = 0._ki
-             !
-             if (rat_or_tot_par%tot_selected) then
-                !
-                f2p_rr(3) = -(-3._ki + 2._ki*real(z_log(mass2/mu2_scale_par,-1._ki)))/4._ki
-                f2p_rr(4) = -aimag(z_log(mass2/mu2_scale_par,-1._ki))/2._ki
-                !
-	     else if (rat_or_tot_par%rat_selected) then
-         !
-                f2p_rr(3) = 3._ki/4._ki
-                f2p_rr(4) = 0._ki
-                !
-	     end if  ! end if rat or tot
       !
-          else  if ( (z_param_out(1) == 0) .and. (z_param_out(2) == 2) ) then
-             !
-             f2p_rr(1) = 1._ki/2._ki
-             f2p_rr(2) = 0._ki
-             !
-             if (rat_or_tot_par%tot_selected) then
-                !
-                f2p_rr(3) = -(-1._ki + 2._ki*real(z_log(mass2/mu2_scale_par,-1._ki)))/4._ki
-                f2p_rr(4) = -aimag(z_log(mass2/mu2_scale_par,-1._ki))/2._ki
-                !
-	     else if (rat_or_tot_par%rat_selected) then
-         !
-                f2p_rr(3) = 1._ki/4._ki
-                f2p_rr(4) = 0._ki
-                !
-             end if  ! end if rat or tot
-             !
-          else  if ( (z_param_out(1) == 1) .and. (z_param_out(2) == 1) ) then
-             !
-             f2p_rr(1) = 1._ki/3._ki
-             f2p_rr(2) = 0._ki
-             !
-             if (rat_or_tot_par%tot_selected) then
-                !
-                f2p_rr(3) = (11._ki - 6._ki*real(z_log(mass2/mu2_scale_par,-1._ki)))/18._ki
-                f2p_rr(4) =  - aimag(z_log(mass2/mu2_scale_par,-1._ki))/3._ki
-                !
-	     else if (rat_or_tot_par%rat_selected) then
-         !
-                f2p_rr(3) = 11._ki/18._ki
-                f2p_rr(4) = 0._ki
-                !
-             end if  ! end if rat or tot
-             !
-          else  if ( (z_param_out(1) == 1) .and. (z_param_out(2) == 2) ) then
-             !
-             f2p_rr(1) = 1._ki/6._ki
-             f2p_rr(2) = 0._ki
-             !
-             if (rat_or_tot_par%tot_selected) then
-                !
-                f2p_rr(3) = (5._ki - 6._ki*real(z_log(mass2/mu2_scale_par,-1._ki)))/36._ki
-                f2p_rr(4) =  - aimag(z_log(mass2/mu2_scale_par,-1._ki))/6._ki
-                !
-	     else if (rat_or_tot_par%rat_selected) then
-         !
-                f2p_rr(3) = 5._ki/36._ki
-                f2p_rr(4) = 0._ki
-                !
-             end if  ! end if rat or tot
-             !
-          else  if ( (z_param_out(1) == 2) .and. (z_param_out(2) == 2) ) then
-             !
-             f2p_rr(1) = 1._ki/3._ki
-             f2p_rr(2) = 0._ki
-             !
-             if (rat_or_tot_par%tot_selected) then
-                !
-                f2p_rr(3) = (1._ki - 3._ki*real(z_log(mass2/mu2_scale_par,-1._ki)))/9._ki
-                f2p_rr(4) =  - aimag(z_log(mass2/mu2_scale_par,-1._ki))/3._ki
-                !
-             else if (rat_or_tot_par%rat_selected) then
-                !
-                f2p_rr(3) = 1._ki/9._ki
-                f2p_rr(4) = 0._ki
-                !
-             end if  ! end if rat or tot
-             !
-          end if  ! end test value of z1,z2
+      f2p_rr(:) = 0._ki
+      !
+    else
+      !
+      call tri_int2(z_param_ini,z_param_out)
+      !
+      if (b_pro<256) then
+        dim_pro = bit_count(b_pro)
+        s = bit_sets(8*b_pro:8*b_pro+dim_pro-1)
+      else
+        dim_pro = countb(b_pro)
+        s = unpackb(b_pro,dim_pro)
+      end if
+      !
+      m1 = s(1)
+      m2 = s(2)
+      !
+      arg1 = s_mat_r(m1,m2)
+      !
+      ! internal masses	
+      mass1 = -s_mat_r(m1,m1)/2._ki
+      mass2 = -s_mat_r(m2,m2)/2._ki
+      s12 = arg1+mass1+mass2
+      !
+      call cut_s(s12,mass1,mass2)
+      !
+      mz1 = equal_real(mass1, zero,1000._ki)   ! 1000 added by MR 10.11.11
+      mz2 = equal_real(mass2, zero,1000._ki)   ! 1000 added by MR 10.11.11
+      sz = equal_real(s12,zero,1000._ki)   ! 1000 added by MR 10.11.11
+      !
+      diffm=mass1-mass2
+      !	
+      if ( (sz) .and. (mz1) .and. (mz2) ) then
+        !
+        f2p_rr(:) = 0._ki
+        !  (scaleless two-point function is zero)
+        !
+      else if ( .not.(sz) .and. (mz1) .and. (mz2) ) then 
+	      ! massless case
+        !
+        if ( (z_param_out(1) == 0) .and. (z_param_out(2) == 0) ) then
           !
-          ! ******************
-          ! ** eq. (A.10) ****
-       else if ( (sz) .and. (.not.(mz1)) .and. (equal_real(diffm,zero)) ) then 
-          ! case p^2=0, m1 nonzero, m2=m1
-          ! write(6,*) 'case (2c): s12 =0, m1 nonzero, m2=m1'
-          !	  
-          if ( (z_param_out(1) == 0) .and. (z_param_out(2) == 0) ) then
-             !
-             f2p_rr = f2p0m_1mi(mass1,0,0)
-             !   
-           else  if ( (z_param_out(1) == 0) .and. (z_param_out(2) == 1) ) then
-             !
-             f2p_rr = f2p0m_1mi(mass1,0,1)
-             !
+          f2p_rr(1) = 1._ki
+          f2p_rr(2) = 0._ki
+          !
+          if (rat_or_tot_par%tot_selected) then
             !
-          else  if ( (z_param_out(1) == 0) .and. (z_param_out(2) == 2) ) then
-             !
-             f2p_rr = f2p0m_1mi(mass1,0,2)
-             !
-          else  if ( (z_param_out(1) == 1) .and. (z_param_out(2) == 1) ) then
-             !
-             f2p_rr = f2p0m_1mi(mass1,1,1)
-             !
-          else  if ( (z_param_out(1) == 1) .and. (z_param_out(2) == 2) ) then
-             !
-             f2p_rr = f2p0m_1mi(mass1,1,2)
-             !
-          else  if ( (z_param_out(1) == 2) .and. (z_param_out(2) == 2) ) then
-             !
-             f2p_rr = f2p0m_1mi(mass1,2,2)
-             !
+            f2p_rr(3) = 2._ki-real(z_log(-s12/mu2_scale_par,-1._ki))
+            f2p_rr(4) = -aimag(z_log(-s12/mu2_scale_par,-1._ki))
+            !
+          else if (rat_or_tot_par%rat_selected) then
+            !
+            f2p_rr(3) = 2._ki
+            f2p_rr(4) = 0._ki
+            !
+          end if
+          !
+        else if ( (z_param_out(1) == 0) .and. (z_param_out(2) /= 0) ) then
+          !
+          f2p_rr(1) = 1._ki/2._ki
+          f2p_rr(2) = 0._ki
+          !
+          if (rat_or_tot_par%tot_selected) then
+            !
+            f2p_rr(3) = 1._ki-real(z_log(-s12/mu2_scale_par,-1._ki))/2._ki
+            f2p_rr(4) = -aimag(z_log(-s12/mu2_scale_par,-1._ki))/2._ki
+            !
+          else if (rat_or_tot_par%rat_selected) then
+            !
+            f2p_rr(3) = 1._ki
+            f2p_rr(4) = 0._ki
+            !
+          end if
+          !
+        else if ( (z_param_out(1) /= 0) .and. (z_param_out(2) /= 0) ) then
+          !
+          if (z_param_out(1) == z_param_out(2)) then
+            !
+            f2p_rr(1) = 1._ki/3._ki
+            f2p_rr(2) = 0._ki
+            !
+            if (rat_or_tot_par%tot_selected) then
+              !
+              f2p_rr(3) = 13._ki/18._ki-real(z_log(-s12/mu2_scale_par,-1._ki))/3._ki
+              f2p_rr(4) = -aimag(z_log(-s12/mu2_scale_par,-1._ki))/3._ki
+              !
+            else if (rat_or_tot_par%rat_selected) then
+              !
+              f2p_rr(3) = 13._ki/18._ki
+              f2p_rr(4) = 0._ki
+              !
+            end if
+            !
+          else
+            !
+            f2p_rr(1) = 1._ki/6._ki
+            f2p_rr(2) = 0._ki
+            !
+            if (rat_or_tot_par%tot_selected) then
+              !
+              f2p_rr(3) = 5._ki/18._ki-real(z_log(-s12/mu2_scale_par,-1._ki),ki)/6._ki
+              f2p_rr(4) = -aimag(z_log(-s12/mu2_scale_par,-1._ki))/6._ki
+              !
+            else if (rat_or_tot_par%rat_selected) then
+              !
+              f2p_rr(3) = 5._ki/18._ki
+              f2p_rr(4) = 0._ki
+              !
+            end if  ! end if rat or tot
+            !
+          end if ! end if z1==z2
+          !
         end if  ! end test value of z1,z2
-          ! 
-          ! ******************
-          ! ** eq. (A.8) ****
-       else if ( (sz) .and. (.not.(mz1)) .and. (.not.(mz2)) .and. .not.(equal_real(diffm,zero)) ) then 
-          ! case p^2=0, m1 nonzero, m2 nonzero, m2 NOT=m1
-          ! write(6,*) 'case (2d): s12 =0, m1 and m2 nonzero, m2 not= m1 '
+        !
+        !
+        !*************** massive cases *******************************
+        ! added 07.08.09
+        ! assumes real masses in numerator
+        ! ************************************************************
+      else if (  (sz) .and. (.not.(mz1)) .and. (mz2) ) then 
+        ! case p^2=0, m1 nonzero, m2=0
+        !
+        if ( (z_param_out(1) == 0) .and. (z_param_out(2) == 0) ) then
           !
-          if ( (z_param_out(1) == 0) .and. (z_param_out(2) == 0) ) then
-             !
-             f2p_rr = f2p0m_m1m2(mass1,mass2,0,0)
-             !   
-          else  if ( (z_param_out(1) == 0) .and. (z_param_out(2) == 1) ) then
-             !
-             f2p_rr = f2p0m_m1m2(mass1,mass2,0,1)
-             !
-          else  if ( (z_param_out(1) == 0) .and. (z_param_out(2) == 2) ) then
-             !
-             f2p_rr = f2p0m_m1m2(mass1,mass2,0,2)
-             !
-          else  if ( (z_param_out(1) == 1) .and. (z_param_out(2) == 1) ) then
-             !
-             f2p_rr = f2p0m_m1m2(mass1,mass2,1,1)
-             !
-          else  if ( (z_param_out(1) == 1) .and. (z_param_out(2) == 2) ) then
-             !
-             f2p_rr = f2p0m_m1m2(mass1,mass2,1,2)
-             !
-          else  if ( (z_param_out(1) == 2) .and. (z_param_out(2) == 2) ) then
-             !
-             f2p_rr = f2p0m_m1m2(mass1,mass2,2,2)
-             !
-          end if  ! end test value of z1,z2
+          f2p_rr = i20m1(mass1)
+          !   
+        else  if ( (z_param_out(1) == 0) .and. (z_param_out(2) == 1) ) then
           !
-          ! ************ now case s12 nonzero **********************    
-       else if (  (.not.(sz)) .and. (mz1) .and. (.not.(mz2)) ) then 
-          ! case  p^2 nonzero, m1=0, m2 nonzero
-          ! write(6,*) 'case (1a): s12 nonzero, m2 nonzero, m1 =0'
+          f2p_rr(1) = 1._ki/2._ki
+          f2p_rr(2) = 0._ki
           !
-	  i2sonem=i2sm1(s12,mass2)
-   !
-          if ( (z_param_out(1) == 0) .and. (z_param_out(2) == 0) ) then
-             !
-             f2p_rr = i2sonem
-             !
-          else  if ( (z_param_out(1) == 0) .and. (z_param_out(2) == 1) ) then
-             !
-             f2p_rr(1) = 1._ki/2._ki
-             f2p_rr(2) = 0._ki
-             !     
-             if (rat_or_tot_par%tot_selected) then
-                !
-                f2p_rr(3) = -(mass2 - (mass2 + s12)*i2sonem(3) - & 
-                     &                  mass2*real(z_log(mass2/mu2_scale_par,-1._ki)))/(2._ki*s12)
-                f2p_rr(4) = -(           - (mass2 + s12)*i2sonem(4) - & 
-                     &	                mass2*aimag(z_log(mass2/mu2_scale_par,-1._ki)))/(2._ki*s12)
-                !
-             else if (rat_or_tot_par%rat_selected) then
-                !
-                f2p_rr(3) = -( mass2 - (mass2 + s12)*i2sonem(3) )/(2._ki*s12)
-                f2p_rr(4) = 0._ki
-                !
-             end if  ! end if rat or tot
-             !
-          else  if ( (z_param_out(1) == 0) .and. (z_param_out(2) == 2) ) then
-             !
-             f2p_rr(1) = 1._ki/2._ki
-             f2p_rr(2) = 0._ki
-             !     
-             if (rat_or_tot_par%tot_selected) then
-                !
-                f2p_rr(3) = -( (mass2 - s12)*i2sonem(3) + mass2*(-1._ki + &
-                     &        real(z_log(mass2/mu2_scale_par,-1._ki))) )/(2._ki*s12)
-                f2p_rr(4) = -( (mass2 - s12)*i2sonem(4) + &
-                     &        mass2*aimag(z_log(mass2/mu2_scale_par,-1._ki)) )/(2._ki*s12)
-                !
-             else if (rat_or_tot_par%rat_selected) then
-                !
-                f2p_rr(3) = -((mass2 - s12)*i2sonem(3) - mass2)/(2._ki*s12)
-                f2p_rr(4) = 0._ki
-                !
-             end if  ! end if rat or tot
-             !
-          else  if ( (z_param_out(1) == 1) .and. (z_param_out(2) == 1) ) then
-             !	       
-             f2p_rr(1) = 1._ki/3._ki
-             f2p_rr(2) = 0._ki
-             !     
-             if (rat_or_tot_par%tot_selected) then
-                !
-                f2p_rr(3) = (-6._ki*mass2**2 - 9._ki*mass2*s12 + s12**2 + & 
-                     &       6._ki*(mass2**2 + mass2*s12 + s12**2)*i2sonem(3) + & 
-                     &       6._ki*mass2*(mass2 + s12)* &
-                     &       real(z_log(mass2/mu2_scale_par,-1._ki)) )/(18._ki*s12**2)
-                f2p_rr(4) = ( 6._ki*(mass2**2 + mass2*s12 + s12**2)*i2sonem(4) + & 
-                     &       6._ki*mass2*(mass2 + s12)* &
-                     &       aimag(z_log(mass2/mu2_scale_par,-1._ki)))/(18._ki*s12**2)
-                !
-	     else if (rat_or_tot_par%rat_selected) then
-         !
-                f2p_rr(3) = ( -6._ki*mass2**2 - 9._ki*mass2*s12 + s12**2 + &
-                     &       6._ki*(mass2**2 + mass2*s12 + s12**2)*i2sonem(3) )/(18._ki*s12**2)
-                f2p_rr(4) = 0._ki
-                !
-             end if  ! end if rat or tot	       
-             !
-          else  if ( (z_param_out(1) == 1) .and. (z_param_out(2) == 2) ) then
-             !
-             f2p_rr(1) = 1._ki/6._ki
-             f2p_rr(2) = 0._ki
-             !     
-             if (rat_or_tot_par%tot_selected) then
-                !
-                f2p_rr(3) = (6._ki*mass2**2 - s12**2 +   &
-                     &      3._ki*(-2._ki*mass2**2 + mass2*s12 + s12**2)*i2sonem(3) + &
-                     &      3._ki*mass2*(-2._ki*mass2 + s12)* &
-                     &      real(z_log(mass2/mu2_scale_par,-1._ki)))/(18._ki*s12**2)
-                !
-                f2p_rr(4) = ( 3._ki*(-2._ki*mass2**2 + mass2*s12 + s12**2)*i2sonem(4) + &
-                     &       3._ki*mass2*(-2._ki*mass2 + s12)* &
-                     &       aimag(z_log(mass2/mu2_scale_par,-1._ki)))/(18._ki*s12**2)
-                !
-	     else if (rat_or_tot_par%rat_selected) then
-         !
-                f2p_rr(3) = (6._ki*mass2**2 - s12**2 +   &
-                     &      3._ki*(-2*mass2**2 + mass2*s12 + s12**2)*i2sonem(3) )/(18._ki*s12**2)
-                f2p_rr(4) = 0._ki
-                !
-             end if  ! end if rat or tot	        
-             !
-
-          else  if ( (z_param_out(1) == 2) .and. (z_param_out(2) == 2) ) then
-             !
-             f2p_rr(1) = 1._ki/3._ki
-             f2p_rr(2) = 0._ki
-             !     
-             if (rat_or_tot_par%tot_selected) then
-                !
-                f2p_rr(3) = (-6._ki*mass2**2 + 9._ki*mass2*s12 + s12**2 + &
-                     &       6._ki*(mass2 - s12)**2*i2sonem(3) +          &
-                     &       6._ki*mass2*(mass2 - 2._ki*s12)* &
-                     &       real(z_log(mass2/mu2_scale_par,-1._ki)))/(18._ki*s12**2)
-                f2p_rr(4) = ( 6._ki*(mass2 - s12)**2*i2sonem(4) + &
-                     &       6._ki*mass2*(mass2 - 2._ki*s12)* &
-                     &       aimag(z_log(mass2/mu2_scale_par,-1._ki)))/(18._ki*s12**2)
-                !
-	     else if (rat_or_tot_par%rat_selected) then
-         !
-                f2p_rr(3) = (-6._ki*mass2**2 + 9._ki*mass2*s12 + s12**2 + &
-                     &       6._ki*(mass2 - s12)**2*i2sonem(3) )/(18._ki*s12**2)
-                f2p_rr(4) = 0._ki
-                !
-             end if  ! end if rat or tot        
-             !
-          end if  ! end test value of z1,z2
-          ! ******************
-       else if ( (.not.(sz)) .and. (.not.(mz1)) .and. (mz2) ) then 
-          ! case p^2 nonzero, m1 nonzero, m2=0
-          ! write(6,*) 'case (1b): s12 nonzero, m1 nonzero, m2 =0'
+          if (rat_or_tot_par%tot_selected) then
+            !
+            f2p_rr(3) = -(-1._ki + 2._ki*real(z_log(mass1/mu2_scale_par,-1._ki)))/4._ki
+            f2p_rr(4) = -aimag(z_log(mass1/mu2_scale_par,-1._ki))/2._ki
+            !
+          else if (rat_or_tot_par%rat_selected) then
+            !
+            f2p_rr(3) = 1._ki/4._ki
+            f2p_rr(4) = 0._ki
+            !
+          end if  ! end if rat or tot
           !
-	  i2sonem=i2sm1(s12,mass1)
-   !
-          if ( (z_param_out(1) == 0) .and. (z_param_out(2) == 0) ) then
-             !
-             f2p_rr = i2sonem
-             !
-          else  if ( (z_param_out(1) == 0) .and. (z_param_out(2) == 1) ) then
-             !
-             f2p_rr(1) = 1._ki/2._ki
-             f2p_rr(2) = 0._ki
-             !     
-             if (rat_or_tot_par%tot_selected) then
-                !
-                f2p_rr(3) = -( (mass1 - s12)*i2sonem(3) + &
-                     &        mass1*(-1._ki + real(z_log(mass1/mu2_scale_par,-1._ki))))/(2._ki*s12)
-                f2p_rr(4) = -( (mass1 - s12)*i2sonem(4) + &
-                     &        mass1*aimag(z_log(mass1/mu2_scale_par,-1._ki)))/(2._ki*s12)
-                !
-	     else if (rat_or_tot_par%rat_selected) then
-         !
-                f2p_rr(3) = -((mass1 - s12)*i2sonem(3) - mass1)/(2._ki*s12)
-                f2p_rr(4) = 0._ki
-                !
-             end if  ! end if rat or tot     
-             !
-          else  if ( (z_param_out(1) == 0) .and. (z_param_out(2) == 2) ) then
-             !
-             f2p_rr(1) = 1._ki/2._ki
-             f2p_rr(2) = 0._ki
-             !     
-             if (rat_or_tot_par%tot_selected) then
-                !
-                f2p_rr(3) = -(mass1 - (mass1 + s12)*i2sonem(3) - &
-                     &	      mass1*real(z_log(mass1/mu2_scale_par,-1._ki)))/(2._ki*s12)
-                f2p_rr(4) = -( - (mass1 + s12)*i2sonem(4) - &
-                     &        mass1*aimag(z_log(mass1/mu2_scale_par,-1._ki)))/(2._ki*s12)
-                !
-	     else if (rat_or_tot_par%rat_selected) then
-         !
-                f2p_rr(3) = -( mass1 - (mass1 + s12)*i2sonem(3) )/(2._ki*s12)
-                f2p_rr(4) = 0._ki
-                !
-             end if  ! end if rat or tot
-             !
-          else  if ( (z_param_out(1) == 1) .and. (z_param_out(2) == 1) ) then
-             !
-             f2p_rr(1) = 1._ki/3._ki
-             f2p_rr(2) = 0._ki
-             !     
-             if (rat_or_tot_par%tot_selected) then
-                !
-                f2p_rr(3) = (-6._ki*mass1**2 + 9._ki*mass1*s12 + s12**2 + & 
-                     &	     6._ki*(mass1 - s12)**2*i2sonem(3) +  &
-                     &       6._ki*mass1*(mass1 - 2*s12)* &
-                     &       real(z_log(mass1/mu2_scale_par,-1._ki)))/(18._ki*s12**2)
-                f2p_rr(4) =( 6._ki*(mass1 - s12)**2*i2sonem(4) + &
-                     &      6._ki*mass1*(mass1 - 2._ki*s12)* &
-                     &      aimag(z_log(mass1/mu2_scale_par,-1._ki)))/(18._ki*s12**2)
-                !
-	     else if (rat_or_tot_par%rat_selected) then
-         !
-                f2p_rr(3) = (-6._ki*mass1**2 + 9._ki*mass1*s12 + s12**2 + & 
-                     &       6._ki*(mass1 - s12)**2*i2sonem(3) )/(18._ki*s12**2)
-                f2p_rr(4) = 0._ki
-                !
-             end if  ! end if rat or tot        
-             !
-          else  if ( (z_param_out(1) == 1) .and. (z_param_out(2) == 2) ) then
-             !
-             f2p_rr(1) = 1._ki/6._ki
-             f2p_rr(2) = 0._ki
-             !     
-             if (rat_or_tot_par%tot_selected) then
-                !
-                f2p_rr(3) = (6._ki*mass1**2 - s12**2 +   &
-                     &      3._ki*(-2._ki*mass1**2 + mass1*s12 + s12**2)*i2sonem(3) + &
-                     &      3._ki*mass1*(-2._ki*mass1 + s12)* &
-                     &      real(z_log(mass1/mu2_scale_par,-1._ki)))/(18._ki*s12**2)
-                f2p_rr(4) = ( 3._ki*(-2._ki*mass1**2 + mass1*s12 + s12**2)*i2sonem(4) + &
-                     &       3._ki*mass1*(-2._ki*mass1 + s12)* &
-                     &       aimag(z_log(mass1/mu2_scale_par,-1._ki)))/(18._ki*s12**2)
-                !
-	     else if (rat_or_tot_par%rat_selected) then
-         !
-                f2p_rr(3) = (6._ki*mass1**2 - s12**2 +   &
-                     &      3._ki*(-2._ki*mass1**2 + mass1*s12 + s12**2)*i2sonem(3) )/(18._ki*s12**2)
-                f2p_rr(4) = 0._ki
-                !
-             end if  ! end if rat or tot	        
-             !
-             !
-          else  if ( (z_param_out(1) == 2) .and. (z_param_out(2) == 2) ) then
-             !
-             f2p_rr(1) = 1._ki/3._ki
-             f2p_rr(2) = 0._ki
-             !     
-             if (rat_or_tot_par%tot_selected) then
-                !
-                f2p_rr(3) = (-6._ki*mass1**2 - 9._ki*mass1*s12 + s12**2 +  &
-                     &	     6._ki*(mass1**2 + mass1*s12 + s12**2)*i2sonem(3) + &
-                     &       6._ki*mass1*(mass1 + s12)* &
-                     &       real(z_log(mass1/mu2_scale_par,-1._ki)))/(18._ki*s12**2)
-                f2p_rr(4) = ( 6._ki*(mass1**2 + mass1*s12 + s12**2)*i2sonem(4) + &
-                     &       6._ki*mass1*(mass1 + s12)* &
-                     &       aimag(z_log(mass1/mu2_scale_par,-1._ki)))/(18._ki*s12**2)
-                !
-	     else if (rat_or_tot_par%rat_selected) then
-         !
-                f2p_rr(3) = (-6._ki*mass1**2 - 9._ki*mass1*s12 + s12**2 + &
-                     &       6._ki*(mass1**2 + mass1*s12 + s12**2)*i2sonem(3))/(18._ki*s12**2)
-                f2p_rr(4) = 0._ki
-                !
-             end if  ! end if rat or tot	       
-             !
-          end if  ! end test value of z1,z2
-	  !
-          ! ******************
-       else if ( (.not.(sz)) .and. (.not.(mz1)) .and. (.not.(mz2)) ) then 
-          ! case p^2 nonzero, m1 nonzero, m2 nonzero, eq.(A.5)
-          ! includes case m1=m2
-          ! write(6,*) 'cases (1c) and (1d): s12 nonzero, m1 and m2  nonzero'
+        else  if ( (z_param_out(1) == 0) .and. (z_param_out(2) == 2) ) then
           !
-          if ( (z_param_out(1) == 0) .and. (z_param_out(2) == 0) ) then
-             !
-             f2p_rr = f2p_m1m2(s12,mass1,mass2,0,0)
-             !   
-          else  if ( (z_param_out(1) == 0) .and. (z_param_out(2) == 1) ) then
-             !
-             f2p_rr = f2p_m1m2(s12,mass1,mass2,0,1)
-             !
-          else  if ( (z_param_out(1) == 0) .and. (z_param_out(2) == 2) ) then
-             !
-             f2p_rr = f2p_m1m2(s12,mass1,mass2,0,2)
-             !
-          else  if ( (z_param_out(1) == 1) .and. (z_param_out(2) == 1) ) then
-             !
-             f2p_rr = f2p_m1m2(s12,mass1,mass2,1,1)
-             !
-          else  if ( (z_param_out(1) == 1) .and. (z_param_out(2) == 2) ) then
-             !
-             f2p_rr = f2p_m1m2(s12,mass1,mass2,1,2)
-             !
-
-          else  if ( (z_param_out(1) == 2) .and. (z_param_out(2) == 2) ) then
-             !
-             f2p_rr = f2p_m1m2(s12,mass1,mass2,2,2)
-             !
-          end if  ! end test value of z1,z2
-          ! ******************************************************************
-	  !
-       else 
-          tab_erreur_par(1)%a_imprimer = .true.
-          tab_erreur_par(1)%chaine = 'something wrong with arguments of two-point function f2p'
-          tab_erreur_par(2)%a_imprimer = .true.
-          tab_erreur_par(2)%chaine = 's12= %f0'
-          tab_erreur_par(2)%arg_real = s12
-          tab_erreur_par(3)%a_imprimer = .true.
-          tab_erreur_par(3)%chaine = 'm1s= %f0'
-          tab_erreur_par(3)%arg_real = mass1
-          tab_erreur_par(4)%a_imprimer = .true.
-          tab_erreur_par(4)%chaine = 'm2s= %f0'
-          tab_erreur_par(4)%arg_real = mass2
+          f2p_rr(1) = 1._ki/2._ki
+          f2p_rr(2) = 0._ki
           !
-          call catch_exception(0)
-       end if  ! end if s12,m1,m2 eq. zero
-       !
+          if (rat_or_tot_par%tot_selected) then
+            !
+            f2p_rr(3) = -(-3._ki + 2._ki*real(z_log(mass1/mu2_scale_par,-1._ki)))/4._ki
+            f2p_rr(4) = -aimag(z_log(mass1/mu2_scale_par,-1._ki))/2._ki
+            !
+	        else if (rat_or_tot_par%rat_selected) then
+            !
+            f2p_rr(3) = 3._ki/4._ki
+            f2p_rr(4) = 0._ki
+            !
+          end if  ! end if rat or tot
+          !
+        else  if ( (z_param_out(1) == 1) .and. (z_param_out(2) == 1) ) then
+          !
+          f2p_rr(1) = 1._ki/3._ki
+          f2p_rr(2) = 0._ki
+          !
+          if (rat_or_tot_par%tot_selected) then
+            !
+            f2p_rr(3) = (1._ki - 3._ki*real(z_log(mass1/mu2_scale_par,-1._ki)))/9._ki
+            f2p_rr(4) =  - aimag(z_log(mass1/mu2_scale_par,-1._ki))/3._ki
+            !
+	        else if (rat_or_tot_par%rat_selected) then
+            !
+            f2p_rr(3) = 1._ki/9._ki
+            f2p_rr(4) = 0._ki
+            !
+          end if  ! end if rat or tot
+          !
+        else  if ( (z_param_out(1) == 1) .and. (z_param_out(2) == 2) ) then
+          !
+          f2p_rr(1) = 1._ki/6._ki
+          f2p_rr(2) = 0._ki
+          !
+          if (rat_or_tot_par%tot_selected) then
+            !
+            f2p_rr(3) = (5._ki - 6._ki*real(z_log(mass1/mu2_scale_par,-1._ki)))/36._ki
+            f2p_rr(4) =  - aimag(z_log(mass1/mu2_scale_par,-1._ki))/6._ki
+            !
+	        else if (rat_or_tot_par%rat_selected) then
+            !
+            f2p_rr(3) = 5._ki/36._ki
+            f2p_rr(4) = 0._ki
+            !
+          end if  ! end if rat or tot
+          !
+        else  if ( (z_param_out(1) == 2) .and. (z_param_out(2) == 2) ) then
+          !
+          f2p_rr(1) = 1._ki/3._ki
+          f2p_rr(2) = 0._ki
+          !
+          if (rat_or_tot_par%tot_selected) then
+            !
+            f2p_rr(3) = (11 - 6*real(z_log(mass1/mu2_scale_par,-1._ki)))/18._ki
+            f2p_rr(4) =  - aimag(z_log(mass1/mu2_scale_par,-1._ki))/3._ki
+            !
+	        else if (rat_or_tot_par%rat_selected) then
+            !
+            f2p_rr(3) = 11._ki/18._ki
+            f2p_rr(4) = 0._ki
+            !
+          end if  ! end if rat or tot
+          !
+        end if  ! end test value of z1,z2
+        !
+        ! ******************
+      else if (  (sz) .and. (mz1) .and. (.not.(mz2)) ) then 
+        ! case p^2=0, m2 nonzero, m1=0
+        !
+        if ( (z_param_out(1) == 0) .and. (z_param_out(2) == 0) ) then
+          !
+          f2p_rr = i20m1(mass2)
+          !   
+        else  if ( (z_param_out(1) == 0) .and. (z_param_out(2) == 1) ) then
+          !
+          f2p_rr(1) = 1._ki/2._ki
+          f2p_rr(2) = 0._ki
+          !
+          if (rat_or_tot_par%tot_selected) then
+            !
+            f2p_rr(3) = -(-3._ki + 2._ki*real(z_log(mass2/mu2_scale_par,-1._ki)))/4._ki
+            f2p_rr(4) = -aimag(z_log(mass2/mu2_scale_par,-1._ki))/2._ki
+            !
+	        else if (rat_or_tot_par%rat_selected) then
+            !
+            f2p_rr(3) = 3._ki/4._ki
+            f2p_rr(4) = 0._ki
+            !
+	        end if  ! end if rat or tot
+          !
+        else  if ( (z_param_out(1) == 0) .and. (z_param_out(2) == 2) ) then
+          !
+          f2p_rr(1) = 1._ki/2._ki
+          f2p_rr(2) = 0._ki
+          !
+          if (rat_or_tot_par%tot_selected) then
+            !
+            f2p_rr(3) = -(-1._ki + 2._ki*real(z_log(mass2/mu2_scale_par,-1._ki)))/4._ki
+            f2p_rr(4) = -aimag(z_log(mass2/mu2_scale_par,-1._ki))/2._ki
+            !
+	        else if (rat_or_tot_par%rat_selected) then
+            !
+            f2p_rr(3) = 1._ki/4._ki
+            f2p_rr(4) = 0._ki
+            !
+          end if  ! end if rat or tot
+          !
+        else  if ( (z_param_out(1) == 1) .and. (z_param_out(2) == 1) ) then
+          !
+          f2p_rr(1) = 1._ki/3._ki
+          f2p_rr(2) = 0._ki
+          !
+          if (rat_or_tot_par%tot_selected) then
+            !
+            f2p_rr(3) = (11._ki - 6._ki*real(z_log(mass2/mu2_scale_par,-1._ki)))/18._ki
+            f2p_rr(4) =  - aimag(z_log(mass2/mu2_scale_par,-1._ki))/3._ki
+            !
+	        else if (rat_or_tot_par%rat_selected) then
+            !
+            f2p_rr(3) = 11._ki/18._ki
+            f2p_rr(4) = 0._ki
+            !
+          end if  ! end if rat or tot
+          !
+        else  if ( (z_param_out(1) == 1) .and. (z_param_out(2) == 2) ) then
+          !
+          f2p_rr(1) = 1._ki/6._ki
+          f2p_rr(2) = 0._ki
+          !
+          if (rat_or_tot_par%tot_selected) then
+            !
+            f2p_rr(3) = (5._ki - 6._ki*real(z_log(mass2/mu2_scale_par,-1._ki)))/36._ki
+            f2p_rr(4) =  - aimag(z_log(mass2/mu2_scale_par,-1._ki))/6._ki
+            !
+	        else if (rat_or_tot_par%rat_selected) then
+            !
+            f2p_rr(3) = 5._ki/36._ki
+            f2p_rr(4) = 0._ki
+            !
+          end if  ! end if rat or tot
+          !
+        else  if ( (z_param_out(1) == 2) .and. (z_param_out(2) == 2) ) then
+          !
+          f2p_rr(1) = 1._ki/3._ki
+          f2p_rr(2) = 0._ki
+          !
+          if (rat_or_tot_par%tot_selected) then
+            !
+            f2p_rr(3) = (1._ki - 3._ki*real(z_log(mass2/mu2_scale_par,-1._ki)))/9._ki
+            f2p_rr(4) =  - aimag(z_log(mass2/mu2_scale_par,-1._ki))/3._ki
+            !
+          else if (rat_or_tot_par%rat_selected) then
+            !
+            f2p_rr(3) = 1._ki/9._ki
+            f2p_rr(4) = 0._ki
+            !
+          end if  ! end if rat or tot
+          !
+        end if  ! end test value of z1,z2
+        !
+        ! ******************
+        ! ** eq. (A.10) ****
+      else if ( (sz) .and. (.not.(mz1)) .and. (equal_real(diffm,zero)) ) then 
+        ! case p^2=0, m1 nonzero, m2=m1
+        ! write(6,*) 'case (2c): s12 =0, m1 nonzero, m2=m1'
+        !	  
+        if ( (z_param_out(1) == 0) .and. (z_param_out(2) == 0) ) then
+          !
+          f2p_rr = f2p0m_1mi(mass1,0,0)
+          !   
+        else  if ( (z_param_out(1) == 0) .and. (z_param_out(2) == 1) ) then
+          !
+          f2p_rr = f2p0m_1mi(mass1,0,1)
+          !
+        else  if ( (z_param_out(1) == 0) .and. (z_param_out(2) == 2) ) then
+          !
+          f2p_rr = f2p0m_1mi(mass1,0,2)
+          !
+        else  if ( (z_param_out(1) == 1) .and. (z_param_out(2) == 1) ) then
+          !
+          f2p_rr = f2p0m_1mi(mass1,1,1)
+          !
+        else  if ( (z_param_out(1) == 1) .and. (z_param_out(2) == 2) ) then
+          !
+          f2p_rr = f2p0m_1mi(mass1,1,2)
+          !
+        else  if ( (z_param_out(1) == 2) .and. (z_param_out(2) == 2) ) then
+          !
+          f2p_rr = f2p0m_1mi(mass1,2,2)
+          !
+        end if  ! end test value of z1,z2
+        ! 
+        ! ******************
+        ! ** eq. (A.8) ****
+      else if ( (sz) .and. (.not.(mz1)) .and. (.not.(mz2)) .and. .not.(equal_real(diffm,zero)) ) then 
+        ! case p^2=0, m1 nonzero, m2 nonzero, m2 NOT=m1
+        !
+        if ( (z_param_out(1) == 0) .and. (z_param_out(2) == 0) ) then
+          !
+          f2p_rr = f2p0m_m1m2(mass1,mass2,0,0)
+          !   
+        else  if ( (z_param_out(1) == 0) .and. (z_param_out(2) == 1) ) then
+          !
+          f2p_rr = f2p0m_m1m2(mass1,mass2,0,1)
+          !
+        else  if ( (z_param_out(1) == 0) .and. (z_param_out(2) == 2) ) then
+          !
+          f2p_rr = f2p0m_m1m2(mass1,mass2,0,2)
+          !
+        else  if ( (z_param_out(1) == 1) .and. (z_param_out(2) == 1) ) then
+          !
+          f2p_rr = f2p0m_m1m2(mass1,mass2,1,1)
+          !
+        else  if ( (z_param_out(1) == 1) .and. (z_param_out(2) == 2) ) then
+          !
+          f2p_rr = f2p0m_m1m2(mass1,mass2,1,2)
+          !
+        else  if ( (z_param_out(1) == 2) .and. (z_param_out(2) == 2) ) then
+          !
+          f2p_rr = f2p0m_m1m2(mass1,mass2,2,2)
+          !
+        end if  ! end test value of z1,z2
+        !
+        ! ************ now case s12 nonzero **********************    
+      else if (  (.not.(sz)) .and. (mz1) .and. (.not.(mz2)) ) then 
+        ! case  p^2 nonzero, m1=0, m2 nonzero
+        !
+	      i2sonem=i2sm1(s12,mass2)
+        !
+        if ( (z_param_out(1) == 0) .and. (z_param_out(2) == 0) ) then
+          !
+          f2p_rr = i2sonem
+          !
+        else  if ( (z_param_out(1) == 0) .and. (z_param_out(2) == 1) ) then
+          !
+          f2p_rr(1) = 1._ki/2._ki
+          f2p_rr(2) = 0._ki
+          !     
+          if (rat_or_tot_par%tot_selected) then
+            !
+            f2p_rr(3) = -(mass2 - (mass2 + s12)*i2sonem(3) - & 
+                 &                  mass2*real(z_log(mass2/mu2_scale_par,-1._ki)))/(2._ki*s12)
+            f2p_rr(4) = -(           - (mass2 + s12)*i2sonem(4) - & 
+                 &	                mass2*aimag(z_log(mass2/mu2_scale_par,-1._ki)))/(2._ki*s12)
+            !
+          else if (rat_or_tot_par%rat_selected) then
+            !
+            f2p_rr(3) = -( mass2 - (mass2 + s12)*i2sonem(3) )/(2._ki*s12)
+            f2p_rr(4) = 0._ki
+            !
+          end if  ! end if rat or tot
+          !
+        else  if ( (z_param_out(1) == 0) .and. (z_param_out(2) == 2) ) then
+          !
+          f2p_rr(1) = 1._ki/2._ki
+          f2p_rr(2) = 0._ki
+          !     
+          if (rat_or_tot_par%tot_selected) then
+            !
+            f2p_rr(3) = -( (mass2 - s12)*i2sonem(3) + mass2*(-1._ki + &
+                 &        real(z_log(mass2/mu2_scale_par,-1._ki))) )/(2._ki*s12)
+            f2p_rr(4) = -( (mass2 - s12)*i2sonem(4) + &
+                 &        mass2*aimag(z_log(mass2/mu2_scale_par,-1._ki)) )/(2._ki*s12)
+            !
+          else if (rat_or_tot_par%rat_selected) then
+            !
+            f2p_rr(3) = -((mass2 - s12)*i2sonem(3) - mass2)/(2._ki*s12)
+            f2p_rr(4) = 0._ki
+            !
+          end if  ! end if rat or tot
+          !
+        else  if ( (z_param_out(1) == 1) .and. (z_param_out(2) == 1) ) then
+          !	       
+          f2p_rr(1) = 1._ki/3._ki
+          f2p_rr(2) = 0._ki
+          !     
+          if (rat_or_tot_par%tot_selected) then
+            !
+            f2p_rr(3) = (-6._ki*mass2**2 - 9._ki*mass2*s12 + s12**2 + & 
+                  &       6._ki*(mass2**2 + mass2*s12 + s12**2)*i2sonem(3) + & 
+                  &       6._ki*mass2*(mass2 + s12)* &
+                  &       real(z_log(mass2/mu2_scale_par,-1._ki)) )/(18._ki*s12**2)
+            f2p_rr(4) = ( 6._ki*(mass2**2 + mass2*s12 + s12**2)*i2sonem(4) + & 
+                  &       6._ki*mass2*(mass2 + s12)* &
+                  &       aimag(z_log(mass2/mu2_scale_par,-1._ki)))/(18._ki*s12**2)
+            !
+	        else if (rat_or_tot_par%rat_selected) then
+            !
+            f2p_rr(3) = ( -6._ki*mass2**2 - 9._ki*mass2*s12 + s12**2 + &
+                 &       6._ki*(mass2**2 + mass2*s12 + s12**2)*i2sonem(3) )/(18._ki*s12**2)
+            f2p_rr(4) = 0._ki
+            !
+          end if  ! end if rat or tot	       
+          !
+        else  if ( (z_param_out(1) == 1) .and. (z_param_out(2) == 2) ) then
+          !
+          f2p_rr(1) = 1._ki/6._ki
+          f2p_rr(2) = 0._ki
+          !     
+          if (rat_or_tot_par%tot_selected) then
+            !
+            f2p_rr(3) = (6._ki*mass2**2 - s12**2 +   &
+                 &      3._ki*(-2._ki*mass2**2 + mass2*s12 + s12**2)*i2sonem(3) + &
+                 &      3._ki*mass2*(-2._ki*mass2 + s12)* &
+                 &      real(z_log(mass2/mu2_scale_par,-1._ki)))/(18._ki*s12**2)
+            !
+            f2p_rr(4) = ( 3._ki*(-2._ki*mass2**2 + mass2*s12 + s12**2)*i2sonem(4) + &
+                 &       3._ki*mass2*(-2._ki*mass2 + s12)* &
+                 &       aimag(z_log(mass2/mu2_scale_par,-1._ki)))/(18._ki*s12**2)
+            !
+	        else if (rat_or_tot_par%rat_selected) then
+            !
+            f2p_rr(3) = (6._ki*mass2**2 - s12**2 +   &
+                 &      3._ki*(-2*mass2**2 + mass2*s12 + s12**2)*i2sonem(3) )/(18._ki*s12**2)
+            f2p_rr(4) = 0._ki
+            !
+          end if  ! end if rat or tot	        
+          !
+        else  if ( (z_param_out(1) == 2) .and. (z_param_out(2) == 2) ) then
+          !
+          f2p_rr(1) = 1._ki/3._ki
+          f2p_rr(2) = 0._ki
+          !     
+          if (rat_or_tot_par%tot_selected) then
+            !
+            f2p_rr(3) = (-6._ki*mass2**2 + 9._ki*mass2*s12 + s12**2 + &
+                 &       6._ki*(mass2 - s12)**2*i2sonem(3) +          &
+                 &       6._ki*mass2*(mass2 - 2._ki*s12)* &
+                 &       real(z_log(mass2/mu2_scale_par,-1._ki)))/(18._ki*s12**2)
+            f2p_rr(4) = ( 6._ki*(mass2 - s12)**2*i2sonem(4) + &
+                 &       6._ki*mass2*(mass2 - 2._ki*s12)* &
+                 &       aimag(z_log(mass2/mu2_scale_par,-1._ki)))/(18._ki*s12**2)
+            !
+	        else if (rat_or_tot_par%rat_selected) then
+            !
+            f2p_rr(3) = (-6._ki*mass2**2 + 9._ki*mass2*s12 + s12**2 + &
+                 &       6._ki*(mass2 - s12)**2*i2sonem(3) )/(18._ki*s12**2)
+            f2p_rr(4) = 0._ki
+            !
+          end if  ! end if rat or tot        
+          !
+        end if  ! end test value of z1,z2
+        ! ******************
+      else if ( (.not.(sz)) .and. (.not.(mz1)) .and. (mz2) ) then 
+        ! case p^2 nonzero, m1 nonzero, m2=0
+        !
+	      i2sonem=i2sm1(s12,mass1)
+        !
+        if ( (z_param_out(1) == 0) .and. (z_param_out(2) == 0) ) then
+          !
+          f2p_rr = i2sonem
+          !
+        else  if ( (z_param_out(1) == 0) .and. (z_param_out(2) == 1) ) then
+          !
+          f2p_rr(1) = 1._ki/2._ki
+          f2p_rr(2) = 0._ki
+          !     
+          if (rat_or_tot_par%tot_selected) then
+            !
+            f2p_rr(3) = -( (mass1 - s12)*i2sonem(3) + &
+                &        mass1*(-1._ki + real(z_log(mass1/mu2_scale_par,-1._ki))))/(2._ki*s12)
+            f2p_rr(4) = -( (mass1 - s12)*i2sonem(4) + &
+                &        mass1*aimag(z_log(mass1/mu2_scale_par,-1._ki)))/(2._ki*s12)
+            !
+	        else if (rat_or_tot_par%rat_selected) then
+            !
+            f2p_rr(3) = -((mass1 - s12)*i2sonem(3) - mass1)/(2._ki*s12)
+            f2p_rr(4) = 0._ki
+            !
+          end if  ! end if rat or tot     
+          !
+        else  if ( (z_param_out(1) == 0) .and. (z_param_out(2) == 2) ) then
+          !
+          f2p_rr(1) = 1._ki/2._ki
+          f2p_rr(2) = 0._ki
+          !     
+          if (rat_or_tot_par%tot_selected) then
+            !
+            f2p_rr(3) = -(mass1 - (mass1 + s12)*i2sonem(3) - &
+                 &	      mass1*real(z_log(mass1/mu2_scale_par,-1._ki)))/(2._ki*s12)
+            f2p_rr(4) = -( - (mass1 + s12)*i2sonem(4) - &
+                 &        mass1*aimag(z_log(mass1/mu2_scale_par,-1._ki)))/(2._ki*s12)
+            !
+	        else if (rat_or_tot_par%rat_selected) then
+            !
+            f2p_rr(3) = -( mass1 - (mass1 + s12)*i2sonem(3) )/(2._ki*s12)
+            f2p_rr(4) = 0._ki
+            !
+          end if  ! end if rat or tot
+          !
+        else  if ( (z_param_out(1) == 1) .and. (z_param_out(2) == 1) ) then
+          !
+          f2p_rr(1) = 1._ki/3._ki
+          f2p_rr(2) = 0._ki
+          !     
+          if (rat_or_tot_par%tot_selected) then
+            !
+            f2p_rr(3) = (-6._ki*mass1**2 + 9._ki*mass1*s12 + s12**2 + & 
+                 &	     6._ki*(mass1 - s12)**2*i2sonem(3) +  &
+                 &       6._ki*mass1*(mass1 - 2*s12)* &
+                 &       real(z_log(mass1/mu2_scale_par,-1._ki)))/(18._ki*s12**2)
+            f2p_rr(4) =( 6._ki*(mass1 - s12)**2*i2sonem(4) + &
+                 &      6._ki*mass1*(mass1 - 2._ki*s12)* &
+                 &      aimag(z_log(mass1/mu2_scale_par,-1._ki)))/(18._ki*s12**2)
+            !
+	        else if (rat_or_tot_par%rat_selected) then
+            !
+            f2p_rr(3) = (-6._ki*mass1**2 + 9._ki*mass1*s12 + s12**2 + & 
+                 &       6._ki*(mass1 - s12)**2*i2sonem(3) )/(18._ki*s12**2)
+            f2p_rr(4) = 0._ki
+            !
+          end if  ! end if rat or tot        
+          !
+        else  if ( (z_param_out(1) == 1) .and. (z_param_out(2) == 2) ) then
+          !
+          f2p_rr(1) = 1._ki/6._ki
+          f2p_rr(2) = 0._ki
+          !     
+          if (rat_or_tot_par%tot_selected) then
+            !
+            f2p_rr(3) = (6._ki*mass1**2 - s12**2 +   &
+                 &      3._ki*(-2._ki*mass1**2 + mass1*s12 + s12**2)*i2sonem(3) + &
+                 &      3._ki*mass1*(-2._ki*mass1 + s12)* &
+                 &      real(z_log(mass1/mu2_scale_par,-1._ki)))/(18._ki*s12**2)
+            f2p_rr(4) = ( 3._ki*(-2._ki*mass1**2 + mass1*s12 + s12**2)*i2sonem(4) + &
+                 &       3._ki*mass1*(-2._ki*mass1 + s12)* &
+                 &       aimag(z_log(mass1/mu2_scale_par,-1._ki)))/(18._ki*s12**2)
+            !
+	        else if (rat_or_tot_par%rat_selected) then
+            !
+            f2p_rr(3) = (6._ki*mass1**2 - s12**2 +   &
+                 &      3._ki*(-2._ki*mass1**2 + mass1*s12 + s12**2)*i2sonem(3) )/(18._ki*s12**2)
+            f2p_rr(4) = 0._ki
+            !
+          end if  ! end if rat or tot	        
+          !
+          !
+        else  if ( (z_param_out(1) == 2) .and. (z_param_out(2) == 2) ) then
+          !
+          f2p_rr(1) = 1._ki/3._ki
+          f2p_rr(2) = 0._ki
+          !     
+          if (rat_or_tot_par%tot_selected) then
+            !
+            f2p_rr(3) = (-6._ki*mass1**2 - 9._ki*mass1*s12 + s12**2 +  &
+                 &	     6._ki*(mass1**2 + mass1*s12 + s12**2)*i2sonem(3) + &
+                 &       6._ki*mass1*(mass1 + s12)* &
+                 &       real(z_log(mass1/mu2_scale_par,-1._ki)))/(18._ki*s12**2)
+            f2p_rr(4) = ( 6._ki*(mass1**2 + mass1*s12 + s12**2)*i2sonem(4) + &
+                 &       6._ki*mass1*(mass1 + s12)* &
+                 &       aimag(z_log(mass1/mu2_scale_par,-1._ki)))/(18._ki*s12**2)
+            !
+	        else if (rat_or_tot_par%rat_selected) then
+            !
+            f2p_rr(3) = (-6._ki*mass1**2 - 9._ki*mass1*s12 + s12**2 + &
+                 &       6._ki*(mass1**2 + mass1*s12 + s12**2)*i2sonem(3))/(18._ki*s12**2)
+            f2p_rr(4) = 0._ki
+            !
+          end if  ! end if rat or tot	       
+          !
+        end if  ! end test value of z1,z2
+	      !
+        ! ******************
+      else if ( (.not.(sz)) .and. (.not.(mz1)) .and. (.not.(mz2)) ) then 
+        ! case p^2 nonzero, m1 nonzero, m2 nonzero, eq.(A.5)
+        ! includes case m1=m2
+        !
+        if ( (z_param_out(1) == 0) .and. (z_param_out(2) == 0) ) then
+          !
+          f2p_rr = f2p_m1m2(s12,mass1,mass2,0,0)
+          !   
+        else  if ( (z_param_out(1) == 0) .and. (z_param_out(2) == 1) ) then
+          !
+          f2p_rr = f2p_m1m2(s12,mass1,mass2,0,1)
+          !
+        else  if ( (z_param_out(1) == 0) .and. (z_param_out(2) == 2) ) then
+          !
+          f2p_rr = f2p_m1m2(s12,mass1,mass2,0,2)
+          !
+        else  if ( (z_param_out(1) == 1) .and. (z_param_out(2) == 1) ) then
+          !
+          f2p_rr = f2p_m1m2(s12,mass1,mass2,1,1)
+          !
+        else  if ( (z_param_out(1) == 1) .and. (z_param_out(2) == 2) ) then
+          !
+          f2p_rr = f2p_m1m2(s12,mass1,mass2,1,2)
+          !
+        else  if ( (z_param_out(1) == 2) .and. (z_param_out(2) == 2) ) then
+          !
+          f2p_rr = f2p_m1m2(s12,mass1,mass2,2,2)
+          !
+        end if  ! end test value of z1,z2
+        ! ******************************************************************
+	      !
+      else 
+        !
+        tab_erreur_par(1)%a_imprimer = .true.
+        tab_erreur_par(1)%chaine = 'something wrong with arguments of two-point function f2p'
+        tab_erreur_par(2)%a_imprimer = .true.
+        tab_erreur_par(2)%chaine = 's12= %f0'
+        tab_erreur_par(2)%arg_real = s12
+        tab_erreur_par(3)%a_imprimer = .true.
+        tab_erreur_par(3)%chaine = 'm1s= %f0'
+        tab_erreur_par(3)%arg_real = mass1
+        tab_erreur_par(4)%a_imprimer = .true.
+        tab_erreur_par(4)%chaine = 'm2s= %f0'
+        tab_erreur_par(4)%arg_real = mass2
+        !
+        call catch_exception(0)
+      end if  ! end if s12,m1,m2 eq. zero
+      !
     end if  ! end if ( minval(z_param_ini) == -1 )
     !
     f2p_r(1) = f2p_rr(1) + i_ * f2p_rr(2)
@@ -853,6 +845,7 @@ contains
     integer, intent (in), optional :: parf1,parf2
     complex(ki), dimension(2) :: f2p_c
     !
+    real(ki), dimension(4) :: f2p_cc
     complex(ki), dimension(2) :: i2sonem
     integer :: par1, par2
     integer, dimension(2) :: z_param_ini, z_param_out
@@ -871,524 +864,610 @@ contains
     z_param_ini = (/ par1,par2 /)
     !
     where (z_param_ini /= 0)
-       !
-       z_param_ini = locateb(z_param_ini,b_pro)
-       !
+      !
+      z_param_ini = locateb(z_param_ini,b_pro)
+      !
     elsewhere
-       !
-       z_param_ini = 0
-       !
+      !
+      z_param_ini = 0
+      !
     end where
     !
     if ( minval(z_param_ini) == -1 ) then
-       !
-       f2p_c(:) = czero
-       !
+      !
+      f2p_c(:) = czero
+      !
     else
-       !
-       call tri_int2(z_param_ini,z_param_out)
-       !
-       if (b_pro<256) then
-          dim_pro = bit_count(b_pro)
-          s = bit_sets(8*b_pro:8*b_pro+dim_pro-1)
-       else
-          dim_pro = countb(b_pro)
-          s = unpackb(b_pro,dim_pro)
-       end if
-       !
-       m1 = s(1)
-       m2 = s(2)
-       !
-       ! internal masses	
-       mass1 = -s_mat_c(m1,m1)/2._ki
-       mass2 = -s_mat_c(m2,m2)/2._ki
-       s12 = real(s_mat_c(m1,m2)+mass1+mass2,ki)
-       !
-       call cut_s(s12,mass1,mass2)
-       !
-       diffm = mass1-mass2
-       !	
-       mz1 = ( equal_real(real(mass1,ki), zero) .and. equal_real(aimag(mass1), zero) )
-       mz2 = ( equal_real(real(mass2,ki), zero) .and. equal_real(aimag(mass2), zero) )
-       sz = equal_real(s12,zero)
-       !
-       diffz = ( equal_real(real(diffm,ki), zero) .and. equal_real(aimag(diffm), zero) )
-       !
-       !
-       ! *************** massive cases, complex *******************************
-       ! **  (this function is only called with at least one non-zero mass)  **
-       ! **********************************************************************
-       !
-       if (  sz .and. (.not. mz1) .and. mz2 ) then
-          ! case p^2=0, m1 nonzero, m2=0
+      !
+      call tri_int2(z_param_ini,z_param_out)
+      !
+      if (b_pro<256) then
+        dim_pro = bit_count(b_pro)
+         s = bit_sets(8*b_pro:8*b_pro+dim_pro-1)
+      else
+         dim_pro = countb(b_pro)
+         s = unpackb(b_pro,dim_pro)
+      end if
+      !
+      m1 = s(1)
+      m2 = s(2)
+      !
+      ! internal masses	
+      mass1 = -s_mat_c(m1,m1)/2._ki
+      mass2 = -s_mat_c(m2,m2)/2._ki
+      s12 = real(s_mat_c(m1,m2)+mass1+mass2,ki)
+      !
+      call cut_s(s12,mass1,mass2)
+      !
+      diffm = mass1-mass2
+      !	
+      mz1 = ( equal_real(real(mass1,ki), zero,1000._ki) .and. equal_real(aimag(mass1), zero,1000._ki) )  ! 1000 added by MR 10.11.11
+      mz2 = ( equal_real(real(mass2,ki), zero,1000._ki) .and. equal_real(aimag(mass2), zero,1000._ki) )  ! 1000 added by MR 10.11.11
+      sz = equal_real(s12,zero)  ! 1000 added by MR 10.11.11
+      !
+      diffz = ( equal_real(real(diffm,ki), zero) .and. equal_real(aimag(diffm), zero) ) ! -- not altered by MR
+      !
+      ! implement the massless case, for any complex masses of order 10^-14 that come this far.
+      if ( (sz) .and. (mz1) .and. (mz2) ) then
+        !
+        f2p_cc(:) = 0._ki
+        !  (scaleless two-point function is zero)
+        !
+      elseif ( .not.(sz) .and. (mz1) .and. (mz2) ) then 
+	      ! massless case
+        !
+        if ( (z_param_out(1) == 0) .and. (z_param_out(2) == 0) ) then
           !
-          if ( (z_param_out(1) == 0) .and. (z_param_out(2) == 0) ) then
-             !
-             f2p_c = i20m1(mass1)
-             !   
-          else if ( (z_param_out(1) == 0) .and. (z_param_out(2) == 1) ) then
-             !
-             f2p_c(1) = 1._ki/2._ki
-             !
-             if (rat_or_tot_par%rat_selected) then
-                !
-                f2p_c(2) = 1._ki/4._ki
-                !
-             else if (rat_or_tot_par%tot_selected) then
-                !
-                f2p_c(2) =  -(-1._ki + 2._ki*z_log(mass1/mu2_scale_par,-1._ki))/4._ki
-                !
-             end if  ! end if rat or tot
-             !
-          else if ( (z_param_out(1) == 0) .and. (z_param_out(2) == 2) ) then
-             !
-             f2p_c(1) = 1._ki/2._ki
-             !
-             if (rat_or_tot_par%rat_selected) then
-                !
-                f2p_c(2) = 3._ki/4._ki
-                !
-             else if (rat_or_tot_par%tot_selected) then
-                !
-                f2p_c(2) = -(-3._ki + 2._ki*z_log(mass1/mu2_scale_par,-1._ki))/4._ki
-                !
-             end if  ! end if rat or tot
-             !
-          else  if ( (z_param_out(1) == 1) .and. (z_param_out(2) == 1) ) then
-             !
-             f2p_c(1) = 1._ki/3._ki
-             !
-             if (rat_or_tot_par%rat_selected) then
-                !
-                f2p_c(2) = 1._ki/9._ki
-                !
-             else if (rat_or_tot_par%tot_selected) then
-                !
-                f2p_c(2) = (1._ki - 3._ki*z_log(mass1/mu2_scale_par,-1._ki))/9._ki
-                !
-             end if  ! end if rat or tot
-             !
-          else  if ( (z_param_out(1) == 1) .and. (z_param_out(2) == 2) ) then
-             !
-             f2p_c(1) = 1._ki/6._ki
-             !
-             if (rat_or_tot_par%rat_selected) then
-                !
-                f2p_c(2) = 5._ki/36._ki
-                !
-             else if (rat_or_tot_par%tot_selected) then
-                !
-                f2p_c(2) =  (5._ki - 6._ki*z_log(mass1/mu2_scale_par,-1._ki))/36._ki
-                !
-             end if  ! end if rat or tot
-             !
-          else  if ( (z_param_out(1) == 2) .and. (z_param_out(2) == 2) ) then
-             !
-             f2p_c(1) = 1._ki/3._ki
-             !
-             if (rat_or_tot_par%rat_selected) then
-                !
-                f2p_c(2) = 11._ki/18._ki
-                !
-             else if (rat_or_tot_par%tot_selected) then
-                !
-                f2p_c(2) = (11._ki - 6._ki*z_log(mass1/mu2_scale_par,-1._ki))/18._ki
-                !
-             end if  ! end if rat or tot
-             !
-          end if  ! end test value of z1,z2
+          f2p_cc(1) = 1._ki
+          f2p_cc(2) = 0._ki
           !
-          ! ******************
-       else if (  sz .and. mz1 .and. (.not. mz2) ) then
-          ! case p^2=0, m2 nonzero, m1=0
+          if (rat_or_tot_par%tot_selected) then
+            !
+            f2p_cc(3) = 2._ki-real(z_log(-s12/mu2_scale_par,-1._ki))
+            f2p_cc(4) = -aimag(z_log(-s12/mu2_scale_par,-1._ki))
+            !
+          else if (rat_or_tot_par%rat_selected) then
+            !
+            f2p_cc(3) = 2._ki
+            f2p_cc(4) = 0._ki
+            !
+          end if
           !
-          if ( (z_param_out(1) == 0) .and. (z_param_out(2) == 0) ) then
-             !
-             f2p_c = i20m1(mass2)
-             !   
-          else  if ( (z_param_out(1) == 0) .and. (z_param_out(2) == 1) ) then 
-             !
-             f2p_c(1) = 1._ki/2._ki
-             !
-             if (rat_or_tot_par%rat_selected) then
-                !
-                f2p_c(2) = 3._ki/4._ki
-                !
-             else if (rat_or_tot_par%tot_selected) then
-                !
-                f2p_c(2) = -(-3._ki + 2._ki*z_log(mass2/mu2_scale_par,-1._ki))/4._ki
-                !
-             end if  ! end if rat or tot
-             !
-          else  if ( (z_param_out(1) == 0) .and. (z_param_out(2) == 2) ) then
-             !
-             f2p_c(1) = 1._ki/2._ki
-             !
-             if (rat_or_tot_par%rat_selected) then
-                !
-                f2p_c(2) = 1._ki/4._ki
-                !
-             else if (rat_or_tot_par%tot_selected) then
-                !
-                f2p_c(2) = -(-1._ki + 2._ki*z_log(mass2/mu2_scale_par,-1._ki))/4._ki
-                !
-             end if  ! end if rat or tot
-             !
-          else  if ( (z_param_out(1) == 1) .and. (z_param_out(2) == 1) ) then
-             !
-             f2p_c(1) = 1._ki/3._ki
-             !
-             if (rat_or_tot_par%rat_selected) then
-                !
-                f2p_c(2) = 11._ki/18._ki
-                !
-             else if (rat_or_tot_par%tot_selected) then
-                !
-                f2p_c(2) =  (11._ki - 6._ki*z_log(mass2/mu2_scale_par,-1._ki))/18._ki
-                !
-             end if  ! end if rat or tot
-             !
-          else  if ( (z_param_out(1) == 1) .and. (z_param_out(2) == 2) ) then
-             !
-             f2p_c(1) = 1._ki/6._ki
-             !
-             if (rat_or_tot_par%rat_selected) then
-                !
-                f2p_c(2) = 5._ki/36._ki
-                !
-             else if (rat_or_tot_par%tot_selected) then
-                !
-                f2p_c(2) = (5._ki - 6._ki*z_log(mass2/mu2_scale_par,-1._ki))/36._ki
-                !
-             end if  ! end if rat or tot
-             !      
-          else  if ( (z_param_out(1) == 2) .and. (z_param_out(2) == 2) ) then
-             !
-             f2p_c(1) = 1._ki/3._ki
-             !
-             if (rat_or_tot_par%rat_selected) then
-                !
-                f2p_c(2) = 1._ki/9._ki
-                !
-             else if (rat_or_tot_par%tot_selected) then
-                !
-                f2p_c(2) =  (1 - 3*z_log(mass2/mu2_scale_par,-1._ki))/9._ki
-                !
-             end if  ! end if rat or tot
-             !
-          end if  ! end test value of z1,z2
+        else if ( (z_param_out(1) == 0) .and. (z_param_out(2) /= 0) ) then
           !
-          ! ******************
-          ! ** eq. (A.10) ****
+          f2p_cc(1) = 1._ki/2._ki
+          f2p_cc(2) = 0._ki
           !
-       else if (  sz .and. (.not. mz1) .and. diffz ) then 
-          ! case p^2=0, m1 nonzero, m2=m1
+          if (rat_or_tot_par%tot_selected) then
+            !
+            f2p_cc(3) = 1._ki-real(z_log(-s12/mu2_scale_par,-1._ki))/2._ki
+            f2p_cc(4) = -aimag(z_log(-s12/mu2_scale_par,-1._ki))/2._ki
+            !
+          else if (rat_or_tot_par%rat_selected) then
+            !
+            f2p_cc(3) = 1._ki
+            f2p_cc(4) = 0._ki
+            !
+          end if
           !
-          if ( (z_param_out(1) == 0) .and. (z_param_out(2) == 0) ) then
-             !
-             f2p_c = f2p0m_1mi(mass1,0,0)
-             !   
-          else  if ( (z_param_out(1) == 0) .and. (z_param_out(2) == 1) ) then
-             !
-             f2p_c = f2p0m_1mi(mass1,0,1)
-             !
-          else  if ( (z_param_out(1) == 0) .and. (z_param_out(2) == 2) ) then
-             !
-             f2p_c = f2p0m_1mi(mass1,0,2)
-             !
-          else  if ( (z_param_out(1) == 1) .and. (z_param_out(2) == 1) ) then
-             !
-             f2p_c = f2p0m_1mi(mass1,1,1)
-             !
-          else  if ( (z_param_out(1) == 1) .and. (z_param_out(2) == 2) ) then
-             !
-             f2p_c = f2p0m_1mi(mass1,1,2)
-             !
-          else  if ( (z_param_out(1) == 2) .and. (z_param_out(2) == 2) ) then
-             !
-             f2p_c = f2p0m_1mi(mass1,2,2)
-             !
-          end if  ! end test value of z1,z2
-          !    
-          ! ******************
-          ! ** eq. (A.8) ****
-       else if (  sz .and. (.not. mz1) .and. (.not. mz2)  .and. (.not. diffz) ) then
-          ! case p^2=0, m1 nonzero, m2 nonzero, m2 NOT=m1
+        else if ( (z_param_out(1) /= 0) .and. (z_param_out(2) /= 0) ) then
           !
-          if ( (z_param_out(1) == 0) .and. (z_param_out(2) == 0) ) then
-             !
-             f2p_c = f2p0m_m1m2(mass1,mass2,0,0)
-             !   
-          else  if ( (z_param_out(1) == 0) .and. (z_param_out(2) == 1) ) then
-             !
-             f2p_c = f2p0m_m1m2(mass1,mass2,0,1)
-             !
-          else  if ( (z_param_out(1) == 0) .and. (z_param_out(2) == 2) ) then
-             !
-             f2p_c = f2p0m_m1m2(mass1,mass2,0,2)
-             !
-          else  if ( (z_param_out(1) == 1) .and. (z_param_out(2) == 1) ) then
-             !
-             f2p_c = f2p0m_m1m2(mass1,mass2,1,1)
-             !
-          else  if ( (z_param_out(1) == 1) .and. (z_param_out(2) == 2) ) then
-             !
-             f2p_c = f2p0m_m1m2(mass1,mass2,1,2)
-             !
-          else  if ( (z_param_out(1) == 2) .and. (z_param_out(2) == 2) ) then
-             !
-             f2p_c = f2p0m_m1m2(mass1,mass2,2,2)
-             !
-          end if  ! end test value of z1,z2
+          if (z_param_out(1) == z_param_out(2)) then
+            !
+            f2p_cc(1) = 1._ki/3._ki
+            f2p_cc(2) = 0._ki
+            !
+            if (rat_or_tot_par%tot_selected) then
+              !
+              f2p_cc(3) = 13._ki/18._ki-real(z_log(-s12/mu2_scale_par,-1._ki))/3._ki
+              f2p_cc(4) = -aimag(z_log(-s12/mu2_scale_par,-1._ki))/3._ki
+              !
+            else if (rat_or_tot_par%rat_selected) then
+              !
+              f2p_cc(3) = 13._ki/18._ki
+              f2p_cc(4) = 0._ki
+              !
+            end if
+            !
+          else
+            !
+            f2p_cc(1) = 1._ki/6._ki
+            f2p_cc(2) = 0._ki
+            !
+            if (rat_or_tot_par%tot_selected) then
+              !
+              f2p_cc(3) = 5._ki/18._ki-real(z_log(-s12/mu2_scale_par,-1._ki),ki)/6._ki
+              f2p_cc(4) = -aimag(z_log(-s12/mu2_scale_par,-1._ki))/6._ki
+              !
+            else if (rat_or_tot_par%rat_selected) then
+              !
+              f2p_cc(3) = 5._ki/18._ki
+              f2p_cc(4) = 0._ki
+              !
+            end if  ! end if rat or tot
+            !
+          end if ! end if z1==z2
           !
-          ! ************ now case s12 nonzero **********************    
+        end if  ! end test value of z1,z2
+        ! 
+        f2p_c(1) = f2p_cc(1) + i_ * f2p_cc(2)
+        f2p_c(2) = f2p_cc(3) + i_ * f2p_cc(4)
+        !
+        !
+        ! *************** massive cases, complex *******************************
+        ! **  (this function is only called with at least one non-zero mass)  **
+        ! **********************************************************************
+        !
+      else if (  sz .and. (.not. mz1) .and. mz2 ) then
+        ! case p^2=0, m1 nonzero, m2=0
+        !
+        if ( (z_param_out(1) == 0) .and. (z_param_out(2) == 0) ) then
           !
-       else if (  (.not. sz) .and. mz1 .and. (.not.mz2) ) then
-          ! case  p^2 nonzero, m1=0, m2 nonzero
-          !
-          i2sonem=i2sm1(s12,mass2)
-          !
-          if ( (z_param_out(1) == 0) .and. (z_param_out(2) == 0) ) then
-             !
-             f2p_c = i2sonem
-             !
-          else if ( (z_param_out(1) == 0) .and. (z_param_out(2) == 1) ) then
-             !
-             f2p_c(1) = 1._ki/2._ki
-             !     
-             if (rat_or_tot_par%rat_selected) then
-                !
-                f2p_c(2) =  -( mass2 - (mass2 + s12)*i2sonem(2) )/(2._ki*s12)
-                !
-             else if (rat_or_tot_par%tot_selected) then
-                !
-                f2p_c(2) = -(mass2 - (mass2 + s12)*i2sonem(2) - & 
-                     &           mass2*z_log(mass2/mu2_scale_par,-1._ki))/(2._ki*s12)
-                !
-             end if  ! end if rat or tot
-             !
-          else if ( (z_param_out(1) == 0) .and. (z_param_out(2) == 2) ) then
-             !
-             f2p_c(1) = 1._ki/2._ki
-             !     
-             if (rat_or_tot_par%rat_selected) then
-                !
-                f2p_c(2) =  -((mass2 - s12)*i2sonem(2) - mass2)/(2._ki*s12)
-                !
-             else if (rat_or_tot_par%tot_selected) then
-                !
-                f2p_c(2) = -((mass2 - s12)*i2sonem(2) + & 
-                     &           mass2*(-1._ki + z_log(mass2/mu2_scale_par,-1._ki)))/(2._ki*s12)
-                !
-             end if  ! end if rat or tot
-             !
-          else if ( (z_param_out(1) == 1) .and. (z_param_out(2) == 1) ) then
-             !	
-             f2p_c(1) = 1._ki/3._ki
-             !
-             ratpart =  (-6._ki*mass2**2 - 9._ki*mass2*s12 + s12**2 + &
-                  &       6._ki*(mass2**2 + mass2*s12 + s12**2)*i2sonem(2))/(18._ki*s12**2)
-             !
-             if (rat_or_tot_par%rat_selected) then
-                !
-                f2p_c(2) = ratpart
-                !
-             else if (rat_or_tot_par%tot_selected) then !!!checked!!!
-                !
-                f2p_c(2) = ratpart + mass2*(mass2 + s12)* &
-                     &         z_log(mass2/mu2_scale_par,-1._ki)/(3._ki*s12**2)
-                !
-             end if  ! end if rat or tot	       
-             !
-          else if ( (z_param_out(1) == 1) .and. (z_param_out(2) == 2) ) then
-             !
-             f2p_c(1) = 1._ki/6._ki
-             !    
-             ratpart =  (6._ki*mass2**2 - s12**2 +   &
-                  &      3._ki*(-2._ki*mass2**2 + mass2*s12 + s12**2)*i2sonem(2) )/(18._ki*s12**2)
-             !
-             if (rat_or_tot_par%rat_selected) then
-                !
-                f2p_c(2) = ratpart
-                !
-             else if (rat_or_tot_par%tot_selected) then
-                !
-                f2p_c(2) = ratpart + mass2*(-2._ki*mass2 + s12)* &
-                     &         z_log(mass2/mu2_scale_par,-1._ki)/(6._ki*s12**2)
-                !
-             end if  ! end if rat or tot	               
-             !   
-          else if ( (z_param_out(1) == 2) .and. (z_param_out(2) == 2) ) then
-             !
-             f2p_c(1) = 1._ki/3._ki
-             !     
-             ratpart =  (-6._ki*mass2**2 + 9._ki*mass2*s12 + s12**2 + &
-                  &       6._ki*(mass2 - s12)**2*i2sonem(2) )/(18._ki*s12**2)
-             !
-             if (rat_or_tot_par%rat_selected) then
-                !
-                f2p_c(2) = ratpart
-                !
-             else if (rat_or_tot_par%tot_selected) then
-                !
-                f2p_c(2) = ratpart + mass2*(mass2 - 2._ki*s12)* & 
-                     &         z_log(mass2/mu2_scale_par,-1._ki)/(3._ki*s12**2)
-                !
-             end if  ! end if rat or tot        
-             !
-          end if  ! end test value of z1,z2
-          !
-          ! ******************
-          !
-       else if ( (.not. sz) .and. (.not. mz1) .and. mz2 ) then
-          ! case p^2 nonzero, m1 nonzero, m2=0
-          !
-          i2sonem = i2sm1(s12,mass1)
-          !
-          if ( (z_param_out(1) == 0) .and. (z_param_out(2) == 0) ) then
-             !
-             f2p_c = i2sonem
-             !
-          else  if ( (z_param_out(1) == 0) .and. (z_param_out(2) == 1) ) then
-             !
-             f2p_c(1) = 1._ki/2._ki
-             !     
-             ratpart =  -((mass1 - s12)*i2sonem(2) - mass1)/(2._ki*s12)
-             !
-             if (rat_or_tot_par%rat_selected) then
-                !
-                f2p_c(2) = ratpart
-                !
-             else if (rat_or_tot_par%tot_selected) then
-                !
-                f2p_c(2) = ratpart - mass1*z_log(mass1/mu2_scale_par,-1._ki)/(2._ki*s12)
-                !
-             end if  ! end if rat or tot     
-             !
-          else  if ( (z_param_out(1) == 0) .and. (z_param_out(2) == 2) ) then
-             !
-             f2p_c(1) = 1._ki/2._ki
-             !     
-             ratpart =  -( mass1 - (mass1 + s12)*i2sonem(2) )/(2._ki*s12)
-             !
-             if (rat_or_tot_par%rat_selected) then
-                !
-                f2p_c(2) = ratpart
-                !
-             else if (rat_or_tot_par%tot_selected) then
-                !
-                f2p_c(2) = ratpart + mass1*z_log(mass1/mu2_scale_par,-1._ki)/(2._ki*s12)
-                !
-             end if  ! end if rat or tot
-             !
-          else  if ( (z_param_out(1) == 1) .and. (z_param_out(2) == 1) ) then
-             !
-             f2p_c(1) = 1._ki/3._ki
-             !     
-             ratpart = (-6._ki*mass1**2 + 9._ki*mass1*s12 + s12**2 + & 
-                  &      6._ki*(mass1 - s12)**2*i2sonem(2) )/(18._ki*s12**2)
-             !
-             if (rat_or_tot_par%rat_selected) then
-                !
-                f2p_c(2) = ratpart
-                !
-             else if (rat_or_tot_par%tot_selected) then
-                !
-                f2p_c(2) = ratpart + mass1*(mass1 - 2._ki*s12)* &
-                     &         z_log(mass1/mu2_scale_par,-1._ki)/(3._ki*s12**2)
-                !
-             end if  ! end if rat or tot        
-             !
-          else  if ( (z_param_out(1) == 1) .and. (z_param_out(2) == 2) ) then
-             !
-             f2p_c(1) = 1._ki/6._ki
-             !   
-             ratpart =  (6._ki*mass1**2 - s12**2 +   &
-                  &      3._ki*(-2._ki*mass1**2 + mass1*s12 + s12**2)*i2sonem(2) )/(18._ki*s12**2)
-             !
-             if (rat_or_tot_par%rat_selected) then
-                !
-                f2p_c = ratpart
-                !
-             else if (rat_or_tot_par%tot_selected) then
-                !
-                f2p_c(2) = ratpart + mass1*(-2._ki*mass1 + s12)* &
-                     &         z_log(mass1/mu2_scale_par,-1._ki)/(6._ki*s12**2)
-                !
-             end if  ! end if rat or tot	        
-             !        
-             !   
-          else  if ( (z_param_out(1) == 2) .and. (z_param_out(2) == 2) ) then
-             !
-             f2p_c(1) = 1._ki/3._ki
-             !     
-             ratpart = (-6._ki*mass1**2 - 9._ki*mass1*s12 + s12**2 + &
-                  &      6._ki*(mass1**2 + mass1*s12 + s12**2)*i2sonem(2))/(18._ki*s12**2)
-             !
-             if (rat_or_tot_par%rat_selected) then
-                !
-                f2p_c(2) = ratpart
-                !
-             else if (rat_or_tot_par%tot_selected) then
-                !
-                f2p_c(2) = ratpart + mass1*(mass1 + s12)* &
-                     &         z_log(mass1/mu2_scale_par,-1._ki)/(3._ki*s12**2)
-                !
-             end if  ! end if rat or tot	       
-             !
-          end if  ! end test value of z1,z2
-          !
-          ! ******************
-          !
-       else if (  (.not. sz) .and. (.not. mz1) .and. (.not. mz2) ) then
-          ! case p^2 nonzero, m1 nonzero, m2 nonzero, eq.(A.5)
-          ! includes case m1=m2
+          f2p_c = i20m1(mass1)
           !   
-          if ( (z_param_out(1) == 0) .and. (z_param_out(2) == 0) ) then
-             !
-             f2p_c = f2p_m1m2(s12,mass1,mass2,0,0)
-             !
-          else  if ( (z_param_out(1) == 0) .and. (z_param_out(2) == 1) ) then
-             !
-             f2p_c = f2p_m1m2(s12,mass1,mass2,0,1)
-             !
-          else  if ( (z_param_out(1) == 0) .and. (z_param_out(2) == 2) ) then
-             !
-             f2p_c = f2p_m1m2(s12,mass1,mass2,0,2)
-             !
-          else  if ( (z_param_out(1) == 1) .and. (z_param_out(2) == 1) ) then
-             !
-             f2p_c = f2p_m1m2(s12,mass1,mass2,1,1)
-             !
-          else  if ( (z_param_out(1) == 1) .and. (z_param_out(2) == 2) ) then
-             !
-             f2p_c = f2p_m1m2(s12,mass1,mass2,1,2)
-             !
-          else  if ( (z_param_out(1) == 2) .and. (z_param_out(2) == 2) ) then
-             !
-             f2p_c = f2p_m1m2(s12,mass1,mass2,2,2)
-             !
-          end if  ! end test value of z1,z2
-          ! ******************************************************************
-	  !
-       else 
+        else if ( (z_param_out(1) == 0) .and. (z_param_out(2) == 1) ) then
           !
-          tab_erreur_par(1)%a_imprimer = .true.
-          tab_erreur_par(1)%chaine = 'something wrong with arguments of two-point function f2p'
-          tab_erreur_par(2)%a_imprimer = .true.
-          tab_erreur_par(2)%chaine = 's12= %f0'
-          tab_erreur_par(2)%arg_real = s12
-          tab_erreur_par(3)%a_imprimer = .true.
-          tab_erreur_par(3)%chaine = 'm1s= %f0'
-          tab_erreur_par(3)%arg_real = mass1
-          tab_erreur_par(4)%a_imprimer = .true.
-          tab_erreur_par(4)%chaine = 'm2s= %f0'
-          tab_erreur_par(4)%arg_real = mass2
+          f2p_c(1) = 1._ki/2._ki
           !
-          call catch_exception(0)
+          if (rat_or_tot_par%rat_selected) then
+            !
+            f2p_c(2) = 1._ki/4._ki
+            !
+          else if (rat_or_tot_par%tot_selected) then
+            !
+            f2p_c(2) =  -(-1._ki + 2._ki*z_log(mass1/mu2_scale_par,-1._ki))/4._ki
+            !
+          end if  ! end if rat or tot
           !
-       end if  ! end if s12,m1,m2 eq. zero
-       !
+        else if ( (z_param_out(1) == 0) .and. (z_param_out(2) == 2) ) then
+          !
+          f2p_c(1) = 1._ki/2._ki
+          !
+          if (rat_or_tot_par%rat_selected) then
+            !
+            f2p_c(2) = 3._ki/4._ki
+            !
+          else if (rat_or_tot_par%tot_selected) then
+            !
+            f2p_c(2) = -(-3._ki + 2._ki*z_log(mass1/mu2_scale_par,-1._ki))/4._ki
+            !
+          end if  ! end if rat or tot
+          !
+        else  if ( (z_param_out(1) == 1) .and. (z_param_out(2) == 1) ) then
+          !
+          f2p_c(1) = 1._ki/3._ki
+          !
+          if (rat_or_tot_par%rat_selected) then
+            !
+            f2p_c(2) = 1._ki/9._ki
+            !
+          else if (rat_or_tot_par%tot_selected) then
+            !
+            f2p_c(2) = (1._ki - 3._ki*z_log(mass1/mu2_scale_par,-1._ki))/9._ki
+            !
+          end if  ! end if rat or tot
+          !
+        else  if ( (z_param_out(1) == 1) .and. (z_param_out(2) == 2) ) then
+          !
+          f2p_c(1) = 1._ki/6._ki
+          !
+          if (rat_or_tot_par%rat_selected) then
+            !
+            f2p_c(2) = 5._ki/36._ki
+            !
+          else if (rat_or_tot_par%tot_selected) then
+            !
+            f2p_c(2) =  (5._ki - 6._ki*z_log(mass1/mu2_scale_par,-1._ki))/36._ki
+            !
+          end if  ! end if rat or tot
+          !
+        else  if ( (z_param_out(1) == 2) .and. (z_param_out(2) == 2) ) then
+          !
+          f2p_c(1) = 1._ki/3._ki
+          !
+          if (rat_or_tot_par%rat_selected) then
+            !
+            f2p_c(2) = 11._ki/18._ki
+            !
+          else if (rat_or_tot_par%tot_selected) then
+            !
+            f2p_c(2) = (11._ki - 6._ki*z_log(mass1/mu2_scale_par,-1._ki))/18._ki
+            !
+          end if  ! end if rat or tot
+          !
+        end if  ! end test value of z1,z2
+        !
+        ! ******************
+      else if (  sz .and. mz1 .and. (.not. mz2) ) then
+        ! case p^2=0, m2 nonzero, m1=0
+        !
+        if ( (z_param_out(1) == 0) .and. (z_param_out(2) == 0) ) then
+          !
+          f2p_c = i20m1(mass2)
+          !   
+        else  if ( (z_param_out(1) == 0) .and. (z_param_out(2) == 1) ) then 
+          !
+          f2p_c(1) = 1._ki/2._ki
+          !
+          if (rat_or_tot_par%rat_selected) then
+            !
+            f2p_c(2) = 3._ki/4._ki
+            !
+          else if (rat_or_tot_par%tot_selected) then
+            !
+            f2p_c(2) = -(-3._ki + 2._ki*z_log(mass2/mu2_scale_par,-1._ki))/4._ki
+            !
+          end if  ! end if rat or tot
+          !
+        else  if ( (z_param_out(1) == 0) .and. (z_param_out(2) == 2) ) then
+          !
+          f2p_c(1) = 1._ki/2._ki
+          !
+          if (rat_or_tot_par%rat_selected) then
+            !
+            f2p_c(2) = 1._ki/4._ki
+            !
+          else if (rat_or_tot_par%tot_selected) then
+            !
+            f2p_c(2) = -(-1._ki + 2._ki*z_log(mass2/mu2_scale_par,-1._ki))/4._ki
+            !
+          end if  ! end if rat or tot
+          !
+        else  if ( (z_param_out(1) == 1) .and. (z_param_out(2) == 1) ) then
+          !
+          f2p_c(1) = 1._ki/3._ki
+          !
+          if (rat_or_tot_par%rat_selected) then
+            !
+            f2p_c(2) = 11._ki/18._ki
+            !
+          else if (rat_or_tot_par%tot_selected) then
+            !
+            f2p_c(2) =  (11._ki - 6._ki*z_log(mass2/mu2_scale_par,-1._ki))/18._ki
+            !
+          end if  ! end if rat or tot
+          !
+        else  if ( (z_param_out(1) == 1) .and. (z_param_out(2) == 2) ) then
+          !
+          f2p_c(1) = 1._ki/6._ki
+          !
+          if (rat_or_tot_par%rat_selected) then
+            !
+            f2p_c(2) = 5._ki/36._ki
+            !
+          else if (rat_or_tot_par%tot_selected) then
+            !
+            f2p_c(2) = (5._ki - 6._ki*z_log(mass2/mu2_scale_par,-1._ki))/36._ki
+            !
+          end if  ! end if rat or tot
+          !      
+        else  if ( (z_param_out(1) == 2) .and. (z_param_out(2) == 2) ) then
+          !
+          f2p_c(1) = 1._ki/3._ki
+          !
+          if (rat_or_tot_par%rat_selected) then
+            !
+            f2p_c(2) = 1._ki/9._ki
+            !
+          else if (rat_or_tot_par%tot_selected) then
+            !
+            f2p_c(2) =  (1 - 3*z_log(mass2/mu2_scale_par,-1._ki))/9._ki
+            !
+          end if  ! end if rat or tot
+          !
+        end if  ! end test value of z1,z2
+        !
+        ! ******************
+        ! ** eq. (A.10) ****
+        !
+      else if (  sz .and. (.not. mz1) .and. diffz ) then 
+        ! case p^2=0, m1 nonzero, m2=m1
+        !
+        if ( (z_param_out(1) == 0) .and. (z_param_out(2) == 0) ) then
+          !
+          f2p_c = f2p0m_1mi(mass1,0,0)
+          !   
+        else  if ( (z_param_out(1) == 0) .and. (z_param_out(2) == 1) ) then
+          !
+          f2p_c = f2p0m_1mi(mass1,0,1)
+          !
+        else  if ( (z_param_out(1) == 0) .and. (z_param_out(2) == 2) ) then
+          !
+          f2p_c = f2p0m_1mi(mass1,0,2)
+          !
+        else  if ( (z_param_out(1) == 1) .and. (z_param_out(2) == 1) ) then
+          !
+          f2p_c = f2p0m_1mi(mass1,1,1)
+          !
+        else  if ( (z_param_out(1) == 1) .and. (z_param_out(2) == 2) ) then
+          !
+          f2p_c = f2p0m_1mi(mass1,1,2)
+          !
+        else  if ( (z_param_out(1) == 2) .and. (z_param_out(2) == 2) ) then
+          !
+          f2p_c = f2p0m_1mi(mass1,2,2)
+          !
+        end if  ! end test value of z1,z2
+        !    
+        ! ******************
+        ! ** eq. (A.8) ****
+      else if (  sz .and. (.not. mz1) .and. (.not. mz2)  .and. (.not. diffz) ) then
+        ! case p^2=0, m1 nonzero, m2 nonzero, m2 NOT=m1
+        !
+        if ( (z_param_out(1) == 0) .and. (z_param_out(2) == 0) ) then
+          !
+          f2p_c = f2p0m_m1m2(mass1,mass2,0,0)
+          !   
+        else  if ( (z_param_out(1) == 0) .and. (z_param_out(2) == 1) ) then
+          !
+          f2p_c = f2p0m_m1m2(mass1,mass2,0,1)
+          !
+        else  if ( (z_param_out(1) == 0) .and. (z_param_out(2) == 2) ) then
+          !
+          f2p_c = f2p0m_m1m2(mass1,mass2,0,2)
+          !
+        else  if ( (z_param_out(1) == 1) .and. (z_param_out(2) == 1) ) then
+          !
+          f2p_c = f2p0m_m1m2(mass1,mass2,1,1)
+          !
+        else  if ( (z_param_out(1) == 1) .and. (z_param_out(2) == 2) ) then
+          !
+          f2p_c = f2p0m_m1m2(mass1,mass2,1,2)
+          !
+        else  if ( (z_param_out(1) == 2) .and. (z_param_out(2) == 2) ) then
+          !
+          f2p_c = f2p0m_m1m2(mass1,mass2,2,2)
+          !
+        end if  ! end test value of z1,z2
+        !
+        ! ************ now case s12 nonzero **********************    
+        !
+      else if (  (.not. sz) .and. mz1 .and. (.not.mz2) ) then
+        ! case  p^2 nonzero, m1=0, m2 nonzero
+        !
+        i2sonem=i2sm1(s12,mass2)
+        !
+        if ( (z_param_out(1) == 0) .and. (z_param_out(2) == 0) ) then
+          !
+          f2p_c = i2sonem
+          !
+        else if ( (z_param_out(1) == 0) .and. (z_param_out(2) == 1) ) then
+          !
+          f2p_c(1) = 1._ki/2._ki
+          !     
+          if (rat_or_tot_par%rat_selected) then
+            !
+            f2p_c(2) =  -( mass2 - (mass2 + s12)*i2sonem(2) )/(2._ki*s12)
+            !
+          else if (rat_or_tot_par%tot_selected) then
+            !
+            f2p_c(2) = -(mass2 - (mass2 + s12)*i2sonem(2) - & 
+                 &           mass2*z_log(mass2/mu2_scale_par,-1._ki))/(2._ki*s12)
+            !
+          end if  ! end if rat or tot
+          !
+        else if ( (z_param_out(1) == 0) .and. (z_param_out(2) == 2) ) then
+          !
+          f2p_c(1) = 1._ki/2._ki
+          !     
+          if (rat_or_tot_par%rat_selected) then
+            !
+            f2p_c(2) =  -((mass2 - s12)*i2sonem(2) - mass2)/(2._ki*s12)
+            !
+          else if (rat_or_tot_par%tot_selected) then
+            !
+            f2p_c(2) = -((mass2 - s12)*i2sonem(2) + & 
+               &           mass2*(-1._ki + z_log(mass2/mu2_scale_par,-1._ki)))/(2._ki*s12)
+            !
+          end if  ! end if rat or tot
+          !
+        else if ( (z_param_out(1) == 1) .and. (z_param_out(2) == 1) ) then
+          !	
+          f2p_c(1) = 1._ki/3._ki
+          !
+          ratpart =  (-6._ki*mass2**2 - 9._ki*mass2*s12 + s12**2 + &
+              &       6._ki*(mass2**2 + mass2*s12 + s12**2)*i2sonem(2))/(18._ki*s12**2)
+          !
+          if (rat_or_tot_par%rat_selected) then
+            !
+            f2p_c(2) = ratpart
+            !
+          else if (rat_or_tot_par%tot_selected) then !!!checked!!!
+            !
+            f2p_c(2) = ratpart + mass2*(mass2 + s12)* &
+              &         z_log(mass2/mu2_scale_par,-1._ki)/(3._ki*s12**2)
+            !
+          end if  ! end if rat or tot	       
+          !
+        else if ( (z_param_out(1) == 1) .and. (z_param_out(2) == 2) ) then
+          !
+          f2p_c(1) = 1._ki/6._ki
+          !    
+          ratpart =  (6._ki*mass2**2 - s12**2 +   &
+               &      3._ki*(-2._ki*mass2**2 + mass2*s12 + s12**2)*i2sonem(2) )/(18._ki*s12**2)
+          !
+          if (rat_or_tot_par%rat_selected) then
+            !
+            f2p_c(2) = ratpart
+            !
+          else if (rat_or_tot_par%tot_selected) then
+            !
+            f2p_c(2) = ratpart + mass2*(-2._ki*mass2 + s12)* &
+              &         z_log(mass2/mu2_scale_par,-1._ki)/(6._ki*s12**2)
+            !
+          end if  ! end if rat or tot	               
+          !   
+        else if ( (z_param_out(1) == 2) .and. (z_param_out(2) == 2) ) then
+          !
+          f2p_c(1) = 1._ki/3._ki
+          !     
+          ratpart =  (-6._ki*mass2**2 + 9._ki*mass2*s12 + s12**2 + &
+               &       6._ki*(mass2 - s12)**2*i2sonem(2) )/(18._ki*s12**2)
+          !
+          if (rat_or_tot_par%rat_selected) then
+            !
+            f2p_c(2) = ratpart
+            !
+          else if (rat_or_tot_par%tot_selected) then
+            !
+            f2p_c(2) = ratpart + mass2*(mass2 - 2._ki*s12)* & 
+             &         z_log(mass2/mu2_scale_par,-1._ki)/(3._ki*s12**2)
+            !
+          end if  ! end if rat or tot        
+          !
+        end if  ! end test value of z1,z2
+        !
+        ! ******************
+        !
+      else if ( (.not. sz) .and. (.not. mz1) .and. mz2 ) then
+        ! case p^2 nonzero, m1 nonzero, m2=0
+        !
+        i2sonem = i2sm1(s12,mass1)
+        !
+        if ( (z_param_out(1) == 0) .and. (z_param_out(2) == 0) ) then
+          !
+          f2p_c = i2sonem
+          !
+        else  if ( (z_param_out(1) == 0) .and. (z_param_out(2) == 1) ) then
+          !
+          f2p_c(1) = 1._ki/2._ki
+          !     
+          ratpart =  -((mass1 - s12)*i2sonem(2) - mass1)/(2._ki*s12)
+          !
+          if (rat_or_tot_par%rat_selected) then
+            !
+            f2p_c(2) = ratpart
+            !
+          else if (rat_or_tot_par%tot_selected) then
+            !
+            f2p_c(2) = ratpart - mass1*z_log(mass1/mu2_scale_par,-1._ki)/(2._ki*s12)
+            !
+          end if  ! end if rat or tot     
+          !
+        else  if ( (z_param_out(1) == 0) .and. (z_param_out(2) == 2) ) then
+          !
+          f2p_c(1) = 1._ki/2._ki
+          !     
+          ratpart =  -( mass1 - (mass1 + s12)*i2sonem(2) )/(2._ki*s12)
+          !
+          if (rat_or_tot_par%rat_selected) then
+            !
+            f2p_c(2) = ratpart
+            !
+          else if (rat_or_tot_par%tot_selected) then
+            !
+            f2p_c(2) = ratpart + mass1*z_log(mass1/mu2_scale_par,-1._ki)/(2._ki*s12)
+            !
+          end if  ! end if rat or tot
+          !
+        else  if ( (z_param_out(1) == 1) .and. (z_param_out(2) == 1) ) then
+          !
+          f2p_c(1) = 1._ki/3._ki
+          !     
+          ratpart = (-6._ki*mass1**2 + 9._ki*mass1*s12 + s12**2 + & 
+               &      6._ki*(mass1 - s12)**2*i2sonem(2) )/(18._ki*s12**2)
+          !
+          if (rat_or_tot_par%rat_selected) then
+            !
+            f2p_c(2) = ratpart
+            !
+          else if (rat_or_tot_par%tot_selected) then
+            !
+            f2p_c(2) = ratpart + mass1*(mass1 - 2._ki*s12)* &
+              &         z_log(mass1/mu2_scale_par,-1._ki)/(3._ki*s12**2)
+            !
+          end if  ! end if rat or tot        
+          !
+        else  if ( (z_param_out(1) == 1) .and. (z_param_out(2) == 2) ) then
+          !
+          f2p_c(1) = 1._ki/6._ki
+          !   
+          ratpart =  (6._ki*mass1**2 - s12**2 +   &
+               &      3._ki*(-2._ki*mass1**2 + mass1*s12 + s12**2)*i2sonem(2) )/(18._ki*s12**2)
+          !
+          if (rat_or_tot_par%rat_selected) then
+            !
+            f2p_c = ratpart
+            !
+          else if (rat_or_tot_par%tot_selected) then
+            !
+            f2p_c(2) = ratpart + mass1*(-2._ki*mass1 + s12)* &
+             &         z_log(mass1/mu2_scale_par,-1._ki)/(6._ki*s12**2)
+            !
+          end if  ! end if rat or tot	        
+          !        
+          !   
+        else  if ( (z_param_out(1) == 2) .and. (z_param_out(2) == 2) ) then
+          !
+          f2p_c(1) = 1._ki/3._ki
+          !     
+          ratpart = (-6._ki*mass1**2 - 9._ki*mass1*s12 + s12**2 + &
+               &      6._ki*(mass1**2 + mass1*s12 + s12**2)*i2sonem(2))/(18._ki*s12**2)
+          !
+          if (rat_or_tot_par%rat_selected) then
+            !
+            f2p_c(2) = ratpart
+            !
+          else if (rat_or_tot_par%tot_selected) then
+            !
+            f2p_c(2) = ratpart + mass1*(mass1 + s12)* &
+              &         z_log(mass1/mu2_scale_par,-1._ki)/(3._ki*s12**2)
+            !
+          end if  ! end if rat or tot	       
+          !
+        end if  ! end test value of z1,z2
+        !
+        ! ******************
+        !
+      else if (  (.not. sz) .and. (.not. mz1) .and. (.not. mz2) ) then
+        ! case p^2 nonzero, m1 nonzero, m2 nonzero, eq.(A.5)
+        ! includes case m1=m2
+        !   
+        if ( (z_param_out(1) == 0) .and. (z_param_out(2) == 0) ) then
+          !
+          f2p_c = f2p_m1m2(s12,mass1,mass2,0,0)
+          !
+        else  if ( (z_param_out(1) == 0) .and. (z_param_out(2) == 1) ) then
+          !
+          f2p_c = f2p_m1m2(s12,mass1,mass2,0,1)
+          !
+        else  if ( (z_param_out(1) == 0) .and. (z_param_out(2) == 2) ) then
+          !
+          f2p_c = f2p_m1m2(s12,mass1,mass2,0,2)
+          !
+        else  if ( (z_param_out(1) == 1) .and. (z_param_out(2) == 1) ) then
+          !
+          f2p_c = f2p_m1m2(s12,mass1,mass2,1,1)
+          !
+        else  if ( (z_param_out(1) == 1) .and. (z_param_out(2) == 2) ) then
+          !
+          f2p_c = f2p_m1m2(s12,mass1,mass2,1,2)
+          !
+        else  if ( (z_param_out(1) == 2) .and. (z_param_out(2) == 2) ) then
+          !
+          f2p_c = f2p_m1m2(s12,mass1,mass2,2,2)
+          !
+        end if  ! end test value of z1,z2
+        ! ******************************************************************
+        !
+      else 
+        !
+        tab_erreur_par(1)%a_imprimer = .true.
+        tab_erreur_par(1)%chaine = 'something wrong with arguments of two-point function f2p'
+        tab_erreur_par(2)%a_imprimer = .true.
+        tab_erreur_par(2)%chaine = 's12= %f0'
+        tab_erreur_par(2)%arg_real = s12
+        tab_erreur_par(3)%a_imprimer = .true.
+        tab_erreur_par(3)%chaine = 'm1s= %f0'
+        tab_erreur_par(3)%arg_real = mass1
+        tab_erreur_par(4)%a_imprimer = .true.
+        tab_erreur_par(4)%chaine = 'm2s= %f0'
+        tab_erreur_par(4)%arg_real = mass2
+        !
+        call catch_exception(0)
+        !
+      end if  ! end if s12,m1,m2 eq. zero
+      !
     end if  ! end if ( minval(z_param_ini) == -1 )
     !
   end function f2p_c
@@ -1491,9 +1570,9 @@ contains
     !
     call cut_s(s12, mass1, mass2)
     !
-    mz1 = equal_real(mass1, zero)
-    mz2 = equal_real(mass2, zero)
-    sz = equal_real(s12, zero)
+     mz1 = equal_real(mass1, zero,1000._ki)   ! 1000 added by MR 10.11.11
+     mz2 = equal_real(mass2, zero,1000._ki)   ! 1000 added by MR 10.11.11
+     sz = equal_real(s12, zero,1000._ki)   ! 1000 added by MR 10.11.11
     !
     !
     if ( (sz) .and. (mz1) .and. (mz2) ) then
@@ -1603,7 +1682,6 @@ contains
           !
        else  ! use expansion in (m2sq-m1sq) up to order 3
           !    
-          !   write(6,*) 'using expanded expression for B22, diffrm=',diffrm
           if (rat_or_tot_par%tot_selected) then
              !
              f2p_np2_rr(3) = (mass1 + mass2)*( -19._ki*mass1**2 + 8._ki*mass1*mass2 - mass2**2 + &
@@ -1756,12 +1834,12 @@ contains
     !
     call cut_s(s12, mass1, mass2)
     !
-    m1z = ( equal_real(real(mass1,ki), zero) .and. equal_real(aimag(mass1), zero) )
-    m2z = ( equal_real(real(mass2,ki), zero) .and. equal_real(aimag(mass2), zero) )
+     m1z = ( equal_real(real(mass1,ki), zero,1000._ki) .and. equal_real(aimag(mass1), zero,1000._ki) )   ! 1000 added by MR 10.11.11
+     m2z = ( equal_real(real(mass2,ki), zero,1000._ki) .and. equal_real(aimag(mass2), zero,1000._ki) )   ! 1000 added by MR 10.11.11
     !
-    sz = equal_real(s12,zero)
+     sz = equal_real(s12,zero,1000._ki)   ! 1000 added by MR 10.11.11
     !
-    diffz = equal_real(diffrm, zero) 
+    diffz = equal_real(diffrm, zero)  ! -- no 1000 put in
     !
     ! *************** massive cases, complex ************************
     ! ** (this function is called with at least one non-zero mass) **
