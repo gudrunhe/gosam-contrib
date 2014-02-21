@@ -31,6 +31,12 @@ else
 # nop
 endif
 
+if COMPILE_NINJA
+SUBDIRS+= ninja-1.0.0
+else
+# nop
+endif
+
 pkgconfigdir= $(libdir)/pkgconfig
 pkgconfig_DATA=samurai.pc
 
