@@ -1500,8 +1500,8 @@ end subroutine HResL2
 
       integer :: i,m,n,j1,j2,i1,i2,i3,i4,i5
       integer :: dicut5,dicut4,dicut3,mx,diff,nsol
-      complex(ki), dimension(10) :: dens2,dens3,dens4,dens5,xneval
-      complex(ki), dimension(10) :: resi5,resi4,resi3,known
+      complex(ki), dimension(15) :: dens2,dens3,dens4,dens5,xneval
+      complex(ki), dimension(15) :: resi5,resi4,resi3,known
       complex(ki), dimension(0:9) :: f2
       complex(ki) :: dens3t,dens4t,dens5t
       logical evalres
