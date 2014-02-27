@@ -79,9 +79,9 @@ PRE_UNINSTALL = :
 POST_UNINSTALL = :
 build_triplet = @build@
 host_triplet = @host@
-DIST_COMMON = $(srcdir)/Makefile.dep $(srcdir)/Makefile.in \
-	$(srcdir)/Makefile.am $(noinst_HEADERS) ChangeLog
-subdir = qcdloop-1.9
+DIST_COMMON = $(srcdir)/../../MakefileCommon.am $(srcdir)/Makefile.dep \
+	$(srcdir)/Makefile.in $(srcdir)/Makefile.am
+subdir = golem95-1.3.0/integrals/one_point
 ACLOCAL_M4 = $(top_srcdir)/aclocal.m4
 am__aclocal_m4_deps = $(top_srcdir)/m4/libtool.m4 \
 	$(top_srcdir)/m4/ltoptions.m4 $(top_srcdir)/m4/ltsugar.m4 \
@@ -92,6 +92,55 @@ am__configure_deps = $(am__aclocal_m4_deps) $(CONFIGURE_DEPENDENCIES) \
 mkinstalldirs = $(install_sh) -d
 CONFIG_CLEAN_FILES =
 CONFIG_CLEAN_VPATH_FILES =
+LTLIBRARIES = $(noinst_LTLIBRARIES)
+libgolem95_integrals_one_point_la_LIBADD =
+am_libgolem95_integrals_one_point_la_OBJECTS =  \
+	libgolem95_integrals_one_point_la-generic_function_1p.lo
+libgolem95_integrals_one_point_la_OBJECTS =  \
+	$(am_libgolem95_integrals_one_point_la_OBJECTS)
+AM_V_lt = $(am__v_lt_@AM_V@)
+am__v_lt_ = $(am__v_lt_@AM_DEFAULT_V@)
+am__v_lt_0 = --silent
+am__v_lt_1 = 
+libgolem95_integrals_one_point_la_LINK = $(LIBTOOL) $(AM_V_lt) \
+	--tag=FC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=link \
+	$(FCLD) $(libgolem95_integrals_one_point_la_FCFLAGS) \
+	$(FCFLAGS) $(AM_LDFLAGS) $(LDFLAGS) -o $@
+AM_V_P = $(am__v_P_@AM_V@)
+am__v_P_ = $(am__v_P_@AM_DEFAULT_V@)
+am__v_P_0 = false
+am__v_P_1 = :
+AM_V_GEN = $(am__v_GEN_@AM_V@)
+am__v_GEN_ = $(am__v_GEN_@AM_DEFAULT_V@)
+am__v_GEN_0 = @echo "  GEN     " $@;
+am__v_GEN_1 = 
+AM_V_at = $(am__v_at_@AM_V@)
+am__v_at_ = $(am__v_at_@AM_DEFAULT_V@)
+am__v_at_0 = @
+am__v_at_1 = 
+DEFAULT_INCLUDES = -I.@am__isrc@
+FCCOMPILE = $(FC) $(AM_FCFLAGS) $(FCFLAGS)
+LTFCCOMPILE = $(LIBTOOL) $(AM_V_lt) --tag=FC $(AM_LIBTOOLFLAGS) \
+	$(LIBTOOLFLAGS) --mode=compile $(FC) $(AM_FCFLAGS) $(FCFLAGS)
+AM_V_FC = $(am__v_FC_@AM_V@)
+am__v_FC_ = $(am__v_FC_@AM_DEFAULT_V@)
+am__v_FC_0 = @echo "  FC      " $@;
+am__v_FC_1 = 
+FCLD = $(FC)
+FCLINK = $(LIBTOOL) $(AM_V_lt) --tag=FC $(AM_LIBTOOLFLAGS) \
+	$(LIBTOOLFLAGS) --mode=link $(FCLD) $(AM_FCFLAGS) $(FCFLAGS) \
+	$(AM_LDFLAGS) $(LDFLAGS) -o $@
+AM_V_FCLD = $(am__v_FCLD_@AM_V@)
+am__v_FCLD_ = $(am__v_FCLD_@AM_DEFAULT_V@)
+am__v_FCLD_0 = @echo "  FCLD    " $@;
+am__v_FCLD_1 = 
+SOURCES = $(libgolem95_integrals_one_point_la_SOURCES)
+DIST_SOURCES = $(libgolem95_integrals_one_point_la_SOURCES)
+am__can_run_installinfo = \
+  case $$AM_UPDATE_INFO_DIR in \
+    n|no|NO) false;; \
+    *) (install-info --version) >/dev/null 2>&1;; \
+  esac
 am__vpath_adj_setup = srcdirstrip=`echo "$(srcdir)" | sed 's|.|.|g'`;
 am__vpath_adj = case $$p in \
     $(srcdir)/*) f=`echo "$$p" | sed "s|^$$srcdirstrip/||"`;; \
@@ -119,62 +168,8 @@ am__uninstall_files_from_dir = { \
     || { echo " ( cd '$$dir' && rm -f" $$files ")"; \
          $(am__cd) "$$dir" && rm -f $$files; }; \
   }
-am__installdirs = "$(DESTDIR)$(libdir)"
-LTLIBRARIES = $(lib_LTLIBRARIES)
-libqcdloop_la_DEPENDENCIES =
-am_libqcdloop_la_OBJECTS = qlinit.lo qlI4.lo qlI3.lo qlI2.lo qlI1.lo \
-	qlI4array.lo qlzero.lo qlI4fin.lo qlI4DNS41.lo qlI4sub0m.lo \
-	qlI4sub1m.lo qlI4sub2m.lo qlI4sub2ma.lo qlI4sub2mo.lo \
-	qlI4sub3m.lo qlI3fin.lo qlI3sub.lo qlI2fin.lo qlfndd.lo \
-	qlLi2omprod.lo qlLi2omrat.lo qllnomrat4.lo qlLi2omx.lo \
-	qlLi2omx2.lo qltrisort.lo qlsnglsort.lo qltri1.lo qltri2.lo \
-	qltri3.lo qltri4.lo qltri5.lo qltri6.lo qlbox1.lo qlbox2.lo \
-	qlbox3.lo qlbox4.lo qlbox5.lo qlbox6.lo qlbox7.lo qlbox8.lo \
-	qlbox9.lo qlbox10.lo qlbox11.lo qlbox12.lo qlbox13.lo \
-	qlbox14.lo qlbox15.lo qlbox16.lo qlcLi2omx2.lo qlcLi2omx3.lo \
-	auxCD.lo qlspencer.lo qlratreal.lo qlratgam.lo ddilog.lo \
-	qllnrat.lo qlfunctions.lo qlYcalc.lo qlkfn.lo qlxpicheck.lo
-libqcdloop_la_OBJECTS = $(am_libqcdloop_la_OBJECTS)
-AM_V_lt = $(am__v_lt_@AM_V@)
-am__v_lt_ = $(am__v_lt_@AM_DEFAULT_V@)
-am__v_lt_0 = --silent
-am__v_lt_1 = 
-AM_V_P = $(am__v_P_@AM_V@)
-am__v_P_ = $(am__v_P_@AM_DEFAULT_V@)
-am__v_P_0 = false
-am__v_P_1 = :
-AM_V_GEN = $(am__v_GEN_@AM_V@)
-am__v_GEN_ = $(am__v_GEN_@AM_DEFAULT_V@)
-am__v_GEN_0 = @echo "  GEN     " $@;
-am__v_GEN_1 = 
-AM_V_at = $(am__v_at_@AM_V@)
-am__v_at_ = $(am__v_at_@AM_DEFAULT_V@)
-am__v_at_0 = @
-am__v_at_1 = 
-DEFAULT_INCLUDES = -I.@am__isrc@
-F77COMPILE = $(F77) $(AM_FFLAGS) $(FFLAGS)
-LTF77COMPILE = $(LIBTOOL) $(AM_V_lt) --tag=F77 $(AM_LIBTOOLFLAGS) \
-	$(LIBTOOLFLAGS) --mode=compile $(F77) $(AM_FFLAGS) $(FFLAGS)
-AM_V_F77 = $(am__v_F77_@AM_V@)
-am__v_F77_ = $(am__v_F77_@AM_DEFAULT_V@)
-am__v_F77_0 = @echo "  F77     " $@;
-am__v_F77_1 = 
-F77LD = $(F77)
-F77LINK = $(LIBTOOL) $(AM_V_lt) --tag=F77 $(AM_LIBTOOLFLAGS) \
-	$(LIBTOOLFLAGS) --mode=link $(F77LD) $(AM_FFLAGS) $(FFLAGS) \
-	$(AM_LDFLAGS) $(LDFLAGS) -o $@
-AM_V_F77LD = $(am__v_F77LD_@AM_V@)
-am__v_F77LD_ = $(am__v_F77LD_@AM_DEFAULT_V@)
-am__v_F77LD_0 = @echo "  F77LD   " $@;
-am__v_F77LD_1 = 
-SOURCES = $(libqcdloop_la_SOURCES)
-DIST_SOURCES = $(libqcdloop_la_SOURCES)
-am__can_run_installinfo = \
-  case $$AM_UPDATE_INFO_DIR in \
-    n|no|NO) false;; \
-    *) (install-info --version) >/dev/null 2>&1;; \
-  esac
-HEADERS = $(noinst_HEADERS)
+am__installdirs = "$(DESTDIR)$(pkgincludedir)"
+HEADERS = $(nodist_pkginclude_HEADERS)
 am__tagged_files = $(HEADERS) $(SOURCES) $(TAGS_FILES) $(LISP)
 # Read a list of newline-separated strings from the standard input,
 # and print each of them once, without duplicates.  Input order is
@@ -349,26 +344,20 @@ target_alias = @target_alias@
 top_build_prefix = @top_build_prefix@
 top_builddir = @top_builddir@
 top_srcdir = @top_srcdir@
-lib_LTLIBRARIES = libqcdloop.la
-noinst_HEADERS = qlconstants.f qlonshellcutoff.f
-libqcdloop_la_SOURCES = \
-   qlinit.f qlI4.f qlI3.f qlI2.f qlI1.f qlI4array.f qlzero.f qlI4fin.f \
-   qlI4DNS41.f qlI4sub0m.f qlI4sub1m.f qlI4sub2m.f qlI4sub2ma.f qlI4sub2mo.f \
-   qlI4sub3m.f qlI3fin.f qlI3sub.f qlI2fin.f qlfndd.f qlLi2omprod.f \
-   qlLi2omrat.f qllnomrat4.f qlLi2omx.f qlLi2omx2.f qltrisort.f qlsnglsort.f \
-   qltri1.f qltri2.f qltri3.f qltri4.f qltri5.f qltri6.f qlbox1.f qlbox2.f \
-   qlbox3.f qlbox4.f qlbox5.f qlbox6.f qlbox7.f qlbox8.f qlbox9.f qlbox10.f \
-   qlbox11.f qlbox12.f qlbox13.f qlbox14.f qlbox15.f qlbox16.f qlcLi2omx2.f \
-   qlcLi2omx3.f auxCD.f qlspencer.f qlratreal.f qlratgam.f ddilog.f qllnrat.f \
-   qlfunctions.f qlYcalc.f qlkfn.f qlxpicheck.f
-
-libqcdloop_la_LIBADD = -L$(builddir)/../ff-2.0 -lff
-AM_FFLAGS = -I$(srcdir) -I$(srcdir)/../ff-2.0
+noinst_LTLIBRARIES = libgolem95_integrals_one_point.la
+AM_FCFLAGS = -I$(top_builddir)/avh_olo-2.2.1 \
+	-I$(builddir)/../../module -I$(builddir)/../../kinematic \
+	-I$(builddir)/../../numerical \
+	-I$(builddir)/../../../avh_olo-2.2.1
+libgolem95_integrals_one_point_la_SOURCES = generic_function_1p.f90
+libgolem95_integrals_one_point_la_FCFLAGS = $(AM_FCFLAGS)
+nodist_pkginclude_HEADERS = generic_function_1p.mod
+CLEANFILES = *.mod
 all: all-am
 
 .SUFFIXES:
-.SUFFIXES: .f .lo .o .obj
-$(srcdir)/Makefile.in:  $(srcdir)/Makefile.am $(srcdir)/Makefile.dep $(am__configure_deps)
+.SUFFIXES: .f90 .lo .mod .o .obj
+$(srcdir)/Makefile.in:  $(srcdir)/Makefile.am $(srcdir)/../../MakefileCommon.am $(srcdir)/Makefile.dep $(am__configure_deps)
 	@for dep in $?; do \
 	  case '$(am__configure_deps)' in \
 	    *$$dep*) \
@@ -377,9 +366,9 @@ $(srcdir)/Makefile.in:  $(srcdir)/Makefile.am $(srcdir)/Makefile.dep $(am__confi
 	      exit 1;; \
 	  esac; \
 	done; \
-	echo ' cd $(top_srcdir) && $(AUTOMAKE) --gnu qcdloop-1.9/Makefile'; \
+	echo ' cd $(top_srcdir) && $(AUTOMAKE) --gnu golem95-1.3.0/integrals/one_point/Makefile'; \
 	$(am__cd) $(top_srcdir) && \
-	  $(AUTOMAKE) --gnu qcdloop-1.9/Makefile
+	  $(AUTOMAKE) --gnu golem95-1.3.0/integrals/one_point/Makefile
 .PRECIOUS: Makefile
 Makefile: $(srcdir)/Makefile.in $(top_builddir)/config.status
 	@case '$?' in \
@@ -389,7 +378,7 @@ Makefile: $(srcdir)/Makefile.in $(top_builddir)/config.status
 	    echo ' cd $(top_builddir) && $(SHELL) ./config.status $(subdir)/$@ $(am__depfiles_maybe)'; \
 	    cd $(top_builddir) && $(SHELL) ./config.status $(subdir)/$@ $(am__depfiles_maybe);; \
 	esac;
-$(srcdir)/Makefile.dep:
+$(srcdir)/../../MakefileCommon.am $(srcdir)/Makefile.dep:
 
 $(top_builddir)/config.status: $(top_srcdir)/configure $(CONFIG_STATUS_DEPENDENCIES)
 	cd $(top_builddir) && $(MAKE) $(AM_MAKEFLAGS) am--refresh
@@ -400,33 +389,9 @@ $(ACLOCAL_M4):  $(am__aclocal_m4_deps)
 	cd $(top_builddir) && $(MAKE) $(AM_MAKEFLAGS) am--refresh
 $(am__aclocal_m4_deps):
 
-install-libLTLIBRARIES: $(lib_LTLIBRARIES)
-	@$(NORMAL_INSTALL)
-	@list='$(lib_LTLIBRARIES)'; test -n "$(libdir)" || list=; \
-	list2=; for p in $$list; do \
-	  if test -f $$p; then \
-	    list2="$$list2 $$p"; \
-	  else :; fi; \
-	done; \
-	test -z "$$list2" || { \
-	  echo " $(MKDIR_P) '$(DESTDIR)$(libdir)'"; \
-	  $(MKDIR_P) "$(DESTDIR)$(libdir)" || exit 1; \
-	  echo " $(LIBTOOL) $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=install $(INSTALL) $(INSTALL_STRIP_FLAG) $$list2 '$(DESTDIR)$(libdir)'"; \
-	  $(LIBTOOL) $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=install $(INSTALL) $(INSTALL_STRIP_FLAG) $$list2 "$(DESTDIR)$(libdir)"; \
-	}
-
-uninstall-libLTLIBRARIES:
-	@$(NORMAL_UNINSTALL)
-	@list='$(lib_LTLIBRARIES)'; test -n "$(libdir)" || list=; \
-	for p in $$list; do \
-	  $(am__strip_dir) \
-	  echo " $(LIBTOOL) $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=uninstall rm -f '$(DESTDIR)$(libdir)/$$f'"; \
-	  $(LIBTOOL) $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=uninstall rm -f "$(DESTDIR)$(libdir)/$$f"; \
-	done
-
-clean-libLTLIBRARIES:
-	-test -z "$(lib_LTLIBRARIES)" || rm -f $(lib_LTLIBRARIES)
-	@list='$(lib_LTLIBRARIES)'; \
+clean-noinstLTLIBRARIES:
+	-test -z "$(noinst_LTLIBRARIES)" || rm -f $(noinst_LTLIBRARIES)
+	@list='$(noinst_LTLIBRARIES)'; \
 	locs=`for p in $$list; do echo $$p; done | \
 	      sed 's|^[^/]*$$|.|; s|/[^/]*$$||; s|$$|/so_locations|' | \
 	      sort -u`; \
@@ -435,8 +400,8 @@ clean-libLTLIBRARIES:
 	  rm -f $${locs}; \
 	}
 
-libqcdloop.la: $(libqcdloop_la_OBJECTS) $(libqcdloop_la_DEPENDENCIES) $(EXTRA_libqcdloop_la_DEPENDENCIES) 
-	$(AM_V_F77LD)$(F77LINK) -rpath $(libdir) $(libqcdloop_la_OBJECTS) $(libqcdloop_la_LIBADD) $(LIBS)
+libgolem95_integrals_one_point.la: $(libgolem95_integrals_one_point_la_OBJECTS) $(libgolem95_integrals_one_point_la_DEPENDENCIES) $(EXTRA_libgolem95_integrals_one_point_la_DEPENDENCIES) 
+	$(AM_V_FCLD)$(libgolem95_integrals_one_point_la_LINK)  $(libgolem95_integrals_one_point_la_OBJECTS) $(libgolem95_integrals_one_point_la_LIBADD) $(LIBS)
 
 mostlyclean-compile:
 	-rm -f *.$(OBJEXT)
@@ -444,20 +409,44 @@ mostlyclean-compile:
 distclean-compile:
 	-rm -f *.tab.c
 
-.f.o:
-	$(AM_V_F77)$(F77COMPILE) -c -o $@ $<
+.f90.o:
+	$(AM_V_FC)$(FCCOMPILE) -c -o $@ $(FCFLAGS_f90) $<
 
-.f.obj:
-	$(AM_V_F77)$(F77COMPILE) -c -o $@ `$(CYGPATH_W) '$<'`
+.f90.obj:
+	$(AM_V_FC)$(FCCOMPILE) -c -o $@ $(FCFLAGS_f90) `$(CYGPATH_W) '$<'`
 
-.f.lo:
-	$(AM_V_F77)$(LTF77COMPILE) -c -o $@ $<
+.f90.lo:
+	$(AM_V_FC)$(LTFCCOMPILE) -c -o $@ $(FCFLAGS_f90) $<
+
+libgolem95_integrals_one_point_la-generic_function_1p.lo: generic_function_1p.f90
+	$(AM_V_FC)$(LIBTOOL) $(AM_V_lt) --tag=FC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(FC) $(libgolem95_integrals_one_point_la_FCFLAGS) $(FCFLAGS) -c -o libgolem95_integrals_one_point_la-generic_function_1p.lo $(FCFLAGS_f90) `test -f 'generic_function_1p.f90' || echo '$(srcdir)/'`generic_function_1p.f90
 
 mostlyclean-libtool:
 	-rm -f *.lo
 
 clean-libtool:
 	-rm -rf .libs _libs
+install-nodist_pkgincludeHEADERS: $(nodist_pkginclude_HEADERS)
+	@$(NORMAL_INSTALL)
+	@list='$(nodist_pkginclude_HEADERS)'; test -n "$(pkgincludedir)" || list=; \
+	if test -n "$$list"; then \
+	  echo " $(MKDIR_P) '$(DESTDIR)$(pkgincludedir)'"; \
+	  $(MKDIR_P) "$(DESTDIR)$(pkgincludedir)" || exit 1; \
+	fi; \
+	for p in $$list; do \
+	  if test -f "$$p"; then d=; else d="$(srcdir)/"; fi; \
+	  echo "$$d$$p"; \
+	done | $(am__base_list) | \
+	while read files; do \
+	  echo " $(INSTALL_HEADER) $$files '$(DESTDIR)$(pkgincludedir)'"; \
+	  $(INSTALL_HEADER) $$files "$(DESTDIR)$(pkgincludedir)" || exit $$?; \
+	done
+
+uninstall-nodist_pkgincludeHEADERS:
+	@$(NORMAL_UNINSTALL)
+	@list='$(nodist_pkginclude_HEADERS)'; test -n "$(pkgincludedir)" || list=; \
+	files=`for p in $$list; do echo $$p; done | sed -e 's|^.*/||'`; \
+	dir='$(DESTDIR)$(pkgincludedir)'; $(am__uninstall_files_from_dir)
 
 ID: $(am__tagged_files)
 	$(am__define_uniq_tagged_files); mkid -fID $$unique
@@ -545,7 +534,7 @@ check-am: all-am
 check: check-am
 all-am: Makefile $(LTLIBRARIES) $(HEADERS)
 installdirs:
-	for dir in "$(DESTDIR)$(libdir)"; do \
+	for dir in "$(DESTDIR)$(pkgincludedir)"; do \
 	  test -z "$$dir" || $(MKDIR_P) "$$dir"; \
 	done
 install: install-am
@@ -570,6 +559,7 @@ install-strip:
 mostlyclean-generic:
 
 clean-generic:
+	-test -z "$(CLEANFILES)" || rm -f $(CLEANFILES)
 
 distclean-generic:
 	-test -z "$(CONFIG_CLEAN_FILES)" || rm -f $(CONFIG_CLEAN_FILES)
@@ -580,7 +570,7 @@ maintainer-clean-generic:
 	@echo "it deletes files that may require special tools to rebuild."
 clean: clean-am
 
-clean-am: clean-generic clean-libLTLIBRARIES clean-libtool \
+clean-am: clean-generic clean-libtool clean-noinstLTLIBRARIES \
 	mostlyclean-am
 
 distclean: distclean-am
@@ -600,13 +590,13 @@ info: info-am
 
 info-am:
 
-install-data-am:
+install-data-am: install-nodist_pkgincludeHEADERS
 
 install-dvi: install-dvi-am
 
 install-dvi-am:
 
-install-exec-am: install-libLTLIBRARIES
+install-exec-am:
 
 install-html: install-html-am
 
@@ -645,26 +635,33 @@ ps: ps-am
 
 ps-am:
 
-uninstall-am: uninstall-libLTLIBRARIES
+uninstall-am: uninstall-nodist_pkgincludeHEADERS
 
 .MAKE: install-am install-strip
 
 .PHONY: CTAGS GTAGS TAGS all all-am check check-am clean clean-generic \
-	clean-libLTLIBRARIES clean-libtool cscopelist-am ctags \
+	clean-libtool clean-noinstLTLIBRARIES cscopelist-am ctags \
 	ctags-am distclean distclean-compile distclean-generic \
 	distclean-libtool distclean-tags distdir dvi dvi-am html \
 	html-am info info-am install install-am install-data \
 	install-data-am install-dvi install-dvi-am install-exec \
 	install-exec-am install-html install-html-am install-info \
-	install-info-am install-libLTLIBRARIES install-man install-pdf \
-	install-pdf-am install-ps install-ps-am install-strip \
-	installcheck installcheck-am installdirs maintainer-clean \
-	maintainer-clean-generic mostlyclean mostlyclean-compile \
-	mostlyclean-generic mostlyclean-libtool pdf pdf-am ps ps-am \
-	tags tags-am uninstall uninstall-am uninstall-libLTLIBRARIES
+	install-info-am install-man install-nodist_pkgincludeHEADERS \
+	install-pdf install-pdf-am install-ps install-ps-am \
+	install-strip installcheck installcheck-am installdirs \
+	maintainer-clean maintainer-clean-generic mostlyclean \
+	mostlyclean-compile mostlyclean-generic mostlyclean-libtool \
+	pdf pdf-am ps ps-am tags tags-am uninstall uninstall-am \
+	uninstall-nodist_pkgincludeHEADERS
 
 
-# No dependencies
+%.mod: %.o %.f90
+	@true
+
+# Module dependencies
+generic_function_1p.mod: generic_function_1p.$(OBJEXT)
+.mod.o:
+	@true
 
 # Tell versions [3.59,3.63) of GNU make to not export all variables.
 # Otherwise a system limit (for SysV at least) may be exceeded.

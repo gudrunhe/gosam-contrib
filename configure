@@ -734,6 +734,10 @@ ac_ct_F77
 LDFLAGS
 FFLAGS
 F77
+AM_BACKSLASH
+AM_DEFAULT_VERBOSITY
+AM_DEFAULT_V
+AM_V
 am__untar
 am__tar
 AMTAR
@@ -798,6 +802,7 @@ SHELL'
 ac_subst_files=''
 ac_user_opts='
 enable_option_checking
+enable_silent_rules
 enable_dependency_tracking
 enable_shared
 enable_static
@@ -1446,6 +1451,8 @@ Optional Features:
   --disable-option-checking  ignore unrecognized --enable/--with options
   --disable-FEATURE       do not include FEATURE (same as --enable-FEATURE=no)
   --enable-FEATURE[=ARG]  include FEATURE [ARG=yes]
+  --enable-silent-rules   less verbose build output (undo: "make V=1")
+  --disable-silent-rules  verbose build output (undo: "make V=0")
   --enable-dependency-tracking
                           do not reject slow dependency extractors
   --disable-dependency-tracking
@@ -2395,7 +2402,7 @@ VERSION=1.0
 PACKAGE=gosam-contrib
 
 
-am__api_version='1.12'
+am__api_version='1.13'
 
 # Find a good install program.  We prefer a C program (faster),
 # so one script is as good as another.  But avoid the broken or
@@ -2579,8 +2586,8 @@ if test x"${MISSING+set}" != xset; then
   esac
 fi
 # Use eval to expand $SHELL
-if eval "$MISSING --run true"; then
-  am_missing_run="$MISSING --run "
+if eval "$MISSING --is-lightweight"; then
+  am_missing_run="$MISSING "
 else
   am_missing_run=
   { $as_echo "$as_me:${as_lineno-$LINENO}: WARNING: 'missing' script is too old or missing" >&5
@@ -2820,6 +2827,45 @@ else
 fi
 rmdir .tst 2>/dev/null
 
+# Check whether --enable-silent-rules was given.
+if test "${enable_silent_rules+set}" = set; then :
+  enableval=$enable_silent_rules;
+fi
+
+case $enable_silent_rules in # (((
+  yes) AM_DEFAULT_VERBOSITY=0;;
+   no) AM_DEFAULT_VERBOSITY=1;;
+    *) AM_DEFAULT_VERBOSITY=1;;
+esac
+am_make=${MAKE-make}
+{ $as_echo "$as_me:${as_lineno-$LINENO}: checking whether $am_make supports nested variables" >&5
+$as_echo_n "checking whether $am_make supports nested variables... " >&6; }
+if ${am_cv_make_support_nested_variables+:} false; then :
+  $as_echo_n "(cached) " >&6
+else
+  if $as_echo 'TRUE=$(BAR$(V))
+BAR0=false
+BAR1=true
+V=1
+am__doit:
+	@$(TRUE)
+.PHONY: am__doit' | $am_make -f - >/dev/null 2>&1; then
+  am_cv_make_support_nested_variables=yes
+else
+  am_cv_make_support_nested_variables=no
+fi
+fi
+{ $as_echo "$as_me:${as_lineno-$LINENO}: result: $am_cv_make_support_nested_variables" >&5
+$as_echo "$am_cv_make_support_nested_variables" >&6; }
+if test $am_cv_make_support_nested_variables = yes; then
+    AM_V='$(V)'
+  AM_DEFAULT_V='$(AM_DEFAULT_VERBOSITY)'
+else
+  AM_V=$AM_DEFAULT_VERBOSITY
+  AM_DEFAULT_V=$AM_DEFAULT_VERBOSITY
+fi
+AM_BACKSLASH='\'
+
 if test "`cd $srcdir && pwd`" != "`pwd`"; then
   # Use -I$(srcdir) only when $(srcdir) != ., so that make's output
   # is not polluted with repeated "-I."
@@ -2862,14 +2908,24 @@ AUTOHEADER=${AUTOHEADER-"${am_missing_run}autoheader"}
 
 MAKEINFO=${MAKEINFO-"${am_missing_run}makeinfo"}
 
-mkdir_p="$MKDIR_P"
+# For better backward compatibility.  To be removed once Automake 1.9.x
+# dies out for good.  For more background, see:
+# <http://lists.gnu.org/archive/html/automake/2012-07/msg00001.html>
+# <http://lists.gnu.org/archive/html/automake/2012-07/msg00014.html>
+mkdir_p='$(MKDIR_P)'
+
 # We need awk for the "check" target.  The system "awk" is bad on
 # some platforms.
 # Always define AMTAR for backward compatibility.  Yes, it's still used
 # in the wild :-(  We should find a proper way to deprecate it ...
 AMTAR='$${TAR-tar}'
 
+
+# We'll loop over all known methods to create a tar archive until one works.
+_am_tools='gnutar  pax cpio none'
+
 am__tar='$${TAR-tar} chof - "$$tardir"' am__untar='$${TAR-tar} xf -'
+
 
 
 
@@ -19035,7 +19091,7 @@ as_fn_error $? "--with-lt-precision was given with an
 See \`config.log' for more details" "$LINENO" 5; }
 fi
 
-ac_config_files="$ac_config_files gosam.conf samurai.pc Makefile ff-2.0/Makefile ff-2.0/ffinit.f qcdloop-1.9/Makefile avh_olo-2.2.1/Makefile golem95c-1.2.1/Makefile golem95c-1.2.1/module/Makefile golem95c-1.2.1/module/precision_golem.f90 golem95c-1.2.1/integrals/Makefile golem95c-1.2.1/integrals/two_point/Makefile golem95c-1.2.1/integrals/one_point/Makefile golem95c-1.2.1/integrals/three_point/Makefile golem95c-1.2.1/integrals/four_point/Makefile golem95c-1.2.1/integrals/four_point/generic_function_4p.f90 golem95c-1.2.1/higherrank/Makefile golem95c-1.2.1/interface/Makefile golem95c-1.2.1/numerical/Makefile golem95c-1.2.1/kinematic/Makefile golem95c-1.2.1/form_factor/Makefile samurai-2.1.1/Makefile samurai-2.1.1/madds.f90 samurai-2.1.1/msamurai.f90 samurai-2.1.1/precision.f90"
+ac_config_files="$ac_config_files gosam.conf samurai.pc Makefile ff-2.0/Makefile ff-2.0/ffinit.f qcdloop-1.9/Makefile avh_olo-2.2.1/Makefile golem95-1.3.0/Makefile golem95-1.3.0/module/Makefile golem95-1.3.0/module/precision_golem.f90 golem95-1.3.0/integrals/Makefile golem95-1.3.0/integrals/two_point/Makefile golem95-1.3.0/integrals/one_point/Makefile golem95-1.3.0/integrals/three_point/Makefile golem95-1.3.0/integrals/four_point/Makefile golem95-1.3.0/integrals/four_point/generic_function_4p.f90 golem95-1.3.0/higherrank/Makefile golem95-1.3.0/interface/Makefile golem95-1.3.0/numerical/Makefile golem95-1.3.0/kinematic/Makefile golem95-1.3.0/form_factor/Makefile samurai-2.1.1/Makefile samurai-2.1.1/madds.f90 samurai-2.1.1/msamurai.f90 samurai-2.1.1/precision.f90"
 
 cat >confcache <<\_ACEOF
 # This file is a shell script that caches the results of configure
@@ -20281,20 +20337,20 @@ do
     "ff-2.0/ffinit.f") CONFIG_FILES="$CONFIG_FILES ff-2.0/ffinit.f" ;;
     "qcdloop-1.9/Makefile") CONFIG_FILES="$CONFIG_FILES qcdloop-1.9/Makefile" ;;
     "avh_olo-2.2.1/Makefile") CONFIG_FILES="$CONFIG_FILES avh_olo-2.2.1/Makefile" ;;
-    "golem95c-1.2.1/Makefile") CONFIG_FILES="$CONFIG_FILES golem95c-1.2.1/Makefile" ;;
-    "golem95c-1.2.1/module/Makefile") CONFIG_FILES="$CONFIG_FILES golem95c-1.2.1/module/Makefile" ;;
-    "golem95c-1.2.1/module/precision_golem.f90") CONFIG_FILES="$CONFIG_FILES golem95c-1.2.1/module/precision_golem.f90" ;;
-    "golem95c-1.2.1/integrals/Makefile") CONFIG_FILES="$CONFIG_FILES golem95c-1.2.1/integrals/Makefile" ;;
-    "golem95c-1.2.1/integrals/two_point/Makefile") CONFIG_FILES="$CONFIG_FILES golem95c-1.2.1/integrals/two_point/Makefile" ;;
-    "golem95c-1.2.1/integrals/one_point/Makefile") CONFIG_FILES="$CONFIG_FILES golem95c-1.2.1/integrals/one_point/Makefile" ;;
-    "golem95c-1.2.1/integrals/three_point/Makefile") CONFIG_FILES="$CONFIG_FILES golem95c-1.2.1/integrals/three_point/Makefile" ;;
-    "golem95c-1.2.1/integrals/four_point/Makefile") CONFIG_FILES="$CONFIG_FILES golem95c-1.2.1/integrals/four_point/Makefile" ;;
-    "golem95c-1.2.1/integrals/four_point/generic_function_4p.f90") CONFIG_FILES="$CONFIG_FILES golem95c-1.2.1/integrals/four_point/generic_function_4p.f90" ;;
-    "golem95c-1.2.1/higherrank/Makefile") CONFIG_FILES="$CONFIG_FILES golem95c-1.2.1/higherrank/Makefile" ;;
-    "golem95c-1.2.1/interface/Makefile") CONFIG_FILES="$CONFIG_FILES golem95c-1.2.1/interface/Makefile" ;;
-    "golem95c-1.2.1/numerical/Makefile") CONFIG_FILES="$CONFIG_FILES golem95c-1.2.1/numerical/Makefile" ;;
-    "golem95c-1.2.1/kinematic/Makefile") CONFIG_FILES="$CONFIG_FILES golem95c-1.2.1/kinematic/Makefile" ;;
-    "golem95c-1.2.1/form_factor/Makefile") CONFIG_FILES="$CONFIG_FILES golem95c-1.2.1/form_factor/Makefile" ;;
+    "golem95-1.3.0/Makefile") CONFIG_FILES="$CONFIG_FILES golem95-1.3.0/Makefile" ;;
+    "golem95-1.3.0/module/Makefile") CONFIG_FILES="$CONFIG_FILES golem95-1.3.0/module/Makefile" ;;
+    "golem95-1.3.0/module/precision_golem.f90") CONFIG_FILES="$CONFIG_FILES golem95-1.3.0/module/precision_golem.f90" ;;
+    "golem95-1.3.0/integrals/Makefile") CONFIG_FILES="$CONFIG_FILES golem95-1.3.0/integrals/Makefile" ;;
+    "golem95-1.3.0/integrals/two_point/Makefile") CONFIG_FILES="$CONFIG_FILES golem95-1.3.0/integrals/two_point/Makefile" ;;
+    "golem95-1.3.0/integrals/one_point/Makefile") CONFIG_FILES="$CONFIG_FILES golem95-1.3.0/integrals/one_point/Makefile" ;;
+    "golem95-1.3.0/integrals/three_point/Makefile") CONFIG_FILES="$CONFIG_FILES golem95-1.3.0/integrals/three_point/Makefile" ;;
+    "golem95-1.3.0/integrals/four_point/Makefile") CONFIG_FILES="$CONFIG_FILES golem95-1.3.0/integrals/four_point/Makefile" ;;
+    "golem95-1.3.0/integrals/four_point/generic_function_4p.f90") CONFIG_FILES="$CONFIG_FILES golem95-1.3.0/integrals/four_point/generic_function_4p.f90" ;;
+    "golem95-1.3.0/higherrank/Makefile") CONFIG_FILES="$CONFIG_FILES golem95-1.3.0/higherrank/Makefile" ;;
+    "golem95-1.3.0/interface/Makefile") CONFIG_FILES="$CONFIG_FILES golem95-1.3.0/interface/Makefile" ;;
+    "golem95-1.3.0/numerical/Makefile") CONFIG_FILES="$CONFIG_FILES golem95-1.3.0/numerical/Makefile" ;;
+    "golem95-1.3.0/kinematic/Makefile") CONFIG_FILES="$CONFIG_FILES golem95-1.3.0/kinematic/Makefile" ;;
+    "golem95-1.3.0/form_factor/Makefile") CONFIG_FILES="$CONFIG_FILES golem95-1.3.0/form_factor/Makefile" ;;
     "samurai-2.1.1/Makefile") CONFIG_FILES="$CONFIG_FILES samurai-2.1.1/Makefile" ;;
     "samurai-2.1.1/madds.f90") CONFIG_FILES="$CONFIG_FILES samurai-2.1.1/madds.f90" ;;
     "samurai-2.1.1/msamurai.f90") CONFIG_FILES="$CONFIG_FILES samurai-2.1.1/msamurai.f90" ;;
@@ -20729,7 +20785,7 @@ $as_echo "$as_me: executing $ac_file commands" >&6;}
 
   case $ac_file$ac_mode in
     "depfiles":C) test x"$AMDEP_TRUE" != x"" || {
-  # Autoconf 2.62 quotes --file arguments for eval, but not when files
+  # Older Autoconf quotes --file arguments for eval, but not when files
   # are listed without --file.  Let's play safe and only enable the eval
   # if we detect the quoting.
   case $CONFIG_FILES in
@@ -20780,7 +20836,7 @@ $as_echo X"$mf" |
     DEPDIR=`sed -n 's/^DEPDIR = //p' < "$mf"`
     test -z "$DEPDIR" && continue
     am__include=`sed -n 's/^am__include = //p' < "$mf"`
-    test -z "am__include" && continue
+    test -z "$am__include" && continue
     am__quote=`sed -n 's/^am__quote = //p' < "$mf"`
     # Find all dependency output files, they are included files with
     # $(DEPDIR) in their names.  We invoke sed twice because it is the

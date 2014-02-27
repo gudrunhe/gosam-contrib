@@ -1,0 +1,4 @@
+# Module dependencies
+generic_function_1p.mod: generic_function_1p.$(OBJEXT)
+.mod.o:
+	@true

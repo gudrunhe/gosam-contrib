@@ -1,5 +1,0 @@
-# Module dependencies
-inverse_matrice.mod: inverse_matrice.f90 inverse_matrice.$(OBJEXT)
-matrice_s.lo: inverse_matrice.lo
-matrice_s.$(OBJEXT): inverse_matrice.$(OBJEXT)
-matrice_s.mod: matrice_s.f90 matrice_s.$(OBJEXT) inverse_matrice.$(OBJEXT)

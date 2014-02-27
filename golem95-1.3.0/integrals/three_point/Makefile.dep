@@ -1,0 +1,43 @@
+# Module dependencies
+function_3p0m_1mi.mod: function_3p0m_1mi.$(OBJEXT)
+function_3p1m.lo: mod_h0.lo
+function_3p1m.$(OBJEXT): mod_h0.$(OBJEXT)
+function_3p1m.mod: function_3p1m.$(OBJEXT) mod_h0.$(OBJEXT)
+function_3p1m_1mi.lo: mod_he.lo
+function_3p1m_1mi.$(OBJEXT): mod_he.$(OBJEXT)
+function_3p1m_1mi.mod: function_3p1m_1mi.$(OBJEXT) mod_he.$(OBJEXT)
+function_3p1m_2mi.lo: mod_gn.lo
+function_3p1m_2mi.$(OBJEXT): mod_gn.$(OBJEXT)
+function_3p1m_2mi.mod: function_3p1m_2mi.$(OBJEXT) mod_gn.$(OBJEXT)
+function_3p2m.lo: mod_h0.lo mod_he.lo mod_hf.lo
+function_3p2m.$(OBJEXT): mod_h0.$(OBJEXT) mod_he.$(OBJEXT) mod_hf.$(OBJEXT)
+function_3p2m.mod: function_3p2m.$(OBJEXT) mod_h0.$(OBJEXT) mod_he.$(OBJEXT) mod_hf.$(OBJEXT)
+function_3p2m_1mi.lo: mod_he.lo mod_hf.lo
+function_3p2m_1mi.$(OBJEXT): mod_he.$(OBJEXT) mod_hf.$(OBJEXT)
+function_3p2m_1mi.mod: function_3p2m_1mi.$(OBJEXT) mod_he.$(OBJEXT) mod_hf.$(OBJEXT)
+function_3p3m.mod: function_3p3m.$(OBJEXT)
+function_3p_finite.mod: function_3p_finite.$(OBJEXT)
+generic_function_3p.lo: function_3p0m_1mi.lo function_3p1m.lo \
+	function_3p1m_1mi.lo function_3p1m_2mi.lo function_3p2m.lo \
+	function_3p2m_1mi.lo function_3p3m.lo function_3p_finite.lo
+generic_function_3p.$(OBJEXT): function_3p0m_1mi.$(OBJEXT) function_3p1m.$(OBJEXT) \
+	function_3p1m_1mi.$(OBJEXT) function_3p1m_2mi.$(OBJEXT) function_3p2m.$(OBJEXT) \
+	function_3p2m_1mi.$(OBJEXT) function_3p3m.$(OBJEXT) function_3p_finite.$(OBJEXT)
+generic_function_3p.mod: generic_function_3p.$(OBJEXT) function_3p0m_1mi.$(OBJEXT) \
+	function_3p1m.$(OBJEXT) function_3p1m_1mi.$(OBJEXT) function_3p1m_2mi.$(OBJEXT) \
+	function_3p2m.$(OBJEXT) function_3p2m_1mi.$(OBJEXT) function_3p3m.$(OBJEXT) \
+	function_3p_finite.$(OBJEXT)
+func_gn.mod: mod_gn.$(OBJEXT)
+func_h0.mod: mod_h0.$(OBJEXT)
+func_he.mod: mod_he.$(OBJEXT)
+func_hf.mod: mod_hf.$(OBJEXT)
+func_hf.mod: mod_hf.$(OBJEXT)
+	@true
+func_gn.mod: mod_gn.$(OBJEXT)
+	@true
+func_h0.mod: mod_h0.$(OBJEXT)
+	@true
+func_he.mod: mod_he.$(OBJEXT)
+	@true
+.mod.o:
+	@true
