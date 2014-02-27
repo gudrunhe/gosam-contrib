@@ -82,21 +82,21 @@ host_triplet = @host@
 @LOOPTOOLS_TRUE@am__append_1 = looptools_interface.cc
 @GOSAM_TRUE@am__append_2 = gosam_interface.cc  ninjago.F90
 @GOSAM_TRUE@@NINJAGOSAMCONTRIB_TRUE@am__append_3 = -L$(top_builddir)/avh_olo-2.2.1 -lavh_olo
-subdir = src
+subdir = ninja-1.0.0
 DIST_COMMON = $(srcdir)/Makefile.in $(srcdir)/Makefile.am \
-	$(top_srcdir)/depcomp $(noinst_HEADERS)
+	$(top_srcdir)/config.aux/depcomp $(noinst_HEADERS)
 ACLOCAL_M4 = $(top_srcdir)/aclocal.m4
 am__aclocal_m4_deps = $(top_srcdir)/m4/libtool.m4 \
 	$(top_srcdir)/m4/ltoptions.m4 $(top_srcdir)/m4/ltsugar.m4 \
 	$(top_srcdir)/m4/ltversion.m4 $(top_srcdir)/m4/lt~obsolete.m4 \
-	$(top_srcdir)/m4/m4_ax_pthread.m4 \
+	$(top_srcdir)/acinclude.m4 \
 	$(top_srcdir)/m4/m4_ax_cxx_compile_stdcxx_11.m4 \
 	$(top_srcdir)/configure.ac
 am__configure_deps = $(am__aclocal_m4_deps) $(CONFIGURE_DEPENDENCIES) \
 	$(ACLOCAL_M4)
 mkinstalldirs = $(install_sh) -d
 CONFIG_HEADER = $(top_builddir)/config.h \
-	$(top_builddir)/src/ninja/ninja_config.h
+	$(top_builddir)/ninja-1.0.0/ninja/ninja_config.h
 CONFIG_CLEAN_FILES =
 CONFIG_CLEAN_VPATH_FILES =
 am__vpath_adj_setup = srcdirstrip=`echo "$(srcdir)" | sed 's|.|.|g'`;
@@ -160,8 +160,8 @@ AM_V_at = $(am__v_at_@AM_V@)
 am__v_at_ = $(am__v_at_@AM_DEFAULT_V@)
 am__v_at_0 = @
 am__v_at_1 = 
-DEFAULT_INCLUDES = -I.@am__isrc@ -I$(top_builddir) -I$(top_builddir)/src/ninja
-depcomp = $(SHELL) $(top_srcdir)/depcomp
+DEFAULT_INCLUDES = -I.@am__isrc@ -I$(top_builddir) -I$(top_builddir)/ninja-1.0.0/ninja
+depcomp = $(SHELL) $(top_srcdir)/config.aux/depcomp
 am__depfiles_maybe = depfiles
 am__mv = mv -f
 PPFCCOMPILE = $(FC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) \
@@ -308,6 +308,7 @@ CXXCPP = @CXXCPP@
 CXXDEPMODE = @CXXDEPMODE@
 CXXFLAGS = @CXXFLAGS@
 CYGPATH_W = @CYGPATH_W@
+DATADIR = @DATADIR@
 DEFS = @DEFS@
 DEPDIR = @DEPDIR@
 DLLTOOL = @DLLTOOL@
@@ -318,8 +319,12 @@ ECHO_N = @ECHO_N@
 ECHO_T = @ECHO_T@
 EGREP = @EGREP@
 EXEEXT = @EXEEXT@
+F77 = @F77@
 FC = @FC@
 FCFLAGS = @FCFLAGS@
+FCFLAGS_f90 = @FCFLAGS_f90@
+FCLIBS = @FCLIBS@
+FFLAGS = @FFLAGS@
 FGREP = @FGREP@
 GREP = @GREP@
 INSTALL = @INSTALL@
@@ -329,16 +334,17 @@ INSTALL_SCRIPT = @INSTALL_SCRIPT@
 INSTALL_STRIP_PROGRAM = @INSTALL_STRIP_PROGRAM@
 LD = @LD@
 LDFLAGS = @LDFLAGS@
+LIBLOOPTOOLS = @LIBLOOPTOOLS@
 LIBOBJS = @LIBOBJS@
 LIBS = @LIBS@
 LIBTOOL = @LIBTOOL@
 LIPO = @LIPO@
 LN_S = @LN_S@
-LTFLAGS = @LTFLAGS@
 LTLIBOBJS = @LTLIBOBJS@
 MAKEINFO = @MAKEINFO@
 MANIFEST_TOOL = @MANIFEST_TOOL@
 MKDIR_P = @MKDIR_P@
+NINJAVERSION = @NINJAVERSION@
 NM = @NM@
 NMEDIT = @NMEDIT@
 OBJDUMP = @OBJDUMP@
@@ -353,11 +359,9 @@ PACKAGE_TARNAME = @PACKAGE_TARNAME@
 PACKAGE_URL = @PACKAGE_URL@
 PACKAGE_VERSION = @PACKAGE_VERSION@
 PATH_SEPARATOR = @PATH_SEPARATOR@
-PTHREAD_CC = @PTHREAD_CC@
-PTHREAD_CFLAGS = @PTHREAD_CFLAGS@
-PTHREAD_LIBS = @PTHREAD_LIBS@
 QUADRUPLEFLAGS = @QUADRUPLEFLAGS@
 RANLIB = @RANLIB@
+SAMURAIVERSION = @SAMURAIVERSION@
 SED = @SED@
 SET_MAKE = @SET_MAKE@
 SHELL = @SHELL@
@@ -371,13 +375,14 @@ ac_ct_AR = @ac_ct_AR@
 ac_ct_CC = @ac_ct_CC@
 ac_ct_CXX = @ac_ct_CXX@
 ac_ct_DUMPBIN = @ac_ct_DUMPBIN@
+ac_ct_F77 = @ac_ct_F77@
 ac_ct_FC = @ac_ct_FC@
 am__include = @am__include@
 am__leading_dot = @am__leading_dot@
 am__quote = @am__quote@
 am__tar = @am__tar@
 am__untar = @am__untar@
-ax_pthread_config = @ax_pthread_config@
+avh_olo_real_kind = @avh_olo_real_kind@
 bindir = @bindir@
 build = @build@
 build_alias = @build_alias@
@@ -385,11 +390,42 @@ build_cpu = @build_cpu@
 build_os = @build_os@
 build_vendor = @build_vendor@
 builddir = @builddir@
+case_with_avh = @case_with_avh@
+case_with_ff = @case_with_ff@
+case_with_golem = @case_with_golem@
+case_with_lt = @case_with_lt@
+case_with_ninja = @case_with_ninja@
+case_with_olo = @case_with_olo@
+case_with_ql = @case_with_ql@
+case_with_samurai = @case_with_samurai@
+case_wout_avh = @case_wout_avh@
+case_wout_ff = @case_wout_ff@
+case_wout_golem = @case_wout_golem@
+case_wout_lt = @case_wout_lt@
+case_wout_ninja = @case_wout_ninja@
+case_wout_olo = @case_wout_olo@
+case_wout_ql = @case_wout_ql@
+case_wout_samurai = @case_wout_samurai@
+conf_with_ff = @conf_with_ff@
+conf_with_golem95 = @conf_with_golem95@
+conf_with_lt = @conf_with_lt@
+conf_with_ninja = @conf_with_ninja@
+conf_with_olo = @conf_with_olo@
+conf_with_ql = @conf_with_ql@
+conf_with_samurai = @conf_with_samurai@
+conf_wout_ff = @conf_wout_ff@
+conf_wout_golem95 = @conf_wout_golem95@
+conf_wout_lt = @conf_wout_lt@
+conf_wout_ninja = @conf_wout_ninja@
+conf_wout_olo = @conf_wout_olo@
+conf_wout_ql = @conf_wout_ql@
+conf_wout_samurai = @conf_wout_samurai@
 datadir = @datadir@
 datarootdir = @datarootdir@
 docdir = @docdir@
 dvidir = @dvidir@
 exec_prefix = @exec_prefix@
+fortran_real_kind = @fortran_real_kind@
 host = @host@
 host_alias = @host_alias@
 host_cpu = @host_cpu@
@@ -403,6 +439,7 @@ libdir = @libdir@
 libexecdir = @libexecdir@
 localedir = @localedir@
 localstatedir = @localstatedir@
+lt_real_kind = @lt_real_kind@
 mandir = @mandir@
 mkdir_p = @mkdir_p@
 oldincludedir = @oldincludedir@
@@ -451,9 +488,9 @@ $(srcdir)/Makefile.in:  $(srcdir)/Makefile.am  $(am__configure_deps)
 	      exit 1;; \
 	  esac; \
 	done; \
-	echo ' cd $(top_srcdir) && $(AUTOMAKE) --gnu src/Makefile'; \
+	echo ' cd $(top_srcdir) && $(AUTOMAKE) --gnu ninja-1.0.0/Makefile'; \
 	$(am__cd) $(top_srcdir) && \
-	  $(AUTOMAKE) --gnu src/Makefile
+	  $(AUTOMAKE) --gnu ninja-1.0.0/Makefile
 .PRECIOUS: Makefile
 Makefile: $(srcdir)/Makefile.in $(top_builddir)/config.status
 	@case '$?' in \

@@ -1,0 +1,111 @@
+/* config.h.in.  Generated from configure.ac by autoheader.  */
+
+/* Where data are placed to. */
+#undef DATADIR
+
+/* Define to dummy `main' function (if any) required to link to the Fortran
+   libraries. */
+#undef FC_DUMMY_MAIN
+
+/* Define if F77 and FC dummy `main' functions are identical. */
+#undef FC_DUMMY_MAIN_EQ_F77
+
+/* Define to a macro mangling the given C identifier (in lower and upper
+   case), which must not contain underscores, for linking with Fortran. */
+#undef FC_FUNC
+
+/* As FC_FUNC, but for C identifiers containing underscores. */
+#undef FC_FUNC_
+
+/* Define to 1 if you have C++11 random numbers library. */
+#undef HAVE_CXX11_RANDOM
+
+/* Define to 1 if you have C++11 `decltype' operator and std::common_type
+   traits. */
+#undef HAVE_DECLTYPE
+
+/* Define to 1 if you have the <dlfcn.h> header file. */
+#undef HAVE_DLFCN_H
+
+/* Define to 1 if you have C++11 initizializer lists in array-data-members
+   initialization. */
+#undef HAVE_INIT_LIST
+
+/* Define to 1 if you have the <inttypes.h> header file. */
+#undef HAVE_INTTYPES_H
+
+/* Define if you have Looptools */
+#undef HAVE_LT
+
+/* Define to 1 if you have the <memory.h> header file. */
+#undef HAVE_MEMORY_H
+
+/* Define to 1 if you have the <stdint.h> header file. */
+#undef HAVE_STDINT_H
+
+/* Define to 1 if you have the <stdlib.h> header file. */
+#undef HAVE_STDLIB_H
+
+/* Define to 1 if you have the <strings.h> header file. */
+#undef HAVE_STRINGS_H
+
+/* Define to 1 if you have the <string.h> header file. */
+#undef HAVE_STRING_H
+
+/* Define to 1 if you have the <sys/stat.h> header file. */
+#undef HAVE_SYS_STAT_H
+
+/* Define to 1 if you have the <sys/types.h> header file. */
+#undef HAVE_SYS_TYPES_H
+
+/* Define to 1 if you have the <unistd.h> header file. */
+#undef HAVE_UNISTD_H
+
+/* Define to the sub-directory in which libtool stores uninstalled libraries.
+   */
+#undef LT_OBJDIR
+
+/* Define to 1 if this an internal is a source file. */
+#undef NINJA_CONFIG_H_INTERNAL
+
+/* Define to 1 massless specialization is enabled. */
+#undef NINJA_MASSLESS
+
+/* Define to 1 if Ninja is compiled in quadruple precision. */
+#undef NINJA_QUADRUPLE
+
+/* Define if you have LoopTools. */
+#undef NINJA_USE_LOOPTOOLS
+
+/* Define to 1 if you have OneLoop. */
+#undef NINJA_USE_ONELOOP
+
+/* Define to 1 if a cache of Master Integrals is implemented for OneLoop. */
+#undef NINJA_USE_ONELOOP_WITH_CACHE
+
+/* Define to 1 if higher-rank support is enabled. */
+#undef NINJA_X1RANK
+
+/* Define to the address where bug reports for this package should be sent. */
+#undef PACKAGE_BUGREPORT
+
+/* Define to the full name of this package. */
+#undef PACKAGE_NAME
+
+/* Define to the full name and version of this package. */
+#undef PACKAGE_STRING
+
+/* Define to the one symbol short name of this package. */
+#undef PACKAGE_TARNAME
+
+/* Define to the home page for this package. */
+#undef PACKAGE_URL
+
+/* Define to the version of this package. */
+#undef PACKAGE_VERSION
+
+/* Define to 1 if you have the ANSI C header files. */
+#undef STDC_HEADERS
+
+/* Version of Ninja */
+#undef VERSION

@@ -322,6 +322,19 @@ AC_ARG_ENABLE([ninja],
    AS_HELP_STRING([--disable-ninja], [do not compile and install Ninja]))
 AM_CONDITIONAL(COMPILE_NINJA, [test "x$enable_ninja" != xno])
 
+AS_IF([test "x$enable_ninja" != xno],
+		[AC_SUBST([conf_with_ninja], [""])],
+		[AC_SUBST([conf_with_ninja], ["# "])])
+AS_IF([test "x$enable_ninja" != xno],
+		[AC_SUBST([conf_wout_ninja], ["# "])],
+		[AC_SUBST([conf_wout_ninja], [""])])
+AS_IF([test "x$enable_ninja" != xno],
+		[AC_SUBST([case_with_ninja], ["    "])],
+		[AC_SUBST([case_with_ninja], ["!AC!"])])
+AS_IF([test "x$enable_ninja" != xno],
+		[AC_SUBST([case_wout_ninja], ["!AC!"])],
+		[AC_SUBST([case_wout_ninja], ["    "])])
+
 # From now on it is C++ stuff
 AC_LANG_PUSH([C++])
 
