@@ -5,7 +5,7 @@
 #define STATIC_ARRAYS_HH
 
 
-#ifndef HAVE_INIT_LIST
+#if !defined(HAVE_INIT_LIST) && !defined(NINJA_CONFIG_H_INTERNAL)
 #  if defined(__clang__)
 #    if __has_feature(cxx_generalized_initializers)
 #      define HAVE_INIT_LIST 1
@@ -13,11 +13,9 @@
 #  elif (defined __INTEL_COMPILER && __INTEL_COMPILER >= 1400) || (defined __ICC && __ICC >= 1400)
 #      define HAVE_INIT_LIST 1
 #  elif defined(__GNUC__) && defined(__GNUC_MINOR__)
-#    if (__GNUC__ > 4 ||  (__GNUC__ == 4 && __GNUC_MINOR__ >= 4)) && defined(__GXX_EXPERIMENTAL_CXX0X__)
+#    if (__GNUC__ > 4 ||  (__GNUC__ == 4 && __GNUC_MINOR__ >= 6)) && defined(__GXX_EXPERIMENTAL_CXX0X__)
 #      define HAVE_INIT_LIST 1
 #    endif
-//#  elif defined(__cplusplus) && __cplusplus > 199711L
-//#      define HAVE_INIT_LIST 1
 #  endif
 #endif
 

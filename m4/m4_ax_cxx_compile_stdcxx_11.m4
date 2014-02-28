@@ -16,6 +16,18 @@
 
 
 m4_define([_AX_CXX_COMPILE_STDCXX_11_testbody], [
+
+    #if defined(__clang__)
+    #  if !__has_feature(cxx_generalized_initializers)
+    #    error "no ninja-compatible c++11"
+    #  endif
+    #elif (defined __INTEL_COMPILER && __INTEL_COMPILER < 1400) || (defined __ICC && __ICC < 1400)
+    #    error "no ninja-compatible c++11"
+    #elif defined(__GNUC__) && defined(__GNUC_MINOR__)
+    #  if (__GNUC__ < 4) ||  (__GNUC__ == 4 && __GNUC_MINOR__ < 6) || !defined(__GXX_EXPERIMENTAL_CXX0X__)
+    #    error "no ninja-compatible c++11"
+    #  endif
+    #endif
 	
 	#include<type_traits>											
     int a;
@@ -26,10 +38,34 @@ m4_define([_AX_CXX_COMPILE_STDCXX_11_testbody], [
 
 m4_define([_AX_CXX_COMPILE_STDCXX_11_INIT_LIST_testbody], [[
 	
-	struct CheckInitializerLists{
-  		   double data[2];
-  		   CheckInitializerLists(double x1, double x2): data{x1,x2} {}
-	};
+    #include<complex>
+	typedef std::complex<double> Complex;
+	
+	template<typename T>
+    struct Array4D {
+
+      Array4D(const T & v0, const T & v1, const T & v2, const T & v3)
+        : data{v0,v1,v2,v3} {}
+
+      T data[4];
+    };
+
+ 	// Definition of a class for complex four-momenta
+  	class ComplexMomentum
+  	{
+
+    public:
+
+      // Default constructor
+      ComplexMomentum(): data(Complex(), Complex(),
+                              Complex(), Complex()) {}
+  
+    private:
+      Array4D<Complex> data;
+  
+    }; // class ComplexMomentum
+
+    ComplexMomentum my_momentum;
 	
 ]])
 
