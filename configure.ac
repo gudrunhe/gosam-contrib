@@ -392,9 +392,19 @@ AC_DEFINE([NINJA_X1RANK], [1],
           [Define to 1 if higher-rank support is enabled.])
 AM_CONDITIONAL(GOSAM, true)
 AM_CONDITIONAL(NINJAGOSAMCONTRIB, true)
-AS_IF([test "x$CXX" == xg++],
-      CXXFLAGS+=" -fcx-fortran-rules -fno-exceptions"
-      CPPFLAGS+=" -DNINJA_NO_EXCEPTIONS",[])
+
+m4_include([m4/m4_cxx_flags_check.m4])
+
+CXX_FLAG_CHECK("-fcx-fortran-rules", ax_cxx_supports_fcx_fortran_rules)
+AS_IF([test "x$ax_cxx_supports_fcx_fortran_rules" == xyes],
+      [CXXFLAGS+=" -fcx-fortran-rules "],[])
+
+CXX_FLAG_CHECK("-fno-exceptions",ax_cxx_supports_fno_exceptions)
+
+AS_IF([test "x$ax_cxx_supports_fno_exceptions" == xyes],
+      [CXXFLAGS+=" -fno-exceptions "
+       CPPFLAGS+=" -DNINJA_NO_EXCEPTIONS"],[])
+
 AC_DEFINE_UNQUOTED([VERSION],["$NINJAVERSION"],[Version of Ninja])
 
 AC_SUBST(NINJAVERSION)

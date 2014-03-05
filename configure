@@ -23304,10 +23304,117 @@ else
   NINJAGOSAMCONTRIB_FALSE=
 fi
 
-if test "x$CXX" == xg++; then :
-  CXXFLAGS+=" -fcx-fortran-rules -fno-exceptions"
-      CPPFLAGS+=" -DNINJA_NO_EXCEPTIONS"
+
+
+
+
+
+   { $as_echo "$as_me:${as_lineno-$LINENO}: checking if $CXX supports/ignores \"-fcx-fortran-rules\"" >&5
+$as_echo_n "checking if $CXX supports/ignores \"-fcx-fortran-rules\"... " >&6; }
+   ac_ext=cpp
+ac_cpp='$CXXCPP $CPPFLAGS'
+ac_compile='$CXX -c $CXXFLAGS $CPPFLAGS conftest.$ac_ext >&5'
+ac_link='$CXX -o conftest$ac_exeext $CXXFLAGS $CPPFLAGS $LDFLAGS conftest.$ac_ext $LIBS >&5'
+ac_compiler_gnu=$ac_cv_cxx_compiler_gnu
+
+  ac_saved_cxxflags="$CXXFLAGS"
+  CXXFLAGS="-Werror "-fcx-fortran-rules""
+  cat confdefs.h - <<_ACEOF >conftest.$ac_ext
+/* end confdefs.h.  */
+
+#ifdef FC_DUMMY_MAIN
+#ifndef FC_DUMMY_MAIN_EQ_F77
+#  ifdef __cplusplus
+     extern "C"
+#  endif
+   int FC_DUMMY_MAIN() { return 1; }
+#endif
+#endif
+int
+main ()
+{
+
+  ;
+  return 0;
+}
+_ACEOF
+if ac_fn_cxx_try_compile "$LINENO"; then :
+  { $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
+$as_echo "yes" >&6; }
+     ax_cxx_supports_fcx_fortran_rules=yes
+else
+  { $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
+$as_echo "no" >&6; }
+     ax_cxx_supports_fcx_fortran_rules=no
+
 fi
+rm -f core conftest.err conftest.$ac_objext conftest.$ac_ext
+  CXXFLAGS="$ac_saved_cxxflags"
+  ac_ext=cpp
+ac_cpp='$CXXCPP $CPPFLAGS'
+ac_compile='$CXX -c $CXXFLAGS $CPPFLAGS conftest.$ac_ext >&5'
+ac_link='$CXX -o conftest$ac_exeext $CXXFLAGS $CPPFLAGS $LDFLAGS conftest.$ac_ext $LIBS >&5'
+ac_compiler_gnu=$ac_cv_cxx_compiler_gnu
+
+
+if test "x$ax_cxx_supports_fcx_fortran_rules" == xyes; then :
+  CXXFLAGS+=" -fcx-fortran-rules "
+fi
+
+   { $as_echo "$as_me:${as_lineno-$LINENO}: checking if $CXX supports/ignores \"-fno-exceptions\"" >&5
+$as_echo_n "checking if $CXX supports/ignores \"-fno-exceptions\"... " >&6; }
+   ac_ext=cpp
+ac_cpp='$CXXCPP $CPPFLAGS'
+ac_compile='$CXX -c $CXXFLAGS $CPPFLAGS conftest.$ac_ext >&5'
+ac_link='$CXX -o conftest$ac_exeext $CXXFLAGS $CPPFLAGS $LDFLAGS conftest.$ac_ext $LIBS >&5'
+ac_compiler_gnu=$ac_cv_cxx_compiler_gnu
+
+  ac_saved_cxxflags="$CXXFLAGS"
+  CXXFLAGS="-Werror "-fno-exceptions""
+  cat confdefs.h - <<_ACEOF >conftest.$ac_ext
+/* end confdefs.h.  */
+
+#ifdef FC_DUMMY_MAIN
+#ifndef FC_DUMMY_MAIN_EQ_F77
+#  ifdef __cplusplus
+     extern "C"
+#  endif
+   int FC_DUMMY_MAIN() { return 1; }
+#endif
+#endif
+int
+main ()
+{
+
+  ;
+  return 0;
+}
+_ACEOF
+if ac_fn_cxx_try_compile "$LINENO"; then :
+  { $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
+$as_echo "yes" >&6; }
+     ax_cxx_supports_fno_exceptions=yes
+else
+  { $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
+$as_echo "no" >&6; }
+     ax_cxx_supports_fno_exceptions=no
+
+fi
+rm -f core conftest.err conftest.$ac_objext conftest.$ac_ext
+  CXXFLAGS="$ac_saved_cxxflags"
+  ac_ext=cpp
+ac_cpp='$CXXCPP $CPPFLAGS'
+ac_compile='$CXX -c $CXXFLAGS $CPPFLAGS conftest.$ac_ext >&5'
+ac_link='$CXX -o conftest$ac_exeext $CXXFLAGS $CPPFLAGS $LDFLAGS conftest.$ac_ext $LIBS >&5'
+ac_compiler_gnu=$ac_cv_cxx_compiler_gnu
+
+
+
+if test "x$ax_cxx_supports_fno_exceptions" == xyes; then :
+  CXXFLAGS+=" -fno-exceptions "
+       CPPFLAGS+=" -DNINJA_NO_EXCEPTIONS"
+fi
+
 
 cat >>confdefs.h <<_ACEOF
 #define VERSION "$NINJAVERSION"
