@@ -15,7 +15,7 @@
 
 namespace ninja {
 
-  class IntegralCache;
+  struct IntegralCache;
 
   class AvHOneLoop : public IntegralLibrary {
   public:
