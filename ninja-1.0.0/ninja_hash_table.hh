@@ -149,7 +149,10 @@ namespace ninja {
     HashTable()
       : buckets_(), size_(0), prime_index_(0) {}
 
-    ~HashTable() {}
+    ~HashTable()
+    {
+      free();
+    }
 
     bool empty() const
     {

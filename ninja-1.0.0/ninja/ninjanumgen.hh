@@ -8,6 +8,8 @@ namespace {
 
   typedef ninja::Complex NinjaAbbrType;
 
+  const ninja::Real NINJAZERO(0);
+
   //template<unsigned N>
   //struct NinjaFormAbbr {
   //    ninja::Complex data_[N];

@@ -25,20 +25,20 @@ namespace ninja {
   // Returns 0.5 * <i \gamma^\mu j ]
   ComplexMomentum momentumFromSpinors(const Spinor & i, const Spinor & j);
 
-  // Left handed polarization vector from two spinors.
+  // Right handed polarization vector from two spinors.
   // Returns <r | \gamma^\mu | k ]/sqrt2/<r,k>
   ComplexMomentum polarizationVectorR(const Spinor & r, const Spinor & k);
 
-  // Left handed polarization vector from two momenta.
+  // Right handed polarization vector from two momenta.
   // Returns <r | \gamma^\mu | k ]/sqrt2/<r,k>
   ComplexMomentum polarizationVectorR(const RealMomentum & r,
                                       const RealMomentum & k);
 
-  // Right handed polarization vector from two spinors.
+  // Left handed polarization vector from two spinors.
   // Returns <k | \gamma^/mu | r ]/sqrt2/[k,r]
   ComplexMomentum polarizationVectorL(const Spinor & r, const Spinor & k);
 
-  // Right handed polarization vector from two momenta.
+  // Left handed polarization vector from two momenta.
   // Returns <k | \gamma^/mu | r ]/sqrt2/[k,r]
   ComplexMomentum polarizationVectorL(const RealMomentum & r,
                                       const RealMomentum & k);
@@ -107,8 +107,6 @@ namespace ninja {
   }
 
 
-  // Left handed polarization vector from two spinors.
-  // Returns <r | \gamma^/mu | k ]/sqrt2/<r,k>
   inline ComplexMomentum
   polarizationVectorR(const Spinor & r, const Spinor & k)
   {
@@ -120,8 +118,6 @@ namespace ninja {
         INVSQRT2 * (  -r.ame*k.bme + r.ap*k.bp   )/spaark  );
   }
 
-  // Right handed polarization vector from two spinors.
-  // Returns <k | \gamma^/mu | r ]/sqrt2/[k,r]
   inline ComplexMomentum
   polarizationVectorL(const Spinor & r, const Spinor & k)
   {
@@ -133,16 +129,12 @@ namespace ninja {
         INVSQRT2 * (  -k.ame*r.bme + k.ap*r.bp   )/spbbkr  );
   }
 
-  // Left handed polarization vector from two momenta.
-  // Returns <r | \gamma^/mu | k ]/sqrt2/<r,k>
   inline ComplexMomentum polarizationVectorR(const RealMomentum & r,
                                              const RealMomentum & k)
   {
     return polarizationVectorR(Spinor(r), Spinor(k));
   }
 
-  // Right handed polarization vector from two momenta.
-  // Returns <k | \gamma^/mu | r ]/sqrt2/[k,r]
   inline ComplexMomentum polarizationVectorL(const RealMomentum & r,
                                              const RealMomentum & k)
   {

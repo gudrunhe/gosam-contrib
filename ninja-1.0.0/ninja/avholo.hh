@@ -15,9 +15,11 @@
 
 namespace ninja {
 
+  class IntegralCache;
+
   class AvHOneLoop : public IntegralLibrary {
   public:
-    AvHOneLoop() {}
+    AvHOneLoop(): cache_(0), mur_(0), mur2_(0) {}
 
     // This method sets the numerical infrared threshold (default =
     // 1.0e-10)
@@ -27,12 +29,12 @@ namespace ninja {
     // buckets in memory.  This avoids rehashing in future calls of
     // MIs.  It is suggested to be called after every phase-space
     // point, especially for amplitudes with many external legs.
-    static void clearIntegralCache();
+    void clearIntegralCache();
 
     // This method completely frees the memory allocated by the cache
     // of MIs.  There is no obvious case when this should be called.
     // The method clearIntegralCache() should in general be preferred.
-    static void freeIntegralCache();
+    void freeIntegralCache();
 
     virtual void init(Real muRsq);
 
@@ -97,8 +99,15 @@ namespace ninja {
     virtual void getTadpoleIntegralRM(Complex rslt[3], Real m0);
     virtual void getTadpoleIntegralCM(Complex rslt[3], const Complex & m0);
 
+
+    // destructor
+    virtual ~AvHOneLoop();
+
   private:
-    static Real mur2_, ir_threshold_;
+    IntegralCache * cache_;
+    Real mur_, mur2_;
+    static Real ir_threshold_;
+    static bool initialized_;
 
   }; // class AvHOneLoop
 

@@ -50,6 +50,11 @@ namespace ninja {
       "  |      through Laurent series expansion,\"                        |\n"
       "  |      JHEP 1206 (2012) 095  [arXiv:1203.0291 [hep-ph]].         |\n"
       "  |                                                                |\n"
+      "  |      T. Peraro,                                                |\n"
+      "  |      \"Ninja: Automated Integrand Reduction via Laurent         |\n"
+      "  |      Expansion for One-Loop Amplitudes,\"                       |\n"
+      "  |      arXiv:1403.1229 [hep-ph]                                  |\n"
+      "  |                                                                |\n"
       "  +----------------------------------------------------------------+\n";
   }
 

@@ -101,6 +101,9 @@ extern "C"{
   // Clear the cache of the master integrals
   void ninjago_clear_integral_cache();
 
+  // Free the cache of the master integrals in OneLoop interface
+  void ninjago_free_integral_cache();
+
   // Set the verbosity
   void ninjago_set_verbosity(int val);
 

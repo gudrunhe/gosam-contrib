@@ -5,6 +5,14 @@ libninja_la_SOURCES = basis.cc  cuts_utils.cc  ninja.cc  Xcuts.cc \
 	coefficient_level_subs.cc	\
 	integral_library.cc avholo_interface.cc \
 	rambo.cc
+if AVHOLO
+libninja_la_SOURCES += avholo_wrapper.F90
+if NINJAGOSAMCONTRIB
+AM_FCFLAGS = -I$(top_builddir)/avh_olo-2.2.1
+else
+AM_FCFLAGS = $(FCINCLUDE)
+endif
+endif
 if LOOPTOOLS
 libninja_la_SOURCES +=  looptools_interface.cc
 endif
@@ -17,7 +25,7 @@ noinst_HEADERS = ninja_implem.cxx  polys_implem.cxx basis.hh \
 	coefficient_level_subs.hh	\
 	integermath.hh  tmp_utils.hh  ninja_scoped_array.hh  cuts_vector.hh \
 	integral_library_wrapper.hh s_mat_wrapper.hh avholo_decls.hh \
-	ninja_hash_table.hh \
+	ninja_hash_table.hh integral_cache.hh \
 	gosam_interface.hh
 
 library_includedir=$(includedir)

@@ -317,6 +317,13 @@ extern "C" {
 #endif
   }
 
+  void ninjago_free_integral_cache()
+  {
+#if defined(NINJA_USE_ONELOOP) && defined(NINJA_USE_ONELOOP_WITH_CACHE)
+    avh_olo.freeIntegralCache();
+#endif
+  }
+
   void ninjago_set_verbosity(int val)
   {
     setVerbosity(val);

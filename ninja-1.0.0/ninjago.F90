@@ -1,6 +1,4 @@
 ! Interface of ninja for Gosam
-!
-! Tiziano Peraro
 
 #ifdef HAVE_CONFIG_H
 #include <config.h>
@@ -15,7 +13,7 @@ module ninjago_module
 
   ! subroutines
   public :: ninja_diagram, ninja_diagram_rm, ninja_diagram_cm, ninja_diagram_nm
-  public :: ninja_clear_integral_cache
+  public :: ninja_clear_integral_cache, ninja_free_integral_cache
   public :: ninja_set_test, ninja_set_test_tolerance
   public :: ninja_set_verbosity, ninja_set_output_precision
   public :: ninja_set_integral_library
@@ -49,12 +47,12 @@ module ninjago_module
   public :: NINJA_OUTPUT_RESULT
   public :: NINJA_OUTPUT_INTEGRALS
 
-  ! Use ninja with double precision
 #ifndef NINJA_QUADRUPLE
-  integer, parameter :: ki_nin = c_double
+# define KI_NIN c_double
 #else
-  integer, parameter :: ki_nin = c_float128
+# define KI_NIN c_float128
 #endif
+  integer, parameter :: ki_nin = KI_NIN
 
   ! Return status parameters of ninja
   integer(c_int), parameter :: NINJA_SUCCESS = 0
@@ -111,66 +109,61 @@ module ninjago_module
           & tot, totr, return_status) &
           & bind(c, name="ninjago_diag_rm")
        use, intrinsic :: iso_c_binding
-       import ki_nin
        implicit none
        interface
           subroutine numerator(ncut, Q, mu2,num) bind(c)
             use, intrinsic :: iso_c_binding
-            import ki_nin
             implicit none
             integer(c_int), intent(in) :: ncut
-            complex(ki_nin), dimension(0:3), intent(in) :: Q
-            complex(ki_nin), intent(in) :: mu2
-            complex(ki_nin), intent(out) :: num
+            complex(KI_NIN), dimension(0:3), intent(in) :: Q
+            complex(KI_NIN), intent(in) :: mu2
+            complex(KI_NIN), intent(out) :: num
           end subroutine numerator
        end interface
        interface
           subroutine numerator_t3(ncut, a, b, c, param, ndeg, coeffs) bind(c)
             use, intrinsic :: iso_c_binding
-            import ki_nin
             implicit none
             integer(c_int), intent(in) :: ncut
-            complex(ki_nin), dimension(0:3), intent(in) :: a, b, c
-            complex(ki_nin), intent(in) :: param
+            complex(KI_NIN), dimension(0:3), intent(in) :: a, b, c
+            complex(KI_NIN), intent(in) :: param
             integer(c_int), intent(in) :: ndeg
-            complex(ki_nin), dimension(0:*), intent(out):: coeffs
+            complex(KI_NIN), dimension(0:*), intent(out):: coeffs
           end subroutine numerator_t3
        end interface
        interface
           subroutine numerator_t2(ncut, a0, a1, b, c, param, ndeg, coeffs) &
                & bind(c)
             use, intrinsic :: iso_c_binding
-            import ki_nin
             implicit none
             integer(c_int), intent(in) :: ncut
-            complex(ki_nin), dimension(0:3), intent(in) :: a0, a1, b, c
-            complex(ki_nin), dimension(0:2), intent(in) :: param
+            complex(KI_NIN), dimension(0:3), intent(in) :: a0, a1, b, c
+            complex(KI_NIN), dimension(0:2), intent(in) :: param
             integer(c_int), intent(in) :: ndeg
-            complex(ki_nin), dimension(0:*), intent(out):: coeffs
+            complex(KI_NIN), dimension(0:*), intent(out):: coeffs
           end subroutine numerator_t2
        end interface
        interface
           subroutine numerator_d(ncut, a, coeffs) bind(c)
             use, intrinsic :: iso_c_binding
-            import ki_nin
             implicit none
             integer(c_int), intent(in) :: ncut
-            complex(ki_nin), dimension(0:3,*), intent(in) :: a
-            complex(ki_nin), dimension(0:*), intent(out):: coeffs
+            complex(KI_NIN), dimension(0:3,*), intent(in) :: a
+            complex(KI_NIN), dimension(0:*), intent(out):: coeffs
           end subroutine numerator_d
        end interface
        integer(c_int), intent(in) :: nprops_group
        integer(c_int), intent(in) :: nprops
-       real(ki_nin), dimension(0:3,*) :: Vi
-       real(ki_nin), dimension(*) :: msq
-       real(ki_nin), dimension(nprops_group,nprops_group), &
+       real(KI_NIN), dimension(0:3,*) :: Vi
+       real(KI_NIN), dimension(*) :: msq
+       real(KI_NIN), dimension(nprops_group,nprops_group), &
             & intent(in) :: s_mat
        integer(c_int), intent(in) :: rk
        integer(c_int), intent(in) :: istop
-       real(ki_nin), intent(in) :: scale2
+       real(KI_NIN), intent(in) :: scale2
        integer(c_int), intent(in), dimension(*) :: subset
-       complex(ki_nin), dimension(-2:0), intent(out) :: tot
-       complex(ki_nin), intent(out) :: totr
+       complex(KI_NIN), dimension(-2:0), intent(out) :: tot
+       complex(KI_NIN), intent(out) :: totr
        integer(c_int), intent(out) :: return_status
      end subroutine ninja_diagram_rm
 
@@ -182,66 +175,61 @@ module ninjago_module
           & tot, totr, return_status) &
           & bind(c, name="ninjago_diag_cm")
        use, intrinsic :: iso_c_binding
-       import ki_nin
        implicit none
        interface
           subroutine numerator(ncut, Q, mu2,num) bind(c)
             use, intrinsic :: iso_c_binding
-            import ki_nin
             implicit none
             integer(c_int), intent(in) :: ncut
-            complex(ki_nin), dimension(0:3), intent(in) :: Q
-            complex(ki_nin), intent(in) :: mu2
-            complex(ki_nin), intent(out) :: num
+            complex(KI_NIN), dimension(0:3), intent(in) :: Q
+            complex(KI_NIN), intent(in) :: mu2
+            complex(KI_NIN), intent(out) :: num
           end subroutine numerator
        end interface
        interface
           subroutine numerator_t3(ncut, a, b, c, param, ndeg, coeffs) bind(c)
             use, intrinsic :: iso_c_binding
-            import ki_nin
             implicit none
             integer(c_int), intent(in) :: ncut
-            complex(ki_nin), dimension(0:3), intent(in) :: a, b, c
-            complex(ki_nin), intent(in) :: param
+            complex(KI_NIN), dimension(0:3), intent(in) :: a, b, c
+            complex(KI_NIN), intent(in) :: param
             integer(c_int), intent(in) :: ndeg
-            complex(ki_nin), dimension(0:*), intent(out):: coeffs
+            complex(KI_NIN), dimension(0:*), intent(out):: coeffs
           end subroutine numerator_t3
        end interface
        interface
           subroutine numerator_t2(ncut, a0, a1, b, c, param, ndeg, coeffs) &
                & bind(c)
             use, intrinsic :: iso_c_binding
-            import ki_nin
             implicit none
             integer(c_int), intent(in) :: ncut
-            complex(ki_nin), dimension(0:3), intent(in) :: a0, a1, b, c
-            complex(ki_nin), dimension(0:2), intent(in) :: param
+            complex(KI_NIN), dimension(0:3), intent(in) :: a0, a1, b, c
+            complex(KI_NIN), dimension(0:2), intent(in) :: param
             integer(c_int), intent(in) :: ndeg
-            complex(ki_nin), dimension(0:*), intent(out):: coeffs
+            complex(KI_NIN), dimension(0:*), intent(out):: coeffs
           end subroutine numerator_t2
        end interface
        interface
           subroutine numerator_d(ncut, a, coeffs) bind(c)
             use, intrinsic :: iso_c_binding
-            import ki_nin
             implicit none
             integer(c_int), intent(in) :: ncut
-            complex(ki_nin), dimension(0:3,*), intent(in) :: a
-            complex(ki_nin), dimension(0:*), intent(out):: coeffs
+            complex(KI_NIN), dimension(0:3,*), intent(in) :: a
+            complex(KI_NIN), dimension(0:*), intent(out):: coeffs
           end subroutine numerator_d
        end interface
        integer(c_int), intent(in) :: nprops_group
        integer(c_int), intent(in) :: nprops
-       real(ki_nin), dimension(0:3,*) :: Vi
-       complex(ki_nin), dimension(*) :: msq
-       real(ki_nin), dimension(nprops_group,nprops_group), &
+       real(KI_NIN), dimension(0:3,*) :: Vi
+       complex(KI_NIN), dimension(*) :: msq
+       real(KI_NIN), dimension(nprops_group,nprops_group), &
             & intent(in) :: s_mat
        integer(c_int), intent(in) :: rk
        integer(c_int), intent(in) :: istop
-       real(ki_nin), intent(in) :: scale2
+       real(KI_NIN), intent(in) :: scale2
        integer(c_int), intent(in), dimension(*) :: subset
-       complex(ki_nin), dimension(-2:0), intent(out) :: tot
-       complex(ki_nin), intent(out) :: totr
+       complex(KI_NIN), dimension(-2:0), intent(out) :: tot
+       complex(KI_NIN), intent(out) :: totr
        integer(c_int), intent(out) :: return_status
      end subroutine ninja_diagram_cm
 
@@ -254,65 +242,60 @@ module ninjago_module
           & tot, totr, return_status) &
           & bind(c, name="ninjago_diag_nm")
        use, intrinsic :: iso_c_binding
-       import ki_nin
        implicit none
        interface
           subroutine numerator(ncut, Q, mu2,num) bind(c)
             use, intrinsic :: iso_c_binding
-            import ki_nin
             implicit none
             integer(c_int), intent(in) :: ncut
-            complex(ki_nin), dimension(0:3), intent(in) :: Q
-            complex(ki_nin), intent(in) :: mu2
-            complex(ki_nin), intent(out) :: num
+            complex(KI_NIN), dimension(0:3), intent(in) :: Q
+            complex(KI_NIN), intent(in) :: mu2
+            complex(KI_NIN), intent(out) :: num
           end subroutine numerator
        end interface
        interface
           subroutine numerator_t3(ncut, a, b, c, param, ndeg, coeffs) bind(c)
             use, intrinsic :: iso_c_binding
-            import ki_nin
             implicit none
             integer(c_int), intent(in) :: ncut
-            complex(ki_nin), dimension(0:3), intent(in) :: a, b, c
-            complex(ki_nin), intent(in) :: param
+            complex(KI_NIN), dimension(0:3), intent(in) :: a, b, c
+            complex(KI_NIN), intent(in) :: param
             integer(c_int), intent(in) :: ndeg
-            complex(ki_nin), dimension(0:*), intent(out):: coeffs
+            complex(KI_NIN), dimension(0:*), intent(out):: coeffs
           end subroutine numerator_t3
        end interface
        interface
           subroutine numerator_t2(ncut, a0, a1, b, c, param, ndeg, coeffs) &
                & bind(c)
             use, intrinsic :: iso_c_binding
-            import ki_nin
             implicit none
             integer(c_int), intent(in) :: ncut
-            complex(ki_nin), dimension(0:3), intent(in) :: a0, a1, b, c
-            complex(ki_nin), dimension(0:2), intent(in) :: param
+            complex(KI_NIN), dimension(0:3), intent(in) :: a0, a1, b, c
+            complex(KI_NIN), dimension(0:2), intent(in) :: param
             integer(c_int), intent(in) :: ndeg
-            complex(ki_nin), dimension(0:*), intent(out):: coeffs
+            complex(KI_NIN), dimension(0:*), intent(out):: coeffs
           end subroutine numerator_t2
        end interface
        interface
           subroutine numerator_d(ncut, a, coeffs) bind(c)
             use, intrinsic :: iso_c_binding
-            import ki_nin
             implicit none
             integer(c_int), intent(in) :: ncut
-            complex(ki_nin), dimension(0:3,*), intent(in) :: a
-            complex(ki_nin), dimension(0:*), intent(out):: coeffs
+            complex(KI_NIN), dimension(0:3,*), intent(in) :: a
+            complex(KI_NIN), dimension(0:*), intent(out):: coeffs
           end subroutine numerator_d
        end interface
        integer(c_int), intent(in) :: nprops_group
        integer(c_int), intent(in) :: nprops
-       real(ki_nin), dimension(0:3,*) :: Vi
-       real(ki_nin), dimension(nprops_group,nprops_group), &
+       real(KI_NIN), dimension(0:3,*) :: Vi
+       real(KI_NIN), dimension(nprops_group,nprops_group), &
             & intent(in) :: s_mat
        integer(c_int), intent(in) :: rk
        integer(c_int), intent(in) :: istop
-       real(ki_nin), intent(in) :: scale2
+       real(KI_NIN), intent(in) :: scale2
        integer(c_int), intent(in), dimension(*) :: subset
-       complex(ki_nin), dimension(-2:0), intent(out) :: tot
-       complex(ki_nin), intent(out) :: totr
+       complex(KI_NIN), dimension(-2:0), intent(out) :: tot
+       complex(KI_NIN), intent(out) :: totr
        integer(c_int), intent(out) :: return_status
      end subroutine ninja_diagram_nm
 
@@ -324,6 +307,16 @@ module ninjago_module
      subroutine ninja_clear_integral_cache() &
           & bind (c,name='ninjago_clear_integral_cache')
      end subroutine ninja_clear_integral_cache
+  end interface
+
+  ! This completely frees the memory allocated by the internal cache
+  ! of Master Integrals in the Ninja interface of OneLoop (note: you
+  ! usually don't want to call this, call ninja_clear_integral_cache()
+  ! instead, unless you're not computing integrals anymore).
+  interface
+     subroutine ninja_free_integral_cache() &
+          & bind (c,name='ninjago_free_integral_cache')
+     end subroutine ninja_free_integral_cache
   end interface
 
   interface
@@ -346,8 +339,7 @@ module ninjago_module
      subroutine ninja_set_test_tolerance(val) &
           bind (c,name='ninjago_set_test_tolerance')
        use, intrinsic :: iso_c_binding
-       import ki_nin
-       real(ki_nin), intent(in) :: val
+       real(KI_NIN), intent(in) :: val
      end subroutine ninja_set_test_tolerance
   end interface
 

@@ -108,6 +108,11 @@ namespace ninja {
     typedef const X* type;
   };
 
+  // Specialize ninja::const_pointer<ZeroFloat>
+  template<> struct const_pointer<ZeroFloat> {
+    typedef ZeroFloatArray type;
+  };
+
 
   // Convert Zero-Floats to reals by asking for real part
   inline Real real (ZeroFloat)

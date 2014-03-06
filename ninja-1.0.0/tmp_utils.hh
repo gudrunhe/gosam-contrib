@@ -30,8 +30,6 @@ namespace ninja{
 // If decltype() is not available, use some template structs in order
 // to choose return type in mixed types operations.
 
-#include <ninja/types.hh>
-
 namespace ninja {
   namespace details {
 
@@ -58,5 +56,94 @@ namespace ninja {
 } // namespace ninja
 
 #endif // ! HAVE_DECLTYPE
+
+
+namespace ninja {
+
+
+  // Defining ZeroFloat arithmetic operations
+
+
+  // 0+0 = 0
+  // x+0 = 0
+  // 0+x = 0
+  inline ZeroFloat operator + (ZeroFloat, ZeroFloat)
+  {
+    return ZeroFloat();
+  }
+  template<typename T>
+  inline T operator + (const T & x, ZeroFloat)
+  {
+    return x;
+  }
+  template<typename T>
+  inline T operator + (ZeroFloat, const T & x)
+  {
+    return x;
+  }
+
+  // 0-0 = 0
+  // x-0 = x
+  // 0-x = -x
+  inline ZeroFloat operator - (ZeroFloat, ZeroFloat)
+  {
+    return ZeroFloat();
+  }
+  template<typename T>
+  inline T operator - (const T & x, ZeroFloat)
+  {
+    return x;
+  }
+  template<typename T>
+  inline T operator - (ZeroFloat, const T & x)
+  {
+    return -x;
+  }
+
+  // 0*0 = 0
+  // 0*x = 0
+  // x*0 = 0
+  inline ZeroFloat operator * (ZeroFloat, ZeroFloat)
+  {
+    return ZeroFloat();
+  }
+  template<typename T>
+  inline ZeroFloat operator * (const T &, ZeroFloat)
+  {
+    return ZeroFloat();
+  }
+  template<typename T>
+  inline ZeroFloat operator * (ZeroFloat, const T &)
+  {
+    return ZeroFloat();
+  }
+
+  // 0/x = 0
+  template<typename T>
+  inline ZeroFloat operator / (ZeroFloat, const T &)
+  {
+    return ZeroFloat();
+  }
+
+
+  namespace details {
+
+    // Specialize ninja::details::common_type<...>
+    template<typename T>
+    struct common_type<ZeroFloat, T> {
+      typedef T type;
+    };
+    template<typename T>
+    struct common_type<T,ZeroFloat> {
+      typedef T type;
+    };
+    template<>
+    struct common_type<ZeroFloat,ZeroFloat> {
+      typedef ZeroFloat type;
+    };
+
+  } // namespace details
+
+}
 
 #endif // NINJA_TMP_UTILS_HH
