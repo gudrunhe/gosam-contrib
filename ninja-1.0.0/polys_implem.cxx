@@ -94,7 +94,7 @@ void print(const CutsVector<Pentagon> & p)
 
 void print(const CutsVector<Box> & d)
 {
-    (*Options::out) << "4 -- Quadruple cuts:\n\n"
+    (*Options::out) << "\n\n4 -- Quadruple cuts:\n\n"
                     << "n. partitions = " << d.size() << "\n\n"
                     << "Coefficients:" << endl;
     for (unsigned int i = 0; i<d.size(); ++i) {
@@ -112,7 +112,7 @@ void print(const CutsVector<Box> & d)
 
 void print(const CutsVector<Triangle> & c)
 {
-    (*Options::out) << "3 -- Triple cuts:\n\n"
+    (*Options::out) << "\n\n3 -- Triple cuts:\n\n"
                     << "n. partitions = " << c.size() << "\n\n"
                     << "Coefficients:" << endl;
     for (unsigned int i = 0; i<c.size(); ++i) {
@@ -128,7 +128,7 @@ void print(const CutsVector<Triangle> & c)
 
 void print(const CutsVector<Bubble> & b)
 {
-    (*Options::out) << "2 -- Double cuts:\n\n"
+    (*Options::out) << "\n\n2 -- Double cuts:\n\n"
                     << "n. partitions = " << b.size() << "\n\n"
                     << "Coefficients:" << endl;
     for (unsigned int i = 0; i<b.size(); ++i) {
@@ -143,7 +143,7 @@ void print(const CutsVector<Bubble> & b)
 
 void print(const CutsVector<Tadpole> & a)
 {
-    (*Options::out) << "1 -- Single cuts:\n\n"
+    (*Options::out) << "\n\n1 -- Single cuts:\n\n"
                     << "n. partitions = " << a.size() << "\n\n"
                     << "Coefficients:" << endl;
     for (unsigned int i = 0; i<a.size(); ++i) {

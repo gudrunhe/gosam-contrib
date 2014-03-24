@@ -153,7 +153,7 @@ namespace ninja {
     ///////////////////
   
     // create Pentagons
-    tests = global_test;
+    tests = Options::test;
     bool anyPentagon = (n >= 5) && (min_cut <= 5)
       && (tests || (Options::verb & Verbose::C5) || !use_mu_exp);
     int n5cuts = anyPentagon ? combinations5(n) : 0;
@@ -418,7 +418,7 @@ namespace ninja {
 
     if (Options::verb) {
       (*Options::out) << endl;
-      if (Verbose::RESULT) {
+      if (Options::verb & Verbose::RESULT) {
         (*Options::out) << "Partial Result:" << endl;
         (*Options::out) << "eps^0  =" << result_temp[0] << endl;
         (*Options::out) << "eps^-1 =" << result_temp[1] << endl;

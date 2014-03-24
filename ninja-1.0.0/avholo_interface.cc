@@ -675,6 +675,8 @@ namespace ninja {
     avh_olo_disabled();
   }
 
+  AvHOneLoop::~AvHOneLoop() {}
+
 } // namespace ninja
 
 #endif // ! NINJA_USE_ONELOOP
