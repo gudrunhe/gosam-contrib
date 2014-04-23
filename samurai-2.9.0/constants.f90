@@ -2,6 +2,19 @@ module constants
 use precision
 implicit none
 
+   integer, dimension(1:1), parameter, public :: cachedim1  = (/1/)
+   integer, dimension(1:2), parameter, public :: cachedim2  = (/7,5/)
+   integer, dimension(1:3), parameter, public :: cachedim3  = (/19,16,1/)
+   integer, dimension(1:4), parameter, public :: cachedim4  = (/39,35,5,1/)
+   integer, dimension(1:4), parameter, public :: cachedim5  = (/70,65,15,5/)
+   integer, dimension(1:4), parameter, public :: cachedim6  = (/116,110,35,15/)
+   integer, dimension(1:4), parameter, public :: cachedim7  = (/182,175,70,35/)
+   integer, dimension(1:4), parameter, public :: cachedim8  = (/274,266,126,70/)
+   integer, dimension(1:4), parameter, public :: cachedim9  = (/399,390,210,126/)
+   integer, dimension(1:4), parameter, public :: cachedim10 = (/565,555,330,210/)
+   integer, dimension(1:4), parameter, public :: cachedim11 = (/781,770,495,330/)
+   integer, dimension(1:4), parameter, public :: cachedim12 = (/1057,1045,715,495/)
+
       private :: ki
 
       real(ki), parameter :: pi = 3.14159265358979323846&

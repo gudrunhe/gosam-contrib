@@ -26,7 +26,7 @@ else
 endif
 
 if COMPILE_SAMURAI
-SUBDIRS+= samurai-2.1.1
+SUBDIRS+= samurai-2.9.0
 else
 # nop
 endif

@@ -145,23 +145,52 @@ contains
    end function effe2
 
 
-   pure function poly4(c4,pm,mu2,L3,e3,e4)
+   pure function poly4(diff,c4,pm,mu2,L3,e3,e4)
       implicit none
+	integer, intent(in) :: diff
       complex(ki), dimension(0:5), intent(in) :: c4
       complex(ki), dimension(4), intent(in) :: pm, e3, e4
       real(ki), dimension(4), intent(in) :: L3
       complex(ki), intent(in) :: mu2
       complex(ki) :: poly4
 
-      poly4=c4(0) &
-     &     +mu2*(c4(2)+c4(4)*mu2) &
-     &     +(c4(1)+c4(3)*mu2+c4(5)*mu2**2) &
-     &      *(+sdot(pm,e3)*sdot(L3,e4) &
-     &        -sdot(pm,e4)*sdot(L3,e3))
+	if(diff.ge.4) then
+	      poly4=c4(0) 
+	elseif(diff.eq.3) then
+	      poly4=c4(0) &
+	     &     +c4(1) &
+	     &      *(+sdot(pm,e3)*sdot(L3,e4) &
+	     &        -sdot(pm,e4)*sdot(L3,e3))
+	elseif(diff.eq.2) then
+	      poly4=c4(0) &
+	     &     +mu2*c4(2) &
+	     &     +c4(1) &
+	     &      *(+sdot(pm,e3)*sdot(L3,e4) &
+	     &        -sdot(pm,e4)*sdot(L3,e3))
+	elseif(diff.eq.1) then
+	      poly4=c4(0) &
+	     &     +mu2*c4(2) &
+	     &     +(c4(1)+c4(3)*mu2) &
+	     &      *(+sdot(pm,e3)*sdot(L3,e4) &
+	     &        -sdot(pm,e4)*sdot(L3,e3))
+	elseif(diff.eq.0) then
+	      poly4=c4(0) &
+	     &     +mu2*(c4(2)+c4(4)*mu2) &
+	     &     +(c4(1)+c4(3)*mu2) &
+	     &      *(+sdot(pm,e3)*sdot(L3,e4) &
+	     &        -sdot(pm,e4)*sdot(L3,e3))
+	else
+	      poly4=c4(0) &
+	     &     +mu2*(c4(2)+c4(4)*mu2) &
+	     &     +(c4(1)+c4(3)*mu2+c4(5)*mu2**2) &
+	     &      *(+sdot(pm,e3)*sdot(L3,e4) &
+	     &        -sdot(pm,e4)*sdot(L3,e3))
+	endif
    end  function poly4
 
-   pure function poly3(c3,pm,mu2,e3,e4)
+   pure function poly3(diff,c3,pm,mu2,e3,e4)
       implicit none
+	integer, intent(in) :: diff
       complex(ki), dimension(0:14), intent(in) :: c3
       complex(ki), dimension(4), intent(in) :: pm, e3, e4
       complex(ki), intent(in) :: mu2
@@ -172,22 +201,36 @@ contains
       pme3=sdot(pm,e3)
       pme4=sdot(pm,e4)
 
-!      poly3=+c3(0) &
-!     &      +pme3*(c3(1)+pme3*(c3(2)+c3(3)*pme3)) &
-!     &      +pme4*(c3(4)+pme4*(c3(5)+c3(6)*pme4)) &
-!     &      +mu2*(c3(7)+c3(8)*pme3+c3(9)*pme4)
-
-      poly3=+c3(0) &
-     &      +pme3*(c3(1)+pme3*(c3(2)+c3(3)*pme3)) &
-     &      +pme4*(c3(4)+pme4*(c3(5)+c3(6)*pme4)) &
-     &      +mu2*( c3(7)+c3(8)*pme3+c3(9)*pme4     &
-     &            +c3(10)*pme3**2+c3(11)*pme4**2)       &
-     &      +c3(12)*pme3**4+c3(13)*pme4**4        &
-     &      +c3(14)*mu2**2
+	if(diff.ge.3) then
+	      poly3=+c3(0) 
+	elseif(diff.eq.2) then
+	      poly3=+c3(0) &
+	     &      +pme3*c3(1) &
+	     &      +pme4*c3(4) 
+	elseif(diff.eq.1) then
+	      poly3=+c3(0) &
+	     &      +pme3*(c3(1)+pme3*c3(2)) &
+	     &      +pme4*(c3(4)+pme4*c3(5)) &
+	     &      +mu2*c3(7)
+	elseif(diff.eq.0) then
+	      poly3=+c3(0) &
+	     &      +pme3*(c3(1)+pme3*(c3(2)+c3(3)*pme3)) &
+	     &      +pme4*(c3(4)+pme4*(c3(5)+c3(6)*pme4)) &
+	     &      +mu2*(c3(7)+c3(8)*pme3+c3(9)*pme4)
+	else
+	      poly3=+c3(0) &
+	     &      +pme3*(c3(1)+pme3*(c3(2)+c3(3)*pme3)) &
+	     &      +pme4*(c3(4)+pme4*(c3(5)+c3(6)*pme4)) &
+	     &      +mu2*( c3(7)+c3(8)*pme3+c3(9)*pme4     &
+	     &            +c3(10)*pme3**2+c3(11)*pme4**2)       &
+	     &      +c3(12)*pme3**4+c3(13)*pme4**4        &
+	     &      +c3(14)*mu2**2
+	endif
    end  function poly3
 
-   pure function poly2(c2,pm,mu2,e2,e3,e4)
+   pure function poly2(diff,c2,pm,mu2,e2,e3,e4)
       implicit none
+	integer, intent(in) :: diff
       complex(ki), dimension(0:19), intent(in) :: c2
       real(ki), dimension(4), intent(in) :: e2
       complex(ki), dimension(4), intent(in) :: e3,e4,pm
@@ -199,29 +242,37 @@ contains
       pme2=sdot(e2,pm)
       pme3=sdot(pm,e3)
       pme4=sdot(pm,e4)
-
-!      poly2=+c2(0) &
-!     &      +pme2*(c2(1)+c2(2)*pme2+c2(7)*pme3+c2(8)*pme4) &
-!     &      +pme3*(c2(3)+c2(4)*pme3) &
-!     &      +pme4*(c2(5)+c2(6)*pme4) &
-!     &      +c2(9)*mu2
-
-      poly2=+c2(0) &
-     &      +pme2*(c2(1)+c2(2)*pme2+c2(7)*pme3+c2(8)*pme4) &
-     &      +pme3*(c2(3)+c2(4)*pme3) &
-     &      +pme4*(c2(5)+c2(6)*pme4) &
-     &      +c2(9)*mu2 &
-     &      +mu2*(c2(10)*pme2+c2(11)*pme3+c2(12)*pme4) &
-     &      +c2(13)*pme2**3+c2(14)*pme3**3+c2(15)*pme4**3 &
-     &      +pme2**2*(c2(16)*pme3+c2(17)*pme4) &
-     &      +pme2*(c2(18)*pme3**2+c2(19)*pme4**2)
-
+	if(diff.ge.2) then
+	      poly2=+c2(0) 
+	elseif(diff.eq.1) then
+	      poly2=+c2(0) &
+	     &      +pme2*c2(1) &
+	     &      +pme3*c2(3) &
+	     &      +pme4*c2(5) 
+	elseif(diff.eq.0) then
+	      poly2=+c2(0) &
+	     &      +pme2*(c2(1)+c2(2)*pme2+c2(7)*pme3+c2(8)*pme4) &
+	     &      +pme3*(c2(3)+c2(4)*pme3) &
+	     &      +pme4*(c2(5)+c2(6)*pme4) &
+	     &      +c2(9)*mu2
+	else
+	      poly2=+c2(0) &
+	     &      +pme2*(c2(1)+c2(2)*pme2+c2(7)*pme3+c2(8)*pme4) &
+	     &      +pme3*(c2(3)+c2(4)*pme3) &
+	     &      +pme4*(c2(5)+c2(6)*pme4) &
+	     &      +c2(9)*mu2 &
+	     &      +mu2*(c2(10)*pme2+c2(11)*pme3+c2(12)*pme4) &
+	     &      +c2(13)*pme2**3+c2(14)*pme3**3+c2(15)*pme4**3 &
+	     &      +pme2**2*(c2(16)*pme3+c2(17)*pme4) &
+	     &      +pme2*(c2(18)*pme3**2+c2(19)*pme4**2)
+	endif
 
   end function poly2
 
 
-   pure function poly1(c1,pm,mu2,e1,e2,e3,e4)
+   pure function poly1(diff,c1,pm,mu2,e1,e2,e3,e4)
       implicit none
+	integer, intent(in) :: diff
       complex(ki), dimension(0:15), intent(in) :: c1
       real(ki), dimension(4), intent(in) ::  e1, e2
       complex(ki), dimension(4), intent(in) :: e3, e4, pm
@@ -235,22 +286,31 @@ contains
       pme3=sdot(pm,e3)
       pme4=sdot(pm,e4)
 
-      poly1=+c1(0) &
-     &      +c1(1)*pme1 &
-     &      +c1(2)*pme2 &
-     &      +c1(3)*pme3 &
-     &      +c1(4)*pme4 &
-	!Added by HvD
-	& + c1(5)*pme1**2 &
-	& + c1(6)*pme2**2 &
-	& + c1(7)*pme3**2 &
-	& + c1(8)*pme4**2 &
-	& + c1(10)*pme1*pme3 &
-	& + c1(11)*pme1*pme4 &
-	& + c1(12)*pme2*pme3 &
-	& + c1(13)*pme2*pme4 &
-	& + c1(14)*mu2 	     &
-	& + c1(15)*pme3*pme4
+	if(diff.ge.1) then
+	      poly1=+c1(0) 
+	elseif(diff.eq.0) then
+	      poly1=+c1(0) &
+	     &      +c1(1)*pme1 &
+	     &      +c1(2)*pme2 &
+	     &      +c1(3)*pme3 &
+	     &      +c1(4)*pme4 
+	else
+	      poly1=+c1(0) &
+	     &      +c1(1)*pme1 &
+	     &      +c1(2)*pme2 &
+	     &      +c1(3)*pme3 &
+	     &      +c1(4)*pme4 &
+		& + c1(5)*pme1**2 &
+		& + c1(6)*pme2**2 &
+		& + c1(7)*pme3**2 &
+		& + c1(8)*pme4**2 &
+		& + c1(10)*pme1*pme3 &
+		& + c1(11)*pme1*pme4 &
+		& + c1(12)*pme2*pme3 &
+		& + c1(13)*pme2*pme4 &
+		& + c1(14)*mu2 	     &
+		& + c1(15)*pme3*pme4
+	endif
   end  function poly1
 
 end module mfunctions

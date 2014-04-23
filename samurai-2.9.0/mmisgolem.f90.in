@@ -1,0 +1,507 @@
+module mmisgolem 
+@case_with_golem@	use precision, only: ki
+@case_with_golem@	use precision_golem, only: ki_gol => ki
+@case_with_golem@	use constants
+@case_with_golem@	use options
+@case_with_golem@	use notfirst
+@case_with_golem@	use mmishighrank
+@case_with_golem@	implicit none
+@case_with_golem@	
+@case_with_golem@	private
+@case_with_golem@	
+@case_with_golem@	interface
+@case_with_golem@		function gD0(p1,p2,p3,p4,s12,s23,m1,m2,m3,m4,mu2,ep)
+@case_with_golem@			use precision_golem, only: ki
+@case_with_golem@			implicit none
+@case_with_golem@			real(ki), intent(in) :: p1,p2,p3,p4,s12,s23
+@case_with_golem@			real(ki), intent(in) :: m1,m2,m3,m4
+@case_with_golem@			real(ki), intent(in) :: mu2
+@case_with_golem@			integer, intent(in) :: ep
+@case_with_golem@			complex(ki) :: gD0
+@case_with_golem@		end function gD0
+@case_with_golem@	end interface
+@case_with_golem@	interface
+@case_with_golem@		function gC0(p1,p2,p3,m1,m2,m3,mu2,ep)
+@case_with_golem@			use precision_golem, only: ki
+@case_with_golem@			implicit none
+@case_with_golem@			real(ki), intent(in) :: p1,p2,p3
+@case_with_golem@			real(ki), intent(in) :: m1,m2,m3
+@case_with_golem@			real(ki), intent(in) :: mu2
+@case_with_golem@			integer, intent(in) :: ep
+@case_with_golem@			complex(ki) :: gC0
+@case_with_golem@		end function gC0
+@case_with_golem@	end interface
+@case_with_golem@	interface
+@case_with_golem@		function gB0(p1,m1,m2,mu2,ep)
+@case_with_golem@			use precision_golem, only: ki
+@case_with_golem@			implicit none
+@case_with_golem@			real(ki), intent(in) :: p1
+@case_with_golem@			real(ki), intent(in) :: m1,m2
+@case_with_golem@			real(ki), intent(in) :: mu2
+@case_with_golem@			integer, intent(in) :: ep
+@case_with_golem@			complex(ki) :: gB0
+@case_with_golem@		end function gB0
+@case_with_golem@	end interface
+@case_with_golem@	interface
+@case_with_golem@		function gD0C(p1,p2,p3,p4,s12,s23,m1,m2,m3,m4,mu2,ep)
+@case_with_golem@			use precision_golem, only: ki
+@case_with_golem@			implicit none
+@case_with_golem@			complex(ki), intent(in) :: p1,p2,p3,p4,s12,s23
+@case_with_golem@			complex(ki), intent(in) :: m1,m2,m3,m4
+@case_with_golem@			real(ki), intent(in) :: mu2
+@case_with_golem@			integer, intent(in) :: ep
+@case_with_golem@			complex(ki) :: gD0C
+@case_with_golem@		end function gD0C
+@case_with_golem@	end interface
+@case_with_golem@	interface
+@case_with_golem@		function gC0C(p1,p2,p3,m1,m2,m3,mu2,ep)
+@case_with_golem@			use precision_golem, only: ki
+@case_with_golem@			implicit none
+@case_with_golem@			complex(ki), intent(in) :: p1,p2,p3
+@case_with_golem@			complex(ki), intent(in) :: m1,m2,m3
+@case_with_golem@			real(ki), intent(in) :: mu2
+@case_with_golem@			integer, intent(in) :: ep
+@case_with_golem@			complex(ki) :: gC0C
+@case_with_golem@		end function gC0C
+@case_with_golem@	end interface
+@case_with_golem@	interface
+@case_with_golem@		function gC0i(idt,p1,p2,p3,m1,m2,m3,mu2,ep)
+@case_with_golem@			use precision_golem, only: ki
+@case_with_golem@			implicit none
+@case_with_golem@			character (len=*), intent (in) :: idt
+@case_with_golem@			real(ki), intent(in) :: p1,p2,p3
+@case_with_golem@			real(ki), intent(in) :: m1,m2,m3
+@case_with_golem@			real(ki), intent(in) :: mu2
+@case_with_golem@			integer, intent(in) :: ep
+@case_with_golem@			complex(ki) :: gC0i
+@case_with_golem@		end function gC0i
+@case_with_golem@	end interface
+@case_with_golem@	interface
+@case_with_golem@		function gC0iC(idt,p1,p2,p3,m1,m2,m3,mu2,ep)
+@case_with_golem@			use precision_golem, only: ki
+@case_with_golem@			implicit none
+@case_with_golem@			character (len=*), intent (in) :: idt
+@case_with_golem@			complex(ki), intent(in) :: p1,p2,p3
+@case_with_golem@			complex(ki), intent(in) :: m1,m2,m3
+@case_with_golem@			real(ki), intent(in) :: mu2
+@case_with_golem@			integer, intent(in) :: ep
+@case_with_golem@			complex(ki) :: gC0iC
+@case_with_golem@		end function gC0iC
+@case_with_golem@	end interface
+@case_with_golem@	interface
+@case_with_golem@		function gB0C(p1,m1,m2,mu2,ep)
+@case_with_golem@			use precision_golem, only: ki
+@case_with_golem@			implicit none
+@case_with_golem@			complex(ki), intent(in) :: p1
+@case_with_golem@			complex(ki), intent(in) :: m1,m2
+@case_with_golem@			real(ki), intent(in) :: mu2
+@case_with_golem@			integer, intent(in) :: ep
+@case_with_golem@			complex(ki) :: gB0C
+@case_with_golem@		end function gB0C
+@case_with_golem@	end interface
+@case_with_golem@	interface
+@case_with_golem@		function gB0i(idt,p1,m1,m2,mu2,ep)
+@case_with_golem@			use precision_golem, only: ki
+@case_with_golem@			implicit none
+@case_with_golem@			character (len=*), intent (in) :: idt
+@case_with_golem@			real(ki), intent(in) :: p1
+@case_with_golem@			real(ki), intent(in) :: m1,m2
+@case_with_golem@			real(ki), intent(in) :: mu2
+@case_with_golem@			integer, intent(in) :: ep
+@case_with_golem@			complex(ki) :: gB0i
+@case_with_golem@		end function gB0i
+@case_with_golem@	end interface
+@case_with_golem@	interface
+@case_with_golem@		function gB0iC(idt,p1,m1,m2,mu2,ep)
+@case_with_golem@			use precision_golem, only: ki
+@case_with_golem@			implicit none
+@case_with_golem@			character (len=*), intent (in) :: idt
+@case_with_golem@			complex(ki), intent(in) :: p1
+@case_with_golem@			complex(ki), intent(in) :: m1,m2
+@case_with_golem@			real(ki), intent(in) :: mu2
+@case_with_golem@			integer, intent(in) :: ep
+@case_with_golem@			complex(ki) :: gB0iC
+@case_with_golem@		end function gB0iC
+@case_with_golem@	end interface
+@case_with_golem@	!interface
+@case_with_golem@	!	function gA0(m1,mu2,ep)
+@case_with_golem@	!		use precision_golem, only: ki
+@case_with_golem@	!		implicit none
+@case_with_golem@	!		real(ki), intent(in) :: m1
+@case_with_golem@	!		real(ki), intent(in) :: mu2
+@case_with_golem@	!		integer, intent(in) :: ep
+@case_with_golem@	!		complex(ki) :: gA0
+@case_with_golem@	!	end function gA0
+@case_with_golem@	!end interface
+@case_with_golem@	interface
+@case_with_golem@		function gA0C(m1,mu2,ep)
+@case_with_golem@			use precision_golem, only: ki
+@case_with_golem@			implicit none
+@case_with_golem@			complex(ki), intent(in) :: m1
+@case_with_golem@			real(ki), intent(in) :: mu2
+@case_with_golem@			integer, intent(in) :: ep
+@case_with_golem@			complex(ki) :: gA0C
+@case_with_golem@		end function gA0C
+@case_with_golem@	end interface
+@case_with_golem@	interface
+@case_with_golem@		function gA0i(idt,m1,mu2,ep)
+@case_with_golem@			use precision_golem, only: ki
+@case_with_golem@			implicit none
+@case_with_golem@			character (len=*), intent (in) :: idt
+@case_with_golem@			real(ki), intent(in) :: m1
+@case_with_golem@			real(ki), intent(in) :: mu2
+@case_with_golem@			integer, intent(in) :: ep
+@case_with_golem@			complex(ki) :: gA0i
+@case_with_golem@		end function gA0i
+@case_with_golem@	end interface
+@case_with_golem@	interface
+@case_with_golem@		function gA0iC(idt,m1,mu2,ep)
+@case_with_golem@			use precision_golem, only: ki
+@case_with_golem@			implicit none
+@case_with_golem@			character (len=*), intent (in) :: idt
+@case_with_golem@			complex(ki), intent(in) :: m1
+@case_with_golem@			real(ki), intent(in) :: mu2
+@case_with_golem@			integer, intent(in) :: ep
+@case_with_golem@			complex(ki) :: gA0iC
+@case_with_golem@		end function gA0iC
+@case_with_golem@	end interface
+@case_with_golem@
+@case_with_golem@
+@case_with_golem@	public :: golemMI4, golemMI3, golemMI2, golemMI2hr1,golemMI2hr2, golemMI1
+@case_with_golem@
+@case_with_golem@
+@case_with_golem@contains
+@case_with_golem@
+@case_with_golem@subroutine golemMI4(V,m,scale2,MI4,cache_flag, cache_offset, scalar_cache)
+@case_with_golem@	implicit none
+@case_with_golem@	real(ki),    dimension(1:6), intent(in ) :: V
+@case_with_golem@	complex(ki), dimension(0:3), intent(in ) :: m
+@case_with_golem@	real(ki),		     intent(in ) :: scale2
+@case_with_golem@	complex(ki), dimension(-2:0),       intent(out) :: MI4
+@case_with_golem@	
+@case_with_golem@	logical,     intent(in   ), optional 			:: cache_flag
+@case_with_golem@	integer,     intent(inout), optional 			:: cache_offset
+@case_with_golem@	complex(ki), intent(inout), optional, dimension(-2:0,*) :: scalar_cache
+@case_with_golem@	
+@case_with_golem@	complex(ki) :: m0, m1, m2, m3
+@case_with_golem@	complex(ki) :: V1, V2, V3, V21, V31, V32
+@case_with_golem@	integer     :: ep, cache_index
+@case_with_golem@
+@case_with_golem@	notfirsti=.true.
+@case_with_golem@
+@case_with_golem@	m0  = m(0)
+@case_with_golem@	m1  = m(1)
+@case_with_golem@	m2  = m(2)
+@case_with_golem@	m3  = m(3)
+@case_with_golem@	V1  = V(1)
+@case_with_golem@	V2  = V(2)
+@case_with_golem@	V3  = V(3)
+@case_with_golem@	V21 = V(4)
+@case_with_golem@	V31 = V(5)
+@case_with_golem@	V32 = V(6)
+@case_with_golem@
+@case_with_golem@	if (present(cache_flag)) cache_index = lbound(scalar_cache,2)+cache_offset
+@case_with_golem@
+@case_with_golem@	call gtrunc(abs(V32)+abs(V31),V1,V2,V3,V21,V32,V31,m0,m1,m2,m3)
+@case_with_golem@	do ep=-2,0
+@case_with_golem@		if (present(cache_flag)) then
+@case_with_golem@			if (cache_flag) then
+@case_with_golem@				MI4(ep) = scalar_cache(ep,cache_index)
+@case_with_golem@			else
+@case_with_golem@				MI4(ep)=gD0(real(V1,ki_gol),real(V21,ki_gol),&
+@case_with_golem@				& real(V32,ki_gol),real(V3,ki_gol),&
+@case_with_golem@				& real(V2,ki_gol),real(V31,ki_gol),&
+@case_with_golem@				& real(m0,ki_gol),real(m1,ki_gol),&
+@case_with_golem@				& real(m2,ki_gol),real(m3,ki_gol),&
+@case_with_golem@				& real(scale2,ki_gol),ep)
+@case_with_golem@				scalar_cache(ep,cache_index) = MI4(ep)
+@case_with_golem@			end if
+@case_with_golem@		else
+@case_with_golem@			MI4(ep)=gD0(real(V1,ki_gol),real(V21,ki_gol),&
+@case_with_golem@			& real(V32,ki_gol),real(V3,ki_gol),&
+@case_with_golem@			& real(V2,ki_gol),real(V31,ki_gol),&
+@case_with_golem@			& real(m0,ki_gol),real(m1,ki_gol),&
+@case_with_golem@			& real(m2,ki_gol),real(m3,ki_gol),&
+@case_with_golem@			& real(scale2,ki_gol),ep)
+@case_with_golem@		end if
+@case_with_golem@	end do
+@case_with_golem@	if (present(cache_flag)) cache_offset = cache_offset + 1
+@case_with_golem@end subroutine golemMI4
+@case_with_golem@
+@case_with_golem@subroutine golemMI3(V,m,scale2,MI3,cache_flag, cache_offset, scalar_cache)
+@case_with_golem@	implicit none
+@case_with_golem@	real(ki),    dimension(1:3),  intent(in ) :: V
+@case_with_golem@	complex(ki), dimension(0:2),  intent(in ) :: m
+@case_with_golem@	real(ki), 		      intent(in ) :: scale2
+@case_with_golem@	complex(ki), dimension(-2:0), intent(out) :: MI3
+@case_with_golem@	
+@case_with_golem@	logical,     intent(in   ), optional 			:: cache_flag
+@case_with_golem@	integer,     intent(inout), optional 			:: cache_offset
+@case_with_golem@	complex(ki), intent(inout), optional, dimension(-2:0,*) :: scalar_cache
+@case_with_golem@	
+@case_with_golem@	complex(ki) :: m0, m1, m2
+@case_with_golem@	complex(ki) :: V1, V2, V3
+@case_with_golem@	integer :: ep, cache_index
+@case_with_golem@	complex(ki), dimension(-2:0) :: c0t
+@case_with_golem@	
+@case_with_golem@	notfirsti=.true.
+@case_with_golem@
+@case_with_golem@	m0 = m(0)
+@case_with_golem@	m1 = m(1)
+@case_with_golem@	m2 = m(2)
+@case_with_golem@	V1 = V(1)
+@case_with_golem@	V2 = V(2)
+@case_with_golem@	V3 = V(3)
+@case_with_golem@	
+@case_with_golem@
+@case_with_golem@	if (present(cache_flag)) cache_index = lbound(scalar_cache,2)+cache_offset
+@case_with_golem@	call gtrunc(abs(V1)+abs(V2)+abs(V3),V1,V2,V3,m0,m1,m2)
+@case_with_golem@	do ep=-2,0
+@case_with_golem@		if (present(cache_flag)) then
+@case_with_golem@			if (cache_flag) then
+@case_with_golem@				c0t(ep) = scalar_cache(ep,cache_index)
+@case_with_golem@			else
+@case_with_golem@				c0t(ep)=gC0(real(V1,ki_gol),real(V2,ki_gol),&
+@case_with_golem@				& real(V3,ki_gol),real(m0,ki_gol),&
+@case_with_golem@				& real(m1,ki_gol),real(m2,ki_gol),&
+@case_with_golem@				& real(scale2,ki_gol),ep)
+@case_with_golem@				scalar_cache(ep,cache_index) = c0t(ep)
+@case_with_golem@			end if
+@case_with_golem@		else
+@case_with_golem@			c0t(ep)=gC0(real(V1,ki_gol),real(V2,ki_gol),&
+@case_with_golem@			& real(V3,ki_gol),real(m0,ki_gol),&
+@case_with_golem@			& real(m1,ki_gol),real(m2,ki_gol),&
+@case_with_golem@			& real(scale2,ki_gol),ep)
+@case_with_golem@		end if
+@case_with_golem@	end do
+@case_with_golem@	MI3(:) = c0t(:) 
+@case_with_golem@	if (present(cache_flag)) cache_offset = cache_offset + 1
+@case_with_golem@end subroutine golemMI3
+@case_with_golem@
+@case_with_golem@subroutine golemMI2(K11in,m,scale2,J0,J1,J00,J01,J11, cache_flag, cache_offset, scalar_cache)
+@case_with_golem@	implicit none
+@case_with_golem@	real(ki),     		      intent(in ) :: K11in
+@case_with_golem@	complex(ki), dimension(0:1),  intent(in ) :: m
+@case_with_golem@	real(ki), 		      intent(in ) :: scale2
+@case_with_golem@        complex(ki), dimension(-2:0),intent(out) :: J0, J1, J00, J01, J11
+@case_with_golem@	
+@case_with_golem@	logical,     intent(in   ), optional 			:: cache_flag
+@case_with_golem@	integer,     intent(inout), optional 			:: cache_offset
+@case_with_golem@	complex(ki), intent(inout), optional, dimension(-2:0,*) :: scalar_cache
+@case_with_golem@	
+@case_with_golem@	complex(ki) :: m0, m1
+@case_with_golem@	complex(ki) :: K11
+@case_with_golem@	integer     :: ep, cache_index
+@case_with_golem@
+@case_with_golem@	notfirsti=.true.
+@case_with_golem@	
+@case_with_golem@	m0=m(0)
+@case_with_golem@	m1=m(1)
+@case_with_golem@	K11=K11in
+@case_with_golem@	
+@case_with_golem@	if (present(cache_flag)) cache_index = lbound(scalar_cache,2)+cache_offset
+@case_with_golem@	if (present(cache_flag)) then
+@case_with_golem@		if (cache_flag) then
+@case_with_golem@			J0(:)  = scalar_cache(:,cache_index+0)
+@case_with_golem@			J1(:)  = scalar_cache(:,cache_index+1)
+@case_with_golem@			J01(:) = scalar_cache(:,cache_index+2)
+@case_with_golem@			J11(:) = scalar_cache(:,cache_index+3)
+@case_with_golem@			J00(:) = scalar_cache(:,cache_index+4)
+@case_with_golem@		else
+@case_with_golem@			call gtrunc(abs(K11)+1.0_ki,K11,m0,m1)
+@case_with_golem@			do ep=-2,0
+@case_with_golem@				J00(ep)= gB0(real(K11,ki_gol),&
+@case_with_golem@				& real(m0,ki_gol),real(m0,ki_gol),&
+@case_with_golem@				& real(scale2,ki_gol),ep)
+@case_with_golem@				J11(ep)= gB0(real(K11,ki_gol),&
+@case_with_golem@				& real(m1,ki_gol),real(m1,ki_gol),&
+@case_with_golem@				& real(scale2,ki_gol),ep)
+@case_with_golem@				J01(ep)= gB0(real(K11,ki_gol),&
+@case_with_golem@				& real(m0,ki_gol),real(m1,ki_gol),&
+@case_with_golem@				& real(scale2,ki_gol),ep)
+@case_with_golem@				J0(ep) = gA0(real(m0,ki_gol),&
+@case_with_golem@				& real(scale2,ki_gol),ep)
+@case_with_golem@				J1(ep) = gA0(real(m1,ki_gol),&
+@case_with_golem@				& real(scale2,ki_gol),ep)
+@case_with_golem@			end do
+@case_with_golem@			scalar_cache(:,cache_index+0) = J0(:)
+@case_with_golem@			scalar_cache(:,cache_index+1) = J1(:)
+@case_with_golem@			scalar_cache(:,cache_index+2) = J01(:)
+@case_with_golem@			scalar_cache(:,cache_index+3) = J11(:)
+@case_with_golem@			scalar_cache(:,cache_index+4) = J00(:)
+@case_with_golem@		end if
+@case_with_golem@	else
+@case_with_golem@		call gtrunc(abs(K11)+1.0_ki, K11,m0,m1)
+@case_with_golem@		do ep=-2,0
+@case_with_golem@			J00(ep)= gB0(real(K11,ki_gol),&
+@case_with_golem@			& real(m0,ki_gol),real(m0,ki_gol),&
+@case_with_golem@			& real(scale2,ki_gol),ep)
+@case_with_golem@			J11(ep)= gB0(real(K11,ki_gol),&
+@case_with_golem@			& real(m1,ki_gol),real(m1,ki_gol),&
+@case_with_golem@			& real(scale2,ki_gol),ep)
+@case_with_golem@			J01(ep)= gB0(real(K11,ki_gol),&
+@case_with_golem@			& real(m0,ki_gol),real(m1,ki_gol),&
+@case_with_golem@			& real(scale2,ki_gol),ep)
+@case_with_golem@			J0(ep) = gA0(real(m0,ki_gol),&
+@case_with_golem@			& real(scale2,ki_gol),ep)
+@case_with_golem@			J1(ep) = gA0(real(m1,ki_gol),&
+@case_with_golem@			& real(scale2,ki_gol),ep)
+@case_with_golem@		end do
+@case_with_golem@	end if
+@case_with_golem@	if (present(cache_flag)) cache_offset = cache_offset + 5
+@case_with_golem@end subroutine golemMI2
+@case_with_golem@
+@case_with_golem@subroutine golemMI2hr1(K11,m,scale2,J111,J001)
+@case_with_golem@	implicit none
+@case_with_golem@	real(ki),     		      intent(in )           :: K11
+@case_with_golem@	complex(ki), dimension(0:1),  intent(in )           :: m
+@case_with_golem@	real(ki), 		      intent(in )           :: scale2
+@case_with_golem@        complex(ki), dimension(-2:0),intent(out)           :: J111
+@case_with_golem@        complex(ki), dimension(-2:0),intent(out), optional :: J001
+@case_with_golem@	
+@case_with_golem@	complex(ki) :: m0, m1
+@case_with_golem@	integer     :: ep
+@case_with_golem@
+@case_with_golem@	m0=m(0)
+@case_with_golem@	m1=m(1)
+@case_with_golem@
+@case_with_golem@		do ep=-2,0
+@case_with_golem@			J001(ep) = gB0i("001",real(K11,ki_gol),&
+@case_with_golem@			& real(m0,ki_gol),real(m1,ki_gol),&
+@case_with_golem@			& real(scale2,ki_gol),ep)
+@case_with_golem@			J111(ep) = gB0i("111",real(K11,ki_gol),&
+@case_with_golem@			& real(m0,ki_gol),real(m1,ki_gol),&
+@case_with_golem@			& real(scale2,ki_gol),ep)
+@case_with_golem@		end do
+@case_with_golem@end subroutine golemMI2hr1
+@case_with_golem@
+@case_with_golem@subroutine golemMI2hr2(K11,m,scale2,J111)
+@case_with_golem@	implicit none
+@case_with_golem@	real(ki),   		      intent(in ) :: K11
+@case_with_golem@	complex(ki), dimension(0:1),  intent(in ) :: m
+@case_with_golem@	real(ki),   		      intent(in ) :: scale2
+@case_with_golem@	complex(ki), dimension(-2:0), intent(out) :: J111
+@case_with_golem@
+@case_with_golem@	integer     :: ep
+@case_with_golem@	complex(ki) :: m0,m1
+@case_with_golem@ 	complex(ki), dimension(-2:0) :: B0p12, B0z11, B0z22
+@case_with_golem@
+@case_with_golem@	m0=m(0)
+@case_with_golem@	m1=m(1)
+@case_with_golem@
+@case_with_golem@	do ep=-2,0
+@case_with_golem@		B0p12(ep)= gB0(real(K11,ki_gol),&
+@case_with_golem@		& real(m0,ki_gol),real(m1,ki_gol),&
+@case_with_golem@		& real(scale2,ki_gol),ep)
+@case_with_golem@		B0z11(ep)= gB0(real(zip,ki_gol),&
+@case_with_golem@		& real(m0,ki_gol),real(m0,ki_gol),&
+@case_with_golem@		& real(scale2,ki_gol),ep)
+@case_with_golem@		B0z22(ep)= gB0(real(zip,ki_gol),&
+@case_with_golem@		& real(m1,ki_gol),real(m1,ki_gol),&
+@case_with_golem@		& real(scale2,ki_gol),ep)
+@case_with_golem@	enddo
+@case_with_golem@
+@case_with_golem@	call HJ111(J111, K11,m0,m1,B0p12,B0z11,B0z22)
+@case_with_golem@
+@case_with_golem@end subroutine golemMI2hr2
+@case_with_golem@
+@case_with_golem@
+@case_with_golem@
+@case_with_golem@subroutine golemMI1(m,scale2,MI1,cache_flag, cache_offset, scalar_cache)
+@case_with_golem@
+@case_with_golem@	implicit none 
+@case_with_golem@	complex(ki), 			  intent(in ) :: m
+@case_with_golem@	real(ki), 			  intent(in ) :: scale2
+@case_with_golem@	complex(ki), dimension(-2:0),     intent(out) :: MI1
+@case_with_golem@	
+@case_with_golem@	logical,     intent(in   ), optional 			:: cache_flag
+@case_with_golem@	integer,     intent(inout), optional 			:: cache_offset
+@case_with_golem@	complex(ki), intent(inout), optional, dimension(-2:0,*) :: scalar_cache
+@case_with_golem@	
+@case_with_golem@	integer :: ep, cache_index
+@case_with_golem@	complex(ki) :: m0
+@case_with_golem@
+@case_with_golem@	m0=m
+@case_with_golem@	
+@case_with_golem@	notfirsti=.true.
+@case_with_golem@	
+@case_with_golem@	MI1(-2)=czip
+@case_with_golem@	if (present(cache_flag)) cache_index = lbound(scalar_cache,2)+cache_offset
+@case_with_golem@	if (present(cache_flag)) then
+@case_with_golem@		if (cache_flag) then
+@case_with_golem@			do ep=-1,0
+@case_with_golem@				MI1(ep) = scalar_cache(ep,cache_index)
+@case_with_golem@			enddo
+@case_with_golem@		else
+@case_with_golem@			scalar_cache(-2,cache_index) = czip
+@case_with_golem@			call gtrunc(1.0_ki, m0)
+@case_with_golem@			do ep=-1,0
+@case_with_golem@				MI1(ep) = gA0(real(m0,ki_gol),real(scale2,ki_gol),ep)
+@case_with_golem@				scalar_cache(ep,cache_index) = MI1(ep)
+@case_with_golem@			enddo
+@case_with_golem@		end if
+@case_with_golem@	else
+@case_with_golem@		call gtrunc(1.0_ki, m0)
+@case_with_golem@		do ep=-1,0
+@case_with_golem@			MI1(ep) = gA0(real(m0,ki_gol),real(scale2,ki_gol),ep)
+@case_with_golem@		enddo
+@case_with_golem@	end if
+@case_with_golem@	if (present(cache_flag)) cache_offset = cache_offset + 1
+@case_with_golem@end subroutine golemMI1
+@case_with_golem@
+@case_with_golem@
+@case_with_golem@pure subroutine gtrunc(ref,s1,s2,s3,s4,s5,s6,s7,s8,s9,s10)
+@case_with_golem@	implicit none
+@case_with_golem@	real(ki), intent(in) :: ref
+@case_with_golem@	complex(ki), intent(inout), optional :: s1,s2,s3,s4,s5,s6,s7,s8,s9,s10
+@case_with_golem@	real(ki), parameter :: small = 1.0E-08_ki
+@case_with_golem@	if(present(s1)) then
+@case_with_golem@		if(abs(s1/ref) .lt. small) s1 = 0.0_ki
+@case_with_golem@	end if
+@case_with_golem@	if(present(s2)) then
+@case_with_golem@		if(abs(s2/ref) .lt. small) s2 = 0.0_ki
+@case_with_golem@	end if
+@case_with_golem@	if(present(s3)) then
+@case_with_golem@		if(abs(s3/ref) .lt. small) s3 = 0.0_ki
+@case_with_golem@	end if
+@case_with_golem@	if(present(s4)) then
+@case_with_golem@		if(abs(s4/ref) .lt. small) s4 = 0.0_ki
+@case_with_golem@	end if
+@case_with_golem@	if(present(s5)) then
+@case_with_golem@		if(abs(s5/ref) .lt. small) s5 = 0.0_ki
+@case_with_golem@	end if
+@case_with_golem@	if(present(s6)) then
+@case_with_golem@		if(abs(s6/ref) .lt. small) s6 = 0.0_ki
+@case_with_golem@	end if
+@case_with_golem@	if(present(s7)) then
+@case_with_golem@		if(abs(s7/ref) .lt. small) s7 = 0.0_ki
+@case_with_golem@	end if
+@case_with_golem@	if(present(s8)) then
+@case_with_golem@		if(abs(s8/ref) .lt. small) s8 = 0.0_ki
+@case_with_golem@	end if
+@case_with_golem@	if(present(s9)) then
+@case_with_golem@		if(abs(s9/ref) .lt. small) s9 = 0.0_ki
+@case_with_golem@	end if
+@case_with_golem@	if(present(s10)) then
+@case_with_golem@		if(abs(s10/ref) .lt. small) s10 = 0.0_ki
+@case_with_golem@	end if
+@case_with_golem@end  subroutine gtrunc
+@case_with_golem@
+@case_with_golem@function gA0(m0,mu2,ep)
+@case_with_golem@   implicit none
+@case_with_golem@   real(ki_gol), intent(in) :: m0, mu2
+@case_with_golem@   integer, intent(in) :: ep
+@case_with_golem@   complex(ki_gol) :: gA0
+@case_with_golem@   if(ep.eq.(-2) .or. m0.eq.0.0_ki_gol) then
+@case_with_golem@      gA0 = (0.0_ki_gol, 0.0_ki_gol)
+@case_with_golem@   elseif(ep.eq.(-1)) then
+@case_with_golem@      gA0 = m0 * gB0(0.0_ki_gol,m0,m0,mu2,-1)
+@case_with_golem@   else
+@case_with_golem@      gA0 = m0 * (gB0(0.0_ki_gol,m0,m0,mu2,0) &
+@case_with_golem@          &    +  gB0(0.0_ki_gol,m0,m0,mu2,-1))
+@case_with_golem@   end if
+@case_with_golem@end function gA0
+
+
+end module mmisgolem
+

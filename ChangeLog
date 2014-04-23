@@ -13,12 +13,14 @@
   * configure.ac: Do not fail if Fortran compiler has no long line option
     and enable long line support also for Fortran 77 compiler if available.
 2012-07-18 Gudrun Heinrich <gudrun@mpp.mpg.de>
-   * golem95c-1.2.1/: bugfix in renormalisation scale dependence of two-point 
+   * golem95c-1.2.1/: bugfix in renormalisation scale dependence of two-point
       functions with complex masses
 2012-08-20 Gudrun Heinrich <gudrun@mpp.mpg.de>
-   * golem95c-1.2.1/: function_3p_finite.f90 replaced by version where invariants 
+   * golem95c-1.2.1/: function_3p_finite.f90 replaced by version where invariants
      are rescaled with the largest entry of s_mat;
      function_2p_m1m2.f90: replaced by more stable version if mass differences are small
-     z_log.f90: replaced by version containing definition of eta functions needed in 
+     z_log.f90: replaced by version containing definition of eta functions needed in
      above functions
-     
+2014-04-23 Johann Felix v. Soden-Fraunhofen <jfsoden@mpp.mpg.de>
+   * Update to samurai-2.9.0
+   * Update to golem-1.3.0

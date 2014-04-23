@@ -98,8 +98,9 @@ contains
       ! res5=savc5(icut5)*mu2**2
    end  function res5
 
-   pure function res4(icut4,q,mu2)
+   pure function res4(diff,icut4,q,mu2)
       implicit none
+	integer, intent(in) :: diff
       integer, intent(in) :: icut4
       complex(ki), intent(in) :: mu2
       complex(ki), dimension(4), intent(in) :: q
@@ -108,18 +109,18 @@ contains
       real(ki), dimension(4) :: L3
       complex(ki), dimension(4) :: e3, e4, pm
       complex(ki), dimension(0:5) :: c4
-
       L3(:)=savL3(icut4,:)
       pm(:)=sav4p0(icut4,:)+q(:)
       e3(:)=sav4e3(icut4,:)
       e4(:)=sav4e4(icut4,:)
       c4(:)=savc4(icut4,:)
 
-      res4=poly4(c4,pm,mu2,L3,e3,e4)
+      res4=poly4(diff,c4,pm,mu2,L3,e3,e4)
    end  function res4
 
-   pure function res3(icut3,q,mu2)
+   pure function res3(diff,icut3,q,mu2)
       implicit none
+	integer, intent(in) :: diff
       integer, intent(in) :: icut3
       complex(ki), intent(in) :: mu2
       complex(ki), dimension(4), intent(in) :: q
@@ -133,11 +134,12 @@ contains
       e4(:)=sav3e4(icut3,:)
       c3(:)=savc3(icut3,:)
 
-      res3=poly3(c3,pm,mu2,e3,e4)
+      res3=poly3(diff,c3,pm,mu2,e3,e4)
    end  function res3
 
-   pure function res2(icut2,q,mu2)
+   pure function res2(diff,icut2,q,mu2)
       implicit none
+	integer, intent(in) :: diff
       integer, intent(in) :: icut2
       complex(ki), dimension(4), intent(in) :: q
       complex(ki), intent(in) :: mu2
@@ -152,11 +154,12 @@ contains
       e3(:)=sav2e3(icut2,:)
       e4(:)=sav2e4(icut2,:)
       c2(:)=savc2(icut2,:)
-      res2=poly2(c2,pm,mu2,e2,e3,e4)
+      res2=poly2(diff,c2,pm,mu2,e2,e3,e4)
    end  function res2
 
-   pure function res1(icut1,q,mu2)
+   pure function res1(diff,icut1,q,mu2)
       implicit none
+	integer, intent(in) :: diff
       integer, intent(in) :: icut1
       complex(ki), dimension(4), intent(in) :: q
       complex(ki) :: res1
@@ -173,7 +176,7 @@ contains
       e4(:)=sav1e4(icut1,:)
       c1(:)=savc1(icut1,:)
 
-      res1=poly1(c1,pm,mu2,e1,e2,e3,e4)
+      res1=poly1(diff,c1,pm,mu2,e1,e2,e3,e4)
    end function res1
 
 end module mrestore

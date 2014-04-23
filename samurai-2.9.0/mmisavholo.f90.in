@@ -1,0 +1,306 @@
+module mmisavholo 
+@case_with_avh@	use precision, only: ki
+@case_with_avh@	use avh_olo_kinds, only: ki_avh => kindr2
+@case_with_avh@	use constants
+@case_with_avh@	use options
+@case_with_avh@	use mfunctions
+@case_with_avh@	use notfirst
+@case_with_avh@	use mmishighrank
+@case_with_avh@	implicit none
+@case_with_avh@
+@case_with_avh@	public :: avholo4, avholo3, avholo2, avholo2hr, avholo1
+@case_with_avh@
+@case_with_avh@contains
+@case_with_avh@
+@case_with_avh@
+@case_with_avh@subroutine avholo4(V,m,scale2,MI4,cache_flag,cache_offset,scalar_cache)
+@case_with_avh@	use avh_olo, only: olo_d0
+@case_with_avh@	implicit none
+@case_with_avh@	real(ki),    dimension(1:6),  intent(in ) :: V
+@case_with_avh@	complex(ki), dimension(0:3),  intent(in ) :: m
+@case_with_avh@	real(ki), 		      intent(in ) :: scale2
+@case_with_avh@	complex(ki), dimension(-2:0), intent(out) :: MI4
+@case_with_avh@	
+@case_with_avh@	logical,     intent(in   ), optional 			:: cache_flag
+@case_with_avh@	integer,     intent(inout), optional 			:: cache_offset
+@case_with_avh@	complex(ki), intent(inout), optional, dimension(-2:0,*) :: scalar_cache
+@case_with_avh@	
+@case_with_avh@	complex(ki) :: m0, m1, m2, m3
+@case_with_avh@	real(ki)    :: V1, V2, V3, V21, V31, V32
+@case_with_avh@	integer     :: ep, cache_index
+@case_with_avh@	complex(ki_avh), dimension(0:2) :: vald0
+@case_with_avh@
+@case_with_avh@	if (notfirsti.eqv.(.false.)) then
+@case_with_avh@		call avh_olo_mu_set(real(sqrt(scale2),ki_avh))
+@case_with_avh@		notfirsti=.true.
+@case_with_avh@	endif
+@case_with_avh@
+@case_with_avh@	m0  = m(0)
+@case_with_avh@	m1  = m(1)
+@case_with_avh@	m2  = m(2)
+@case_with_avh@	m3  = m(3)
+@case_with_avh@	V1  = V(1)
+@case_with_avh@	V2  = V(2)
+@case_with_avh@	V3  = V(3)
+@case_with_avh@	V21 = V(4)
+@case_with_avh@	V31 = V(5)
+@case_with_avh@	V32 = V(6)
+@case_with_avh@
+@case_with_avh@	if (present(cache_flag)) cache_index = lbound(scalar_cache,2)+cache_offset
+@case_with_avh@
+@case_with_avh@	if (present(cache_flag)) then
+@case_with_avh@		if (cache_flag) then
+@case_with_avh@			vald0(0) = scalar_cache( 0,cache_index)
+@case_with_avh@			vald0(1) = scalar_cache(-1,cache_index)
+@case_with_avh@			vald0(2) = scalar_cache(-2,cache_index)
+@case_with_avh@		else
+@case_with_avh@			call olo_d0(vald0,&
+@case_with_avh@			& cmplx(V1,0.0_ki_avh,ki_avh), &
+@case_with_avh@			& cmplx(V21,0.0_ki_avh,ki_avh), &
+@case_with_avh@			& cmplx(V32,0.0_ki_avh,ki_avh), &
+@case_with_avh@			& cmplx(V3,0.0_ki_avh,ki_avh), &
+@case_with_avh@			& cmplx(V2,0.0_ki_avh,ki_avh), &
+@case_with_avh@			& cmplx(V31,0.0_ki_avh,ki_avh), &
+@case_with_avh@			& cmplx(real(m0,ki_avh),aimag(m0),ki_avh),&
+@case_with_avh@			& cmplx(real(m1,ki_avh),aimag(m1),ki_avh),&
+@case_with_avh@			& cmplx(real(m2,ki_avh),aimag(m2),ki_avh),&
+@case_with_avh@			& cmplx(real(m3,ki_avh),aimag(m3),ki_avh))
+@case_with_avh@			scalar_cache( 0,cache_index) = vald0(0)
+@case_with_avh@			scalar_cache(-1,cache_index) = vald0(1)
+@case_with_avh@			scalar_cache(-2,cache_index) = vald0(2)
+@case_with_avh@		end if
+@case_with_avh@	else
+@case_with_avh@		call olo_d0(vald0,&
+@case_with_avh@		& cmplx(V1,0.0_ki_avh,ki_avh), &
+@case_with_avh@		& cmplx(V21,0.0_ki_avh,ki_avh), &
+@case_with_avh@		& cmplx(V32,0.0_ki_avh,ki_avh), &
+@case_with_avh@		& cmplx(V3,0.0_ki_avh,ki_avh), &
+@case_with_avh@		& cmplx(V2,0.0_ki_avh,ki_avh), &
+@case_with_avh@		& cmplx(V31,0.0_ki_avh,ki_avh), &
+@case_with_avh@		& cmplx(real(m0,ki_avh),aimag(m0),ki_avh),&
+@case_with_avh@		& cmplx(real(m1,ki_avh),aimag(m1),ki_avh),&
+@case_with_avh@		& cmplx(real(m2,ki_avh),aimag(m2),ki_avh),&
+@case_with_avh@		& cmplx(real(m3,ki_avh),aimag(m3),ki_avh))
+@case_with_avh@	end if
+@case_with_avh@	do ep=-2,0
+@case_with_avh@		MI4(ep)=vald0(-ep) 
+@case_with_avh@	enddo
+@case_with_avh@	if (present(cache_flag)) cache_offset = cache_offset + 1
+@case_with_avh@end subroutine avholo4
+@case_with_avh@
+@case_with_avh@
+@case_with_avh@subroutine avholo3(V,m,scale2,MI3,cache_flag, cache_offset, scalar_cache)
+@case_with_avh@	use avh_olo, only: olo_c0
+@case_with_avh@	implicit none
+@case_with_avh@	real(ki),    dimension(3),    intent(in ) :: V
+@case_with_avh@	complex(ki), dimension(0:2),  intent(in ) :: m
+@case_with_avh@	real(ki), 		      intent(in ) :: scale2
+@case_with_avh@	complex(ki), dimension(-2:0), intent(out) :: MI3
+@case_with_avh@	
+@case_with_avh@	logical,     intent(in   ), optional 			:: cache_flag
+@case_with_avh@	integer,     intent(inout), optional 			:: cache_offset
+@case_with_avh@	complex(ki), intent(inout), optional, dimension(-2:0,*) :: scalar_cache
+@case_with_avh@	
+@case_with_avh@	complex(ki) :: m0, m1, m2
+@case_with_avh@	real(ki)    :: V1, V2, V3
+@case_with_avh@	complex(ki_avh), dimension(0:2) :: valc0
+@case_with_avh@	integer     :: ep, cache_index
+@case_with_avh@	
+@case_with_avh@	if (notfirsti.eqv.(.false.)) then
+@case_with_avh@		call avh_olo_mu_set(real(sqrt(scale2),ki_avh))
+@case_with_avh@		notfirsti=.true.
+@case_with_avh@	endif
+@case_with_avh@
+@case_with_avh@	m0 = m(0)
+@case_with_avh@	m1 = m(1)
+@case_with_avh@	m2 = m(2)
+@case_with_avh@	V1 = V(1)
+@case_with_avh@	V2 = V(2)
+@case_with_avh@	V3 = V(3)
+@case_with_avh@
+@case_with_avh@	if (present(cache_flag)) cache_index = lbound(scalar_cache,2)+cache_offset
+@case_with_avh@
+@case_with_avh@	if (present(cache_flag)) then
+@case_with_avh@		if (cache_flag) then
+@case_with_avh@			valc0(0) = scalar_cache( 0,cache_index)
+@case_with_avh@			valc0(1) = scalar_cache(-1,cache_index)
+@case_with_avh@			valc0(2) = scalar_cache(-2,cache_index)
+@case_with_avh@		else
+@case_with_avh@			call olo_c0(valc0,&
+@case_with_avh@			& cmplx(V1,0.0_ki_avh,ki_avh), &
+@case_with_avh@			& cmplx(V2,0.0_ki_avh,ki_avh), &
+@case_with_avh@			& cmplx(V3,0.0_ki_avh,ki_avh), &
+@case_with_avh@			& cmplx(real(m0,ki_avh),aimag(m0),ki_avh),&
+@case_with_avh@			& cmplx(real(m1,ki_avh),aimag(m1),ki_avh),&
+@case_with_avh@			& cmplx(real(m2,ki_avh),aimag(m2),ki_avh))
+@case_with_avh@			scalar_cache( 0,cache_index) = valc0(0)
+@case_with_avh@			scalar_cache(-1,cache_index) = valc0(1)
+@case_with_avh@			scalar_cache(-2,cache_index) = valc0(2)
+@case_with_avh@		end if
+@case_with_avh@	else
+@case_with_avh@		call olo_c0(valc0,&
+@case_with_avh@		& cmplx(V1,0.0_ki_avh,ki_avh), &
+@case_with_avh@		& cmplx(V2,0.0_ki_avh,ki_avh), &
+@case_with_avh@		& cmplx(V3,0.0_ki_avh,ki_avh), &
+@case_with_avh@		& cmplx(real(m0,ki_avh),aimag(m0),ki_avh),&
+@case_with_avh@		& cmplx(real(m1,ki_avh),aimag(m1),ki_avh),&
+@case_with_avh@		& cmplx(real(m2,ki_avh),aimag(m2),ki_avh))
+@case_with_avh@	end if
+@case_with_avh@	do ep=-2,0
+@case_with_avh@	   MI3(ep) = valc0(-ep) 
+@case_with_avh@	enddo
+@case_with_avh@	if (present(cache_flag)) cache_offset = cache_offset + 1
+@case_with_avh@end subroutine avholo3
+@case_with_avh@
+@case_with_avh@subroutine avholo2(K11,m,scale2,MI2a,MI2b,MI2c,MI2d,MI2e,cache_flag, cache_offset, scalar_cache)
+@case_with_avh@
+@case_with_avh@	use avh_olo, only: olo_b11
+@case_with_avh@	implicit none
+@case_with_avh@	
+@case_with_avh@	real(ki),    		      intent(in) :: K11
+@case_with_avh@	complex(ki), dimension(0:1),  intent(in) :: m
+@case_with_avh@	real(ki),    		      intent(in) :: scale2
+@case_with_avh@	complex(ki), dimension(-2:0), intent(out) :: MI2a, MI2b, MI2c, MI2d, MI2e
+@case_with_avh@
+@case_with_avh@	
+@case_with_avh@	logical,     intent(in   ), optional 			:: cache_flag
+@case_with_avh@	integer,     intent(inout), optional 			:: cache_offset
+@case_with_avh@	complex(ki), intent(inout), optional, dimension(-2:0,*) :: scalar_cache
+@case_with_avh@	
+@case_with_avh@	complex(ki) :: m0, m1
+@case_with_avh@	integer     :: ep, cache_index
+@case_with_avh@	complex(ki_avh), dimension(0:2) :: scf2, scf1, scf0, scf 
+@case_with_avh@
+@case_with_avh@	if (notfirsti.eqv.(.false.)) then
+@case_with_avh@		call avh_olo_mu_set(real(sqrt(scale2),ki_avh))
+@case_with_avh@		notfirsti=.true.
+@case_with_avh@	endif
+@case_with_avh@
+@case_with_avh@	m0=m(0)
+@case_with_avh@	m1=m(1)
+@case_with_avh@	
+@case_with_avh@	if (present(cache_flag)) cache_index = lbound(scalar_cache,2)+cache_offset
+@case_with_avh@
+@case_with_avh@	if (present(cache_flag)) then
+@case_with_avh@		if (cache_flag) then
+@case_with_avh@			scf(:)  = scalar_cache(:,cache_index+0)
+@case_with_avh@			scf0(:) = scalar_cache(:,cache_index+1)
+@case_with_avh@			scf1(:) = scalar_cache(:,cache_index+2)
+@case_with_avh@			scf2(:) = scalar_cache(:,cache_index+3)
+@case_with_avh@		else
+@case_with_avh@			call olo_b11(scf2,scf0,scf1,scf,&
+@case_with_avh@			& cmplx(K11,0.0_ki_avh,ki_avh), &
+@case_with_avh@			& cmplx(real(m0,ki_avh),aimag(m0),ki_avh),&
+@case_with_avh@			& cmplx(real(m1,ki_avh),aimag(m1),ki_avh))
+@case_with_avh@			scalar_cache(:,cache_index+0) = scf(:)
+@case_with_avh@			scalar_cache(:,cache_index+1) = scf0(:)
+@case_with_avh@			scalar_cache(:,cache_index+2) = scf1(:)
+@case_with_avh@			scalar_cache(:,cache_index+3) = scf2(:)
+@case_with_avh@		end if
+@case_with_avh@	else
+@case_with_avh@		call olo_b11(scf2,scf0,scf1,scf,&
+@case_with_avh@		& cmplx(K11,0.0_ki_avh,ki_avh), &
+@case_with_avh@		& cmplx(real(m0,ki_avh),aimag(m0),ki_avh),&
+@case_with_avh@		& cmplx(real(m1,ki_avh),aimag(m1),ki_avh))
+@case_with_avh@	end if
+@case_with_avh@		MI2a(0) = scf (0)
+@case_with_avh@		MI2b(0) = scf1(0)
+@case_with_avh@		MI2c(0) = scf2(0)
+@case_with_avh@	do ep=1,2
+@case_with_avh@		MI2a(-ep) = scf (ep)
+@case_with_avh@		MI2b(-ep) = scf1(ep)
+@case_with_avh@		MI2c(-ep) = scf2(ep)
+@case_with_avh@	enddo
+@case_with_avh@	MI2d(:) = czip
+@case_with_avh@	MI2e(:) = czip
+@case_with_avh@	if (present(cache_flag)) cache_offset = cache_offset + 5
+@case_with_avh@end subroutine avholo2
+@case_with_avh@
+@case_with_avh@subroutine avholo2hr(K11,m,scale2,J111)
+@case_with_avh@	use avh_olo, only: olo_b11
+@case_with_avh@	implicit none
+@case_with_avh@	real(ki),                     intent(in ) :: K11
+@case_with_avh@	complex(ki), dimension( 0:1), intent(in ) :: m
+@case_with_avh@	real(ki),                     intent(in ) :: scale2
+@case_with_avh@	complex(ki), dimension(-2:0), intent(out) :: J111
+@case_with_avh@
+@case_with_avh@	integer :: ep
+@case_with_avh@	complex(ki),    dimension(-2:0) :: B0p12, B0z11, B0z22
+@case_with_avh@	complex(ki_avh),dimension( 0:2) :: dscf2, dscf1, dscf0, dscf 
+@case_with_avh@	complex(ki) :: m0,m1
+@case_with_avh@
+@case_with_avh@	m0=m(0)
+@case_with_avh@	m1=m(1)
+@case_with_avh@
+@case_with_avh@	call olo_b11(dscf2,dscf0,dscf1,dscf,&
+@case_with_avh@	& real(K11,ki_avh),real(m0,ki_avh),real(m1,ki_avh))
+@case_with_avh@	B0p12(-2) = dscf(2)
+@case_with_avh@	B0p12(-1) = dscf(1)
+@case_with_avh@	B0p12(0)  = dscf(0)
+@case_with_avh@	call olo_b11(dscf2,dscf0,dscf1,dscf,&
+@case_with_avh@	& real(zip,ki_avh),real(m0,ki_avh),real(m0,ki_avh))
+@case_with_avh@	B0z11(-2) = dscf(2)
+@case_with_avh@	B0z11(-1) = dscf(1)
+@case_with_avh@	B0z11(0)  = dscf(0)
+@case_with_avh@	call olo_b11(dscf2,dscf0,dscf1,dscf,&
+@case_with_avh@	& real(zip,ki_avh),real(m1,ki_avh),real(m1,ki_avh))
+@case_with_avh@	B0z22(-2) = dscf(2)
+@case_with_avh@	B0z22(-1) = dscf(1)
+@case_with_avh@	B0z22(0)  = dscf(0)
+@case_with_avh@
+@case_with_avh@	call HJ111(J111, K11,m0,m1,B0p12,B0z11,B0z22)
+@case_with_avh@end subroutine avholo2hr
+@case_with_avh@
+@case_with_avh@
+@case_with_avh@subroutine avholo1(m,scale2,MI1,cache_flag, cache_offset, scalar_cache)
+@case_with_avh@	use avh_olo, only: olo_a0
+@case_with_avh@	implicit none 
+@case_with_avh@	complex(ki),			  intent(in ) :: m
+@case_with_avh@	complex(ki), dimension(-2:0),     intent(out) :: MI1
+@case_with_avh@	real(ki), 			  intent(in ) :: scale2
+@case_with_avh@	
+@case_with_avh@	logical,     intent(in   ), optional 			:: cache_flag
+@case_with_avh@	integer,     intent(inout), optional 			:: cache_offset
+@case_with_avh@	complex(ki), intent(inout), optional, dimension(-2:0,*) :: scalar_cache
+@case_with_avh@	
+@case_with_avh@	integer     :: j1
+@case_with_avh@	complex(ki) :: m0
+@case_with_avh@	complex(ki_avh), dimension(0:2) :: vala0
+@case_with_avh@	integer     :: ep, cache_index
+@case_with_avh@	
+@case_with_avh@	if (notfirsti.eqv.(.false.)) then
+@case_with_avh@		call avh_olo_mu_set(real(sqrt(scale2),ki_avh))
+@case_with_avh@		notfirsti=.true.
+@case_with_avh@	endif
+@case_with_avh@	
+@case_with_avh@	m0=m
+@case_with_avh@	
+@case_with_avh@  1   Format(A3,I2,A1,I2,A5,D24.15,A1,D24.15,A3)
+@case_with_avh@
+@case_with_avh@	if (present(cache_flag)) cache_index = lbound(scalar_cache,2)+cache_offset
+@case_with_avh@
+@case_with_avh@	if (present(cache_flag)) then
+@case_with_avh@		if (cache_flag) then
+@case_with_avh@			vala0(0) = scalar_cache( 0,cache_index)
+@case_with_avh@			vala0(1) = scalar_cache(-1,cache_index)
+@case_with_avh@			vala0(2) = scalar_cache(-2,cache_index)
+@case_with_avh@		else
+@case_with_avh@			call olo_a0(vala0,cmplx(real(m0,ki_avh),aimag(m0),ki_avh))
+@case_with_avh@			scalar_cache( 0,cache_index) = vala0(0)
+@case_with_avh@			scalar_cache(-1,cache_index) = vala0(1)
+@case_with_avh@			scalar_cache(-2,cache_index) = vala0(2)
+@case_with_avh@		end if
+@case_with_avh@	else
+@case_with_avh@		call olo_a0(vala0,cmplx(real(m0,ki_avh),aimag(m0),ki_avh))
+@case_with_avh@	end if
+@case_with_avh@	do ep=-2,0
+@case_with_avh@		MI1(ep)= vala0(-ep) 
+@case_with_avh@	enddo
+@case_with_avh@	
+@case_with_avh@	if (present(cache_flag)) cache_offset = cache_offset + 1
+@case_with_avh@end subroutine avholo1
+@case_with_avh@
+@case_with_avh@
+@case_with_avh@
+end module mmisavholo 
+
