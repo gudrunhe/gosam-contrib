@@ -38,6 +38,7 @@ module dilogarithme
   use constante, only : un,pi,pi6,pi12,zero,czero,cun
   use logarithme, only : z_log,z_log2
   use sortie_erreur, only : tab_erreur_par,catch_exception
+  use parametre, only: if_print_warn_par
   use equal
   !
   implicit none
@@ -318,6 +319,7 @@ module dilogarithme
       complex(ki), intent (in) :: z
       complex(ki) :: cdilog
       real(ki) :: delta
+      logical :: old_if_print_warn_par
       !
       delta=10._ki*epsilon(1._ki)
     !  
@@ -352,10 +354,14 @@ module dilogarithme
         tab_erreur_par(2)%a_imprimer = .true.
         tab_erreur_par(2)%chaine = 'the argument z is not in the good range :  %z0'
         tab_erreur_par(2)%arg_comp = z
-        call catch_exception(0)
+        old_if_print_warn_par=if_print_warn_par
+        if_print_warn_par=.true.
+        call catch_exception(1)
+        if_print_warn_par=old_if_print_warn_par
         !
         ! to please the compiler
-        stop
+        !stop
+        cdilog = z
         !
       end if
       !
