@@ -23,4 +23,8 @@
      above functions
 2014-04-23 Johann Felix v. Soden-Fraunhofen <jfsoden@mpp.mpg.de>
    * Update to samurai-2.9.0
-   * Update to golem-1.3.0
+   * Update to golem95c-1.3.0
+2014-04-25 Johann Felix v. Soden-Fraunhofen <jfsoden@mpp.mpg.de>
+   * golem95c-1.3.0: Revert function_3p_finite.f90 back to latest golem95c-1.2.1
+     version
+
