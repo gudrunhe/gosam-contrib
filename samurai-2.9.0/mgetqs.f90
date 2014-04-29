@@ -58,9 +58,11 @@ subroutine getq5(nleg,cut5,e1,e2,e3,e4,p0,Vi,msq,r1,r2,q5,mu2)
 	var3 = MPv33 + MP1v3*two*x1 + MP2v3*two*x2+msq(j1)-msq(j4)
 	x3   = (-MP4v3*var2+MP4v2*var3)/den
 	x4   = ( MP3v3*var2-MP3v2*var3)/den
+
+
 	! test values
 	tmu2 = two*MP12*(x1*x2-x3*x4)-msq(j1)
-	mu2  = real(tmu2, ki)
+	mu2  = tmu2
 ! SETTING OUTPUT===================================================================!
 	q5(:) = -p0(:)+x1*e1(:)+x2*e2(:)+x3*e3(:)+x4*e4(:)
 end subroutine getq5
