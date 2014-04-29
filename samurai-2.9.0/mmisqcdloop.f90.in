@@ -1,0 +1,308 @@
+module mmisqcdloop
+@case_with_ql@   use precision, only: ki, ki_ql
+@case_with_ql@   use constants
+@case_with_ql@   use options
+@case_with_ql@   use mfunctions
+@case_with_ql@   use notfirst
+@case_with_ql@   use mmishighrank
+@case_with_ql@   implicit none
+@case_with_ql@
+@case_with_ql@   private
+@case_with_ql@
+@case_with_ql@   complex(ki), dimension(:,:), allocatable, public :: s_mat
+@case_with_ql@
+@case_with_ql@	interface
+@case_with_ql@		function qlI4(p1,p2,p3,p4,s12,s23,m1,m2,m3,m4,mu2,ep)
+@case_with_ql@			use precision, only: ki_ql
+@case_with_ql@			implicit none
+@case_with_ql@			real(ki_ql), intent(in) :: p1,p2,p3,p4,s12,s23
+@case_with_ql@			real(ki_ql), intent(in) :: m1,m2,m3,m4,mu2
+@case_with_ql@			integer, intent(in) :: ep
+@case_with_ql@			complex(ki_ql) :: qlI4
+@case_with_ql@		end function qlI4
+@case_with_ql@	end interface
+@case_with_ql@	interface
+@case_with_ql@		function qlI3(p1,p2,p3,m1,m2,m3,mu2,ep)
+@case_with_ql@			use precision, only: ki_ql
+@case_with_ql@			implicit none
+@case_with_ql@			real(ki_ql), intent(in) :: p1,p2,p3
+@case_with_ql@			real(ki_ql), intent(in) :: m1,m2,m3,mu2
+@case_with_ql@			integer, intent(in) :: ep
+@case_with_ql@			complex(ki_ql) :: qlI3
+@case_with_ql@		end function qlI3
+@case_with_ql@	end interface
+@case_with_ql@	interface
+@case_with_ql@		function qlI2(p1,m1,m2,mu2,ep)
+@case_with_ql@			use precision, only: ki_ql
+@case_with_ql@			implicit none
+@case_with_ql@			real(ki_ql), intent(in) :: p1
+@case_with_ql@			real(ki_ql), intent(in) :: m1,m2,mu2
+@case_with_ql@			integer, intent(in) :: ep
+@case_with_ql@			complex(ki_ql) :: qlI2
+@case_with_ql@		end function qlI2
+@case_with_ql@	end interface
+@case_with_ql@	interface
+@case_with_ql@		function qlI1(m1,mu2,ep)
+@case_with_ql@			use precision, only: ki_ql
+@case_with_ql@			implicit none
+@case_with_ql@			real(ki_ql), intent(in) :: m1,mu2
+@case_with_ql@			integer, intent(in) :: ep
+@case_with_ql@			complex(ki_ql) :: qlI1
+@case_with_ql@		end function qlI1
+@case_with_ql@	end interface
+@case_with_ql@
+@case_with_ql@	public :: qcdloop4, qcdloop3, qcdloop2,qcdloop2hr, qcdloop1
+@case_with_ql@
+@case_with_ql@contains
+@case_with_ql@
+@case_with_ql@subroutine qcdloop4(V,m,scale2,MI4,cache_flag, cache_offset, scalar_cache)
+@case_with_ql@	implicit none
+@case_with_ql@	real(ki),    dimension(1:6),  intent(in ) :: V
+@case_with_ql@	complex(ki), dimension(0:3),  intent(in ) :: m
+@case_with_ql@	real(ki), 		      intent(in ) :: scale2
+@case_with_ql@	complex(ki), dimension(-2:0), intent(out) :: MI4
+@case_with_ql@	
+@case_with_ql@	logical,     intent(in   ), optional 			:: cache_flag
+@case_with_ql@	integer,     intent(inout), optional 			:: cache_offset
+@case_with_ql@	complex(ki), intent(inout), optional, dimension(-2:0,*) :: scalar_cache
+@case_with_ql@	
+@case_with_ql@	complex(ki) :: m0, m1, m2, m3
+@case_with_ql@	real(ki)    :: V1, V2, V3, V21, V31, V32
+@case_with_ql@	integer     :: ep, cache_index
+@case_with_ql@	complex(ki) :: MI4tmp
+@case_with_ql@	
+@case_with_ql@	notfirsti=.true.
+@case_with_ql@	
+@case_with_ql@	m0  = m(0)
+@case_with_ql@	m1  = m(1)
+@case_with_ql@	m2  = m(2)
+@case_with_ql@	m3  = m(3)
+@case_with_ql@	V1  = V(1)
+@case_with_ql@	V2  = V(2)
+@case_with_ql@	V3  = V(3)
+@case_with_ql@	V21 = V(4)
+@case_with_ql@	V31 = V(5)
+@case_with_ql@	V32 = V(6)
+@case_with_ql@	
+@case_with_ql@  1   Format(A3,I4,A1,I2,A5,D24.15,A1,D24.15,A3)
+@case_with_ql@
+@case_with_ql@	if (present(cache_flag)) cache_index = lbound(scalar_cache,2)+cache_offset
+@case_with_ql@	if ( (aimag(m0).ne.0) .or. (aimag(m1).ne.0) .or. &
+@case_with_ql@	&    (aimag(m2).ne.0) .or. (aimag(m3).ne.0) ) then
+@case_with_ql@		print *,'isca=1: QCDLoop does not support complex masses'
+@case_with_ql@		stop
+@case_with_ql@	endif
+@case_with_ql@	do ep=-2,0
+@case_with_ql@		if (present(cache_flag)) then
+@case_with_ql@			if (cache_flag) then
+@case_with_ql@				MI4tmp = scalar_cache(ep,cache_index)
+@case_with_ql@			else
+@case_with_ql@				MI4tmp=qlI4(&
+@case_with_ql@				& real(V1,ki_ql),real(V21,ki_ql),real(V32,ki_ql),&
+@case_with_ql@				& real(V3,ki_ql),real(V2,ki_ql),real(V31,ki_ql),&
+@case_with_ql@				& real(m0,ki_ql),real(m1,ki_ql),real(m2,ki_ql),&
+@case_with_ql@				& real(m3,ki_ql),real(scale2,ki_ql),ep)
+@case_with_ql@				scalar_cache(ep,cache_index) = MI4tmp
+@case_with_ql@			end if
+@case_with_ql@		else
+@case_with_ql@			MI4tmp=qlI4(&
+@case_with_ql@			& real(V1,ki_ql),real(V21,ki_ql),real(V32,ki_ql),&
+@case_with_ql@			& real(V3,ki_ql),real(V2,ki_ql),real(V31,ki_ql),&
+@case_with_ql@			& real(m0,ki_ql),real(m1,ki_ql),real(m2,ki_ql),&
+@case_with_ql@			& real(m3,ki_ql),real(scale2,ki_ql),ep)
+@case_with_ql@		end if
+@case_with_ql@		MI4(ep)=MI4tmp
+@case_with_ql@	enddo
+@case_with_ql@	if (present(cache_flag)) cache_offset = cache_offset + 1
+@case_with_ql@end subroutine qcdloop4
+@case_with_ql@
+@case_with_ql@subroutine qcdloop3(V,m,scale2,MI3,cache_flag, cache_offset, scalar_cache)
+@case_with_ql@	implicit none
+@case_with_ql@	
+@case_with_ql@	real(ki),    dimension(1:3),  intent(in ) :: V
+@case_with_ql@	complex(ki), dimension(0:2),  intent(in ) :: m
+@case_with_ql@	real(ki), 		      intent(in ) :: scale2
+@case_with_ql@	complex(ki), dimension(-2:0), intent(out) :: MI3
+@case_with_ql@	
+@case_with_ql@	logical,     intent(in   ), optional 			:: cache_flag
+@case_with_ql@	integer,     intent(inout), optional 			:: cache_offset
+@case_with_ql@	complex(ki), intent(inout), optional, dimension(-2:0,*) :: scalar_cache
+@case_with_ql@	
+@case_with_ql@	complex(ki) :: m0, m1, m2
+@case_with_ql@	real(ki)    :: V1, V2, V3
+@case_with_ql@	complex(ki) :: MI3tmp
+@case_with_ql@	integer     :: ep, cache_index
+@case_with_ql@	
+@case_with_ql@	notfirsti=.true.
+@case_with_ql@
+@case_with_ql@	m0 = m(0)
+@case_with_ql@	m1 = m(1)
+@case_with_ql@	m2 = m(2)
+@case_with_ql@	V1 = V(1)
+@case_with_ql@	V2 = V(2)
+@case_with_ql@	V3 = V(3)
+@case_with_ql@	
+@case_with_ql@  1  Format(A3,I3,A1,I2,A5,D24.15,A1,D24.15,A3)
+@case_with_ql@
+@case_with_ql@	if (present(cache_flag)) cache_index = lbound(scalar_cache,2)+cache_offset
+@case_with_ql@	do ep=-2,0
+@case_with_ql@		if (present(cache_flag)) then
+@case_with_ql@			if (cache_flag) then
+@case_with_ql@				MI3tmp = scalar_cache(ep,cache_index)
+@case_with_ql@			else
+@case_with_ql@				MI3tmp=qlI3(&
+@case_with_ql@				& real(V1,ki_ql),real(V2,ki_ql),real(V3,ki_ql),&
+@case_with_ql@				& real(m0,ki_ql),real(m1,ki_ql),real(m2,ki_ql),&
+@case_with_ql@				& real(scale2,ki_ql),ep)
+@case_with_ql@				scalar_cache(ep,cache_index) = MI3tmp 
+@case_with_ql@			end if
+@case_with_ql@		else
+@case_with_ql@			MI3tmp=qlI3(&
+@case_with_ql@			& real(V1,ki_ql),real(V2,ki_ql),real(V3,ki_ql),&
+@case_with_ql@			& real(m0,ki_ql),real(m1,ki_ql),real(m2,ki_ql),&
+@case_with_ql@			& real(scale2,ki_ql),ep)
+@case_with_ql@		end if
+@case_with_ql@		MI3(ep)=MI3tmp
+@case_with_ql@	enddo
+@case_with_ql@	if (present(cache_flag)) cache_offset = cache_offset + 1
+@case_with_ql@
+@case_with_ql@end subroutine qcdloop3
+@case_with_ql@
+@case_with_ql@subroutine qcdloop2(K11,m,scale2,MI2J0,MI2J1,MI2J00,MI2J01,MI2J11,&
+@case_with_ql@			& cache_flag, cache_offset, scalar_cache)
+@case_with_ql@	implicit none
+@case_with_ql@	
+@case_with_ql@	real(ki),    		     intent(in ) :: K11 
+@case_with_ql@	complex(ki), dimension(0:1), intent(in ) :: m
+@case_with_ql@	real(ki), 		     intent(in ) :: scale2
+@case_with_ql@	complex(ki), dimension(-2:0),intent(out) :: MI2J0, MI2J1, MI2J00, MI2J01, MI2J11
+@case_with_ql@	
+@case_with_ql@	logical,     intent(in   ), optional 			:: cache_flag
+@case_with_ql@	integer,     intent(inout), optional 			:: cache_offset
+@case_with_ql@	complex(ki), intent(inout), optional, dimension(-2:0,*) :: scalar_cache
+@case_with_ql@	
+@case_with_ql@	complex(ki) :: m0, m1
+@case_with_ql@	integer     :: ep, cache_index
+@case_with_ql@
+@case_with_ql@	notfirsti=.true.
+@case_with_ql@	
+@case_with_ql@	m0=m(0)
+@case_with_ql@	m1=m(1)
+@case_with_ql@	
+@case_with_ql@	if (present(cache_flag)) cache_index = lbound(scalar_cache,2)+cache_offset
+@case_with_ql@	if (present(cache_flag)) then
+@case_with_ql@		if (cache_flag) then
+@case_with_ql@			MI2J0(:)  = scalar_cache(:,cache_index+0)
+@case_with_ql@			MI2J1(:)  = scalar_cache(:,cache_index+1)
+@case_with_ql@			MI2J01(:) = scalar_cache(:,cache_index+2)
+@case_with_ql@			MI2J11(:) = scalar_cache(:,cache_index+3)
+@case_with_ql@			MI2J00(:) = scalar_cache(:,cache_index+4)
+@case_with_ql@		else
+@case_with_ql@			 do ep=-2,0
+@case_with_ql@				MI2J00(ep) = qlI2(&
+@case_with_ql@				& real(K11,ki_ql),real(m0,ki_ql),real(m0,ki_ql),&
+@case_with_ql@				& real(scale2,ki_ql),ep)
+@case_with_ql@				MI2J11(ep) = qlI2(&
+@case_with_ql@				& real(K11,ki_ql),real(m1,ki_ql),real(m1,ki_ql),&
+@case_with_ql@				& real(scale2,ki_ql),ep)
+@case_with_ql@				MI2J01(ep)=qlI2(&
+@case_with_ql@				& real(K11,ki_ql),real(m0,ki_ql),real(m1,ki_ql),&
+@case_with_ql@				& real(scale2,ki_ql),ep)
+@case_with_ql@				MI2J0(ep) = qlI1(real(m0,ki_ql),real(scale2,ki_ql),ep)
+@case_with_ql@				MI2J1(ep) = qlI1(real(m1,ki_ql),real(scale2,ki_ql),ep)
+@case_with_ql@			 end do
+@case_with_ql@			 scalar_cache(:,cache_index+0) = MI2J0(:)
+@case_with_ql@			 scalar_cache(:,cache_index+1) = MI2J1(:)
+@case_with_ql@			 scalar_cache(:,cache_index+2) = MI2J01(:)
+@case_with_ql@			 scalar_cache(:,cache_index+3) = MI2J11(:)
+@case_with_ql@			 scalar_cache(:,cache_index+4) = MI2J00(:)
+@case_with_ql@		end if
+@case_with_ql@	else
+@case_with_ql@		do ep=-2,0
+@case_with_ql@			MI2J00(ep) = qlI2(&
+@case_with_ql@			& real(K11,ki_ql),real(m0,ki_ql),real(m0,ki_ql),&
+@case_with_ql@			& real(scale2,ki_ql),ep)
+@case_with_ql@			MI2J11(ep) = qlI2(&
+@case_with_ql@			& real(K11,ki_ql),real(m1,ki_ql),real(m1,ki_ql),&
+@case_with_ql@			& real(scale2,ki_ql),ep)
+@case_with_ql@			MI2J01(ep)=qlI2(&
+@case_with_ql@			& real(K11,ki_ql),real(m0,ki_ql),real(m1,ki_ql),&
+@case_with_ql@			& real(scale2,ki_ql),ep)
+@case_with_ql@			MI2J0(ep) = qlI1(real(m0,ki_ql),real(scale2,ki_ql),ep)
+@case_with_ql@			MI2J1(ep) = qlI1(real(m1,ki_ql),real(scale2,ki_ql),ep)
+@case_with_ql@		end do
+@case_with_ql@	end if
+@case_with_ql@	if (present(cache_flag)) cache_offset = cache_offset + 5
+@case_with_ql@
+@case_with_ql@end subroutine qcdloop2
+@case_with_ql@
+@case_with_ql@
+@case_with_ql@subroutine qcdloop2hr(K11,m,scale2,J111)
+@case_with_ql@	implicit none
+@case_with_ql@	real(ki),    intent(in) :: K11
+@case_with_ql@	complex(ki), dimension(0:1), intent(in) :: m
+@case_with_ql@	real(ki),    intent(in) :: scale2
+@case_with_ql@	complex(ki), dimension(-2:0), intent(out) :: J111
+@case_with_ql@	integer     :: ep
+@case_with_ql@	complex(ki) :: m0, m1
+@case_with_ql@ 	complex(ki), dimension(-2:0) :: B0p12, B0z11, B0z22
+@case_with_ql@
+@case_with_ql@	m0 = m(0)
+@case_with_ql@	m1 = m(1)
+@case_with_ql@
+@case_with_ql@	do ep=-2,0
+@case_with_ql@		B0p12(ep) = qlI2(&
+@case_with_ql@		& real(K11,ki_ql),real(m0,ki_ql),real(m1,ki_ql),&
+@case_with_ql@		& real(scale2,ki_ql),ep)
+@case_with_ql@		B0z11(ep) = qlI2(&
+@case_with_ql@		& real(zip,ki_ql),real(m0,ki_ql),real(m0,ki_ql),&
+@case_with_ql@		& real(scale2,ki_ql),ep)
+@case_with_ql@		B0z22(ep) = qlI2(&
+@case_with_ql@		& real(zip,ki_ql),real(m1,ki_ql),real(m1,ki_ql),&
+@case_with_ql@		& real(scale2,ki_ql),ep)
+@case_with_ql@	enddo
+@case_with_ql@
+@case_with_ql@	call HJ111(J111, K11,m0,m1,B0p12,B0z11,B0z22)
+@case_with_ql@
+@case_with_ql@end subroutine qcdloop2hr
+@case_with_ql@
+@case_with_ql@subroutine qcdloop1(m,scale2,MI1, cache_flag, cache_offset, scalar_cache)
+@case_with_ql@	implicit none 
+@case_with_ql@	complex(ki), 			  intent(in ) :: m
+@case_with_ql@	real(ki), 			  intent(in ) :: scale2
+@case_with_ql@	complex(ki), dimension(-2:0), 	  intent(out) :: MI1
+@case_with_ql@	
+@case_with_ql@	logical,     intent(in   ), optional 			:: cache_flag
+@case_with_ql@	integer,     intent(inout), optional 			:: cache_offset
+@case_with_ql@	complex(ki), intent(inout), optional, dimension(-2:0,*) :: scalar_cache
+@case_with_ql@	
+@case_with_ql@	integer     :: j1
+@case_with_ql@	complex(ki) :: m0, MI1tmp
+@case_with_ql@	integer     :: ep, cache_index
+@case_with_ql@	
+@case_with_ql@	notfirsti=.true.
+@case_with_ql@	
+@case_with_ql@	m0=m
+@case_with_ql@	
+@case_with_ql@  1   Format(A3,I2,A1,I2,A5,D24.15,A1,D24.15,A3)
+@case_with_ql@
+@case_with_ql@	if (present(cache_flag)) cache_index = lbound(scalar_cache,2)+cache_offset
+@case_with_ql@	do ep=-2,0
+@case_with_ql@		if (present(cache_flag)) then
+@case_with_ql@			if (cache_flag) then
+@case_with_ql@				MI1tmp = scalar_cache(ep,cache_index)
+@case_with_ql@			else
+@case_with_ql@				MI1tmp = qlI1(real(m0,ki_ql),real(scale2,ki_ql),ep)
+@case_with_ql@				scalar_cache(ep,cache_index) = MI1tmp
+@case_with_ql@			end if
+@case_with_ql@		else
+@case_with_ql@			MI1tmp = qlI1(real(m0,ki_ql),real(scale2,ki_ql),ep)
+@case_with_ql@		end if
+@case_with_ql@		MI1(ep)=MI1tmp
+@case_with_ql@	enddo
+@case_with_ql@	if (present(cache_flag)) cache_offset = cache_offset + 1
+@case_with_ql@
+@case_with_ql@end subroutine qcdloop1
+@case_with_ql@
+end module mmisqcdloop
+

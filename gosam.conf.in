@@ -27,8 +27,12 @@ $pkgincludedir=@includedir@/@PACKAGE@
 #---#[ Samurai:
 @conf_with_samurai@samurai.fcflags=-I${pkgincludedir}
 @conf_with_samurai@samurai.ldflags=-L${libdir} -lsamurai
-@conf_with_samurai@samurai.version=2.1.1
+@conf_with_samurai@samurai.version=2.9.0
 #---#] Samurai:
+#---#[ Ninja:
+@conf_with_ninja@ninja.fcflags=-I${pkgincludedir}
+@conf_with_ninja@ninja.ldflags=-L${libdir} -lninja
+#---#] Ninja:
 #---#[ Fortran Compiler:
 +z0005.extensions=gosam-contrib_fc
 +gosam-contrib_fc.fcflags=@FCFLAGS@

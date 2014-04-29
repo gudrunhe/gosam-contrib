@@ -1,0 +1,9 @@
+# Module dependencies
+adapt_gauss.mod: mod_adapt_gauss.$(OBJEXT)
+mod_numeric.lo: mod_adapt_gauss.lo
+mod_numeric.$(OBJEXT): mod_adapt_gauss.$(OBJEXT)
+numerical_evaluation.mod: mod_numeric.$(OBJEXT) mod_adapt_gauss.$(OBJEXT)
+adapt_gauss.mod: mod_adapt_gauss.$(OBJEXT)
+	@true
+numerical_evaluation.mod: mod_adapt_gauss.$(OBJEXT)
+	@true

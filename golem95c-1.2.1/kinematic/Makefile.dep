@@ -1,4 +1,0 @@
-# Module dependencies
-matrice_s.o: inverse_matrice.o
-matrice_s.lo: inverse_matrice.lo
-matrice_s.obj: inverse_matrice.obj

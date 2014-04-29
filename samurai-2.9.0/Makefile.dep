@@ -1,0 +1,128 @@
+# Module dependencies
+constants.lo: precision.lo
+constants.$(OBJEXT): precision.$(OBJEXT)
+constants.mod: constants.$(OBJEXT) precision.$(OBJEXT)
+kinematic.lo: precision.lo
+kinematic.$(OBJEXT): precision.$(OBJEXT)
+kinematic.mod: kinematic.$(OBJEXT) precision.$(OBJEXT)
+ltest.lo: precision.lo
+ltest.$(OBJEXT): precision.$(OBJEXT)
+ltest.mod: ltest.$(OBJEXT) precision.$(OBJEXT)
+maccu.lo: precision.lo
+maccu.$(OBJEXT): precision.$(OBJEXT)
+maccu.mod: maccu.$(OBJEXT) precision.$(OBJEXT)
+madds.lo: constants.lo mfunctions.lo notfirst.lo options.lo precision.lo
+madds.$(OBJEXT): constants.$(OBJEXT) mfunctions.$(OBJEXT) notfirst.$(OBJEXT) options.$(OBJEXT) precision.$(OBJEXT)
+madds.mod: madds.$(OBJEXT) constants.$(OBJEXT) mfunctions.$(OBJEXT) notfirst.$(OBJEXT) options.$(OBJEXT) \
+	precision.$(OBJEXT)
+mcgs.lo: precision.lo
+mcgs.$(OBJEXT): precision.$(OBJEXT)
+mcgs.mod: mcgs.$(OBJEXT) precision.$(OBJEXT)
+mfunctions.lo: constants.lo precision.lo
+mfunctions.$(OBJEXT): constants.$(OBJEXT) precision.$(OBJEXT)
+mfunctions.mod: mfunctions.$(OBJEXT) constants.$(OBJEXT) precision.$(OBJEXT)
+mgetbase.lo: constants.lo kinematic.lo mfunctions.lo precision.lo
+mgetbase.$(OBJEXT): constants.$(OBJEXT) kinematic.$(OBJEXT) mfunctions.$(OBJEXT) precision.$(OBJEXT)
+mgetbase.mod: mgetbase.$(OBJEXT) constants.$(OBJEXT) kinematic.$(OBJEXT) mfunctions.$(OBJEXT) \
+	precision.$(OBJEXT)
+mgetc1.lo: constants.lo mfunctions.lo mglobal.lo mrestore.lo options.lo \
+	precision.lo
+mgetc1.$(OBJEXT): constants.$(OBJEXT) mfunctions.$(OBJEXT) mglobal.$(OBJEXT) mrestore.$(OBJEXT) options.$(OBJEXT) \
+	precision.$(OBJEXT)
+mgetc1.mod: mgetc1.$(OBJEXT) constants.$(OBJEXT) mfunctions.$(OBJEXT) mglobal.$(OBJEXT) mrestore.$(OBJEXT) \
+	options.$(OBJEXT) precision.$(OBJEXT)
+mgetc2.lo: constants.lo mfunctions.lo mglobal.lo mrestore.lo options.lo \
+	precision.lo
+mgetc2.$(OBJEXT): constants.$(OBJEXT) mfunctions.$(OBJEXT) mglobal.$(OBJEXT) mrestore.$(OBJEXT) options.$(OBJEXT) \
+	precision.$(OBJEXT)
+mgetc2.mod: mgetc2.$(OBJEXT) constants.$(OBJEXT) mfunctions.$(OBJEXT) mglobal.$(OBJEXT) mrestore.$(OBJEXT) \
+	options.$(OBJEXT) precision.$(OBJEXT)
+mgetc3.lo: constants.lo mfunctions.lo mglobal.lo mrestore.lo options.lo \
+	precision.lo
+mgetc3.$(OBJEXT): constants.$(OBJEXT) mfunctions.$(OBJEXT) mglobal.$(OBJEXT) mrestore.$(OBJEXT) options.$(OBJEXT) \
+	precision.$(OBJEXT)
+mgetc3.mod: mgetc3.$(OBJEXT) constants.$(OBJEXT) mfunctions.$(OBJEXT) mglobal.$(OBJEXT) mrestore.$(OBJEXT) \
+	options.$(OBJEXT) precision.$(OBJEXT)
+mgetc4.lo: constants.lo mfunctions.lo mglobal.lo mrestore.lo options.lo \
+	precision.lo
+mgetc4.$(OBJEXT): constants.$(OBJEXT) mfunctions.$(OBJEXT) mglobal.$(OBJEXT) mrestore.$(OBJEXT) options.$(OBJEXT) \
+	precision.$(OBJEXT)
+mgetc4.mod: mgetc4.$(OBJEXT) constants.$(OBJEXT) mfunctions.$(OBJEXT) mglobal.$(OBJEXT) mrestore.$(OBJEXT) \
+	options.$(OBJEXT) precision.$(OBJEXT)
+mgetc5.lo: constants.lo mfunctions.lo options.lo precision.lo
+mgetc5.$(OBJEXT): constants.$(OBJEXT) mfunctions.$(OBJEXT) options.$(OBJEXT) precision.$(OBJEXT)
+mgetc5.mod: mgetc5.$(OBJEXT) constants.$(OBJEXT) mfunctions.$(OBJEXT) options.$(OBJEXT) precision.$(OBJEXT)
+mgetkin.lo: mfunctions.lo precision.lo
+mgetkin.$(OBJEXT): mfunctions.$(OBJEXT) precision.$(OBJEXT)
+mgetkin.mod: mgetkin.$(OBJEXT) mfunctions.$(OBJEXT) precision.$(OBJEXT)
+mgetqs.lo: constants.lo mfunctions.lo mglobal.lo options.lo precision.lo
+mgetqs.$(OBJEXT): constants.$(OBJEXT) mfunctions.$(OBJEXT) mglobal.$(OBJEXT) options.$(OBJEXT) precision.$(OBJEXT)
+mgetqs.mod: mgetqs.$(OBJEXT) constants.$(OBJEXT) mfunctions.$(OBJEXT) mglobal.$(OBJEXT) options.$(OBJEXT) \
+	precision.$(OBJEXT)
+mglobal.lo: precision.lo
+mglobal.$(OBJEXT): precision.$(OBJEXT)
+mglobal.mod: mglobal.$(OBJEXT) precision.$(OBJEXT)
+mmasters.lo: mmisavholo.lo mmisgolem.lo mmislooptools.lo mmisqcdloop.lo \
+	options.lo precision.lo
+mmasters.$(OBJEXT): mmisavholo.$(OBJEXT) mmisgolem.$(OBJEXT) mmislooptools.$(OBJEXT) mmisqcdloop.$(OBJEXT) \
+	options.$(OBJEXT) precision.$(OBJEXT)
+mmasters.mod: mmasters.$(OBJEXT) mmisavholo.$(OBJEXT) mmisgolem.$(OBJEXT) mmislooptools.$(OBJEXT) \
+	mmisqcdloop.$(OBJEXT) options.$(OBJEXT) precision.$(OBJEXT)
+mmisavholo.lo: constants.lo mfunctions.lo mmishighrank.lo notfirst.lo \
+	options.lo precision.lo
+mmisavholo.$(OBJEXT): constants.$(OBJEXT) mfunctions.$(OBJEXT) mmishighrank.$(OBJEXT) notfirst.$(OBJEXT) \
+	options.$(OBJEXT) precision.$(OBJEXT)
+mmisavholo.mod: mmisavholo.$(OBJEXT) constants.$(OBJEXT) mfunctions.$(OBJEXT) mmishighrank.$(OBJEXT) \
+	notfirst.$(OBJEXT) options.$(OBJEXT) precision.$(OBJEXT)
+mmisgolem.lo: constants.lo mfunctions.lo mmishighrank.lo notfirst.lo \
+	options.lo precision.lo
+mmisgolem.$(OBJEXT): constants.$(OBJEXT) mfunctions.$(OBJEXT) mmishighrank.$(OBJEXT) notfirst.$(OBJEXT) \
+	options.$(OBJEXT) precision.$(OBJEXT)
+mmisgolem.mod: mmisgolem.$(OBJEXT) constants.$(OBJEXT) mfunctions.$(OBJEXT) mmishighrank.$(OBJEXT) \
+	notfirst.$(OBJEXT) options.$(OBJEXT) precision.$(OBJEXT)
+mmishighrank.lo: constants.lo options.lo precision.lo
+mmishighrank.$(OBJEXT): constants.$(OBJEXT) options.$(OBJEXT) precision.$(OBJEXT)
+mmishighrank.mod: mmishighrank.$(OBJEXT) constants.$(OBJEXT) options.$(OBJEXT) precision.$(OBJEXT)
+mmislooptools.mod: mmislooptools.$(OBJEXT)
+mmisqcdloop.lo: constants.lo mfunctions.lo mmishighrank.lo notfirst.lo \
+	options.lo precision.lo
+mmisqcdloop.$(OBJEXT): constants.$(OBJEXT) mfunctions.$(OBJEXT) mmishighrank.$(OBJEXT) notfirst.$(OBJEXT) \
+	options.$(OBJEXT) precision.$(OBJEXT)
+mmisqcdloop.mod: mmisqcdloop.$(OBJEXT) constants.$(OBJEXT) mfunctions.$(OBJEXT) mmishighrank.$(OBJEXT) \
+	notfirst.$(OBJEXT) options.$(OBJEXT) precision.$(OBJEXT)
+mrestore.lo: constants.lo mfunctions.lo precision.lo save.lo
+mrestore.$(OBJEXT): constants.$(OBJEXT) mfunctions.$(OBJEXT) precision.$(OBJEXT) save.$(OBJEXT)
+mrestore.mod: mrestore.$(OBJEXT) constants.$(OBJEXT) mfunctions.$(OBJEXT) precision.$(OBJEXT) save.$(OBJEXT)
+msamurai.lo: constants.lo ltest.lo maccu.lo madds.lo mfunctions.lo \
+	mgetbase.lo mgetc1.lo mgetc2.lo mgetc3.lo mgetc4.lo mgetc5.lo \
+	mgetkin.lo mgetqs.lo mglobal.lo mmasters.lo mrestore.lo mtens.lo \
+	mtests.lo ncuts.lo notfirst.lo options.lo precision.lo
+msamurai.$(OBJEXT): constants.$(OBJEXT) ltest.$(OBJEXT) maccu.$(OBJEXT) madds.$(OBJEXT) mfunctions.$(OBJEXT) \
+	mgetbase.$(OBJEXT) mgetc1.$(OBJEXT) mgetc2.$(OBJEXT) mgetc3.$(OBJEXT) mgetc4.$(OBJEXT) mgetc5.$(OBJEXT) \
+	mgetkin.$(OBJEXT) mgetqs.$(OBJEXT) mglobal.$(OBJEXT) mmasters.$(OBJEXT) mrestore.$(OBJEXT) mtens.$(OBJEXT) \
+	mtests.$(OBJEXT) ncuts.$(OBJEXT) notfirst.$(OBJEXT) options.$(OBJEXT) precision.$(OBJEXT)
+msamurai.mod: msamurai.$(OBJEXT) constants.$(OBJEXT) ltest.$(OBJEXT) maccu.$(OBJEXT) madds.$(OBJEXT) \
+	mfunctions.$(OBJEXT) mgetbase.$(OBJEXT) mgetc1.$(OBJEXT) mgetc2.$(OBJEXT) mgetc3.$(OBJEXT) mgetc4.$(OBJEXT) mgetc5.$(OBJEXT) \
+	mgetkin.$(OBJEXT) mgetqs.$(OBJEXT) mglobal.$(OBJEXT) mmasters.$(OBJEXT) mrestore.$(OBJEXT) mtens.$(OBJEXT) mtests.$(OBJEXT) \
+	ncuts.$(OBJEXT) notfirst.$(OBJEXT) options.$(OBJEXT) precision.$(OBJEXT)
+mtens.lo: constants.lo mcgs.lo mfunctions.lo options.lo precision.lo
+mtens.$(OBJEXT): constants.$(OBJEXT) mcgs.$(OBJEXT) mfunctions.$(OBJEXT) options.$(OBJEXT) precision.$(OBJEXT)
+mtens.mod: mtens.$(OBJEXT) constants.$(OBJEXT) mcgs.$(OBJEXT) mfunctions.$(OBJEXT) options.$(OBJEXT) \
+	precision.$(OBJEXT)
+mtests.lo: constants.lo ltest.lo mfunctions.lo mglobal.lo mrestore.lo \
+	options.lo precision.lo save.lo
+mtests.$(OBJEXT): constants.$(OBJEXT) ltest.$(OBJEXT) mfunctions.$(OBJEXT) mglobal.$(OBJEXT) mrestore.$(OBJEXT) \
+	options.$(OBJEXT) precision.$(OBJEXT) save.$(OBJEXT)
+mtests.mod: mtests.$(OBJEXT) constants.$(OBJEXT) ltest.$(OBJEXT) mfunctions.$(OBJEXT) mglobal.$(OBJEXT) \
+	mrestore.$(OBJEXT) options.$(OBJEXT) precision.$(OBJEXT) save.$(OBJEXT)
+ncuts.mod: ncuts.$(OBJEXT)
+notfirst.mod: notfirst.$(OBJEXT)
+options.lo: precision.lo
+options.$(OBJEXT): precision.$(OBJEXT)
+options.mod: options.$(OBJEXT) precision.$(OBJEXT)
+precision.mod: precision.$(OBJEXT)
+save.lo: constants.lo precision.lo
+save.$(OBJEXT): constants.$(OBJEXT) precision.$(OBJEXT)
+save.mod: save.$(OBJEXT) constants.$(OBJEXT) precision.$(OBJEXT)
+.mod.o:
+	@true

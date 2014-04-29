@@ -1,0 +1,8 @@
+# Module dependencies
+form_factor_higher_ranks.lo: generic_function_np.lo
+form_factor_higher_ranks.$(OBJEXT): generic_function_np.$(OBJEXT)
+form_factor_higher_ranks.mod: form_factor_higher_ranks.$(OBJEXT) \
+	generic_function_np.$(OBJEXT)
+generic_function_np.mod: generic_function_np.$(OBJEXT)
+.mod.o:
+	@true

@@ -1,0 +1,11 @@
+# Module dependencies
+form_factor_1p.mod: form_factor_1p.$(OBJEXT)
+form_factor_2p.mod: form_factor_2p.$(OBJEXT)
+form_factor_3p.mod: form_factor_3p.$(OBJEXT)
+form_factor_4p.mod: form_factor_4p.$(OBJEXT)
+form_factor_5p.mod: form_factor_5p.$(OBJEXT)
+form_factor_6p.lo: form_factor_5p.lo
+form_factor_6p.$(OBJEXT): form_factor_5p.$(OBJEXT)
+form_factor_6p.mod: form_factor_6p.$(OBJEXT) form_factor_5p.$(OBJEXT)
+.mod.o:
+	@true

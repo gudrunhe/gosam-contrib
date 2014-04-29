@@ -20,13 +20,19 @@ else
 endif
 
 if COMPILE_GOLEM95C
-SUBDIRS+= golem95c-1.2.1
+SUBDIRS+= golem95-1.3.0
 else
 # nop
 endif
 
 if COMPILE_SAMURAI
-SUBDIRS+= samurai-2.1.1
+SUBDIRS+= samurai-2.9.0
+else
+# nop
+endif
+
+if COMPILE_NINJA
+SUBDIRS+= ninja-1.0.0
 else
 # nop
 endif

@@ -1,0 +1,391 @@
+module mmislooptools
+@case_with_lt@   use precision, only: ki, ki_lt
+@case_with_lt@
+@case_with_lt@   use constants
+@case_with_lt@   use options
+@case_with_lt@   use mfunctions
+@case_with_lt@   use notfirst
+@case_with_lt@   implicit none
+@case_with_lt@
+@case_with_lt@   private
+@case_with_lt@
+@case_with_lt@
+@case_with_lt@	interface
+@case_with_lt@		function D0(p1,p2,p3,p4,s12,s23,m1,m2,m3,m4)
+@case_with_lt@			use precision, only: ki_lt
+@case_with_lt@			implicit none
+@case_with_lt@			real(ki_lt), intent(in) :: p1,p2,p3,p4,s12,s23
+@case_with_lt@			real(ki_lt), intent(in) :: m1,m2,m3,m4
+@case_with_lt@			complex(ki_lt) :: D0
+@case_with_lt@		end function D0
+@case_with_lt@	end interface
+@case_with_lt@	interface
+@case_with_lt@		function C0(p1,p2,p3,m1,m2,m3)
+@case_with_lt@			use precision, only: ki_lt
+@case_with_lt@			implicit none
+@case_with_lt@			real(ki_lt), intent(in) :: p1,p2,p3
+@case_with_lt@			real(ki_lt), intent(in) :: m1,m2,m3
+@case_with_lt@			complex(ki_lt) :: C0
+@case_with_lt@		end function C0
+@case_with_lt@	end interface
+@case_with_lt@	interface
+@case_with_lt@		function B0(p1,m1,m2)
+@case_with_lt@			use precision, only: ki_lt
+@case_with_lt@			implicit none
+@case_with_lt@			real(ki_lt), intent(in) :: p1
+@case_with_lt@			real(ki_lt), intent(in) :: m1,m2
+@case_with_lt@			complex(ki_lt) :: B0
+@case_with_lt@		end function B0
+@case_with_lt@	end interface
+@case_with_lt@	interface
+@case_with_lt@		function B1(p1,m1,m2)
+@case_with_lt@			use precision, only: ki_lt
+@case_with_lt@			implicit none
+@case_with_lt@			real(ki_lt), intent(in) :: p1
+@case_with_lt@			real(ki_lt), intent(in) :: m1,m2
+@case_with_lt@			complex(ki_lt) :: B1
+@case_with_lt@		end function B1
+@case_with_lt@	end interface
+@case_with_lt@	interface
+@case_with_lt@		function B00(p1,m1,m2)
+@case_with_lt@			use precision, only: ki_lt
+@case_with_lt@			implicit none
+@case_with_lt@			real(ki_lt), intent(in) :: p1
+@case_with_lt@			real(ki_lt), intent(in) :: m1,m2
+@case_with_lt@			complex(ki_lt) :: B00
+@case_with_lt@		end function B00
+@case_with_lt@	end interface
+@case_with_lt@	interface
+@case_with_lt@		function B11(p1,m1,m2)
+@case_with_lt@			use precision, only: ki_lt
+@case_with_lt@			implicit none
+@case_with_lt@			real(ki_lt), intent(in) :: p1
+@case_with_lt@			real(ki_lt), intent(in) :: m1,m2
+@case_with_lt@			complex(ki_lt) :: B11
+@case_with_lt@		end function B11
+@case_with_lt@	end interface
+@case_with_lt@	interface
+@case_with_lt@		function A0(m1)
+@case_with_lt@			use precision, only: ki_lt
+@case_with_lt@			implicit none
+@case_with_lt@			real(ki_lt), intent(in) :: m1
+@case_with_lt@			complex(ki_lt) :: A0
+@case_with_lt@		end function A0
+@case_with_lt@	end interface
+@case_with_lt@	interface
+@case_with_lt@		function D0C(p1,p2,p3,p4,s12,s23,m1,m2,m3,m4)
+@case_with_lt@			use precision, only: ki_lt
+@case_with_lt@			implicit none
+@case_with_lt@			complex(ki_lt), intent(in) :: p1,p2,p3,p4,s12,s23
+@case_with_lt@			complex(ki_lt), intent(in) :: m1,m2,m3,m4
+@case_with_lt@			complex(ki_lt) :: D0C
+@case_with_lt@		end function D0C
+@case_with_lt@	end interface
+@case_with_lt@	interface
+@case_with_lt@		function C0C(p1,p2,p3,m1,m2,m3)
+@case_with_lt@			use precision, only: ki_lt
+@case_with_lt@			implicit none
+@case_with_lt@			complex(ki_lt), intent(in) :: p1,p2,p3
+@case_with_lt@			complex(ki_lt), intent(in) :: m1,m2,m3
+@case_with_lt@			complex(ki_lt) :: C0C
+@case_with_lt@		end function C0C
+@case_with_lt@	end interface
+@case_with_lt@	interface
+@case_with_lt@		function B0C(p1,m1,m2)
+@case_with_lt@			use precision, only: ki_lt
+@case_with_lt@			implicit none
+@case_with_lt@			complex(ki_lt), intent(in) :: p1
+@case_with_lt@			complex(ki_lt), intent(in) :: m1,m2
+@case_with_lt@			complex(ki_lt) :: B0C
+@case_with_lt@		end function B0C
+@case_with_lt@	end interface
+@case_with_lt@	interface
+@case_with_lt@		function B1C(p1,m1,m2)
+@case_with_lt@			use precision, only: ki_lt
+@case_with_lt@			implicit none
+@case_with_lt@			complex(ki_lt), intent(in) :: p1
+@case_with_lt@			complex(ki_lt), intent(in) :: m1,m2
+@case_with_lt@			complex(ki_lt) :: B1C
+@case_with_lt@		end function B1C
+@case_with_lt@	end interface
+@case_with_lt@	interface
+@case_with_lt@		function B00C(p1,m1,m2)
+@case_with_lt@			use precision, only: ki_lt
+@case_with_lt@			implicit none
+@case_with_lt@			complex(ki_lt), intent(in) :: p1
+@case_with_lt@			complex(ki_lt), intent(in) :: m1,m2
+@case_with_lt@			complex(ki_lt) :: B00C
+@case_with_lt@		end function B00C
+@case_with_lt@	end interface
+@case_with_lt@	interface
+@case_with_lt@		function B11C(p1,m1,m2)
+@case_with_lt@			use precision, only: ki_lt
+@case_with_lt@			implicit none
+@case_with_lt@			complex(ki_lt), intent(in) :: p1
+@case_with_lt@			complex(ki_lt), intent(in) :: m1,m2
+@case_with_lt@			complex(ki_lt) :: B11C
+@case_with_lt@		end function B11C
+@case_with_lt@	end interface
+@case_with_lt@	interface
+@case_with_lt@		function A0C(m1)
+@case_with_lt@			use precision, only: ki_lt
+@case_with_lt@			implicit none
+@case_with_lt@			complex(ki_lt), intent(in) :: m1
+@case_with_lt@			complex(ki_lt) :: A0C
+@case_with_lt@		end function A0C
+@case_with_lt@	end interface
+@case_with_lt@	interface
+@case_with_lt@		function getlambda()
+@case_with_lt@			use precision, only: ki_lt
+@case_with_lt@			implicit none
+@case_with_lt@			real(ki_lt) :: getlambda
+@case_with_lt@		end function getlambda
+@case_with_lt@	end interface
+@case_with_lt@
+@case_with_lt@
+@case_with_lt@
+@case_with_lt@	public :: looptools4, looptools3, looptools2, looptools2hr, looptools1
+@case_with_lt@
+@case_with_lt@contains
+@case_with_lt@
+@case_with_lt@
+@case_with_lt@  subroutine looptools4(V,m,scale2,MI4, cache_flag, cache_offset, scalar_cache)
+@case_with_lt@	implicit none
+@case_with_lt@	real(ki),    dimension(1:6),  intent(in ) :: Vi
+@case_with_lt@	complex(ki), dimension(0:3),  intent(in ) :: m
+@case_with_lt@	real(ki), 		      intent(in ) :: scale2
+@case_with_lt@	complex(ki), dimension(-2:0), intent(out) :: MI4
+@case_with_lt@	
+@case_with_lt@	logical,     intent(in   ), optional 			:: cache_flag
+@case_with_lt@	integer,     intent(inout), optional 			:: cache_offset
+@case_with_lt@	complex(ki), intent(inout), optional, dimension(-2:0,*) :: scalar_cache
+@case_with_lt@	
+@case_with_lt@	complex(ki) 		:: m0, m1, m2, m3
+@case_with_lt@	real(ki) 		:: V1, V2, V3, V21, V31, V32
+@case_with_lt@	integer 		:: ep, cache_index
+@case_with_lt@	complex(ki) :: MI4tmp
+@case_with_lt@
+@case_with_lt@	if (notfirsti.eqv.(.false.)) then
+@case_with_lt@		call setmudim(real(scale2, ki_lt))
+@case_with_lt@		notfirsti=.true.
+@case_with_lt@	endif
+@case_with_lt@
+@case_with_lt@	m0  = m(0)
+@case_with_lt@	m1  = m(1)
+@case_with_lt@	m2  = m(2)
+@case_with_lt@	m3  = m(3)
+@case_with_lt@	V1  = V(1)
+@case_with_lt@	V2  = V(2)
+@case_with_lt@	V3  = V(3)
+@case_with_lt@	V21 = V(4)
+@case_with_lt@	V31 = V(5)
+@case_with_lt@	V32 = V(6)
+@case_with_lt@
+@case_with_lt@	if (present(cache_flag)) cache_index = lbound(scalar_cache,2)+cache_offset
+@case_with_lt@	MI4(:)=czip
+@case_with_lt@	ep = -dim(0, int(getlambda()))
+@case_with_lt@	if (present(cache_flag)) then
+@case_with_lt@		if (cache_flag) then
+@case_with_lt@			MI4tmp = scalar_cache(ep,cache_index)
+@case_with_lt@		else
+@case_with_lt@			call gtrunc(abs(V32)+abs(V31), &
+@case_with_lt@			&   V1,V2,V3,V21,V32,V31,m0,m1,m2,m3)
+@case_with_lt@			MI4tmp=D0(&
+@case_with_lt@			& real(V1,ki_lt),real(V21,ki_lt),real(V32,ki_lt),&
+@case_with_lt@			& real(V3,ki_lt),real(V2,ki_lt),real(V31,ki_lt),&
+@case_with_lt@			& real(m0,ki_lt),real(m1,ki_lt),real(m2,ki_lt),&
+@case_with_lt@			& real(m3,ki_lt))
+@case_with_lt@			scalar_cache(ep,cache_index) = MI4tmp
+@case_with_lt@		end if
+@case_with_lt@	else
+@case_with_lt@		call gtrunc(abs(V32)+abs(V31), &
+@case_with_lt@		&   V1,V2,V3,V21,V32,V31,m0,m1,m2,m3)
+@case_with_lt@		MI4tmp=D0(&
+@case_with_lt@		& real(V1,ki_lt),real(V21,ki_lt),real(V32,ki_lt),&
+@case_with_lt@		& real(V3,ki_lt),real(V2,ki_lt),real(V31,ki_lt),&
+@case_with_lt@		& real(m0,ki_lt),real(m1,ki_lt),real(m2,ki_lt),&
+@case_with_lt@		& real(m3,ki_lt))
+@case_with_lt@	end if
+@case_with_lt@	MI4(ep)=MI4tmp
+@case_with_lt@	if (present(cache_flag)) cache_offset = cache_offset + 1
+@case_with_lt@end subroutine add4
+@case_with_lt@
+@case_with_lt@subroutine add3(V,m,scale2,MI3,cache_flag, cache_offset, scalar_cache)
+@case_with_lt@	implicit none
+@case_with_lt@	
+@case_with_lt@	real(ki),    dimension(1:3),  intent(in ) :: V
+@case_with_lt@	complex(ki), dimension(0:2),  intent(in ) :: m
+@case_with_lt@	real(ki), 		      intent(in ) :: scale2
+@case_with_lt@	complex(ki), dimension(-2:0), intent(out) :: MI3
+@case_with_lt@	
+@case_with_lt@	logical,     intent(in   ), optional 			:: cache_flag
+@case_with_lt@	integer,     intent(inout), optional 			:: cache_offset
+@case_with_lt@	complex(ki), intent(inout), optional, dimension(-2:0,*) :: scalar_cache
+@case_with_lt@	
+@case_with_lt@	complex(ki) :: m0, m1, m2
+@case_with_lt@	real(ki) :: V1, V2, V3
+@case_with_lt@	integer :: ep, cache_index
+@case_with_lt@	
+@case_with_lt@	if (notfirsti.eqv.(.false.)) then
+@case_with_lt@		call setmudim(real(scale2, ki_lt))
+@case_with_lt@		notfirsti=.true.
+@case_with_lt@	endif
+@case_with_lt@
+@case_with_lt@	m0 = m(0)
+@case_with_lt@	m1 = m(1)
+@case_with_lt@	m2 = m(2)
+@case_with_lt@	V1 = V(1)
+@case_with_lt@	V2 = V(2)
+@case_with_lt@	V3 = V(3)
+@case_with_lt@
+@case_with_lt@	if (present(cache_flag)) cache_index = lbound(scalar_cache,2)+cache_offset
+@case_with_lt@	MI3(:) = 0
+@case_with_lt@	call gtrunc(abs(V1)+abs(V2)+abs(V3),V1,V2,V3,m0,m1,m2)
+@case_with_lt@	ep = -dim(0, int(getlambda()))
+@case_with_lt@	if (present(cache_flag)) then
+@case_with_lt@		if (cache_flag) then
+@case_with_lt@			MI3tmp = scalar_cache(ep,cache_index)
+@case_with_lt@		else
+@case_with_lt@			MI3tmp=C0(&
+@case_with_lt@			&  real(V1,ki_lt),real(V2,ki_lt),real(V3,ki_lt),&
+@case_with_lt@			&  real(m0,ki_lt),real(m1,ki_lt),real(m2,ki_lt))
+@case_with_lt@			scalar_cache(ep,cache_index) = MI3tmp
+@case_with_lt@		end if
+@case_with_lt@	else
+@case_with_lt@		MI3tmp=C0(&
+@case_with_lt@		&  real(V1,ki_lt),real(V2,ki_lt),real(V3,ki_lt),&
+@case_with_lt@		&  real(m0,ki_lt),real(m1,ki_lt),real(m2,ki_lt))
+@case_with_lt@	end if
+@case_with_lt@	MI3(ep)=MI3tmp 
+@case_with_lt@	if (present(cache_flag)) cache_offset = cache_offset + 1
+@case_with_lt@end subroutine add3
+@case_with_lt@
+@case_with_lt@subroutine add2(K11,m,scale2,MI2J0,MI2J1,MI2J00,MI2J01,MI2J11,&
+@case_with_lt@                        & cache_flag, cache_offset, scalar_cache)
+@case_with_lt@	implicit none
+@case_with_lt@	
+@case_with_lt@	real(ki), 		      intent(in ) :: K11
+@case_with_lt@	complex(ki), dimension(0:1),  intent(in ) :: m
+@case_with_lt@	real(ki), 		      intent(in ) :: scale2
+@case_with_lt@        complex(ki), dimension(-2:0), intent(out) :: MI2J0, MI2J1, MI2J00, MI2J01, MI2J11
+@case_with_lt@
+@case_with_lt@	
+@case_with_lt@	logical,     intent(in   ), optional 			:: cache_flag
+@case_with_lt@	integer,     intent(inout), optional 			:: cache_offset
+@case_with_lt@	complex(ki), intent(inout), optional, dimension(-2:0,*) :: scalar_cache
+@case_with_lt@	
+@case_with_lt@	complex(ki) :: m0, m1
+@case_with_lt@	integer     :: ep, cache_index
+@case_with_lt@
+@case_with_lt@	if (notfirsti.eqv.(.false.)) then
+@case_with_lt@		call setmudim(real(scale2, ki_lt))
+@case_with_lt@		notfirsti=.true.
+@case_with_lt@	endif
+@case_with_lt@
+@case_with_lt@	
+@case_with_lt@	m0=m(0)
+@case_with_lt@	m1=m(1)
+@case_with_lt@	
+@case_with_lt@	if (present(cache_flag)) cache_index = lbound(scalar_cache,2)+cache_offset
+@case_with_lt@	ep = -dim(0, int(getlambda()))
+@case_with_lt@	MI2J00(:) = 0.0_ki_lt
+@case_with_lt@	MI2J11(:) = 0.0_ki_lt
+@case_with_lt@	MI2J0(:) = 0.0_ki_lt
+@case_with_lt@	MI2J1(:) = 0.0_ki_lt
+@case_with_lt@	if (present(cache_flag)) then
+@case_with_lt@		if (cache_flag) then
+@case_with_lt@			MI2J0(:)  = scalar_cache(:,cache_index+0)
+@case_with_lt@			MI2J1(:)  = scalar_cache(:,cache_index+1)
+@case_with_lt@			MI2J01(:) = scalar_cache(:,cache_index+2)
+@case_with_lt@			MI2J11(:) = scalar_cache(:,cache_index+3)
+@case_with_lt@			MI2J00(:) = scalar_cache(:,cache_index+4)
+@case_with_lt@		else
+@case_with_lt@			call gtrunc(abs(K11)+1.0_ki, K11,m0,m1)
+@case_with_lt@			MI2J00(ep) = B0(real(K11,ki_lt),&
+@case_with_lt@			& real(m0,ki_lt),real(m0,ki_lt))
+@case_with_lt@			MI2J11(ep) = B0(real(K11,ki_lt),&
+@case_with_lt@			& real(m1,ki_lt),real(m1,ki_lt))
+@case_with_lt@			MI2J01(ep) = B0(real(K11,ki_lt),&
+@case_with_lt@			& real(m0,ki_lt),real(m1,ki_lt))
+@case_with_lt@			MI2J0(ep) = A0(real(m0,ki_lt))
+@case_with_lt@			MI2J1(ep) = A0(real(m1,ki_lt))
+@case_with_lt@			scalar_cache(:,cache_index+0) = J0(:)
+@case_with_lt@			scalar_cache(:,cache_index+1) = J1(:)
+@case_with_lt@			scalar_cache(:,cache_index+2) = J01(:)
+@case_with_lt@			scalar_cache(:,cache_index+3) = J11(:)
+@case_with_lt@			scalar_cache(:,cache_index+4) = J00(:)
+@case_with_lt@		end if
+@case_with_lt@	else
+@case_with_lt@		call gtrunc(abs(K11)+1.0_ki, K11,m0,m1)
+@case_with_lt@		MI2J00(ep) = B0(real(K11,ki_lt),&
+@case_with_lt@		& real(m0,ki_lt),real(m0,ki_lt))
+@case_with_lt@		 MI2J11(ep) = B0(real(K11,ki_lt),&
+@case_with_lt@		& real(m1,ki_lt),real(m1,ki_lt))
+@case_with_lt@		 MI2J01(ep) = B0(real(K11,ki_lt),&
+@case_with_lt@		& real(m0,ki_lt),real(m1,ki_lt))
+@case_with_lt@		 MI2J0(ep)  = A0(real(m0,ki_lt))
+@case_with_lt@		 MI2J1(ep)  = A0(real(m1,ki_lt))
+@case_with_lt@	end if
+@case_with_lt@	if (present(cache_flag)) cache_offset = cache_offset + 5
+@case_with_lt@end subroutine looptools2
+@case_with_lt@
+@case_with_lt@subroutine looptools2hr(K11,m,scale2,J111)
+@case_with_lt@	implicit none
+@case_with_lt@	real(ki),   		      intent(in ) :: K11
+@case_with_lt@	complex(ki),dimension(0:1)    intent(in ) :: m
+@case_with_lt@	real(ki),   		      intent(in ) :: scale2
+@case_with_lt@	complex(ki), dimension(-2:0), intent(out) :: J111 
+@case_with_lt@
+@case_with_lt@	integer :: ep
+@case_with_lt@	complex(ki) :: m0,m1
+@case_with_lt@
+@case_with_lt@	m0=m(0)
+@case_with_lt@	m1=m(1)
+@case_with_lt@
+@case_with_lt@	print 'error looptools2hr, higher rank not yet supported!'
+@case_with_lt@	stop
+@case_with_lt@
+@case_with_lt@end subroutine looptools2hr
+@case_with_lt@
+@case_with_lt@
+@case_with_lt@
+@case_with_lt@subroutine add1(m0,scale2,MI1,cache_flag, cache_offset, scalar_cache)
+@case_with_lt@	implicit none 
+@case_with_lt@	complex(ki),			  intent(in ) :: m0
+@case_with_lt@	real(ki), 			  intent(in ) :: scale2
+@case_with_lt@	complex(ki), dimension(-2:0),     intent(out) :: MI1
+@case_with_lt@	
+@case_with_lt@	logical,     intent(in   ), optional 			:: cache_flag
+@case_with_lt@	integer,     intent(inout), optional 			:: cache_offset
+@case_with_lt@	complex(ki), intent(inout), optional, dimension(-2:0,*) :: scalar_cache
+@case_with_lt@	
+@case_with_lt@	integer     :: ep, cache_index
+@case_with_lt@	complex(ki), dimension(-2:0) :: MI1tmp
+@case_with_lt@	
+@case_with_lt@	if (notfirsti.eqv.(.false.)) then
+@case_with_lt@		call setmudim(real(scale2, ki_lt))
+@case_with_lt@		notfirsti=.true.
+@case_with_lt@	endif
+@case_with_lt@
+@case_with_lt@	if (present(cache_flag)) cache_index = lbound(scalar_cache,2)+cache_offset
+@case_with_lt@	MI1(:)=czip
+@case_with_lt@	ep = -dim(0, int(getlambda()))
+@case_with_lt@	if (present(cache_flag)) then
+@case_with_lt@		if (cache_flag) then
+@case_with_lt@			MI1tmp = scalar_cache(ep,cache_index)
+@case_with_lt@		else
+@case_with_lt@			MI1tmp = A0(real(m0,ki_lt))
+@case_with_lt@			scalar_cache(ep,cache_index) = ctmp
+@case_with_lt@		end if
+@case_with_lt@	else
+@case_with_lt@		MI1tmp = A0(real(m0,ki_lt))
+@case_with_lt@	end if
+@case_with_lt@	MI1(ep)=MItmp
+@case_with_lt@	
+@case_with_lt@	if (present(cache_flag)) cache_offset = cache_offset + 1
+@case_with_lt@end subroutine add1
+@case_with_lt@
+@case_with_lt@
+@case_with_lt@
+end module mmislooptools
+

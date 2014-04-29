@@ -1,0 +1,37 @@
+! 
+!****h* src/module/precision_golem
+! NAME
+!
+!  Module precision_golem
+!
+! USAGE
+!
+!  use precision_golem
+!
+! DESCRIPTION
+!
+!  This module defines the parameter ki which gives the representation 
+!  of the real and complex numbers in golem
+!
+! OUTPUT
+!
+!  The integer parameter ki
+!  The integer parameter ki_avh, which is the real kind used in avh_olo
+!  The integer parameter ki_lt, which is the real kind used in LoopTools
+!
+! USES
+!
+!  No uses
+!
+!*****
+module precision_golem
+    use avh_olo_kinds, only: ki_avh => kindr2
+    implicit none
+    private
+    !
+    integer, parameter, public :: ki=@fortran_real_kind@
+@case_with_lt@integer, parameter, public :: ki_lt=@lt_real_kind@
+
+    public :: ki_avh
+end module precision_golem
+

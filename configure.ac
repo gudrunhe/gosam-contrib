@@ -1,6 +1,7 @@
 AC_INIT([GoSam Convenience Package],[1.0],[gosam@hepforge.org],[gosam-contrib],[http://projects.hepforge.org/golem/gosam-contrib/])
 AC_PREREQ(2.65)
 
+AC_CONFIG_HEADERS([config.h ninja-1.0.0/ninja/ninja_config.h])
 AC_CONFIG_MACRO_DIR([m4])
 AC_CONFIG_AUX_DIR([config.aux])
 
@@ -18,6 +19,7 @@ AM_INIT_AUTOMAKE($PACKAGE, $VERSION, no-define, no-dependencies)
 
 AC_LANG_PUSH([Fortran])
 
+AC_PROG_CXX
 AC_PROG_F77([gfortran ifort g77 f77 xlf frt pgf77 fort77 fl32 af77])
 AC_PROG_FC([gfortran ifort g77 f77 xlf frt pgf77 fort77 fl32 af77])
 
@@ -225,7 +227,7 @@ SAMURAIVERSION=2.1.1
 AC_ARG_ENABLE([samurai],
    AS_HELP_STRING([--disable-samurai], [do not compile and install Samurai]))
 
-AM_CONDITIONAL(COMPILE_SAMURAI, [test "x$enable_golem95" != xno])
+AM_CONDITIONAL(COMPILE_SAMURAI, [test "x$enable_samurai" != xno])
 
 AS_IF([test "x$enable_samurai" != xno],
 		[AC_SUBST([conf_with_samurai], [""])],
@@ -310,6 +312,107 @@ dnl ---#] Configure LoopTools (external):
 dnl ---------------------------------------------------------------------
 
 dnl ---------------------------------------------------------------------
+dnl ---#[ Configure Ninja:
+dnl ---------------------------------------------------------------------
+NINJAVERSION=1.0.0
+
+AC_DEFINE_DIR([DATADIR], [datadir], [Where data are placed to.])
+
+AC_ARG_ENABLE([ninja],
+   AS_HELP_STRING([--disable-ninja], [do not compile and install Ninja]))
+AM_CONDITIONAL(COMPILE_NINJA, [test "x$enable_ninja" != xno])
+
+AS_IF([test "x$enable_ninja" != xno],
+		[AC_SUBST([conf_with_ninja], [""])],
+		[AC_SUBST([conf_with_ninja], ["# "])])
+AS_IF([test "x$enable_ninja" != xno],
+		[AC_SUBST([conf_wout_ninja], ["# "])],
+		[AC_SUBST([conf_wout_ninja], [""])])
+AS_IF([test "x$enable_ninja" != xno],
+		[AC_SUBST([case_with_ninja], ["    "])],
+		[AC_SUBST([case_with_ninja], ["!AC!"])])
+AS_IF([test "x$enable_ninja" != xno],
+		[AC_SUBST([case_wout_ninja], ["!AC!"])],
+		[AC_SUBST([case_wout_ninja], ["    "])])
+
+# From now on it is C++ stuff
+AC_LANG_PUSH([C++])
+
+# Check C++11 compiler support
+m4_include([m4/m4_ax_cxx_compile_stdcxx_11.m4])
+AX_CXX_COMPILE_STDCXX_11
+AX_CXX_COMPILE_STDCXX_11_INIT_LIST
+AX_CXX_COMPILE_STDCXX_11_RANDOM
+
+# Test OneLoop
+AS_IF([test "x$enable_olo" != xno],
+      [AC_DEFINE([NINJA_USE_ONELOOP], [1],
+      [Define to 1 if you have OneLoop.])
+      AC_DEFINE([NINJA_USE_ONELOOP_WITH_CACHE], [1],
+      [Define to 1 if a cache of Master Integrals is implemented for OneLoop.])
+      [avholo=true]
+      ],
+      [avholo=false])
+AM_CONDITIONAL(AVHOLO, test "x$avholo" == xtrue)
+AC_SUBST([AVHFLAGS], [""])
+
+# Test LoopTools
+AS_IF([test "x$with_looptools" != xno],
+      [AC_DEFINE([NINJA_USE_LOOPTOOLS], [1], [Define if you have LoopTools.])
+      [looptools=true]
+      ],
+      [looptools=false])
+AM_CONDITIONAL(LOOPTOOLS, test "x$looptools" == xtrue)
+
+# Test quadruple precision.  Intermediate precision is not compatible
+# with Ninja.
+AS_IF(
+	[test "x$with_precision" == xquadruple],
+	AC_DEFINE([NINJA_QUADRUPLE], [1],
+    [Define to 1 if Ninja is compiled in quadruple precision.])
+    AC_SUBST([QUADRUPLEFLAGS], ["-lquadmath"])
+    [quadruple=true],
+	[test "x$with_precision" == xquad],
+	AC_DEFINE([NINJA_QUADRUPLE], [1],
+    [Define to 1 if Ninja is compiled in quadruple precision.])
+    AC_SUBST([QUADRUPLEFLAGS], ["-lquadmath"])
+    [quadruple=true],
+    [test "x$with_precision" == xintermediate],
+    AS_IF([test "x$enable_ninja" != xno],
+    [AC_MSG_FAILURE([intermediate precision for Ninja is not available])]),
+	[quadruple=false])
+AM_CONDITIONAL(QUADRUPLE, test "x$quadruple" == xtrue)
+
+# These are always defined for the contrib
+AC_DEFINE([NINJA_CONFIG_H_INTERNAL], [1],
+          [Define to 1 if this an internal is a source file.])
+AC_DEFINE([NINJA_MASSLESS], [1],
+          [Define to 1 massless specialization is enabled.])
+AC_DEFINE([NINJA_X1RANK], [1],
+          [Define to 1 if higher-rank support is enabled.])
+AM_CONDITIONAL(GOSAM, true)
+AM_CONDITIONAL(NINJAGOSAMCONTRIB, true)
+
+m4_include([m4/m4_cxx_flags_check.m4])
+
+CXX_FLAG_CHECK("-fcx-fortran-rules", ax_cxx_supports_fcx_fortran_rules)
+AS_IF([test "x$ax_cxx_supports_fcx_fortran_rules" == xyes],
+      [CXXFLAGS+=" -fcx-fortran-rules "],[])
+
+CXX_FLAG_CHECK("-fno-exceptions",ax_cxx_supports_fno_exceptions)
+
+AS_IF([test "x$ax_cxx_supports_fno_exceptions" == xyes],
+      [CXXFLAGS+=" -fno-exceptions "
+       CPPFLAGS+=" -DNINJA_NO_EXCEPTIONS"],[])
+
+AC_DEFINE_UNQUOTED([VERSION],["$NINJAVERSION"],[Version of Ninja])
+
+AC_SUBST(NINJAVERSION)
+dnl ---------------------------------------------------------------------
+dnl ---#] Configure Ninja:
+dnl ---------------------------------------------------------------------
+
+dnl ---------------------------------------------------------------------
 dnl ---#[ Generates Makefile's, configuration files and scripts:
 dnl ---------------------------------------------------------------------
 AC_CONFIG_FILES([\
@@ -320,24 +423,29 @@ AC_CONFIG_FILES([\
         ff-2.0/ffinit.f \
         qcdloop-1.9/Makefile \
         avh_olo-2.2.1/Makefile \
-        avh_olo-2.2.1/avh_olo_xkind.f90 \
-        golem95c-1.2.1/Makefile \
-        golem95c-1.2.1/module/Makefile \
-        golem95c-1.2.1/module/precision_golem.f90 \
-        golem95c-1.2.1/integrals/Makefile \
-        golem95c-1.2.1/integrals/two_point/Makefile \
-        golem95c-1.2.1/integrals/one_point/Makefile \
-        golem95c-1.2.1/integrals/three_point/Makefile \
-        golem95c-1.2.1/integrals/four_point/Makefile \
-        golem95c-1.2.1/integrals/four_point/generic_function_4p.f90 \
-        golem95c-1.2.1/interface/Makefile \
-        golem95c-1.2.1/numerical/Makefile \
-        golem95c-1.2.1/kinematic/Makefile \
-        golem95c-1.2.1/form_factor/Makefile \
-        samurai-2.1.1/Makefile \
-        samurai-2.1.1/madds.f90 \
-        samurai-2.1.1/msamurai.f90 \
-        samurai-2.1.1/precision.f90 \
+        golem95-1.3.0/Makefile \
+        golem95-1.3.0/module/Makefile \
+        golem95-1.3.0/module/precision_golem.f90 \
+        golem95-1.3.0/integrals/Makefile \
+        golem95-1.3.0/integrals/two_point/Makefile \
+        golem95-1.3.0/integrals/one_point/Makefile \
+        golem95-1.3.0/integrals/three_point/Makefile \
+        golem95-1.3.0/integrals/four_point/Makefile \
+        golem95-1.3.0/integrals/four_point/generic_function_4p.f90 \
+        golem95-1.3.0/higherrank/Makefile \
+        golem95-1.3.0/interface/Makefile \
+        golem95-1.3.0/numerical/Makefile \
+        golem95-1.3.0/kinematic/Makefile \
+        golem95-1.3.0/form_factor/Makefile \
+        samurai-2.9.0/Makefile \
+        samurai-2.9.0/mmisavholo.f90 \
+        samurai-2.9.0/mmisqcdloop.f90 \
+        samurai-2.9.0/mmisgolem.f90 \
+        samurai-2.9.0/mmislooptools.f90 \
+        samurai-2.9.0/mmasters.f90 \
+        samurai-2.9.0/precision.f90 \
+        ninja-1.0.0/Makefile \
+        ninja-1.0.0/ninja/Makefile \
 ])
 AC_OUTPUT
 dnl ---------------------------------------------------------------------

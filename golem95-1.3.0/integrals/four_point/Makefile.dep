@@ -1,0 +1,38 @@
+# Module dependencies
+function_4p1m.mod: function_4p1m.$(OBJEXT)
+function_4p2m_3mi_onshell.mod: function_4p2m_3mi_onshell.$(OBJEXT)
+function_4p2m_adj.mod: function_4p2m_adj.$(OBJEXT)
+function_4p2m_opp.mod: function_4p2m_opp.$(OBJEXT)
+function_4p3m.mod: function_4p3m.$(OBJEXT)
+function_4p4m.mod: function_4p4m.$(OBJEXT)
+function_4p_ql10.mod: function_4p_ql10.$(OBJEXT)
+function_4p_ql11.mod: function_4p_ql11.$(OBJEXT)
+function_4p_ql12.mod: function_4p_ql12.$(OBJEXT)
+function_4p_ql13.mod: function_4p_ql13.$(OBJEXT)
+function_4p_ql14.mod: function_4p_ql14.$(OBJEXT)
+function_4p_ql15.mod: function_4p_ql15.$(OBJEXT)
+function_4p_ql16.mod: function_4p_ql16.$(OBJEXT)
+function_4p_ql6.mod: function_4p_ql6.$(OBJEXT)
+function_4p_ql7.mod: function_4p_ql7.$(OBJEXT)
+function_4p_ql8.mod: function_4p_ql8.$(OBJEXT)
+function_4p_ql9.mod: function_4p_ql9.$(OBJEXT)
+generic_function_4p.lo: function_4p1m.lo function_4p2m_3mi_onshell.lo \
+	function_4p2m_adj.lo function_4p2m_opp.lo function_4p3m.lo \
+	function_4p4m.lo function_4p_ql10.lo function_4p_ql11.lo \
+	function_4p_ql12.lo function_4p_ql13.lo function_4p_ql14.lo \
+	function_4p_ql15.lo function_4p_ql16.lo function_4p_ql6.lo \
+	function_4p_ql7.lo function_4p_ql8.lo function_4p_ql9.lo
+generic_function_4p.$(OBJEXT): function_4p1m.$(OBJEXT) function_4p2m_3mi_onshell.$(OBJEXT) \
+	function_4p2m_adj.$(OBJEXT) function_4p2m_opp.$(OBJEXT) function_4p3m.$(OBJEXT) \
+	function_4p4m.$(OBJEXT) function_4p_ql10.$(OBJEXT) function_4p_ql11.$(OBJEXT) \
+	function_4p_ql12.$(OBJEXT) function_4p_ql13.$(OBJEXT) function_4p_ql14.$(OBJEXT) \
+	function_4p_ql15.$(OBJEXT) function_4p_ql16.$(OBJEXT) function_4p_ql6.$(OBJEXT) \
+	function_4p_ql7.$(OBJEXT) function_4p_ql8.$(OBJEXT) function_4p_ql9.$(OBJEXT)
+generic_function_4p.mod: generic_function_4p.$(OBJEXT) function_4p1m.$(OBJEXT) \
+	function_4p2m_3mi_onshell.$(OBJEXT) function_4p2m_adj.$(OBJEXT) function_4p2m_opp.$(OBJEXT) \
+	function_4p3m.$(OBJEXT) function_4p4m.$(OBJEXT) function_4p_ql10.$(OBJEXT) function_4p_ql11.$(OBJEXT) \
+	function_4p_ql12.$(OBJEXT) function_4p_ql13.$(OBJEXT) function_4p_ql14.$(OBJEXT) \
+	function_4p_ql15.$(OBJEXT) function_4p_ql16.$(OBJEXT) function_4p_ql6.$(OBJEXT) \
+	function_4p_ql7.$(OBJEXT) function_4p_ql8.$(OBJEXT) function_4p_ql9.$(OBJEXT)
+.mod.o:
+	@true

@@ -1,0 +1,11 @@
+# Module dependencies
+function_2p0m_1mi.mod: function_2p0m_1mi.$(OBJEXT)
+function_2p_m1m2.lo: function_2p0m_1mi.lo
+function_2p_m1m2.$(OBJEXT): function_2p0m_1mi.$(OBJEXT)
+function_2p_m1m2.mod: function_2p_m1m2.$(OBJEXT) function_2p0m_1mi.$(OBJEXT)
+generic_function_2p.lo: function_2p0m_1mi.lo function_2p_m1m2.lo
+generic_function_2p.$(OBJEXT): function_2p0m_1mi.$(OBJEXT) function_2p_m1m2.$(OBJEXT)
+generic_function_2p.mod: generic_function_2p.$(OBJEXT) function_2p0m_1mi.$(OBJEXT) \
+	function_2p_m1m2.$(OBJEXT)
+.mod.o:
+	@true

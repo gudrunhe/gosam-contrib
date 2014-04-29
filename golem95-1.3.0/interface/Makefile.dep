@@ -1,0 +1,21 @@
+# Module dependencies
+ga0.lo: tool_lt_to_golem.lo
+ga0.$(OBJEXT): tool_lt_to_golem.$(OBJEXT)
+gb0.lo: tool_lt_to_golem.lo
+gb0.$(OBJEXT): tool_lt_to_golem.$(OBJEXT)
+gc0.lo: tool_lt_to_golem.lo
+gc0.$(OBJEXT): tool_lt_to_golem.$(OBJEXT)
+gd0.lo: tool_lt_to_golem.lo
+gd0.$(OBJEXT): tool_lt_to_golem.$(OBJEXT)
+ge0.lo: tool_lt_to_golem.lo
+ge0.$(OBJEXT): tool_lt_to_golem.$(OBJEXT)
+gf0.lo: tool_lt_to_golem.lo
+gf0.$(OBJEXT): tool_lt_to_golem.$(OBJEXT)
+tens_comb.lo: tens_rec.lo
+tens_comb.$(OBJEXT): tens_rec.$(OBJEXT)
+tens_comb.mod: tens_comb.$(OBJEXT) tens_rec.$(OBJEXT)
+tens_rec.mod: tens_rec.$(OBJEXT)
+tensor_integrals.mod: tensor_integrals.$(OBJEXT)
+tool_lt_to_golem.mod: tool_lt_to_golem.$(OBJEXT)
+.mod.o:
+	@true
