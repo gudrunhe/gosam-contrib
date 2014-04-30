@@ -161,43 +161,39 @@ end subroutine exitsamurai
 
 
 subroutine banner
-	implicit none
-	
-	print *
-	print *, ' ********************************************************************'
-	print *, ' ********************** SAMURAI - version 2.9.0'
-	print *, ' ********************************************************************'
-	print *, ' *                                                                  *'
-	print *, ' *                                                                  *'
-!	print *, ' * Authors: P. Mastrolia, G. Ossola, T. Reiter and F. Tramontano    *'
-!	print *, ' *                                                                  *'
-!	print *, ' * pierpaolo.mastrolia@cern.ch                                      *'
-!	print *, ' * gossola@citytech.cuny.edu                                        *'
-!	print *, ' * reiterth@mpp.mpg.de                                              *'
-!	print *, ' * francesco.tramontano@cern.ch                                     *'
-!	print *, ' *                                                                  *'
-!	print *, ' *  For details please see: arXiv:1006.0710                         *'
-	print *, ' *                                                                  *'
-	print *, ' *  On the web:  http://cern.ch/samurai                             *'
-	print *, ' *                                                                  *'
-	print *, ' ********************************************************************'
-	print *, ' *                                                                  *'
-	print *, ' * output files: <output.log>   [ for verbosity.gt.0 ]              *'
-	print *, ' *                                                                  *'
-	print *, ' *               <bad.points>   [ for itest.gt.0     ]              *'
-	print *, ' *                                                                  *'
-	print *, ' ********************************************************************'
-	print *, '                           Development Xsamurai'
-	print *, ' ********************************************************************'
-	print *, '                             version xs1.0.x'
-	print *, ' ********************************************************************'
-	print *, '            PLEASE NOTE: THIS VERSION IS STILL BEING TESTED'
-	print *, '                   '
-	print *, ' ********************************************************************'
-	print *, ' ********************************************************************'
+        implicit none
+        
+        print *
+        print *, ' ********************************************************************'
+        print *, ' ********************** SAMURAI - version 2.9.0'
+        print *, ' ********************************************************************'
+        print *, ' *                                                                  *'
+        print *, ' *                                                                  *'
+        print *, ' * Authors: H. van Deurzen, P. Mastrolia,                           *'
+        print *, ' *          E. Mirabella, G. Ossola, and F. Tramontano              *'
+        print *, ' *                                                                  *'
+        print *, ' * hdeurzen@mpp.mpg.de                                              *'
+        print *, ' * pierpaolo.mastrolia@cern.ch                                      *'
+        print *, ' * mirabell@mpp.mpg.de                                              *'
+        print *, ' * gossola@citytech.cuny.edu                                        *'
+        print *, ' * francesco.tramontano@cern.ch                                     *'
+        print *, ' *                                                                  *'
+        print *, ' *  Based on:                                                       *'
+        print *, ' *    - Mastrolia, Ossola, Reiter, Tramontano,                      *'
+        print *, ' *      JHEP 1008 (2010) 080, arXiv:1006.0710                       *'
+        print *, ' *    - van Deurzen, Acta Phys.Polon. B44 (2013) 11, 2223-2230      *'
+        print *, ' *                                                                  *'
+        print *, ' *  On the web:  http://cern.ch/samurai                             *'
+        print *, ' *                                                                  *'
+        print *, ' ********************************************************************'
+        print *, ' *                                                                  *'
+        print *, ' * output files: <output.log>   [ for verbosity.gt.0 ]              *'
+        print *, ' *                                                                  *'
+        print *, ' *               <bad.points>   [ for itest.gt.0     ]              *'
+        print *, ' *                                                                  *'
+        print *, ' ********************************************************************'
 
 end subroutine banner
-
 
 
 
