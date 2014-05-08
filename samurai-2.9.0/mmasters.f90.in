@@ -19,7 +19,7 @@ subroutine initmasters()
 @case_with_ql@		case(1) 
 @case_with_ql@			call qlinit
 @case_with_avh@		case(2) 
-@case_with_avh@			call olo_onshell(1.d-8)
+@case_with_avh@			call olo_onshell(1.e-8_ki)
 @case_with_golem@	case(3) 
 @case_with_golem@		continue
 @case_with_lt@		case(4) 
