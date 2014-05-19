@@ -1980,6 +1980,7 @@ module form_factor_5p
         b_pin_glob = b_pin
         !
         temp1 = czero
+        temp3 = czero
         !
         ib = b_pro_glob
         j = 0
