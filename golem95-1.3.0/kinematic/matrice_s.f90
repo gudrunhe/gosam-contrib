@@ -621,7 +621,7 @@ module matrice_s
 
       real(ki) :: error,tmp_error
       real(ki) :: plus_grand
-      integer, dimension(5) :: pinch
+      integer, dimension(6) :: pinch
       !
       plus_grand = maxval(array=abs(s_mat_r))
       b_ref = packb(set_ref)
