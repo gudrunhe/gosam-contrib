@@ -16,17 +16,17 @@
 !
 ! OUTPUT
 !
-!  This modules exports three functions:
+!  This modules exports four functions:
 !  * ge -- a function
-!  * gl -- a function
+!  * ge_c -- a function
 !  * gf -- a function
+!  * gf_c -- a function
 !
 ! USES
 !
 !  * precision_golem (src/module/precision.f90)
 !  * numerical_evaluation (src/numerical/mod_numeric.f90)
-!  * sortie_erreur (src/module/sortie_erreur.f90)
-!         only : tab_erreur_par,catch_exception,origine_info_par,num_grand_b_info_par,denom_grand_b_info_par
+!  * sortie_erreur (src/module/sortie_erreur.f90) only : tab_erreur_par,catch_exception,origine_info_par,num_grand_b_info_par,denom_grand_b_info_par
 !  * parametre (src/module/parametre.f90)
 !  * logarithme (src/module/z_log.f90)
 !  * dilogarithme (src/module/zdilog.f90)
@@ -45,9 +45,10 @@ module func_gn
   implicit none
   !
   private
-  real(ki) :: a_glob,b_glob,c_glob
-  real(ki) :: lm_glob
-  real(ki) :: lambda_glob
+  real(ki) :: a_glob,b_glob,c_glob,eps_glob
+  complex(ki) :: x1_glob,x2_glob
+  real(ki) :: plus_grand_glob
+  real(ki) :: lambda_glob,alpha_glob,beta_glob
   integer :: expo_glob
   logical :: dist_glob
   public :: gf,ge,gl
@@ -70,8 +71,6 @@ module func_gn
     !  where a, b and c are reals
     !  It switches to numerical evaluation if 
     !  (b^2-4*a*c) < coupure_3p1m_2mi
-    !  Around the Landau pole, the divergent part is extracted analytically,
-    !  only the rest is computed numerically
     !
     ! INPUTS
     !
@@ -95,43 +94,35 @@ module func_gn
     !
     !
     !*****
-    function ge(n,ax,bx,cx,dist)
+    function ge(n,a,b,c,dist)
+    !~ function ge(n,a,b,c)
       !
       integer, intent(in) :: n
-      real(ki), intent(in) :: ax,bx,cx
+      real(ki), intent(in) :: a,b,c
       logical, intent(in) :: dist
       real(ki), dimension(2) :: ge
       !
-      real(ki) :: a,b,c
       complex(ki) :: veri,veri_rat,rest,abserr
-      real(ki) :: x1,x2,deltax,denom
+      complex(ki) :: residue
+      complex(ki) :: extra_imag
+      real(ki) :: pole1
+      real(ki) :: x1,x2,deltax
       complex(ki) :: cx1,cx2,cdeltax
       real(ki) :: delta
+      logical :: l1
       complex(ki) :: div_part
       real(ki) :: coeff
-      complex(ki) :: extra_part,integ1
-      real(ki) :: plus_grand
-      logical :: not_small_a
-      real(ki) :: sb,sa,aa,x2t
-      real(ki) :: cut_e = 1.e-3_ki
       !
-      plus_grand = max(abs(ax),abs(bx),abs(cx))
-      a = ax/plus_grand
-      b = bx/plus_grand
-      c = cx/plus_grand
-      !
+      plus_grand_glob = max(abs(a),abs(b),abs(c))
       expo_glob = n
-      sb = sign(un,b)
       delta = b*b-4._ki*a*c
       a_glob = a
       b_glob = b
       c_glob = c
       lambda_glob = lambda_par
+      alpha_glob = alpha_par
+      beta_glob = beta_par
       dist_glob = dist
-      !
-      origine_info_par = "ge"
-      num_grand_b_info_par = n
-      denom_grand_b_info_par = abs(delta)
       !
       if (dist) then
         !
@@ -161,133 +152,66 @@ module func_gn
           !
         end if
         !
-        integ1 = 1._ki/a*(z_log(a+b+c,-1._ki)-z_log(c,-1._ki))
-        !
-        select case(n)
-          !
-          case(1)
-            !
-            coeff = 1._ki
-            extra_part = 0._ki
-            !
-          case(2)
-            !
-            coeff = -b/(2._ki*a)
-            extra_part = 0.5_ki*integ1
-            !
-          case(3)
-            !
-            coeff = (b**2-2._ki*a*c)/(2._ki*a**2)
-            extra_part = (1._ki-b/2._ki*integ1)/a
-            !
-          case(4)
-            !
-            coeff = (3._ki*a*b*c-b**3)/(2._ki*a**3)
-            extra_part = ( a/2._ki-b + (b*b-c*a)/2._ki*integ1 )/a/a
-            !
-        end select
-        !
       else
         !
         div_part = 0._ki
-        extra_part = 0._ki
-        integ1 = 0._ki
         !
       end if
       !
+      select case(n)
+        !
+        case(1)
+          !
+          coeff = 1._ki
+          !
+        case(2)
+          !
+          coeff = -b/(2._ki*a)
+          !
+        case(3)
+          !
+          coeff = (b**2-2._ki*a*c)/(2._ki*a**2)
+          !
+        case(4)
+          !
+          coeff = (3._ki*a*b*c-b**3)/(2._ki*a**3)
+          !
+      end select
+      !
       if (delta >= 0._ki) then
         !
-        aa = abs(a)
-        not_small_a = aa > cut_e
-        !
-        if (a == 0._ki) then
-          !
-          sa = 1._ki ! arbitrary value
-          !
-        else
-          !
-          sa = sign(un,a)
-          !
-        end if
-        !
-        x2t = -(b+sb*sqrt(delta))/2._ki
-        !
-        if (not_small_a) then
-          !
-          x1 = (-b + sb*sqrt(delta))/(2._ki*a)
-          x2 = (-b - sb*sqrt(delta))/(2._ki*a)
-          denom = (x1-x2)*a
-          !
-        else ! no need of x2 and deltax in this case
-          !
-          x1 = c/x2t
-          !x2 = x2t/a
-          denom = sb*sqrt(delta)
-          !
-        end if
-        !
+        x1 = (-b + sqrt(delta))/(2._ki*a)
+        x2 = (-b - sqrt(delta))/(2._ki*a)
+        x1_glob = cmplx(x1,0._ki)
+        x2_glob = cmplx(x2,0._ki)
+        deltax = x1-x2
         !
         if (sqrt(abs(delta)) >  coupure_3p1m_2mi) then
+        !~ if (abs(delta) >  0._ki) then
           !
           if (n == 1) then
             !
-            if (not_small_a) then
-              !
-              veri_rat = 0._ki
-              veri =  ( z_log((x1-1._ki)/x1,sb) - z_log((x2-1._ki)/x2,-sb) ) &
-                      /denom
-              !
-            else
-              !
-              veri_rat = 0._ki ! dummy value
-              veri = ( z_log((x1-1._ki)/x1,sb) - z_log((x2t-a)/x2t,-sb) )/denom
-              !
-            end if
+            veri_rat = 0._ki
+            veri =  ( z_log((x1-1._ki)/x1,1._ki) - z_log((x2-1._ki)/x2,-1._ki) ) &
+                    /deltax/a
             !
           else if (n == 2) then
             !
-            if (not_small_a) then
-              !
-              veri_rat = 0._ki
-              veri =  ( x1*z_log((x1-1._ki)/x1,sb) - x2*z_log((x2-1._ki)/x2,-sb) ) &
-                      /denom
-              !
-            else
-              !
-              veri_rat = 0._ki ! dummy value
-              veri = ( x1*z_log((x1-1._ki)/x1,sb) - q(1,a/x2t,-sb) )/denom
-              !
-            end if
+            veri_rat = 0._ki
+            veri =  ( x1*z_log((x1-1._ki)/x1,1._ki) - x2*z_log((x2-1._ki)/x2,-1._ki) ) &
+                    /deltax/a
             !
           else if (n == 3) then
             !
-            if (not_small_a) then
-              !
-              veri_rat =  1._ki/a
-              veri = ( x1**2*z_log((x1-1._ki)/x1,sb) - x2**2*z_log((x2-1._ki)/x2,-sb) ) &
-                      /denom
-              !
-            else
-              !
-              veri_rat = 0._ki ! dummy value
-              veri = ( x1**2*z_log((x1-1._ki)/x1,sb)+x1 - q(2,a/x2t,-sb) )/denom
-              !
-            end if
+            veri_rat =  1._ki/a
+            veri = ( x1**2*z_log((x1-1._ki)/x1,1._ki) - x2**2*z_log((x2-1._ki)/x2,-1._ki) ) &
+                    /deltax/a
             !
           else if (n == 4) then
             !
-            if (not_small_a) then
-              !
-              veri_rat =  ( 1._ki/2._ki + x1 + x2 )/a
-              veri = ( x1**3*z_log((x1-1._ki)/x1,sb) - x2**3*z_log((x2-1._ki)/x2,-sb) ) &
-                      /denom
-              !
-            else
-              !
-              veri_rat = 0._ki ! dummy value
-              veri = ( x1**3*z_log((x1-1._ki)/x1,sb)+x1**2+x1*0.5_ki - q(3,a/x2t,-sb) )/denom
-              !
-            end if
+            veri_rat =  ( 1._ki/2._ki + x1 + x2 )/a
+            veri = ( x1**3*z_log((x1-1._ki)/x1,1._ki) - x2**3*z_log((x2-1._ki)/x2,-1._ki) ) &
+                    /deltax/a
             !
           else
             !
@@ -298,34 +222,66 @@ module func_gn
             tab_erreur_par(3)%arg_int = n
             call catch_exception(0)
             !
+            ! to please the compiler
+            stop
+            !
           end if
           !
           if ( rat_or_tot_par%tot_selected  ) then
             !
             rest = veri + veri_rat
             !
-          else if ( ( rat_or_tot_par%rat_selected ) .and. not_small_a ) then
-            !
-            rest =  veri_rat
-            !
           else !if ( rat_or_tot_par%rat_selected  ) then
             !
-            tab_erreur_par(1)%a_imprimer = .true.
-            tab_erreur_par(1)%chaine = 'In function ge (file mod_gn.f90)'
-            tab_erreur_par(2)%a_imprimer = .true.
-            tab_erreur_par(2)%chaine = 'the value of a is too small to extract the rational part : a= %f0'
-            tab_erreur_par(3)%arg_real = a
-            call catch_exception(1)
+            rest =  veri_rat
             !
           end if
           !
         else if ( (sqrt(abs(delta)) <=  coupure_3p1m_2mi) .and. &
            & (rat_or_tot_par%tot_selected) ) then
           !
+          !~ pole1 = x2
+          !~ eps_glob = 1._ki
+          !
+          !~ call generic_eval_numer(eval_numer_ge,0._ki,1._ki,1.0E-8_ki,rest,abserr)
           call generic_eval_numer(eval_numer_ge,0._ki,1._ki,tolerance,rest,abserr)
           !
-          rest = rest + coeff*div_part + extra_part
+          !~ if ( (pole1 >= 0._ki) .and. (pole1 <= 1._ki) ) then
+            !~ !
+            !~ residue = x2**(n-1)/(x2-x1)/a_glob
+            !~ extra_imag = -2._ki*i_*pi*residue
+            !~ !
+          !~ else
+            !~ !
+            !~ extra_imag = 0._ki
+            !~ !
+          !~ end if
+          !~ !
+          !~ rest = rest + extra_imag
           !
+          !~ write(*,*) 'exact result is:',coeff*div_part
+          !~ write(*,*) 'err numer result is:',abserr,rest
+          !~ write(*,*) 'n is:',n
+          !~ select case(n)
+          !~ case(1)
+          !~ write(*,*) 'analytical result is:', &
+            !~ ( z_log((x1-1._ki)/x1,1._ki) - z_log((x2-1._ki)/x2,-1._ki) )/deltax/a
+          !~ case(2)
+          !~ write(*,*) 'analytical result is:', &
+            !~ ( x1*z_log((x1-1._ki)/x1,1._ki) - x2*z_log((x2-1._ki)/x2,-1._ki) )/deltax/a
+          !~ case(3)
+          !~ write(*,*) 'analytical result is:', &
+            !~ ( x1**2*z_log((x1-1._ki)/x1,1._ki) - x2**2*z_log((x2-1._ki)/x2,-1._ki) )/deltax/a + 1._ki/a
+          !~ case(4)
+          !~ write(*,*) 'analytical result is:', &
+            !~ ( x1**3*z_log((x1-1._ki)/x1,1._ki) - x2**3*z_log((x2-1._ki)/x2,-1._ki) )/deltax/a + ( 1._ki/2._ki + x1 + x2 )/a
+            !~ end select
+          !~ if (dist) then
+          rest = rest + coeff*div_part
+          !~ write(*,*) 'numer result is:',rest
+          !~ end if
+        !else if ( (abs(delta) <=  coupure_3p1m_2mi) .and. &
+        !   & (rat_or_tot_par%rat_selected) ) then
         else
           !
           tab_erreur_par(1)%a_imprimer = .true.
@@ -337,15 +293,31 @@ module func_gn
           tab_erreur_par(3)%arg_real = abs(delta)
           call catch_exception(0)
           !
+          ! to please the compiler
+          stop
+          !
         end if
         !
       else
         !
+        origine_info_par = "ge"
+        num_grand_b_info_par = n
+        !! Thomas Reiter, 01/March/2011:
+        !! original code:
+        ! denom_grand_b_info_par = abs(deltax)
+        !! cannot be right, deltax was never initialized
+        !! probably: delta instead of deltax.
+        denom_grand_b_info_par = abs(delta)
+        !
+        !
         cx1 = -b/(2._ki*a) + i_*sqrt(-delta)/(2._ki*abs(a))
         cx2 = -b/(2._ki*a) - i_*sqrt(-delta)/(2._ki*abs(a))
+        x1_glob = cx1
+        x2_glob = cx2
         cdeltax = cx1-cx2
         !
         if (sqrt(abs(delta)) >  coupure_3p1m_2mi) then
+        !~ if (abs(delta) >  0._ki) then
           !
           if (n == 1) then
             !
@@ -380,6 +352,9 @@ module func_gn
             tab_erreur_par(3)%arg_int = n
             call catch_exception(0)
             !
+            ! to please the compiler
+            stop
+            !
           end if
           !
           if ( rat_or_tot_par%tot_selected  ) then
@@ -395,9 +370,47 @@ module func_gn
         else if ( (sqrt(abs(delta)) <=  coupure_3p1m_2mi) .and. &
            & (rat_or_tot_par%tot_selected) ) then
           !
+          !~ eps_glob = 1._ki
+          !~ !
+          !~ call inside_contour(cx2,l1)
+          !
+          !~ call generic_eval_numer(eval_numer_ge,0._ki,1._ki,1.0E-8_ki,rest,abserr)
           call generic_eval_numer(eval_numer_ge,0._ki,1._ki,tolerance,rest,abserr)
           !
-          rest = rest + coeff*div_part + extra_part
+          !~ if ( l1) then
+            !~ !
+            !~ residue = cx2**(n-1)/(cx2-cx1)/a_glob
+            !~ extra_imag = -2._ki*i_*pi*residue
+            !~ !
+          !~ else
+            !~ !
+            !~ extra_imag = 0._ki
+            !~ !
+          !~ end if
+          !~ !
+          !~ rest = rest + extra_imag
+          !
+        !else if ( (abs(delta) <=  coupure_3p1m_2mi) .and. &
+        !   & (rat_or_tot_par%rat_selected) ) then
+          !~ write(*,*) 'exact result is:',coeff*div_part
+          !~ write(*,*) 'err numer result is:',abserr,rest
+          !~ write(*,*) 'n is:',n
+          !~ select case(n)
+          !~ case(1)
+          !~ write(*,*) 'analytical result is:', &
+          !~ ( log((cx1-1._ki)/cx1) - log((cx2-1._ki)/cx2) )/cdeltax/a
+          !~ case(2)
+          !~ write(*,*) 'analytical result is:', &
+          !~ ( cx1*log((cx1-1._ki)/cx1) - cx2*log((cx2-1._ki)/cx2) )/cdeltax/a
+          !~ case(3)
+          !~ write(*,*) 'analytical result is:', &
+          !~ ( cx1**2*log((cx1-1._ki)/cx1) - cx2**2*log((cx2-1._ki)/cx2) )/cdeltax/a + 1._ki/a
+          !~ case(4)
+          !~ write(*,*) 'analytical result is:', &
+          !~ ( cx1**3*log((cx1-1._ki)/cx1) - cx2**3*log((cx2-1._ki)/cx2) )/cdeltax/a +  ( 1._ki/2._ki + cx1 + cx2 )/a
+          !~ end select
+          rest = rest + coeff*div_part
+          !~ write(*,*) 'numer result is:',rest
           !
         else
           !
@@ -410,12 +423,16 @@ module func_gn
           tab_erreur_par(3)%arg_real = abs(delta)
           call catch_exception(0)
           !
+          ! to please the compiler
+          stop
+          !
         end if
         !
       end if
       !
-      ge(1) = real(rest,ki)/plus_grand
-      ge(2) = aimag(rest)/plus_grand
+      ge(1) = real(rest,ki)
+      ge(2) = aimag(rest)
+      !~ write(*,*) 'test ge :',rest,abserr
       !
       !
     end function ge
@@ -458,99 +475,40 @@ module func_gn
     !
     !
     !*****
-    function gl(n,ax,bx,cx)
+    function gl(n,a,b,c)
       !
       integer, intent(in) :: n
-      real(ki), intent(in) :: ax,bx,cx
+      real(ki), intent(in) :: a,b,c
       real(ki), dimension(2) :: gl
       !
-      real(ki) :: a,b,c
       complex(ki) :: veri,veri_rat,rest
       real(ki) :: x1,x2
       complex(ki) :: cx1,cx2
-      real(ki) :: delta,plus_grand,lm
-      logical :: not_small_a
-      real(ki) :: sb,sa,aa,x2t
-      real(ki) :: cut_l = 1.e-5_ki
+      real(ki) :: delta
       !
-      plus_grand = max(abs(ax),abs(bx),abs(cx))
-      lm = log(plus_grand)
-      a = ax/plus_grand
-      b = bx/plus_grand
-      c = cx/plus_grand
-      !
-      sb = sign(un,b)
+      !~ plus_grand_glob = max(abs(a),abs(b),abs(c))
       delta = b*b-4._ki*a*c
       !
       if (delta >= 0._ki) then
         !
-        aa = abs(a)
-        not_small_a = aa > cut_l
-        !
-        if (a == 0._ki) then
-          !
-          sa = 1._ki ! arbitrary value
-          !
-        else
-          !
-          sa = sign(un,a)
-          !
-        end if
-        !
-        x2t = -(b+sb*sqrt(delta))/2._ki
-        !
-        if (not_small_a) then
-          !
-          x1 = (-b + sb*sqrt(delta))/(2._ki*a)
-          x2 = (-b - sb*sqrt(delta))/(2._ki*a)
-          !
-        else
-          !
-          x1 = c/x2t
-          !x2 = x2t/a
-          !
-        end if
+        x1 = (-b + sqrt(delta))/(2._ki*a)
+        x2 = (-b - sqrt(delta))/(2._ki*a)
+        x1_glob = cmplx(x1,0._ki)
+        x2_glob = cmplx(x2,0._ki)
         !
         if (n == 1) then
           !
-          if (not_small_a) then
-            !
-            veri_rat = -2._ki
-            !veri =  ( z_log(a,-1._ki) + (1._ki-x1)*z_log(1._ki-x1,-1._ki) + x1*z_log(-x1,-1._ki) &
-                    !+ (1._ki-x2)*z_log(1._ki-x2,1._ki) + x2*z_log(-x2,1._ki) )
-            veri =  ( z_log(a,-1._ki) + (1._ki-x1)*z_log(1._ki-x1,-sb) + x1*z_log(-x1,-sb) &
-                    + (1._ki-x2)*z_log(1._ki-x2,sb) + x2*z_log(-x2,sb) )
-            !
-          else
-            !
-            veri_rat = 0._ki
-            !veri = ( -2._ki + (1._ki-x1)*z_log(1._ki-x1,-sb) + x1*z_log(-x1,-sb) &
-                    !+ z_log(sa,-1._ki) + z_log(sa*(a-x2t),sb) - q(1,a/x2t,-sb) )
-            veri = ( -2._ki - x1*( z_log(1._ki-x1,-sb) - z_log(-x1,-sb) ) &
-                    + z_log(a+b+c,-1._ki) - q(1,a/x2t,-sb) )
-            !
-          end if
+          veri_rat = -2._ki
+          veri =  ( z_log(a,-1._ki) + (1._ki-x1)*z_log(1._ki-x1,-1._ki) + x1*z_log(-x1,-1._ki) &
+                  + (1._ki-x2)*z_log(1._ki-x2,1._ki) + x2*z_log(-x2,1._ki) )
           !
         else if (n == 2) then
           !
-          if (not_small_a) then
-            !
-            veri_rat = -(1._ki + x1 + x2)/2._ki
-            veri =  ( z_log(a,-1._ki) + (1._ki-x1**2)*z_log(1._ki-x1,-sb) + x1**2*z_log(-x1,-sb) &
-                    + (1._ki-x2**2)*z_log(1._ki-x2,sb) + x2**2*z_log(-x2,sb) )/2._ki
-            !
-          else
-            !
-            veri_rat = 0._ki
-            !veri = ( -(1._ki+x1) + (1._ki-x1**2)*z_log(1._ki-x1,-sb) + x1**2*z_log(-x1,-sb) &
-                    !+ z_log(sa,-1._ki) + z_log(sa*(a-x2t),sb) - q(2,a/x2t,-sb) )/2._ki
-            veri = ( -(1._ki+x1) - x1**2*( z_log(1._ki-x1,-sb) - z_log(-x1,-sb) ) &
-                    + z_log(a+b+c,-1._ki) - q(2,a/x2t,-sb) )/2._ki
-            !
-          end if
+          veri_rat = -(1._ki + x1 + x2)/2._ki
+          veri =  ( z_log(a,-1._ki) + (1._ki-x1**2)*z_log(1._ki-x1,-1._ki) + x1**2*z_log(-x1,-1._ki) &
+                  + (1._ki-x2**2)*z_log(1._ki-x2,1._ki) + x2**2*z_log(-x2,1._ki) )/2._ki
           !
         else
-          !
           tab_erreur_par(1)%a_imprimer = .true.
           tab_erreur_par(1)%chaine = 'In function gl (file mod_gn.f90)'
           tab_erreur_par(2)%a_imprimer = .true.
@@ -559,6 +517,9 @@ module func_gn
           tab_erreur_par(3)%chaine = 'n= %d0'
           tab_erreur_par(3)%arg_int = n
           call catch_exception(0)
+          !
+          ! to please the compiler
+          stop
           !
         end if
         !
@@ -570,6 +531,8 @@ module func_gn
         !
         cx1 = -b/(2._ki*a) + i_*sqrt(-delta)/(2._ki*abs(a))
         cx2 = -b/(2._ki*a) - i_*sqrt(-delta)/(2._ki*abs(a))
+        x1_glob = cx1
+        x2_glob = cx2
         !
         if (n == 1) then
           !
@@ -584,7 +547,6 @@ module func_gn
                   + (1._ki-cx2**2)*log(1._ki-cx2) + cx2**2*log(-cx2) )/2._ki
           !
         else
-          !
           tab_erreur_par(1)%a_imprimer = .true.
           tab_erreur_par(1)%chaine = 'In function gl (file mod_gn.f90)'
           tab_erreur_par(2)%a_imprimer = .true.
@@ -594,6 +556,9 @@ module func_gn
           tab_erreur_par(3)%arg_int = n
           call catch_exception(0)
           !
+          ! to please the compiler
+          stop
+          !
         end if
         !
         veri =  veri + veri_rat
@@ -601,8 +566,10 @@ module func_gn
         !
       end if
       !
-      gl(1) = real(rest,ki) + lm/real(n,ki)
+      gl(1) = real(rest,ki)
       gl(2) = aimag(rest)
+      !
+      !
       !
     end function gl
     !
@@ -622,8 +589,6 @@ module func_gn
     !  where a, b and c are reals
     !  It switches to numerical evaluation if 
     !  (b^2-4*a*c) < coupure_3p1m_2mi
-    !  Around the Landau pole, the divergent part is extracted analytically,
-    !  only the rest is computed numerically
     !
     ! INPUTS
     !
@@ -647,42 +612,36 @@ module func_gn
     !
     !
     !*****
-    function gf(n,ax,bx,cx,dist)
+    !~ function gf(n,a,b,c)
+    function gf(n,a,b,c,dist)
       !
       integer, intent(in) :: n
-      real(ki), intent(in) :: ax,bx,cx
+      real(ki), intent(in) :: a,b,c
       logical, intent(in) :: dist
       real(ki), dimension(2) :: gf
       !
-      real(ki) :: a,b,c
-      complex(ki) :: veri,verim,rest,abserr
-      real(ki) :: x1,x2,deltax,denom
+      complex(ki) :: veri,rest,abserr
+      complex(ki) :: rest1,abserr1,rest2,abserr2,rest3,abserr3
+      complex(ki) :: residue1,residue2
+      complex(ki) :: extra_imag1,extra_imag2
+      real(ki) :: pole1,pole2
+      real(ki) :: x1,x2,deltax
       complex(ki) :: cx1,cx2,cdeltax
-      real(ki) :: delta,plus_grand
+      real(ki) :: delta
+      logical :: l1,l2
       complex(ki) :: div_part
-      logical :: not_small_a
-      real(ki) :: sb,sa,aa,x2t
-      real(ki) :: cut_f = 1.e-6_ki
       !
-      plus_grand = max(abs(ax),abs(bx),abs(cx))
-      lm_glob = log(plus_grand)
-      a = ax/plus_grand
-      b = bx/plus_grand
-      c = cx/plus_grand
-      !
+      plus_grand_glob = max(abs(a),abs(b),abs(c))
       expo_glob = n
-      sb = sign(un,b)
       delta = b*b-4._ki*a*c
       a_glob = a
       b_glob = b
       c_glob = c
       lambda_glob = lambda_par
+      alpha_glob = alpha_par
+      beta_glob = beta_par
       dist_glob = dist
-      !
-      origine_info_par = "gf"
-      num_grand_b_info_par = n
-      denom_grand_b_info_par = abs(delta)
-      !
+      !write(*,*) 'delta et a :',delta,a,dist
       ! divergent part for Landau singularities
       if (dist) then
         !
@@ -690,11 +649,11 @@ module func_gn
           !
           if (a > 0._ki) then
             !
-            div_part = 2._ki*i_*pi/sqrt(delta)*(log(delta/a) - i_*pi + lm_glob )
+            div_part = 2._ki*i_*pi/sqrt(delta)*(log(delta/a) - i_*pi)
             !
           else if (a < 0._ki) then
             !
-            div_part = 2._ki*i_*pi/sqrt(delta)*(log(-delta/a) + lm_glob)
+            div_part = 2._ki*i_*pi/sqrt(delta)*log(-delta/a)
             !
           end if
           !
@@ -702,11 +661,11 @@ module func_gn
           !
           if (a > 0._ki) then
             !
-            div_part = 2._ki*pi/sqrt(-delta)*(log(-delta/a) + lm_glob)
+            div_part = 2._ki*pi/sqrt(-delta)*log(-delta/a)
             !
           else if (a < 0._ki) then
             !
-            div_part = -2._ki*pi/sqrt(-delta)*(log(delta/a) - i_*pi + lm_glob)
+            div_part = -2._ki*pi/sqrt(-delta)*(log(delta/a) - i_*pi)
             !
           end if
           !
@@ -720,102 +679,159 @@ module func_gn
       !
       if (delta >= 0._ki) then
         !
-        aa = abs(a)
-        not_small_a = aa > cut_f
-        !
-        if (a == 0._ki) then
-          !
-          sa = 1._ki ! arbitrary value
-          !
-        else
-          !
-          sa = sign(un,a)
-          !
-        end if
-        !
-        x2t = -(b+sb*sqrt(delta))/2._ki
-        !
-        if (not_small_a) then
-          ! we do not care which is x1 and which is x2, in this way
-          ! whatever th value of b is, x2 is the root which is sent 
-          ! to infinity when a --> 0
-          x1 = (-b + sb*sqrt(delta))/(2._ki*a)
-          x2 = (-b - sb*sqrt(delta))/(2._ki*a)
-          deltax = (x1-x2)
-          denom = deltax*a
-        else ! no need of x2 and deltax in this case
-          !
-          x1 = c/x2t
-          !x2 = x2t/a
-          denom = sb*sqrt(delta)
-          !
-        end if
+        x1 = (-b + sqrt(delta))/(2._ki*a)
+        x2 = (-b - sqrt(delta))/(2._ki*a)
+        x1_glob = cmplx(x1,0._ki)
+        x2_glob = cmplx(x2,0._ki)
+        deltax = x1-x2
         !
         if (sqrt(abs(delta)) >  coupure_3p1m_2mi) then
+        !~ if (abs(delta) >  0._ki) then
           !
-          if (not_small_a) then
-            !
-          !veri =  ( -zdilog((1._ki-x2)/(1._ki-x1),sign(1._ki,2._ki-x1-x2)) + zdilog(x2/x1,sign(1._ki,-x1-x2)) &
-                  !+ zdilog((1._ki-x1)/(1._ki-x2),sign(1._ki,-2._ki+x1+x2)) - zdilog(x1/x2,sign(1._ki,x1+x2)) &
-                  !+ ( 2._ki*z_log(deltax,1._ki) - i_*pi + z_log(a,-1._ki) ) &
-                  !*( z_log((x1-1._ki)/x1,1._ki) - z_log((x2-1._ki)/x2,-1._ki) ) &
-                  !)/deltax/a
-          !verim =  ( z_log((x1-1._ki)/x1,1._ki) - z_log((x2-1._ki)/x2,-1._ki) ) &
-                  !/deltax/a
-          veri =  ( -zdilog((1._ki-x2)/(1._ki-x1),sign(sb,2._ki-x1-x2)) + zdilog(x2/x1,sign(sb,-x1-x2)) &
-                  + zdilog((1._ki-x1)/(1._ki-x2),sign(sb,-2._ki+x1+x2)) - zdilog(x1/x2,sign(sb,x1+x2)) &
-                  + ( 2._ki*z_log(deltax,sb) - i_*pi + z_log(a,-1._ki) ) &
-                  *( z_log((x1-1._ki)/x1,sb) - z_log((x2-1._ki)/x2,-sb) ) &
-                  )/denom
-          verim =  ( z_log((x1-1._ki)/x1,sb) - z_log((x2-1._ki)/x2,-sb) ) &
-                  /denom
-            !
-          else
-            !
-            ! in order that the small imaginary part get the right sign, we must have x2t > a
-            !
-            veri = ( 2._ki*( zdilog(a*(x2t-c)/(x2t*(a-x2t)),-sa) - zdilog(a*c/x2t/x2t,-sa) ) &
-                    + ( z_log((x1-1._ki)/x1,sb) - z_log((x2t-a)/x2t,-sb) )* &
-                    ( 0.5_ki*(z_log(1._ki-x1,-sb) + z_log(x1,sb) - z_log(sa*x2t-aa,-sb) - z_log(-sa*x2t,sb)) &
-                     + 2._ki*z_log(sb*sa*sqrt(delta),sb) + z_log(sa,-1._ki)-i_*pi) &
-                  )/denom
-            verim = ( z_log((x1-1._ki)/x1,sb) - z_log((x2t-a)/x2t,-sb) )/denom
-            !
-          end if
+          veri =  ( -zdilog((1._ki-x2)/(1._ki-x1),sign(1._ki,2._ki-x1-x2)) + zdilog(x2/x1,sign(1._ki,-x1-x2)) &
+                  + zdilog((1._ki-x1)/(1._ki-x2),sign(1._ki,-2._ki+x1+x2)) - zdilog(x1/x2,sign(1._ki,x1+x2)) &
+                  + ( 2._ki*z_log(deltax,1._ki) - i_*pi + z_log(a,-1._ki) ) &
+                  *( z_log((x1-1._ki)/x1,1._ki) - z_log((x2-1._ki)/x2,-1._ki) ) &
+                  )/deltax/a
           !
-          rest = ( veri + verim*lm_glob )/plus_grand
+          rest = veri
           !
         else
           !
+          !~ pole1 = x2
+          !~ eps_glob = 1._ki
+          !
+          !~ call generic_eval_numer(eval_numer_gf1,0._ki,1._ki,1.0E-8_ki,rest1,abserr1)
+          !~ call generic_eval_numer(eval_numer_gf1,0._ki,1._ki,tolerance,rest1,abserr1)
           call generic_eval_numer(eval_numer_gf,0._ki,1._ki,tolerance,rest,abserr)
           !
-          rest = (rest + div_part)/plus_grand
+          !~ if ( (pole1 >= 0._ki) .and. (pole1 <= 1._ki) ) then
+            !~ !
+            !~ residue1 = ( z_log(a_glob,-1._ki) + z_log(x2-x1,-1._ki) )/(x2-x1)/a_glob
+            !~ extra_imag1 = -2._ki*i_*pi*residue1
+            !~ !
+          !~ else
+            !~ !
+            !~ extra_imag1 = 0._ki
+            !~ !
+          !~ end if
+          !~ !
+          !~ rest1 = rest1 + extra_imag1
+          !~ !
+          !~ pole2 = x1
+          !~ eps_glob = -1._ki
+          !~ !
+          !~ call generic_eval_numer(eval_numer_gf2,0._ki,1._ki,1.0E-8_ki,rest2,abserr2)
+          !~ call generic_eval_numer(eval_numer_gf2,0._ki,1._ki,tolerance,rest2,abserr2)
+          !~ !
+          !~ if ( (pole2 >= 0._ki) .and. (pole2 <= 1._ki) ) then
+            !~ !
+            !~ residue2 = z_log(x1-x2,1._ki)/(x1-x2)/a_glob
+            !~ extra_imag2 = 2._ki*i_*pi*residue2
+            !~ !
+          !~ else
+            !~ !
+            !~ extra_imag2 = 0._ki
+            !~ !
+          !~ end if
+          !~ !
+          !~ rest2 = rest2 + extra_imag2
+          !
+          !~ rest = rest1+rest2
+          !~ abserr = abserr1 + abserr2
+          !~ write(*,*) 'exact result is:',2._ki*i_*pi/sqrt(delta)*(log(delta/a)-i_*pi)
+          !~ write(*,*) 'err numer result is:',abserr
+          !~ write(*,*) 'analytical result is:', &
+          !~ ( -zdilog((1._ki-x2)/(1._ki-x1),sign(1._ki,2._ki-x1-x2)) + zdilog(x2/x1,sign(1._ki,-x1-x2)) &
+                  !~ + zdilog((1._ki-x1)/(1._ki-x2),sign(1._ki,-2._ki+x1+x2)) - zdilog(x1/x2,sign(1._ki,x1+x2)) &
+                  !~ + ( 2._ki*z_log(deltax,1._ki) - i_*pi + z_log(a,-1._ki) ) &
+                  !~ *( z_log((x1-1._ki)/x1,1._ki) - z_log((x2-1._ki)/x2,-1._ki) ) &
+                  !~ )/deltax/a
+          !~ write(*,*) 'numer result is:',rest
+          !~ if (dist) then
+          !~ rest = rest + 2._ki*i_*pi/sqrt(delta)*(log(delta/a)-i_*pi)
+          rest = rest + div_part
+          !~ end if
+          !~ write(*,*) 'numer result is:',rest
           !
         end if
         !
       else
+        origine_info_par = "gf"
+        num_grand_b_info_par = n
+        denom_grand_b_info_par = abs(deltax)
+        !
         !
         cx1 = -b/(2._ki*a) + i_*sqrt(-delta)/(2._ki*abs(a))
         cx2 = -b/(2._ki*a) - i_*sqrt(-delta)/(2._ki*abs(a))
+        x1_glob = cx1
+        x2_glob = cx2
         cdeltax = cx1-cx2
         !
         if (sqrt(abs(delta)) >  coupure_3p1m_2mi) then
+        !~ if (abs(delta) >  0._ki) then
           !
           veri =  ( -cdilog((1._ki-cx2)/(1._ki-cx1)) + cdilog(cx2/cx1) &
                   + cdilog((1._ki-cx1)/(1._ki-cx2)) - cdilog(cx1/cx2) &
                   + ( 2._ki*log(cdeltax) - i_*pi + z_log(a,-1._ki) ) &
                   *( log((cx1-1._ki)/cx1) - log((cx2-1._ki)/cx2) ) &
                   )/cdeltax/a
-          verim =  ( log((cx1-1._ki)/cx1) - log((cx2-1._ki)/cx2) ) &
-                  /cdeltax/a
           !
-          rest = ( veri + verim*lm_glob )/plus_grand
+          rest = veri
           !
         else
           !
+          !~ eps_glob = 1._ki
+          !~ call inside_contour(cx2,l1)
+          !~ !
+          !~ call generic_eval_numer(eval_numer_gf1,0._ki,1._ki,tolerance,rest1,abserr1)
           call generic_eval_numer(eval_numer_gf,0._ki,1._ki,tolerance,rest,abserr)
           !
-          rest = (  rest + div_part )/plus_grand
+          !~ if ( l1) then
+            !~ !
+            !~ residue1 = ( z_log(a_glob,-1._ki) + log(cx2-cx1) )/(cx2-cx1)/a_glob
+            !~ extra_imag1 = -2._ki*i_*pi*residue1
+            !~ !
+          !~ else
+            !~ !
+            !~ extra_imag1 = 0._ki
+            !~ !
+          !~ end if
+          !~ !
+          !~ rest1 = rest1 + extra_imag1
+          !~ !
+          !~ eps_glob = -1._ki
+          !~ call inside_contour(cx1,l2)
+          !~ !
+          !~ call generic_eval_numer(eval_numer_gf2,0._ki,1._ki,1.0E-8_ki,rest2,abserr2)
+          !~ !
+          !~ if ( l2 ) then
+            !~ !
+            !~ residue2 = log(cx1-cx2)/(cx1-cx2)/a_glob
+            !~ extra_imag2 = 2._ki*i_*pi*residue2
+            !~ !
+          !~ else
+            !~ !
+            !~ extra_imag2 = 0._ki
+            !~ !
+          !~ end if
+          !~ !
+          !~ rest2 = rest2 + extra_imag2
+          !~ !
+          !~ !
+          !~ rest = rest2 + rest1
+          !~ abserr = abserr1 + abserr2
+          !~ if (dist) then
+          !~ rest = rest + 2._ki*i_*pi/sqrt(delta)*(log(delta/a)-i_*pi)
+          !~ write(*,*) 'analytical result is:', &
+          !~ ( -cdilog((1._ki-cx2)/(1._ki-cx1)) + cdilog(cx2/cx1) &
+                  !~ + cdilog((1._ki-cx1)/(1._ki-cx2)) - cdilog(cx1/cx2) &
+                  !~ + ( 2._ki*log(cdeltax) - i_*pi + z_log(a,-1._ki) ) &
+                  !~ *( log((cx1-1._ki)/cx1) - log((cx2-1._ki)/cx2) ) &
+                  !~ )/cdeltax/a
+          rest = rest + div_part
+          !~ write(*,*) 'numer result is:',rest
+          !~ end if
           !
         end if
         !
@@ -823,6 +839,7 @@ module func_gn
       !
       gf(1) = real(rest,ki)
       gf(2) = aimag(rest)
+      !~ write(*,*) 'test gf :',rest,abserr
       !
       !
     end function gf
@@ -838,8 +855,7 @@ module func_gn
     !
     ! DESCRIPTION
     !
-    !  This is the integrand for the numerical evaluation for ge.
-    !  Depending if 
+    !  This is the integrand for the numerical evaluation of ge,
     !  part 1/( (z-x_1)*(z-x_2) )
     !
     ! INPUTS
@@ -860,27 +876,37 @@ module func_gn
     !
     !
     !*****
+    !~ function eval_numer_ge(u)
+      !~ !
+      !~ real(ki), intent (in) :: u
+      !~ complex(ki) :: eval_numer_ge
+      !~ !
+      !~ real(ki) :: x,y
+      !~ real(ki) :: eps
+      !~ complex(ki) :: z,jacob
+      !~ !
+      !~ eps = eps_glob
+      !~ x = u
+      !~ y = lambda_glob*u**alpha_glob*(1._ki-u)**beta_glob
+      !~ jacob = 1._ki - eps*i_*lambda_glob*u**(alpha_glob-1._ki)&
+              !~ *(1._ki-u)**(beta_glob-1._ki)*(alpha_glob*(1._ki-u)-beta_glob*u)
+      !~ z = x - eps*i_*y
+      !~ eval_numer_ge = z**(expo_glob-1)/(z-x1_glob)/(z-x2_glob)/a_glob
+      !~ eval_numer_ge = eval_numer_ge*jacob
+      !~ !
+    !~ end function eval_numer_ge
     function eval_numer_ge(u)
       !
       real(ki), intent (in) :: u
       complex(ki) :: eval_numer_ge
       !
       real(ki) :: x,y
+      real(ki) :: eps
       complex(ki) :: z,jacob
-      real(ki) :: sigma,delta
-      complex(ki) :: integ2
+      real(ki) :: sigma
       !
-      if (dist_glob) then
-        !
-        sigma = 1._ki+b_glob/a_glob/2._ki
-        !
-      else
-        !
-        sigma = -b_glob/a_glob/2._ki
-        !
-      end if
-      !
-      delta = b_glob*b_glob-4._ki*a_glob*c_glob
+      !~ eps = eps_glob
+      sigma = -b_glob/a_glob/2._ki
       !
       x = u
       !
@@ -899,37 +925,41 @@ module func_gn
       end if
       !
       if (dist_glob) then
-        !
-        integ2 = -b_glob/(2._ki*a_glob+b_glob) &
-          &/(-delta*a_glob/(2._ki*a_glob+b_glob)**2*z*z+delta/(2._ki*a_glob+b_glob)*z+c_glob)
-        !
-        select case(expo_glob)
-          !
-          case(1)
-            !
-            eval_numer_ge = -integ2
-            !
-          case(2)
-            !
-            eval_numer_ge = b_glob/2._ki/a_glob*integ2
-            !
-          case(3)
-            !
-            eval_numer_ge = (c_glob-b_glob*b_glob/2._ki/a_glob)*integ2/a_glob 
-            !
-          case(4)
-            !
-            eval_numer_ge = -b_glob*(3._ki*a_glob*c_glob-b_glob*b_glob)/2._ki/a_glob**3&
-              &*integ2
-            !
-          end select
-          !
-      else
-        !
-        eval_numer_ge = z**(expo_glob-1)/(a_glob*z*z+b_glob*z+c_glob)
-        !
-      end if
+      select case(expo_glob)
       !
+      case(1)
+      !
+      eval_numer_ge = -( &
+        &1._ki/(a_glob-b_glob*z+c_glob*z*z) + &
+        &1._ki/(a_glob+b_glob*z+c_glob*z*z) + &
+        &1._ki/(a_glob*z*z-b_glob*z+c_glob) )
+      !
+      case(2)
+      !
+      eval_numer_ge = -( &
+        &(-2._ki*b_glob) &
+        &/( (a_glob-b_glob*z+c_glob*z*z)*(a_glob+b_glob*z+c_glob*z*z) ) + &
+        &(-z)/(a_glob*z*z-b_glob*z+c_glob) )
+      !
+      case(3)
+      !
+      eval_numer_ge = ( &
+        &(-2._ki*b_glob**2 + 2._ki*c_glob*a_glob + 2._ki*c_glob*c_glob*z*z) &
+        &/( (a_glob-b_glob*z+c_glob*z*z)*(a_glob+b_glob*z+c_glob*z*z) ) + &
+        &(-b_glob*z+c_glob)/(a_glob*z*z-b_glob*z+c_glob) + 1._ki )/a_glob
+      !
+      case(4)
+      !
+      eval_numer_ge = -( &
+        &2._ki*b_glob*(-b_glob**2 + 2._ki*c_glob*a_glob + 2._ki*c_glob*c_glob*z*z) &
+        &/( (a_glob-b_glob*z+c_glob*z*z)*(a_glob+b_glob*z+c_glob*z*z) ) + &
+        &((c_glob*a_glob-b_glob**2)*z+b_glob*c_glob)/(a_glob*z*z-b_glob*z+c_glob) &
+        & - (a_glob*z-b_glob) )/a_glob**2
+      !
+      end select
+      else
+      eval_numer_ge = z**(expo_glob-1)/(a_glob*z*z+b_glob*z+c_glob)
+      end if
       eval_numer_ge = eval_numer_ge*jacob
       !
     end function eval_numer_ge
@@ -972,58 +1002,203 @@ module func_gn
       complex(ki) :: eval_numer_gf
       !
       real(ki) :: x,y
+      real(ki) :: eps
       complex(ki) :: z,jacob
-      real(ki) :: sigma,delta,a_coeff
+      real(ki) :: sigma
       !
+      !~ eps = eps_glob
       !
-      delta = b_glob*b_glob-4._ki*a_glob*c_glob
-      !
-      if (dist_glob) then
-        !
-        sigma = 1._ki+b_glob/a_glob/2._ki
-        a_coeff = -delta
-        !
-      else
-        !
-        sigma = -b_glob/a_glob/2._ki
-        a_coeff = a_glob
-        !
-      end if
+      !~ sigma = -real(b,ki)/a/2._ki
+      sigma = -b_glob/a_glob/2._ki
       !
       x = u
       !
       if ( (sigma <= 1._ki) .and. (sigma >= 0._ki) ) then
         !
-        y = lambda_glob*sign(un,a_coeff)*u*(u-1._ki)*(u-sigma)
+        y = lambda_glob*sign(un,a_glob)*u*(u-1._ki)*(u-sigma)
         z = x + i_*y
-        jacob = 1._ki + i_*lambda_glob*sign(un,a_coeff)*( (u-1._ki)*(u-sigma) + u*(u-1._ki) + u*(u-sigma) )
+        jacob = 1._ki + i_*lambda_glob*sign(un,a_glob)*( (u-1._ki)*(u-sigma) + u*(u-1._ki) + u*(u-sigma) )
         !
       else
         !
-        y = lambda_glob*sign(un,a_coeff*sigma)*u*(u-1._ki)
-        z = x + i_*y
-        jacob = 1._ki + i_*lambda_glob*sign(un,a_coeff*sigma)*( (u-1._ki) + u )
+        y = lambda_glob*sign(un,a_glob*sigma)*u*(u-1._ki)
+        z = x - i_*y
+        jacob = 1._ki - i_*lambda_glob*sign(un,a_glob*sigma)*( (u-1._ki) + u )
         !
       end if
       !
+      !~ eval_numer_gf = (z_log(a_glob,-1._ki) +log(z-x1_glob) )/(z-x1_glob)/(z-x2_glob)/a_glob
       if (dist_glob) then
-        !
-        eval_numer_gf = -b_glob/(2._ki*a_glob+b_glob) &
-          &*log( (1._ki-2._ki*a_glob/(2._ki*a_glob+b_glob)*z)**2 /&
-          & (-delta*a_glob/(2._ki*a_glob+b_glob)**2*z*z+delta/(2._ki*a_glob+b_glob)*z+c_glob) )&
-          &/(-delta*a_glob/(2._ki*a_glob+b_glob)**2*z*z+delta/(2._ki*a_glob+b_glob)*z+c_glob)
-        eval_numer_gf = eval_numer_gf  + lm_glob*( b_glob/(2._ki*a_glob+b_glob) &
-          &/(-delta*a_glob/(2._ki*a_glob+b_glob)**2*z*z+delta/(2._ki*a_glob+b_glob)*z+c_glob) )
-        !
+      eval_numer_gf = -( &
+        &log((a_glob-b_glob*z+c_glob*z*z)/(z*z))/(a_glob-b_glob*z+c_glob*z*z) + &
+        &log((a_glob+b_glob*z+c_glob*z*z)/(z*z))/(a_glob+b_glob*z+c_glob*z*z) + &
+        &log(a_glob*z*z-b_glob*z+c_glob)/(a_glob*z*z-b_glob*z+c_glob) )
       else
-        !
-        eval_numer_gf = (log(a_glob*z*z+b_glob*z+c_glob)+lm_glob)/(a_glob*z*z+b_glob*z+c_glob)
-        !
+      eval_numer_gf = log(a_glob*z*z+b_glob*z+c_glob)/(a_glob*z*z+b_glob*z+c_glob)
       end if
-      !
       eval_numer_gf = eval_numer_gf*jacob
       !
     end function eval_numer_gf
+    !
+    !****if* src/integrals/three_point/func_gn/eval_numer_gf1
+    ! NAME
+    !
+    !  Function eval_numer_gf1
+    !
+    ! USAGE
+    !
+    !  complex = eval_numer_gf1(u)
+    !
+    ! DESCRIPTION
+    !
+    !  This is the integrand for the numerical evaluation of gf,
+    !  part ln(z-x_1)/( (z-x_1)*(z-x_2) )
+    !
+    ! INPUTS
+    !
+    !  * u -- a real (type ki), the integration variable
+    !
+    ! SIDE EFFECTS
+    !
+    !  No side effect. The variables of type xxx_glob
+    !  are global in this module
+    !
+    ! RETURN VALUE
+    !
+    !  It returns a complex (type ki)
+    !
+    ! EXAMPLE
+    !
+    !
+    !
+    !*****
+    function eval_numer_gf1(u)
+      !
+      real(ki), intent (in) :: u
+      complex(ki) :: eval_numer_gf1
+      !
+      real(ki) :: x,y
+      real(ki) :: eps
+      complex(ki) :: z,jacob
+      !
+      eps = eps_glob
+      x = u
+      y = lambda_glob*u**alpha_glob*(1._ki-u)**beta_glob
+      jacob = 1._ki - eps*i_*lambda_glob*u**(alpha_glob-1._ki)&
+              *(1._ki-u)**(beta_glob-1._ki)*(alpha_glob*(1._ki-u)-beta_glob*u)
+      z = x - eps*i_*y
+      eval_numer_gf1 = (z_log(a_glob,-1._ki) +log(z-x1_glob) )/(z-x1_glob)/(z-x2_glob)/a_glob
+      eval_numer_gf1 = eval_numer_gf1*jacob
+      !
+    end function eval_numer_gf1
+    !
+    !****if* src/integrals/three_point/func_gn/eval_numer_gf2
+    ! NAME
+    !
+    !  Function eval_numer_gf2
+    !
+    ! USAGE
+    !
+    !  complex = eval_numer_gf2(u)
+    !
+    ! DESCRIPTION
+    !
+    !  This is the integrand for the numerical evaluation of gf,
+    !  part ln(z-x_2)/( (z-x_1)*(z-x_2) )
+    !
+    ! INPUTS
+    !
+    !  * u -- a real (type ki), the integration variable
+    !
+    ! SIDE EFFECTS
+    !
+    !  No side effect. The variables of type xxx_glob
+    !  are global in this module
+    !
+    ! RETURN VALUE
+    !
+    !  It returns a complex (type ki)
+    !
+    ! EXAMPLE
+    !
+    !
+    !
+    !*****
+    function eval_numer_gf2(u)
+      !
+      real(ki), intent (in) :: u
+      complex(ki) :: eval_numer_gf2
+      !
+      real(ki) :: x,y
+      real(ki) :: eps
+      complex(ki) :: z,jacob
+      !
+      eps = eps_glob
+      x = u
+      y = lambda_glob*u**alpha_glob*(1._ki-u)**beta_glob
+      jacob = 1._ki - eps*i_*lambda_glob*u**(alpha_glob-1._ki)&
+              *(1._ki-u)**(beta_glob-1._ki)*(alpha_glob*(1._ki-u)-beta_glob*u)
+      z = x - eps*i_*y
+      eval_numer_gf2 = log(z-x2_glob)/(z-x1_glob)/(z-x2_glob)/a_glob
+      eval_numer_gf2 = eval_numer_gf2*jacob
+      !
+    end function eval_numer_gf2
+    !
+    !****if* src/integrals/three_point/func_gn/inside_contour
+    ! NAME
+    !
+    !  Subroutine inside_contour
+    !
+    ! USAGE
+    !
+    !  call inside_contour(pole,yes_or_no)
+    !
+    ! DESCRIPTION
+    !
+    !  This subroutine tests if the pole is inside the contour or not
+    !
+    ! INPUTS
+    !
+    !  * pole -- a complex (type ki), the pole
+    !
+    ! SIDE EFFECTS
+    !
+    !  No side effect
+    !
+    ! RETURN VALUE
+    !
+    !  It returns a logical, true if the pole is inside, false otherwise
+    !
+    ! EXAMPLE
+    !
+    !
+    !
+    !*****
+    subroutine inside_contour(pole,yes_or_no)
+      !
+      complex(ki), INTENT(IN) :: pole
+      logical, INTENT(OUT) :: yes_or_no
+      !
+      real(ki) :: distance,x,y
+      !
+      yes_or_no = .false.
+      x = real(pole,ki)
+      y = aimag(pole)
+      distance = lambda_glob*x**alpha_glob*(1._ki-x)**beta_glob
+      if ( abs(distance-y) <= 0.1_ki ) then
+        !
+        lambda_glob = 2._ki*lambda_glob
+        distance = lambda_glob*x**alpha_glob*(1._ki-x)**beta_glob
+        !
+      end if
+      !
+      if ( (x >= 0._ki) .and. (x <= 1._ki) .and. (abs(y) <= distance) .and. (sign(1._ki,y) == sign(1._ki,-eps_glob)) ) then
+        !
+        yes_or_no = .true.
+        !
+      end if
+      !
+    end subroutine inside_contour
     !
 end module func_gn
 

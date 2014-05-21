@@ -359,7 +359,7 @@ contains
  !         f3p_finite_rarg(3:4)= a3pC0i_rarg(s1,s2,s3,m1,m2,m3,par1,par2,par3)
 	  f3p_finite_rarg(3:4)= a3pC0i_rarg(s1p,s2p,s3p,m1p,m2p,m3p,par1,par2,par3)&
            &/plus_grand
-	  	  !
+          !
        else if (dim == "n+2") then
           !
 !          f3p_finite_rarg = a3pC0i_np2_rarg(s1,s2,s3,m1,m2,m3,par1,par2,par3)
@@ -656,7 +656,7 @@ contains
   !
   ! EXAMPLE
   !
-   function f3p_finite_c(dim,s1,s2,s3,m1,m2,m3,par1,par2,par3)
+  function f3p_finite_c(dim,s1,s2,s3,m1,m2,m3,par1,par2,par3)
     !
     use translate
     implicit none
@@ -1191,7 +1191,7 @@ contains
              end if
              !
              temp1 = temp1 + b_real(j)*truc1
-           !
+             !
           end if
           !
           j = j+1
@@ -1643,16 +1643,16 @@ contains
     !  m1sq,m2sq,m3sq = SQUARED internal masses
     real(ki), intent(in) :: s1,s2,s3,m1sq,m2sq,m3sq
     real(ki) :: s1r,s2r,s3r
-    ! real(ki) :: del
+    real(ki) :: del
     complex(ki) :: C0_rarg
     complex(ki_avh), dimension(0:2) :: C0olo
  !AC!   complex(ki_lt) :: C0
-    !  del = epsilon(1._ki)
+      del = epsilon(1._ki)
     !
     s1r = s1
     s2r = s2
     s3r = s3
-   !
+    !
 !    if (equal_real(s1r,zero) ) s1r = 0._ki
 !    if (equal_real(s2r,zero) ) s2r = 0._ki
 !    if (equal_real(s3r,zero) ) s3r = 0._ki   
@@ -1668,9 +1668,10 @@ contains
        !
 !AC!    else 
     ! use avh_olo
+    ! on-shell cutoff decreased 26.4.2013 GH
          if (.not. olo) then
-          !    call avh_olo_onshell(100._ki*del)
-          call avh_olo_onshell(1.e-10_ki)
+              call avh_olo_onshell(100._ki*del)
+          !call avh_olo_onshell(1.e-10_ki)
           call avh_olo_mu_set(sqrt(mu2_scale_par))
           olo=.true.
          end if
@@ -1701,12 +1702,12 @@ contains
     complex(ki), intent(in) :: m1sq,m2sq,m3sq
     complex(ki_avh) :: cp1,cp2,cp3,cm1,cm2,cm3
     real(ki) :: s1r,s2r,s3r
-    ! real(ki) :: del
+    real(ki) :: del
     complex(ki) :: C0_carg
     complex(ki_avh), dimension(0:2) :: C0olo
    !AC!   complex(ki_lt) :: C0C
     !integer :: i,j,k
-    !  del = epsilon(1._ki)
+      del = epsilon(1._ki)
     !
     s1r = s1
     s2r = s2
@@ -1727,9 +1728,10 @@ contains
        !
 !AC!    else 
        ! use avh_olo
+    ! on-shell cutoff decreased 26.4.2013 GH
        if (.not. olo) then
-          !    call avh_olo_onshell(100._ki*del)
-          call avh_olo_onshell(1.e-10_ki)
+          call avh_olo_onshell(100._ki*del)
+   !       call avh_olo_onshell(1.e-10_ki)
           call avh_olo_mu_set(sqrt(mu2_scale_par))
           olo=.true.
         end if
