@@ -80,12 +80,12 @@ URL: http://helac-phegas.web.cern.ch/helac-phegas/OneLOop.html
 
 ########################################################################
 #                                                                      #
-#                     You are using OneLOop-2.2.1                      #
+#                      You are using OneLOop-3.6                       #
 #                                                                      #
 # for the evaluation of 1-loop scalar 1-, 2-, 3- and 4-point functions #
 #                                                                      #
 # author: Andreas van Hameren <hamerenREMOVETHIS@ifj.edu.pl>           #
-#   date: 07-09-2011                                                   #
+#   date: 14-05-2014                                                   #
 #                                                                      #
 # Please cite                                                          #
 #    A. van Hameren,                                                   #
@@ -95,6 +95,89 @@ URL: http://helac-phegas.web.cern.ch/helac-phegas/OneLOop.html
 # in publications with results obtained with the help of this program. #
 #                                                                      #
 ########################################################################
+
+The file avh_olo-3.6/avh_olo.f90 was generated from the OneLOop source files
+using 
+ ./create.py source
+avh_olo_xkinds.f90.in added and following patch applied
+
+
+--- a/avh_olo.f90 2015-06-24 14:48:02.723443589 +0200
++++ b/avh_olo.f90 2015-06-24 14:55:47.328176383 +0200
+@@ -77,7 +77,9 @@
+ 
+ 
+ module avh_olo_dp_kinds
+-  integer ,parameter :: kindr2=selected_real_kind(15) 
++  use avh_olo_xkind
++  public :: kindr2
++  integer ,parameter :: kindr2=olo_xkind  
+ end module
+ 
+ 
+@@ -6540,19 +6542,19 @@
+   subroutine olo_scale( val )
+ !*******************************************************************
+ !*******************************************************************
+-  real(kind(1d0)) ,intent(in) :: val
++  real(kindr2) ,intent(in) :: val
+   if (initz) call init
+-  muscale = convert(val)
++  muscale = val
+   end subroutine
+  
+  
+   subroutine olo_onshell( thrs )
+ !*******************************************************************
+ !*******************************************************************
+-  real(kind(1d0)) ,intent(in) :: thrs
++  real(kindr2) ,intent(in) :: thrs
+   if (initz) call init
+   nonzerothrs = .true.
+-  onshellthrs = convert(thrs)
++  onshellthrs = thrs
+   end subroutine
+ 
+ 
+@@ -6568,17 +6570,17 @@
+   function olo_get_scale() result(rslt)
+ !*******************************************************************
+ !*******************************************************************
+-  real(kind(1d0)) :: rslt
++  real(kindr2) :: rslt
+   if (initz) call init
+-  rslt = adble(muscale)
++  rslt = muscale
+   end function
+ 
+   function olo_get_onshell() result(rslt)
+ !*******************************************************************
+ !*******************************************************************
+-  real(kind(1d0)) :: rslt
++  real(kindr2) :: rslt
+   if (initz) call init
+-  rslt = adble(onshellthrs)
++  rslt = onshellthrs
+   end function
+ 
+ 
+@@ -11805,13 +11807,12 @@
+ 
+   subroutine olo_scale( val )
+   use avh_olo_dp ,only: dp_sub=>olo_scale 
+-  real(kind(1d0)) ,intent(in) :: val
++  real(olo_dp_kind) ,intent(in) :: val
+   call dp_sub( val ) 
+   end subroutine
+ 
+   subroutine olo_onshell( val )
+-  use avh_olo_dp ,only: dp_sub=>olo_onshell 
+-  real(kind(1d0)) ,intent(in) :: val
++  real(olo_dp_kind) ,intent(in) :: val
+   call dp_sub( val ) 
+   end subroutine
+ 
+
 
 #---------
 # Golem95C

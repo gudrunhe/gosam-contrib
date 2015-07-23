@@ -14,7 +14,7 @@ else
 endif
 
 if COMPILE_OLO
-SUBDIRS+= avh_olo-2.2.1
+SUBDIRS+= avh_olo-3.6
 else
 # nop
 endif

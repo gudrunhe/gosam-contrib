@@ -13,5 +13,5 @@ libgolem_la_LIBADD=\
    $(builddir)/numerical/libgolem95_numerical.la \
    $(builddir)/kinematic/libgolem95_kinematics.la \
    $(builddir)/module/libgolem95_module.la \
-   -L$(builddir)/../avh_olo-2.2.1 -lavh_olo \
+   -L$(builddir)/../avh_olo-3.6 -lavh_olo \
    $(LIBLOOPTOOLS)

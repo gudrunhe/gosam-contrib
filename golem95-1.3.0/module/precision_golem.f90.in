@@ -25,7 +25,7 @@
 !
 !*****
 module precision_golem
-    use avh_olo_kinds, only: ki_avh => kindr2
+    use avh_olo_dp_kinds, only: ki_avh => kindr2
     implicit none
     private
     !

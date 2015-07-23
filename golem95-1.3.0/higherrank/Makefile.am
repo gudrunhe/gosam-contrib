@@ -11,7 +11,7 @@ AM_FCFLAGS+=\
 	-I$(builddir)/../integrals/three_point \
 	-I$(builddir)/../integrals/four_point
 
-#	-I$(builddir)/../../avh_olo-2.2.1
+#	-I$(builddir)/../../avh_olo-3.6
 
 libgolem95_higherrank_la_SOURCES=generic_function_np.f90 form_factor_higher_ranks.f90
 

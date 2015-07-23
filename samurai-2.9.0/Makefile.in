@@ -363,12 +363,12 @@ nodist_pkginclude_HEADERS = \
 
 AM_FCFLAGS = \
 	-I. \
-	-I$(top_builddir)/avh_olo-2.2.1 \
+	-I$(top_builddir)/avh_olo-3.6 \
 	-I$(top_builddir)/golem95-1.3.0/module
 
 # nop
 libsamurai_la_LIBADD = $(LIBLOOPTOOLS) $(am__append_1) $(am__append_2) \
-	-L$(top_builddir)/avh_olo-2.2.1 -lavh_olo
+	-L$(top_builddir)/avh_olo-3.6 -lavh_olo
 CLEANFILES = \
    constants.mod kinematic.mod ltest.mod madds.mod mcgs.mod mfunctions.mod \
    mgetbase.mod mgetc1.mod mgetc2.mod mgetc3.mod mgetc4.mod mgetc5.mod \

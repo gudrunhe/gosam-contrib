@@ -352,10 +352,10 @@ top_build_prefix = @top_build_prefix@
 top_builddir = @top_builddir@
 top_srcdir = @top_srcdir@
 noinst_LTLIBRARIES = libgolem95_integrals_four_point.la
-AM_FCFLAGS = -I$(top_builddir)/avh_olo-2.2.1 \
-	-I$(builddir)/../../module -I$(builddir)/../../kinematic \
-	-I$(builddir)/../../numerical -I$(builddir)/../one_point \
-	-I$(builddir)/../two_point -I$(builddir)/../three_point
+AM_FCFLAGS = -I$(top_builddir)/avh_olo-3.6 -I$(builddir)/../../module \
+	-I$(builddir)/../../kinematic -I$(builddir)/../../numerical \
+	-I$(builddir)/../one_point -I$(builddir)/../two_point \
+	-I$(builddir)/../three_point
 libgolem95_integrals_four_point_la_SOURCES = \
 	function_4p1m.f90 function_4p2m_3mi_onshell.f90 function_4p2m_adj.f90 \
 	function_4p2m_opp.f90 function_4p3m.f90 function_4p4m.f90 \

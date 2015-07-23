@@ -5,7 +5,7 @@ AM_FCFLAGS+=\
 	-I$(builddir)/../../module \
 	-I$(builddir)/../../kinematic \
 	-I$(builddir)/../../numerical \
-	-I$(builddir)/../../../avh_olo-2.2.1
+	-I$(builddir)/../../../avh_olo-3.6
 
 libgolem95_integrals_one_point_la_SOURCES= generic_function_1p.f90
 libgolem95_integrals_one_point_la_FCFLAGS= $(AM_FCFLAGS)

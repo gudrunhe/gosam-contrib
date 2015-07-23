@@ -52,9 +52,8 @@ POST_UNINSTALL = :
 build_triplet = @build@
 host_triplet = @host@
 DIST_COMMON = $(srcdir)/Makefile.dep $(srcdir)/Makefile.in \
-	$(srcdir)/Makefile.am $(srcdir)/avh_olo_xkind.f90.in \
-	$(noinst_HEADERS)
-subdir = avh_olo-2.2.1
+	$(srcdir)/Makefile.am $(srcdir)/avh_olo_xkind.f90.in
+subdir = avh_olo-3.6
 ACLOCAL_M4 = $(top_srcdir)/aclocal.m4
 am__aclocal_m4_deps = $(top_srcdir)/m4/libtool.m4 \
 	$(top_srcdir)/m4/ltoptions.m4 $(top_srcdir)/m4/ltsugar.m4 \
@@ -100,10 +99,7 @@ am__uninstall_files_from_dir = { \
 am__installdirs = "$(DESTDIR)$(libdir)" "$(DESTDIR)$(pkgincludedir)"
 LTLIBRARIES = $(lib_LTLIBRARIES)
 libavh_olo_la_LIBADD =
-am_libavh_olo_la_OBJECTS = avh_olo_boxc.lo avh_olo_box.lo \
-	avh_olo_bub.lo avh_olo_func.lo avh_olo_kinds.lo \
-	avh_olo_main.lo avh_olo_print.lo avh_olo_tri.lo \
-	avh_olo_units.lo avh_olo_wrp01.lo avh_olo_xkind.lo
+am_libavh_olo_la_OBJECTS = avh_olo.lo avh_olo_xkind.lo
 libavh_olo_la_OBJECTS = $(am_libavh_olo_la_OBJECTS)
 AM_V_lt = $(am__v_lt_@AM_V@)
 am__v_lt_ = $(am__v_lt_@AM_DEFAULT_V@)
@@ -144,7 +140,7 @@ am__can_run_installinfo = \
     n|no|NO) false;; \
     *) (install-info --version) >/dev/null 2>&1;; \
   esac
-HEADERS = $(nodist_pkginclude_HEADERS) $(noinst_HEADERS)
+HEADERS = $(nodist_pkginclude_HEADERS)
 am__tagged_files = $(HEADERS) $(SOURCES) $(TAGS_FILES) $(LISP)
 # Read a list of newline-separated strings from the standard input,
 # and print each of them once, without duplicates.  Input order is
@@ -332,21 +328,13 @@ top_build_prefix = @top_build_prefix@
 top_builddir = @top_builddir@
 top_srcdir = @top_srcdir@
 lib_LTLIBRARIES = libavh_olo.la
-libavh_olo_la_SOURCES = avh_olo_boxc.f90 avh_olo_box.f90 avh_olo_bub.f90 \
-   avh_olo_func.f90 avh_olo_kinds.f90 avh_olo_main.f90 avh_olo_print.f90 \
-   avh_olo_tri.f90 avh_olo_units.f90 avh_olo_wrp01.f90 avh_olo_xkind.f90
-
-noinst_HEADERS = \
-   avh_olo_a0_a.h90 avh_olo_a0_b.h90 avh_olo_b0_a.h90 avh_olo_b0_b.h90 \
-   avh_olo_b11_a.h90 avh_olo_b11_b.h90 avh_olo_c0_a.h90 avh_olo_c0_b.h90 \
-   avh_olo_d0_a.h90 avh_olo_d0_b.h90
-
+libavh_olo_la_SOURCES = avh_olo.f90 avh_olo_xkind.f90
 nodist_pkginclude_HEADERS = \
-   avh_olo_bern.mod avh_olo_boxc.mod avh_olo_box.mod avh_olo_bub.mod \
-   avh_olo_func.mod avh_olo_kinds.mod avh_olo_li2a.mod avh_olo_li2c2.mod \
-   avh_olo_li2c.mod avh_olo_loga2.mod avh_olo_loga.mod avh_olo_logc2.mod \
-   avh_olo_logc.mod avh_olo.mod avh_olo_print.mod avh_olo_tri.mod \
-   avh_olo_units.mod avh_olo_xkind.mod
+	avh_olo_dp_arrays.mod avh_olo_dp_auxfun.mod avh_olo_dp_bnlog.mod \
+	avh_olo_dp_boxc.mod avh_olo_dp_box.mod avh_olo_dp_bub.mod avh_olo_dp_dilog.mod \
+	avh_olo_dp_kinds.mod avh_olo_dp.mod avh_olo_dp_olog.mod avh_olo_dp_prec.mod \
+	avh_olo_dp_print.mod avh_olo_dp_qmplx.mod avh_olo_dp_tri.mod avh_olo.mod \
+	avh_olo_units.mod avh_olo_version.mod avh_olo_xkind.mod
 
 CLEANFILES = $(nodist_pkginclude_HEADERS)
 all: all-am
@@ -362,9 +350,9 @@ $(srcdir)/Makefile.in:  $(srcdir)/Makefile.am $(srcdir)/Makefile.dep $(am__confi
 	      exit 1;; \
 	  esac; \
 	done; \
-	echo ' cd $(top_srcdir) && $(AUTOMAKE) --gnu avh_olo-2.2.1/Makefile'; \
+	echo ' cd $(top_srcdir) && $(AUTOMAKE) --gnu avh_olo-3.6/Makefile'; \
 	$(am__cd) $(top_srcdir) && \
-	  $(AUTOMAKE) --gnu avh_olo-2.2.1/Makefile
+	  $(AUTOMAKE) --gnu avh_olo-3.6/Makefile
 .PRECIOUS: Makefile
 Makefile: $(srcdir)/Makefile.in $(top_builddir)/config.status
 	@case '$?' in \
@@ -676,56 +664,25 @@ uninstall-am: uninstall-libLTLIBRARIES \
 
 
 # Module dependencies
-avh_olo_box.o: avh_olo_func.o avh_olo_kinds.o avh_olo_units.o
-avh_olo_box.lo: avh_olo_func.lo avh_olo_kinds.lo avh_olo_units.lo
-avh_olo_box.obj: avh_olo_func.obj avh_olo_kinds.obj avh_olo_units.obj
-avh_olo_boxc.o: avh_olo_box.o avh_olo_func.o avh_olo_kinds.o avh_olo_units.o
-avh_olo_boxc.lo: avh_olo_box.lo avh_olo_func.lo avh_olo_kinds.lo \
-	avh_olo_units.lo
-avh_olo_boxc.obj: avh_olo_box.obj avh_olo_func.obj avh_olo_kinds.obj \
-	avh_olo_units.obj
-avh_olo_bub.o: avh_olo_func.o avh_olo_kinds.o avh_olo_units.o
-avh_olo_bub.lo: avh_olo_func.lo avh_olo_kinds.lo avh_olo_units.lo
-avh_olo_bub.obj: avh_olo_func.obj avh_olo_kinds.obj avh_olo_units.obj
-avh_olo_func.o: avh_olo_kinds.o avh_olo_units.o
-avh_olo_func.lo: avh_olo_kinds.lo avh_olo_units.lo
-avh_olo_func.obj: avh_olo_kinds.obj avh_olo_units.obj
-avh_olo_kinds.o: avh_olo_xkind.o
-avh_olo_kinds.lo: avh_olo_xkind.lo
-avh_olo_kinds.obj: avh_olo_xkind.obj
-avh_olo_main.o: avh_olo_box.o avh_olo_boxc.o avh_olo_bub.o avh_olo_func.o \
-	avh_olo_kinds.o avh_olo_print.o avh_olo_tri.o avh_olo_units.o \
-	avh_olo_a0_a.h90 avh_olo_a0_b.h90 avh_olo_b0_a.h90 avh_olo_b0_b.h90 \
-	avh_olo_b11_a.h90 avh_olo_b11_b.h90 avh_olo_c0_a.h90 avh_olo_c0_b.h90 \
-	avh_olo_d0_a.h90 avh_olo_d0_b.h90
-avh_olo_main.lo: avh_olo_box.lo avh_olo_boxc.lo avh_olo_bub.lo avh_olo_func.lo \
-	avh_olo_kinds.lo avh_olo_print.lo avh_olo_tri.lo avh_olo_units.lo \
-	avh_olo_a0_a.h90 avh_olo_a0_b.h90 avh_olo_b0_a.h90 avh_olo_b0_b.h90 \
-	avh_olo_b11_a.h90 avh_olo_b11_b.h90 avh_olo_c0_a.h90 avh_olo_c0_b.h90 \
-	avh_olo_d0_a.h90 avh_olo_d0_b.h90
-avh_olo_main.obj: avh_olo_box.obj avh_olo_boxc.obj avh_olo_bub.obj \
-	avh_olo_func.obj avh_olo_kinds.obj avh_olo_print.obj avh_olo_tri.obj \
-	avh_olo_units.obj avh_olo_a0_a.h90 avh_olo_a0_b.h90 avh_olo_b0_a.h90 \
-	avh_olo_b0_b.h90 avh_olo_b11_a.h90 avh_olo_b11_b.h90 avh_olo_c0_a.h90 \
-	avh_olo_c0_b.h90 avh_olo_d0_a.h90 avh_olo_d0_b.h90
-avh_olo_print.o: avh_olo_kinds.o
-avh_olo_print.lo: avh_olo_kinds.lo
-avh_olo_print.obj: avh_olo_kinds.obj
-avh_olo_tri.o: avh_olo_func.o avh_olo_kinds.o avh_olo_units.o
-avh_olo_tri.lo: avh_olo_func.lo avh_olo_kinds.lo avh_olo_units.lo
-avh_olo_tri.obj: avh_olo_func.obj avh_olo_kinds.obj avh_olo_units.obj
-avh_olo_wrp01.o: avh_olo_main.o
-avh_olo_wrp01.lo: avh_olo_main.lo
-avh_olo_wrp01.obj: avh_olo_main.obj
-
-avh_olo_func.mod avh_olo_loga.mod avh_olo_bern.mod avh_olo_li2a.mod \
-avh_olo_loga2.mod avh_olo_logc.mod avh_olo_li2c.mod avh_olo_logc2.mod \
-avh_olo_li2c2.mod: avh_olo_func.o
-
-avh_olo.mod: $(nodist_pkginclude_HEADERS:avh_olo.mod=)
-
-%.mod: %.o %.f90
-	@true
+avh_olo.lo: avh_olo_xkind.lo
+avh_olo.mod: avh_olo.lo
+avh_olo_xkind.mod: avh_olo_xkind.lo
+avh_olo_version.mod: avh_olo.lo
+avh_olo_units.mod: avh_olo.lo
+avh_olo_dp_kinds.mod: avh_olo.lo
+avh_olo_dp_arrays.mod: avh_olo.lo
+avh_olo_dp_prec.mod: avh_olo.lo
+avh_olo_dp_print.mod: avh_olo.lo
+avh_olo_dp_auxfun.mod: avh_olo.lo
+avh_olo_dp_olog.mod: avh_olo.lo
+avh_olo_dp_dilog.mod: avh_olo.lo
+avh_olo_dp_bnlog.mod: avh_olo.lo
+avh_olo_dp_qmplx.mod: avh_olo.lo
+avh_olo_dp_bub.mod: avh_olo.lo
+avh_olo_dp_tri.mod: avh_olo.lo
+avh_olo_dp_box.mod: avh_olo.lo
+avh_olo_dp_boxc.mod: avh_olo.lo
+avh_olo_dp.mod: avh_olo.lo
 
 # Tell versions [3.59,3.63) of GNU make to not export all variables.
 # Otherwise a system limit (for SysV at least) may be exceeded.

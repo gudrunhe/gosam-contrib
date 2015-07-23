@@ -347,7 +347,7 @@ nodist_pkginclude_HEADERS = precision_golem.mod \
 	multiply_div.mod parametre.mod \
 	sortie_erreur.mod spinor.mod translate.mod  cache_generic.mod 
 
-AM_FCFLAGS = -I$(top_builddir)/avh_olo-2.2.1
+AM_FCFLAGS = -I$(top_builddir)/avh_olo-3.6
 CLEANFILES = $(nodist_pkginclude_HEADERS)
 all: all-am
 

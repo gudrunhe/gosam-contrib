@@ -1,6 +1,6 @@
 module mmisavholo 
 @case_with_avh@	use precision, only: ki
-@case_with_avh@	use avh_olo_kinds, only: ki_avh => kindr2
+@case_with_avh@	use avh_olo_dp_kinds, only: ki_avh => kindr2
 @case_with_avh@	use constants
 @case_with_avh@	use options
 @case_with_avh@	use mfunctions
