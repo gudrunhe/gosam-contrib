@@ -19,9 +19,4 @@ nodist_pkginclude_HEADERS= generic_function_np.mod form_factor_higher_ranks.mod
 
 CLEANFILES=*.mod
 
-
-%.mod: %.o %.f90
-	@true
-
-
 include Makefile.dep

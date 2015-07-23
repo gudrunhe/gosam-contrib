@@ -72,35 +72,19 @@ CONFIG_CLEAN_FILES = generic_function_4p.f90
 CONFIG_CLEAN_VPATH_FILES =
 LTLIBRARIES = $(noinst_LTLIBRARIES)
 libgolem95_integrals_four_point_la_LIBADD =
-am_libgolem95_integrals_four_point_la_OBJECTS =  \
-	libgolem95_integrals_four_point_la-function_4p1m.lo \
-	libgolem95_integrals_four_point_la-function_4p2m_3mi_onshell.lo \
-	libgolem95_integrals_four_point_la-function_4p2m_adj.lo \
-	libgolem95_integrals_four_point_la-function_4p2m_opp.lo \
-	libgolem95_integrals_four_point_la-function_4p3m.lo \
-	libgolem95_integrals_four_point_la-function_4p4m.lo \
-	libgolem95_integrals_four_point_la-function_4p_ql10.lo \
-	libgolem95_integrals_four_point_la-function_4p_ql11.lo \
-	libgolem95_integrals_four_point_la-function_4p_ql12.lo \
-	libgolem95_integrals_four_point_la-function_4p_ql13.lo \
-	libgolem95_integrals_four_point_la-function_4p_ql14.lo \
-	libgolem95_integrals_four_point_la-function_4p_ql15.lo \
-	libgolem95_integrals_four_point_la-function_4p_ql16.lo \
-	libgolem95_integrals_four_point_la-function_4p_ql6.lo \
-	libgolem95_integrals_four_point_la-function_4p_ql7.lo \
-	libgolem95_integrals_four_point_la-function_4p_ql8.lo \
-	libgolem95_integrals_four_point_la-function_4p_ql9.lo \
-	libgolem95_integrals_four_point_la-generic_function_4p.lo
+am_libgolem95_integrals_four_point_la_OBJECTS = function_4p1m.lo \
+	function_4p2m_3mi_onshell.lo function_4p2m_adj.lo \
+	function_4p2m_opp.lo function_4p3m.lo function_4p4m.lo \
+	function_4p_ql10.lo function_4p_ql11.lo function_4p_ql12.lo \
+	function_4p_ql13.lo function_4p_ql14.lo function_4p_ql15.lo \
+	function_4p_ql16.lo function_4p_ql6.lo function_4p_ql7.lo \
+	function_4p_ql8.lo function_4p_ql9.lo generic_function_4p.lo
 libgolem95_integrals_four_point_la_OBJECTS =  \
 	$(am_libgolem95_integrals_four_point_la_OBJECTS)
 AM_V_lt = $(am__v_lt_@AM_V@)
 am__v_lt_ = $(am__v_lt_@AM_DEFAULT_V@)
 am__v_lt_0 = --silent
 am__v_lt_1 = 
-libgolem95_integrals_four_point_la_LINK = $(LIBTOOL) $(AM_V_lt) \
-	--tag=FC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=link \
-	$(FCLD) $(libgolem95_integrals_four_point_la_FCFLAGS) \
-	$(FCFLAGS) $(AM_LDFLAGS) $(LDFLAGS) -o $@
 AM_V_P = $(am__v_P_@AM_V@)
 am__v_P_ = $(am__v_P_@AM_DEFAULT_V@)
 am__v_P_0 = false
@@ -364,7 +348,6 @@ libgolem95_integrals_four_point_la_SOURCES = \
 	function_4p_ql16.f90 function_4p_ql6.f90 function_4p_ql7.f90 \
 	function_4p_ql8.f90 function_4p_ql9.f90	generic_function_4p.f90
 
-libgolem95_integrals_four_point_la_FCFLAGS = $(AM_FCFLAGS)
 nodist_pkginclude_HEADERS = function_4p4m.mod function_4p_ql7.mod \
 	generic_function_4p.mod function_4p2m_adj.mod function_4p_ql14.mod \
 	function_4p_ql13.mod function_4p_ql15.mod function_4p_ql10.mod \
@@ -373,11 +356,11 @@ nodist_pkginclude_HEADERS = function_4p4m.mod function_4p_ql7.mod \
 	function_4p_ql12.mod function_4p2m_opp.mod function_4p3m.mod \
 	function_4p1m.mod function_4p_ql16.mod function_4p_ql6.mod
 
-CLEANFILES = *.mod
+CLEANFILES = *.mod 
 all: all-am
 
 .SUFFIXES:
-.SUFFIXES: .f90 .lo .mod .o .obj
+.SUFFIXES: .f90 .lo .o .obj
 $(srcdir)/Makefile.in:  $(srcdir)/Makefile.am $(srcdir)/../../MakefileCommon.am $(srcdir)/Makefile.dep $(am__configure_deps)
 	@for dep in $?; do \
 	  case '$(am__configure_deps)' in \
@@ -423,7 +406,7 @@ clean-noinstLTLIBRARIES:
 	  rm -f $${locs}; \
 	}
 libgolem95_integrals_four_point.la: $(libgolem95_integrals_four_point_la_OBJECTS) $(libgolem95_integrals_four_point_la_DEPENDENCIES) $(EXTRA_libgolem95_integrals_four_point_la_DEPENDENCIES) 
-	$(AM_V_FCLD)$(libgolem95_integrals_four_point_la_LINK)  $(libgolem95_integrals_four_point_la_OBJECTS) $(libgolem95_integrals_four_point_la_LIBADD) $(LIBS)
+	$(AM_V_FCLD)$(FCLINK)  $(libgolem95_integrals_four_point_la_OBJECTS) $(libgolem95_integrals_four_point_la_LIBADD) $(LIBS)
 
 mostlyclean-compile:
 	-rm -f *.$(OBJEXT)
@@ -439,60 +422,6 @@ distclean-compile:
 
 .f90.lo:
 	$(AM_V_FC)$(LTFCCOMPILE) -c -o $@ $(FCFLAGS_f90) $<
-
-libgolem95_integrals_four_point_la-function_4p1m.lo: function_4p1m.f90
-	$(AM_V_FC)$(LIBTOOL) $(AM_V_lt) --tag=FC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(FC) $(libgolem95_integrals_four_point_la_FCFLAGS) $(FCFLAGS) -c -o libgolem95_integrals_four_point_la-function_4p1m.lo $(FCFLAGS_f90) `test -f 'function_4p1m.f90' || echo '$(srcdir)/'`function_4p1m.f90
-
-libgolem95_integrals_four_point_la-function_4p2m_3mi_onshell.lo: function_4p2m_3mi_onshell.f90
-	$(AM_V_FC)$(LIBTOOL) $(AM_V_lt) --tag=FC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(FC) $(libgolem95_integrals_four_point_la_FCFLAGS) $(FCFLAGS) -c -o libgolem95_integrals_four_point_la-function_4p2m_3mi_onshell.lo $(FCFLAGS_f90) `test -f 'function_4p2m_3mi_onshell.f90' || echo '$(srcdir)/'`function_4p2m_3mi_onshell.f90
-
-libgolem95_integrals_four_point_la-function_4p2m_adj.lo: function_4p2m_adj.f90
-	$(AM_V_FC)$(LIBTOOL) $(AM_V_lt) --tag=FC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(FC) $(libgolem95_integrals_four_point_la_FCFLAGS) $(FCFLAGS) -c -o libgolem95_integrals_four_point_la-function_4p2m_adj.lo $(FCFLAGS_f90) `test -f 'function_4p2m_adj.f90' || echo '$(srcdir)/'`function_4p2m_adj.f90
-
-libgolem95_integrals_four_point_la-function_4p2m_opp.lo: function_4p2m_opp.f90
-	$(AM_V_FC)$(LIBTOOL) $(AM_V_lt) --tag=FC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(FC) $(libgolem95_integrals_four_point_la_FCFLAGS) $(FCFLAGS) -c -o libgolem95_integrals_four_point_la-function_4p2m_opp.lo $(FCFLAGS_f90) `test -f 'function_4p2m_opp.f90' || echo '$(srcdir)/'`function_4p2m_opp.f90
-
-libgolem95_integrals_four_point_la-function_4p3m.lo: function_4p3m.f90
-	$(AM_V_FC)$(LIBTOOL) $(AM_V_lt) --tag=FC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(FC) $(libgolem95_integrals_four_point_la_FCFLAGS) $(FCFLAGS) -c -o libgolem95_integrals_four_point_la-function_4p3m.lo $(FCFLAGS_f90) `test -f 'function_4p3m.f90' || echo '$(srcdir)/'`function_4p3m.f90
-
-libgolem95_integrals_four_point_la-function_4p4m.lo: function_4p4m.f90
-	$(AM_V_FC)$(LIBTOOL) $(AM_V_lt) --tag=FC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(FC) $(libgolem95_integrals_four_point_la_FCFLAGS) $(FCFLAGS) -c -o libgolem95_integrals_four_point_la-function_4p4m.lo $(FCFLAGS_f90) `test -f 'function_4p4m.f90' || echo '$(srcdir)/'`function_4p4m.f90
-
-libgolem95_integrals_four_point_la-function_4p_ql10.lo: function_4p_ql10.f90
-	$(AM_V_FC)$(LIBTOOL) $(AM_V_lt) --tag=FC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(FC) $(libgolem95_integrals_four_point_la_FCFLAGS) $(FCFLAGS) -c -o libgolem95_integrals_four_point_la-function_4p_ql10.lo $(FCFLAGS_f90) `test -f 'function_4p_ql10.f90' || echo '$(srcdir)/'`function_4p_ql10.f90
-
-libgolem95_integrals_four_point_la-function_4p_ql11.lo: function_4p_ql11.f90
-	$(AM_V_FC)$(LIBTOOL) $(AM_V_lt) --tag=FC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(FC) $(libgolem95_integrals_four_point_la_FCFLAGS) $(FCFLAGS) -c -o libgolem95_integrals_four_point_la-function_4p_ql11.lo $(FCFLAGS_f90) `test -f 'function_4p_ql11.f90' || echo '$(srcdir)/'`function_4p_ql11.f90
-
-libgolem95_integrals_four_point_la-function_4p_ql12.lo: function_4p_ql12.f90
-	$(AM_V_FC)$(LIBTOOL) $(AM_V_lt) --tag=FC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(FC) $(libgolem95_integrals_four_point_la_FCFLAGS) $(FCFLAGS) -c -o libgolem95_integrals_four_point_la-function_4p_ql12.lo $(FCFLAGS_f90) `test -f 'function_4p_ql12.f90' || echo '$(srcdir)/'`function_4p_ql12.f90
-
-libgolem95_integrals_four_point_la-function_4p_ql13.lo: function_4p_ql13.f90
-	$(AM_V_FC)$(LIBTOOL) $(AM_V_lt) --tag=FC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(FC) $(libgolem95_integrals_four_point_la_FCFLAGS) $(FCFLAGS) -c -o libgolem95_integrals_four_point_la-function_4p_ql13.lo $(FCFLAGS_f90) `test -f 'function_4p_ql13.f90' || echo '$(srcdir)/'`function_4p_ql13.f90
-
-libgolem95_integrals_four_point_la-function_4p_ql14.lo: function_4p_ql14.f90
-	$(AM_V_FC)$(LIBTOOL) $(AM_V_lt) --tag=FC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(FC) $(libgolem95_integrals_four_point_la_FCFLAGS) $(FCFLAGS) -c -o libgolem95_integrals_four_point_la-function_4p_ql14.lo $(FCFLAGS_f90) `test -f 'function_4p_ql14.f90' || echo '$(srcdir)/'`function_4p_ql14.f90
-
-libgolem95_integrals_four_point_la-function_4p_ql15.lo: function_4p_ql15.f90
-	$(AM_V_FC)$(LIBTOOL) $(AM_V_lt) --tag=FC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(FC) $(libgolem95_integrals_four_point_la_FCFLAGS) $(FCFLAGS) -c -o libgolem95_integrals_four_point_la-function_4p_ql15.lo $(FCFLAGS_f90) `test -f 'function_4p_ql15.f90' || echo '$(srcdir)/'`function_4p_ql15.f90
-
-libgolem95_integrals_four_point_la-function_4p_ql16.lo: function_4p_ql16.f90
-	$(AM_V_FC)$(LIBTOOL) $(AM_V_lt) --tag=FC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(FC) $(libgolem95_integrals_four_point_la_FCFLAGS) $(FCFLAGS) -c -o libgolem95_integrals_four_point_la-function_4p_ql16.lo $(FCFLAGS_f90) `test -f 'function_4p_ql16.f90' || echo '$(srcdir)/'`function_4p_ql16.f90
-
-libgolem95_integrals_four_point_la-function_4p_ql6.lo: function_4p_ql6.f90
-	$(AM_V_FC)$(LIBTOOL) $(AM_V_lt) --tag=FC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(FC) $(libgolem95_integrals_four_point_la_FCFLAGS) $(FCFLAGS) -c -o libgolem95_integrals_four_point_la-function_4p_ql6.lo $(FCFLAGS_f90) `test -f 'function_4p_ql6.f90' || echo '$(srcdir)/'`function_4p_ql6.f90
-
-libgolem95_integrals_four_point_la-function_4p_ql7.lo: function_4p_ql7.f90
-	$(AM_V_FC)$(LIBTOOL) $(AM_V_lt) --tag=FC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(FC) $(libgolem95_integrals_four_point_la_FCFLAGS) $(FCFLAGS) -c -o libgolem95_integrals_four_point_la-function_4p_ql7.lo $(FCFLAGS_f90) `test -f 'function_4p_ql7.f90' || echo '$(srcdir)/'`function_4p_ql7.f90
-
-libgolem95_integrals_four_point_la-function_4p_ql8.lo: function_4p_ql8.f90
-	$(AM_V_FC)$(LIBTOOL) $(AM_V_lt) --tag=FC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(FC) $(libgolem95_integrals_four_point_la_FCFLAGS) $(FCFLAGS) -c -o libgolem95_integrals_four_point_la-function_4p_ql8.lo $(FCFLAGS_f90) `test -f 'function_4p_ql8.f90' || echo '$(srcdir)/'`function_4p_ql8.f90
-
-libgolem95_integrals_four_point_la-function_4p_ql9.lo: function_4p_ql9.f90
-	$(AM_V_FC)$(LIBTOOL) $(AM_V_lt) --tag=FC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(FC) $(libgolem95_integrals_four_point_la_FCFLAGS) $(FCFLAGS) -c -o libgolem95_integrals_four_point_la-function_4p_ql9.lo $(FCFLAGS_f90) `test -f 'function_4p_ql9.f90' || echo '$(srcdir)/'`function_4p_ql9.f90
-
-libgolem95_integrals_four_point_la-generic_function_4p.lo: generic_function_4p.f90
-	$(AM_V_FC)$(LIBTOOL) $(AM_V_lt) --tag=FC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(FC) $(libgolem95_integrals_four_point_la_FCFLAGS) $(FCFLAGS) -c -o libgolem95_integrals_four_point_la-generic_function_4p.lo $(FCFLAGS_f90) `test -f 'generic_function_4p.f90' || echo '$(srcdir)/'`generic_function_4p.f90
 
 mostlyclean-libtool:
 	-rm -f *.lo
@@ -728,47 +657,46 @@ uninstall-am: uninstall-nodist_pkgincludeHEADERS
 	uninstall-nodist_pkgincludeHEADERS
 
 
-%.mod: %.o %.f90
-	@true
-
 # Module dependencies
-function_4p1m.mod: function_4p1m.$(OBJEXT)
-function_4p2m_3mi_onshell.mod: function_4p2m_3mi_onshell.$(OBJEXT)
-function_4p2m_adj.mod: function_4p2m_adj.$(OBJEXT)
-function_4p2m_opp.mod: function_4p2m_opp.$(OBJEXT)
-function_4p3m.mod: function_4p3m.$(OBJEXT)
-function_4p4m.mod: function_4p4m.$(OBJEXT)
-function_4p_ql10.mod: function_4p_ql10.$(OBJEXT)
-function_4p_ql11.mod: function_4p_ql11.$(OBJEXT)
-function_4p_ql12.mod: function_4p_ql12.$(OBJEXT)
-function_4p_ql13.mod: function_4p_ql13.$(OBJEXT)
-function_4p_ql14.mod: function_4p_ql14.$(OBJEXT)
-function_4p_ql15.mod: function_4p_ql15.$(OBJEXT)
-function_4p_ql16.mod: function_4p_ql16.$(OBJEXT)
-function_4p_ql6.mod: function_4p_ql6.$(OBJEXT)
-function_4p_ql7.mod: function_4p_ql7.$(OBJEXT)
-function_4p_ql8.mod: function_4p_ql8.$(OBJEXT)
-function_4p_ql9.mod: function_4p_ql9.$(OBJEXT)
+function_4p1m.mod: function_4p1m.lo
+function_4p2m_3mi_onshell.mod: function_4p2m_3mi_onshell.lo
+function_4p2m_adj.mod: function_4p2m_adj.lo
+function_4p2m_opp.mod: function_4p2m_opp.lo
+function_4p3m.mod: function_4p3m.lo
+function_4p4m.mod: function_4p4m.lo
+function_4p4m.mod: function_4p4m.lo
+function_4p_nonscalar_numerics.lo: function_4p1m.lo \
+	function_4p2m_3mi_onshell.lo function_4p2m_adj.lo \
+	function_4p2m_opp.lo function_4p3m.lo function_4p4m.lo
+function_4p_nonscalar_numerics.mod: function_4p_nonscalar_numerics.lo \
+	function_4p1m.lo function_4p2m_3mi_onshell.lo function_4p2m_adj.lo \
+	function_4p2m_opp.lo function_4p3m.lo function_4p4m.lo
+function_4p_ql10.mod: function_4p_ql10.lo
+function_4p_ql11.mod: function_4p_ql11.lo
+function_4p_ql12.mod: function_4p_ql12.lo
+function_4p_ql13.mod: function_4p_ql13.lo
+function_4p_ql14.mod: function_4p_ql14.lo
+function_4p_ql15.mod: function_4p_ql15.lo
+function_4p_ql16.mod: function_4p_ql16.lo
+function_4p_ql6.mod: function_4p_ql6.lo
+function_4p_ql7.mod: function_4p_ql7.lo
+function_4p_ql8.mod: function_4p_ql8.lo
+function_4p_ql9.mod: function_4p_ql9.lo
+
 generic_function_4p.lo: function_4p1m.lo function_4p2m_3mi_onshell.lo \
 	function_4p2m_adj.lo function_4p2m_opp.lo function_4p3m.lo \
-	function_4p4m.lo function_4p_ql10.lo function_4p_ql11.lo \
-	function_4p_ql12.lo function_4p_ql13.lo function_4p_ql14.lo \
-	function_4p_ql15.lo function_4p_ql16.lo function_4p_ql6.lo \
-	function_4p_ql7.lo function_4p_ql8.lo function_4p_ql9.lo
-generic_function_4p.$(OBJEXT): function_4p1m.$(OBJEXT) function_4p2m_3mi_onshell.$(OBJEXT) \
-	function_4p2m_adj.$(OBJEXT) function_4p2m_opp.$(OBJEXT) function_4p3m.$(OBJEXT) \
-	function_4p4m.$(OBJEXT) function_4p_ql10.$(OBJEXT) function_4p_ql11.$(OBJEXT) \
-	function_4p_ql12.$(OBJEXT) function_4p_ql13.$(OBJEXT) function_4p_ql14.$(OBJEXT) \
-	function_4p_ql15.$(OBJEXT) function_4p_ql16.$(OBJEXT) function_4p_ql6.$(OBJEXT) \
-	function_4p_ql7.$(OBJEXT) function_4p_ql8.$(OBJEXT) function_4p_ql9.$(OBJEXT)
-generic_function_4p.mod: generic_function_4p.$(OBJEXT) function_4p1m.$(OBJEXT) \
-	function_4p2m_3mi_onshell.$(OBJEXT) function_4p2m_adj.$(OBJEXT) function_4p2m_opp.$(OBJEXT) \
-	function_4p3m.$(OBJEXT) function_4p4m.$(OBJEXT) function_4p_ql10.$(OBJEXT) function_4p_ql11.$(OBJEXT) \
-	function_4p_ql12.$(OBJEXT) function_4p_ql13.$(OBJEXT) function_4p_ql14.$(OBJEXT) \
-	function_4p_ql15.$(OBJEXT) function_4p_ql16.$(OBJEXT) function_4p_ql6.$(OBJEXT) \
-	function_4p_ql7.$(OBJEXT) function_4p_ql8.$(OBJEXT) function_4p_ql9.$(OBJEXT)
-.mod.o:
-	@true
+	function_4p4m.lo  \
+	function_4p_ql10.lo function_4p_ql11.lo function_4p_ql12.lo \
+	function_4p_ql13.lo function_4p_ql14.lo function_4p_ql15.lo \
+	function_4p_ql16.lo function_4p_ql6.lo function_4p_ql7.lo \
+	function_4p_ql8.lo function_4p_ql9.lo
+generic_function_4p.mod: generic_function_4p.lo function_4p1m.lo \
+	function_4p2m_3mi_onshell.lo function_4p2m_adj.lo function_4p2m_opp.lo \
+	function_4p3m.lo function_4p4m.lo \
+	function_4p_ql10.lo function_4p_ql11.lo function_4p_ql12.lo \
+	function_4p_ql13.lo function_4p_ql14.lo function_4p_ql15.lo \
+	function_4p_ql16.lo function_4p_ql6.lo function_4p_ql7.lo \
+	function_4p_ql8.lo function_4p_ql9.lo
 
 # Tell versions [3.59,3.63) of GNU make to not export all variables.
 # Otherwise a system limit (for SysV at least) may be exceeded.

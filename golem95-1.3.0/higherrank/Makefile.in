@@ -345,7 +345,7 @@ CLEANFILES = *.mod
 all: all-am
 
 .SUFFIXES:
-.SUFFIXES: .f90 .lo .mod .o .obj
+.SUFFIXES: .f90 .lo .o .obj
 $(srcdir)/Makefile.in:  $(srcdir)/Makefile.am $(srcdir)/../MakefileCommon.am $(srcdir)/Makefile.dep $(am__configure_deps)
 	@for dep in $?; do \
 	  case '$(am__configure_deps)' in \
@@ -640,20 +640,11 @@ uninstall-am: uninstall-nodist_pkgincludeHEADERS
 	uninstall-nodist_pkgincludeHEADERS
 
 
-%.mod: %.o %.f90
-	@true
-
-%.mod: %.o %.f90
-	@true
-
 # Module dependencies
 form_factor_higher_ranks.lo: generic_function_np.lo
-form_factor_higher_ranks.$(OBJEXT): generic_function_np.$(OBJEXT)
-form_factor_higher_ranks.mod: form_factor_higher_ranks.$(OBJEXT) \
-	generic_function_np.$(OBJEXT)
-generic_function_np.mod: generic_function_np.$(OBJEXT)
-.mod.o:
-	@true
+form_factor_higher_ranks.mod: form_factor_higher_ranks.lo \
+	generic_function_np.lo
+generic_function_np.mod: generic_function_np.lo
 
 # Tell versions [3.59,3.63) of GNU make to not export all variables.
 # Otherwise a system limit (for SysV at least) may be exceeded.

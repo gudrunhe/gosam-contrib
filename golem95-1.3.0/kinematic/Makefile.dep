@@ -1,7 +1,4 @@
 # Module dependencies
-inverse_matrice.mod: inverse_matrice.$(OBJEXT)
+inverse_matrice.mod: inverse_matrice.lo
 matrice_s.lo: inverse_matrice.lo
-matrice_s.$(OBJEXT): inverse_matrice.$(OBJEXT)
-matrice_s.mod: matrice_s.$(OBJEXT) inverse_matrice.$(OBJEXT)
-.mod.o:
-	@true
+matrice_s.mod: matrice_s.lo inverse_matrice.lo

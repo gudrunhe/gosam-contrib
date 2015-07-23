@@ -71,19 +71,13 @@ CONFIG_CLEAN_FILES =
 CONFIG_CLEAN_VPATH_FILES =
 LTLIBRARIES = $(noinst_LTLIBRARIES)
 libgolem95_kinematics_la_LIBADD =
-am_libgolem95_kinematics_la_OBJECTS =  \
-	libgolem95_kinematics_la-inverse_matrice.lo \
-	libgolem95_kinematics_la-matrice_s.lo
+am_libgolem95_kinematics_la_OBJECTS = inverse_matrice.lo matrice_s.lo
 libgolem95_kinematics_la_OBJECTS =  \
 	$(am_libgolem95_kinematics_la_OBJECTS)
 AM_V_lt = $(am__v_lt_@AM_V@)
 am__v_lt_ = $(am__v_lt_@AM_DEFAULT_V@)
 am__v_lt_0 = --silent
 am__v_lt_1 = 
-libgolem95_kinematics_la_LINK = $(LIBTOOL) $(AM_V_lt) --tag=FC \
-	$(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=link $(FCLD) \
-	$(libgolem95_kinematics_la_FCFLAGS) $(FCFLAGS) $(AM_LDFLAGS) \
-	$(LDFLAGS) -o $@
 AM_V_P = $(am__v_P_@AM_V@)
 am__v_P_ = $(am__v_P_@AM_DEFAULT_V@)
 am__v_P_0 = false
@@ -335,16 +329,15 @@ top_build_prefix = @top_build_prefix@
 top_builddir = @top_builddir@
 top_srcdir = @top_srcdir@
 noinst_LTLIBRARIES = libgolem95_kinematics.la
-AM_FCFLAGS = -I$(top_builddir)/avh_olo-2.2.1 -I$(builddir)/../module \
-	-I$(builddir)/../../avh_olo-2.2.1
+AM_FCFLAGS = -I$(top_builddir)/avh_olo-3.6 -I$(builddir)/../module \
+	-I$(builddir)/../../avh_olo-3.6
 libgolem95_kinematics_la_SOURCES = inverse_matrice.f90 matrice_s.f90
-libgolem95_kinematics_la_FCFLAGS = $(AM_FCFLAGS)
 nodist_pkginclude_HEADERS = matrice_s.mod inverse_matrice.mod
 CLEANFILES = *.mod
 all: all-am
 
 .SUFFIXES:
-.SUFFIXES: .f90 .lo .mod .o .obj
+.SUFFIXES: .f90 .lo .o .obj
 $(srcdir)/Makefile.in:  $(srcdir)/Makefile.am $(srcdir)/../MakefileCommon.am $(srcdir)/Makefile.dep $(am__configure_deps)
 	@for dep in $?; do \
 	  case '$(am__configure_deps)' in \
@@ -388,7 +381,7 @@ clean-noinstLTLIBRARIES:
 	  rm -f $${locs}; \
 	}
 libgolem95_kinematics.la: $(libgolem95_kinematics_la_OBJECTS) $(libgolem95_kinematics_la_DEPENDENCIES) $(EXTRA_libgolem95_kinematics_la_DEPENDENCIES) 
-	$(AM_V_FCLD)$(libgolem95_kinematics_la_LINK)  $(libgolem95_kinematics_la_OBJECTS) $(libgolem95_kinematics_la_LIBADD) $(LIBS)
+	$(AM_V_FCLD)$(FCLINK)  $(libgolem95_kinematics_la_OBJECTS) $(libgolem95_kinematics_la_LIBADD) $(LIBS)
 
 mostlyclean-compile:
 	-rm -f *.$(OBJEXT)
@@ -404,12 +397,6 @@ distclean-compile:
 
 .f90.lo:
 	$(AM_V_FC)$(LTFCCOMPILE) -c -o $@ $(FCFLAGS_f90) $<
-
-libgolem95_kinematics_la-inverse_matrice.lo: inverse_matrice.f90
-	$(AM_V_FC)$(LIBTOOL) $(AM_V_lt) --tag=FC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(FC) $(libgolem95_kinematics_la_FCFLAGS) $(FCFLAGS) -c -o libgolem95_kinematics_la-inverse_matrice.lo $(FCFLAGS_f90) `test -f 'inverse_matrice.f90' || echo '$(srcdir)/'`inverse_matrice.f90
-
-libgolem95_kinematics_la-matrice_s.lo: matrice_s.f90
-	$(AM_V_FC)$(LIBTOOL) $(AM_V_lt) --tag=FC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(FC) $(libgolem95_kinematics_la_FCFLAGS) $(FCFLAGS) -c -o libgolem95_kinematics_la-matrice_s.lo $(FCFLAGS_f90) `test -f 'matrice_s.f90' || echo '$(srcdir)/'`matrice_s.f90
 
 mostlyclean-libtool:
 	-rm -f *.lo
@@ -645,16 +632,10 @@ uninstall-am: uninstall-nodist_pkgincludeHEADERS
 	uninstall-nodist_pkgincludeHEADERS
 
 
-%.mod: %.o %.f90
-	@true
-
 # Module dependencies
-inverse_matrice.mod: inverse_matrice.$(OBJEXT)
+inverse_matrice.mod: inverse_matrice.lo
 matrice_s.lo: inverse_matrice.lo
-matrice_s.$(OBJEXT): inverse_matrice.$(OBJEXT)
-matrice_s.mod: matrice_s.$(OBJEXT) inverse_matrice.$(OBJEXT)
-.mod.o:
-	@true
+matrice_s.mod: matrice_s.lo inverse_matrice.lo
 
 # Tell versions [3.59,3.63) of GNU make to not export all variables.
 # Otherwise a system limit (for SysV at least) may be exceeded.

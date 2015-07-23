@@ -71,30 +71,17 @@ CONFIG_CLEAN_FILES =
 CONFIG_CLEAN_VPATH_FILES =
 LTLIBRARIES = $(noinst_LTLIBRARIES)
 libgolem95_integrals_three_point_la_LIBADD =
-am_libgolem95_integrals_three_point_la_OBJECTS =  \
-	libgolem95_integrals_three_point_la-mod_gn.lo \
-	libgolem95_integrals_three_point_la-mod_h0.lo \
-	libgolem95_integrals_three_point_la-mod_he.lo \
-	libgolem95_integrals_three_point_la-mod_hf.lo \
-	libgolem95_integrals_three_point_la-function_3p0m_1mi.lo \
-	libgolem95_integrals_three_point_la-function_3p1m_1mi.lo \
-	libgolem95_integrals_three_point_la-function_3p1m_2mi.lo \
-	libgolem95_integrals_three_point_la-function_3p1m.lo \
-	libgolem95_integrals_three_point_la-function_3p2m_1mi.lo \
-	libgolem95_integrals_three_point_la-function_3p2m.lo \
-	libgolem95_integrals_three_point_la-function_3p3m.lo \
-	libgolem95_integrals_three_point_la-function_3p_finite.lo \
-	libgolem95_integrals_three_point_la-generic_function_3p.lo
+am_libgolem95_integrals_three_point_la_OBJECTS = mod_gn.lo mod_h0.lo \
+	mod_he.lo mod_hf.lo function_3p0m_1mi.lo function_3p1m_1mi.lo \
+	function_3p1m_2mi.lo function_3p1m.lo function_3p2m_1mi.lo \
+	function_3p2m.lo function_3p3m.lo function_3p_finite.lo \
+	generic_function_3p.lo
 libgolem95_integrals_three_point_la_OBJECTS =  \
 	$(am_libgolem95_integrals_three_point_la_OBJECTS)
 AM_V_lt = $(am__v_lt_@AM_V@)
 am__v_lt_ = $(am__v_lt_@AM_DEFAULT_V@)
 am__v_lt_0 = --silent
 am__v_lt_1 = 
-libgolem95_integrals_three_point_la_LINK = $(LIBTOOL) $(AM_V_lt) \
-	--tag=FC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=link \
-	$(FCLD) $(libgolem95_integrals_three_point_la_FCFLAGS) \
-	$(FCFLAGS) $(AM_LDFLAGS) $(LDFLAGS) -o $@
 AM_V_P = $(am__v_P_@AM_V@)
 am__v_P_ = $(am__v_P_@AM_DEFAULT_V@)
 am__v_P_0 = false
@@ -346,18 +333,16 @@ top_build_prefix = @top_build_prefix@
 top_builddir = @top_builddir@
 top_srcdir = @top_srcdir@
 noinst_LTLIBRARIES = libgolem95_integrals_three_point.la
-AM_FCFLAGS = -I$(top_builddir)/avh_olo-2.2.1 \
-	-I$(builddir)/../../module -I$(builddir)/../../kinematic \
-	-I$(builddir)/../../numerical -I$(builddir)/../one_point \
-	-I$(builddir)/../two_point
+AM_FCFLAGS = -I$(top_builddir)/avh_olo-3.6 -I$(builddir)/../../module \
+	-I$(builddir)/../../kinematic -I$(builddir)/../../numerical \
+	-I$(builddir)/../one_point -I$(builddir)/../two_point
 libgolem95_integrals_three_point_la_SOURCES = \
 	mod_gn.f90 mod_h0.f90 mod_he.f90 mod_hf.f90 \
 	function_3p0m_1mi.f90 function_3p1m_1mi.f90 function_3p1m_2mi.f90 \
 	function_3p1m.f90 function_3p2m_1mi.f90 function_3p2m.f90 \
 	function_3p3m.f90 function_3p_finite.f90 \
-	generic_function_3p.f90
+	generic_function_3p.f90 
 
-libgolem95_integrals_three_point_la_FCFLAGS = $(AM_FCFLAGS)
 nodist_pkginclude_HEADERS = function_3p3m.mod generic_function_3p.mod \
 	function_3p1m_2mi.mod func_h0.mod func_he.mod \
 	function_3p2m_1mi.mod func_hf.mod function_3p_finite.mod \
@@ -368,7 +353,7 @@ CLEANFILES = *.mod
 all: all-am
 
 .SUFFIXES:
-.SUFFIXES: .f90 .lo .mod .o .obj
+.SUFFIXES: .f90 .lo .o .obj
 $(srcdir)/Makefile.in:  $(srcdir)/Makefile.am $(srcdir)/../../MakefileCommon.am $(srcdir)/Makefile.dep $(am__configure_deps)
 	@for dep in $?; do \
 	  case '$(am__configure_deps)' in \
@@ -412,7 +397,7 @@ clean-noinstLTLIBRARIES:
 	  rm -f $${locs}; \
 	}
 libgolem95_integrals_three_point.la: $(libgolem95_integrals_three_point_la_OBJECTS) $(libgolem95_integrals_three_point_la_DEPENDENCIES) $(EXTRA_libgolem95_integrals_three_point_la_DEPENDENCIES) 
-	$(AM_V_FCLD)$(libgolem95_integrals_three_point_la_LINK)  $(libgolem95_integrals_three_point_la_OBJECTS) $(libgolem95_integrals_three_point_la_LIBADD) $(LIBS)
+	$(AM_V_FCLD)$(FCLINK)  $(libgolem95_integrals_three_point_la_OBJECTS) $(libgolem95_integrals_three_point_la_LIBADD) $(LIBS)
 
 mostlyclean-compile:
 	-rm -f *.$(OBJEXT)
@@ -428,45 +413,6 @@ distclean-compile:
 
 .f90.lo:
 	$(AM_V_FC)$(LTFCCOMPILE) -c -o $@ $(FCFLAGS_f90) $<
-
-libgolem95_integrals_three_point_la-mod_gn.lo: mod_gn.f90
-	$(AM_V_FC)$(LIBTOOL) $(AM_V_lt) --tag=FC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(FC) $(libgolem95_integrals_three_point_la_FCFLAGS) $(FCFLAGS) -c -o libgolem95_integrals_three_point_la-mod_gn.lo $(FCFLAGS_f90) `test -f 'mod_gn.f90' || echo '$(srcdir)/'`mod_gn.f90
-
-libgolem95_integrals_three_point_la-mod_h0.lo: mod_h0.f90
-	$(AM_V_FC)$(LIBTOOL) $(AM_V_lt) --tag=FC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(FC) $(libgolem95_integrals_three_point_la_FCFLAGS) $(FCFLAGS) -c -o libgolem95_integrals_three_point_la-mod_h0.lo $(FCFLAGS_f90) `test -f 'mod_h0.f90' || echo '$(srcdir)/'`mod_h0.f90
-
-libgolem95_integrals_three_point_la-mod_he.lo: mod_he.f90
-	$(AM_V_FC)$(LIBTOOL) $(AM_V_lt) --tag=FC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(FC) $(libgolem95_integrals_three_point_la_FCFLAGS) $(FCFLAGS) -c -o libgolem95_integrals_three_point_la-mod_he.lo $(FCFLAGS_f90) `test -f 'mod_he.f90' || echo '$(srcdir)/'`mod_he.f90
-
-libgolem95_integrals_three_point_la-mod_hf.lo: mod_hf.f90
-	$(AM_V_FC)$(LIBTOOL) $(AM_V_lt) --tag=FC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(FC) $(libgolem95_integrals_three_point_la_FCFLAGS) $(FCFLAGS) -c -o libgolem95_integrals_three_point_la-mod_hf.lo $(FCFLAGS_f90) `test -f 'mod_hf.f90' || echo '$(srcdir)/'`mod_hf.f90
-
-libgolem95_integrals_three_point_la-function_3p0m_1mi.lo: function_3p0m_1mi.f90
-	$(AM_V_FC)$(LIBTOOL) $(AM_V_lt) --tag=FC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(FC) $(libgolem95_integrals_three_point_la_FCFLAGS) $(FCFLAGS) -c -o libgolem95_integrals_three_point_la-function_3p0m_1mi.lo $(FCFLAGS_f90) `test -f 'function_3p0m_1mi.f90' || echo '$(srcdir)/'`function_3p0m_1mi.f90
-
-libgolem95_integrals_three_point_la-function_3p1m_1mi.lo: function_3p1m_1mi.f90
-	$(AM_V_FC)$(LIBTOOL) $(AM_V_lt) --tag=FC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(FC) $(libgolem95_integrals_three_point_la_FCFLAGS) $(FCFLAGS) -c -o libgolem95_integrals_three_point_la-function_3p1m_1mi.lo $(FCFLAGS_f90) `test -f 'function_3p1m_1mi.f90' || echo '$(srcdir)/'`function_3p1m_1mi.f90
-
-libgolem95_integrals_three_point_la-function_3p1m_2mi.lo: function_3p1m_2mi.f90
-	$(AM_V_FC)$(LIBTOOL) $(AM_V_lt) --tag=FC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(FC) $(libgolem95_integrals_three_point_la_FCFLAGS) $(FCFLAGS) -c -o libgolem95_integrals_three_point_la-function_3p1m_2mi.lo $(FCFLAGS_f90) `test -f 'function_3p1m_2mi.f90' || echo '$(srcdir)/'`function_3p1m_2mi.f90
-
-libgolem95_integrals_three_point_la-function_3p1m.lo: function_3p1m.f90
-	$(AM_V_FC)$(LIBTOOL) $(AM_V_lt) --tag=FC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(FC) $(libgolem95_integrals_three_point_la_FCFLAGS) $(FCFLAGS) -c -o libgolem95_integrals_three_point_la-function_3p1m.lo $(FCFLAGS_f90) `test -f 'function_3p1m.f90' || echo '$(srcdir)/'`function_3p1m.f90
-
-libgolem95_integrals_three_point_la-function_3p2m_1mi.lo: function_3p2m_1mi.f90
-	$(AM_V_FC)$(LIBTOOL) $(AM_V_lt) --tag=FC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(FC) $(libgolem95_integrals_three_point_la_FCFLAGS) $(FCFLAGS) -c -o libgolem95_integrals_three_point_la-function_3p2m_1mi.lo $(FCFLAGS_f90) `test -f 'function_3p2m_1mi.f90' || echo '$(srcdir)/'`function_3p2m_1mi.f90
-
-libgolem95_integrals_three_point_la-function_3p2m.lo: function_3p2m.f90
-	$(AM_V_FC)$(LIBTOOL) $(AM_V_lt) --tag=FC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(FC) $(libgolem95_integrals_three_point_la_FCFLAGS) $(FCFLAGS) -c -o libgolem95_integrals_three_point_la-function_3p2m.lo $(FCFLAGS_f90) `test -f 'function_3p2m.f90' || echo '$(srcdir)/'`function_3p2m.f90
-
-libgolem95_integrals_three_point_la-function_3p3m.lo: function_3p3m.f90
-	$(AM_V_FC)$(LIBTOOL) $(AM_V_lt) --tag=FC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(FC) $(libgolem95_integrals_three_point_la_FCFLAGS) $(FCFLAGS) -c -o libgolem95_integrals_three_point_la-function_3p3m.lo $(FCFLAGS_f90) `test -f 'function_3p3m.f90' || echo '$(srcdir)/'`function_3p3m.f90
-
-libgolem95_integrals_three_point_la-function_3p_finite.lo: function_3p_finite.f90
-	$(AM_V_FC)$(LIBTOOL) $(AM_V_lt) --tag=FC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(FC) $(libgolem95_integrals_three_point_la_FCFLAGS) $(FCFLAGS) -c -o libgolem95_integrals_three_point_la-function_3p_finite.lo $(FCFLAGS_f90) `test -f 'function_3p_finite.f90' || echo '$(srcdir)/'`function_3p_finite.f90
-
-libgolem95_integrals_three_point_la-generic_function_3p.lo: generic_function_3p.f90
-	$(AM_V_FC)$(LIBTOOL) $(AM_V_lt) --tag=FC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(FC) $(libgolem95_integrals_three_point_la_FCFLAGS) $(FCFLAGS) -c -o libgolem95_integrals_three_point_la-generic_function_3p.lo $(FCFLAGS_f90) `test -f 'generic_function_3p.f90' || echo '$(srcdir)/'`generic_function_3p.f90
 
 mostlyclean-libtool:
 	-rm -f *.lo
@@ -702,52 +648,35 @@ uninstall-am: uninstall-nodist_pkgincludeHEADERS
 	uninstall-nodist_pkgincludeHEADERS
 
 
-%.mod: %.o %.f90
-	@true
-
 # Module dependencies
-function_3p0m_1mi.mod: function_3p0m_1mi.$(OBJEXT)
+function_3p0m_1mi.mod: function_3p0m_1mi.lo
 function_3p1m.lo: mod_h0.lo
-function_3p1m.$(OBJEXT): mod_h0.$(OBJEXT)
-function_3p1m.mod: function_3p1m.$(OBJEXT) mod_h0.$(OBJEXT)
+function_3p1m.mod: function_3p1m.lo mod_h0.lo
 function_3p1m_1mi.lo: mod_he.lo
-function_3p1m_1mi.$(OBJEXT): mod_he.$(OBJEXT)
-function_3p1m_1mi.mod: function_3p1m_1mi.$(OBJEXT) mod_he.$(OBJEXT)
+function_3p1m_1mi.mod: function_3p1m_1mi.lo mod_he.lo
 function_3p1m_2mi.lo: mod_gn.lo
-function_3p1m_2mi.$(OBJEXT): mod_gn.$(OBJEXT)
-function_3p1m_2mi.mod: function_3p1m_2mi.$(OBJEXT) mod_gn.$(OBJEXT)
+function_3p1m_2mi.mod: function_3p1m_2mi.lo mod_gn.lo
 function_3p2m.lo: mod_h0.lo mod_he.lo mod_hf.lo
-function_3p2m.$(OBJEXT): mod_h0.$(OBJEXT) mod_he.$(OBJEXT) mod_hf.$(OBJEXT)
-function_3p2m.mod: function_3p2m.$(OBJEXT) mod_h0.$(OBJEXT) mod_he.$(OBJEXT) mod_hf.$(OBJEXT)
+function_3p2m.mod: function_3p2m.lo mod_h0.lo mod_he.lo mod_hf.lo
 function_3p2m_1mi.lo: mod_he.lo mod_hf.lo
-function_3p2m_1mi.$(OBJEXT): mod_he.$(OBJEXT) mod_hf.$(OBJEXT)
-function_3p2m_1mi.mod: function_3p2m_1mi.$(OBJEXT) mod_he.$(OBJEXT) mod_hf.$(OBJEXT)
-function_3p3m.mod: function_3p3m.$(OBJEXT)
-function_3p_finite.mod: function_3p_finite.$(OBJEXT)
+function_3p2m_1mi.mod: function_3p2m_1mi.lo mod_he.lo mod_hf.lo
+function_3p3m.mod: function_3p3m.lo
+function_3p_finite.mod: function_3p_finite.lo
 generic_function_3p.lo: function_3p0m_1mi.lo function_3p1m.lo \
 	function_3p1m_1mi.lo function_3p1m_2mi.lo function_3p2m.lo \
 	function_3p2m_1mi.lo function_3p3m.lo function_3p_finite.lo
-generic_function_3p.$(OBJEXT): function_3p0m_1mi.$(OBJEXT) function_3p1m.$(OBJEXT) \
-	function_3p1m_1mi.$(OBJEXT) function_3p1m_2mi.$(OBJEXT) function_3p2m.$(OBJEXT) \
-	function_3p2m_1mi.$(OBJEXT) function_3p3m.$(OBJEXT) function_3p_finite.$(OBJEXT)
-generic_function_3p.mod: generic_function_3p.$(OBJEXT) function_3p0m_1mi.$(OBJEXT) \
-	function_3p1m.$(OBJEXT) function_3p1m_1mi.$(OBJEXT) function_3p1m_2mi.$(OBJEXT) \
-	function_3p2m.$(OBJEXT) function_3p2m_1mi.$(OBJEXT) function_3p3m.$(OBJEXT) \
-	function_3p_finite.$(OBJEXT)
-func_gn.mod: mod_gn.$(OBJEXT)
-func_h0.mod: mod_h0.$(OBJEXT)
-func_he.mod: mod_he.$(OBJEXT)
-func_hf.mod: mod_hf.$(OBJEXT)
-func_hf.mod: mod_hf.$(OBJEXT)
-	@true
-func_gn.mod: mod_gn.$(OBJEXT)
-	@true
-func_h0.mod: mod_h0.$(OBJEXT)
-	@true
-func_he.mod: mod_he.$(OBJEXT)
-	@true
-.mod.o:
-	@true
+generic_function_3p.mod: generic_function_3p.lo function_3p0m_1mi.lo \
+	function_3p1m.lo function_3p1m_1mi.lo function_3p1m_2mi.lo \
+	function_3p2m.lo function_3p2m_1mi.lo function_3p3m.lo \
+	function_3p_finite.lo
+func_gn.mod: mod_gn.lo
+func_h0.mod: mod_h0.lo
+func_he.mod: mod_he.lo
+func_hf.mod: mod_hf.lo
+func_gn.mod: mod_gn.lo
+func_hf.mod: mod_hf.lo
+func_h0.mod: mod_h0.lo
+func_he.mod: mod_he.lo
 
 # Tell versions [3.59,3.63) of GNU make to not export all variables.
 # Otherwise a system limit (for SysV at least) may be exceeded.

@@ -76,15 +76,9 @@ libgolem95_interface_la_LIBADD =
 am__libgolem95_interface_la_SOURCES_DIST = tool_lt_to_golem.f90 \
 	tensor_integrals.f90 gb0.f90 gc0.f90 gd0.f90 ge0.f90 gf0.f90 \
 	ga0.f90 tens_rec.f90 tens_comb.f90
-@COMPILE_TENSREC_TRUE@am__objects_1 =  \
-@COMPILE_TENSREC_TRUE@	libgolem95_interface_la-tens_rec.lo \
-@COMPILE_TENSREC_TRUE@	libgolem95_interface_la-tens_comb.lo
-am_libgolem95_interface_la_OBJECTS =  \
-	libgolem95_interface_la-tool_lt_to_golem.lo \
-	libgolem95_interface_la-tensor_integrals.lo \
-	libgolem95_interface_la-gb0.lo libgolem95_interface_la-gc0.lo \
-	libgolem95_interface_la-gd0.lo libgolem95_interface_la-ge0.lo \
-	libgolem95_interface_la-gf0.lo libgolem95_interface_la-ga0.lo \
+@COMPILE_TENSREC_TRUE@am__objects_1 = tens_rec.lo tens_comb.lo
+am_libgolem95_interface_la_OBJECTS = tool_lt_to_golem.lo \
+	tensor_integrals.lo gb0.lo gc0.lo gd0.lo ge0.lo gf0.lo ga0.lo \
 	$(am__objects_1)
 libgolem95_interface_la_OBJECTS =  \
 	$(am_libgolem95_interface_la_OBJECTS)
@@ -92,10 +86,6 @@ AM_V_lt = $(am__v_lt_@AM_V@)
 am__v_lt_ = $(am__v_lt_@AM_DEFAULT_V@)
 am__v_lt_0 = --silent
 am__v_lt_1 = 
-libgolem95_interface_la_LINK = $(LIBTOOL) $(AM_V_lt) --tag=FC \
-	$(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=link $(FCLD) \
-	$(libgolem95_interface_la_FCFLAGS) $(FCFLAGS) $(AM_LDFLAGS) \
-	$(LDFLAGS) -o $@
 AM_V_P = $(am__v_P_@AM_V@)
 am__v_P_ = $(am__v_P_@AM_DEFAULT_V@)
 am__v_P_0 = false
@@ -347,7 +337,7 @@ top_build_prefix = @top_build_prefix@
 top_builddir = @top_builddir@
 top_srcdir = @top_srcdir@
 noinst_LTLIBRARIES = libgolem95_interface.la
-AM_FCFLAGS = -I$(top_builddir)/avh_olo-2.2.1 -I$(builddir)/../module \
+AM_FCFLAGS = -I$(top_builddir)/avh_olo-3.6 -I$(builddir)/../module \
 	-I$(builddir)/../kinematic -I$(builddir)/../form_factor \
 	-I$(builddir)/../integrals/one_point \
 	-I$(builddir)/../integrals/two_point \
@@ -357,14 +347,13 @@ AM_FCFLAGS = -I$(top_builddir)/avh_olo-2.2.1 -I$(builddir)/../module \
 libgolem95_interface_la_SOURCES = tool_lt_to_golem.f90 \
 	tensor_integrals.f90 gb0.f90 gc0.f90 gd0.f90 ge0.f90 gf0.f90 \
 	ga0.f90 $(am__append_1)
-libgolem95_interface_la_FCFLAGS = $(AM_FCFLAGS)
 nodist_pkginclude_HEADERS = tool_lt_to_golem.mod tensor_integrals.mod \
 	$(am__append_2)
 CLEANFILES = *.mod
 all: all-am
 
 .SUFFIXES:
-.SUFFIXES: .f90 .lo .mod .o .obj
+.SUFFIXES: .f90 .lo .o .obj
 $(srcdir)/Makefile.in:  $(srcdir)/Makefile.am $(srcdir)/../MakefileCommon.am $(srcdir)/Makefile.dep $(am__configure_deps)
 	@for dep in $?; do \
 	  case '$(am__configure_deps)' in \
@@ -408,7 +397,7 @@ clean-noinstLTLIBRARIES:
 	  rm -f $${locs}; \
 	}
 libgolem95_interface.la: $(libgolem95_interface_la_OBJECTS) $(libgolem95_interface_la_DEPENDENCIES) $(EXTRA_libgolem95_interface_la_DEPENDENCIES) 
-	$(AM_V_FCLD)$(libgolem95_interface_la_LINK)  $(libgolem95_interface_la_OBJECTS) $(libgolem95_interface_la_LIBADD) $(LIBS)
+	$(AM_V_FCLD)$(FCLINK)  $(libgolem95_interface_la_OBJECTS) $(libgolem95_interface_la_LIBADD) $(LIBS)
 
 mostlyclean-compile:
 	-rm -f *.$(OBJEXT)
@@ -424,36 +413,6 @@ distclean-compile:
 
 .f90.lo:
 	$(AM_V_FC)$(LTFCCOMPILE) -c -o $@ $(FCFLAGS_f90) $<
-
-libgolem95_interface_la-tool_lt_to_golem.lo: tool_lt_to_golem.f90
-	$(AM_V_FC)$(LIBTOOL) $(AM_V_lt) --tag=FC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(FC) $(libgolem95_interface_la_FCFLAGS) $(FCFLAGS) -c -o libgolem95_interface_la-tool_lt_to_golem.lo $(FCFLAGS_f90) `test -f 'tool_lt_to_golem.f90' || echo '$(srcdir)/'`tool_lt_to_golem.f90
-
-libgolem95_interface_la-tensor_integrals.lo: tensor_integrals.f90
-	$(AM_V_FC)$(LIBTOOL) $(AM_V_lt) --tag=FC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(FC) $(libgolem95_interface_la_FCFLAGS) $(FCFLAGS) -c -o libgolem95_interface_la-tensor_integrals.lo $(FCFLAGS_f90) `test -f 'tensor_integrals.f90' || echo '$(srcdir)/'`tensor_integrals.f90
-
-libgolem95_interface_la-gb0.lo: gb0.f90
-	$(AM_V_FC)$(LIBTOOL) $(AM_V_lt) --tag=FC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(FC) $(libgolem95_interface_la_FCFLAGS) $(FCFLAGS) -c -o libgolem95_interface_la-gb0.lo $(FCFLAGS_f90) `test -f 'gb0.f90' || echo '$(srcdir)/'`gb0.f90
-
-libgolem95_interface_la-gc0.lo: gc0.f90
-	$(AM_V_FC)$(LIBTOOL) $(AM_V_lt) --tag=FC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(FC) $(libgolem95_interface_la_FCFLAGS) $(FCFLAGS) -c -o libgolem95_interface_la-gc0.lo $(FCFLAGS_f90) `test -f 'gc0.f90' || echo '$(srcdir)/'`gc0.f90
-
-libgolem95_interface_la-gd0.lo: gd0.f90
-	$(AM_V_FC)$(LIBTOOL) $(AM_V_lt) --tag=FC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(FC) $(libgolem95_interface_la_FCFLAGS) $(FCFLAGS) -c -o libgolem95_interface_la-gd0.lo $(FCFLAGS_f90) `test -f 'gd0.f90' || echo '$(srcdir)/'`gd0.f90
-
-libgolem95_interface_la-ge0.lo: ge0.f90
-	$(AM_V_FC)$(LIBTOOL) $(AM_V_lt) --tag=FC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(FC) $(libgolem95_interface_la_FCFLAGS) $(FCFLAGS) -c -o libgolem95_interface_la-ge0.lo $(FCFLAGS_f90) `test -f 'ge0.f90' || echo '$(srcdir)/'`ge0.f90
-
-libgolem95_interface_la-gf0.lo: gf0.f90
-	$(AM_V_FC)$(LIBTOOL) $(AM_V_lt) --tag=FC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(FC) $(libgolem95_interface_la_FCFLAGS) $(FCFLAGS) -c -o libgolem95_interface_la-gf0.lo $(FCFLAGS_f90) `test -f 'gf0.f90' || echo '$(srcdir)/'`gf0.f90
-
-libgolem95_interface_la-ga0.lo: ga0.f90
-	$(AM_V_FC)$(LIBTOOL) $(AM_V_lt) --tag=FC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(FC) $(libgolem95_interface_la_FCFLAGS) $(FCFLAGS) -c -o libgolem95_interface_la-ga0.lo $(FCFLAGS_f90) `test -f 'ga0.f90' || echo '$(srcdir)/'`ga0.f90
-
-libgolem95_interface_la-tens_rec.lo: tens_rec.f90
-	$(AM_V_FC)$(LIBTOOL) $(AM_V_lt) --tag=FC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(FC) $(libgolem95_interface_la_FCFLAGS) $(FCFLAGS) -c -o libgolem95_interface_la-tens_rec.lo $(FCFLAGS_f90) `test -f 'tens_rec.f90' || echo '$(srcdir)/'`tens_rec.f90
-
-libgolem95_interface_la-tens_comb.lo: tens_comb.f90
-	$(AM_V_FC)$(LIBTOOL) $(AM_V_lt) --tag=FC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(FC) $(libgolem95_interface_la_FCFLAGS) $(FCFLAGS) -c -o libgolem95_interface_la-tens_comb.lo $(FCFLAGS_f90) `test -f 'tens_comb.f90' || echo '$(srcdir)/'`tens_comb.f90
 
 mostlyclean-libtool:
 	-rm -f *.lo
@@ -689,30 +648,18 @@ uninstall-am: uninstall-nodist_pkgincludeHEADERS
 	uninstall-nodist_pkgincludeHEADERS
 
 
-%.mod: %.o %.f90
-	@true
-
 # Module dependencies
 ga0.lo: tool_lt_to_golem.lo
-ga0.$(OBJEXT): tool_lt_to_golem.$(OBJEXT)
 gb0.lo: tool_lt_to_golem.lo
-gb0.$(OBJEXT): tool_lt_to_golem.$(OBJEXT)
 gc0.lo: tool_lt_to_golem.lo
-gc0.$(OBJEXT): tool_lt_to_golem.$(OBJEXT)
 gd0.lo: tool_lt_to_golem.lo
-gd0.$(OBJEXT): tool_lt_to_golem.$(OBJEXT)
 ge0.lo: tool_lt_to_golem.lo
-ge0.$(OBJEXT): tool_lt_to_golem.$(OBJEXT)
 gf0.lo: tool_lt_to_golem.lo
-gf0.$(OBJEXT): tool_lt_to_golem.$(OBJEXT)
 tens_comb.lo: tens_rec.lo
-tens_comb.$(OBJEXT): tens_rec.$(OBJEXT)
-tens_comb.mod: tens_comb.$(OBJEXT) tens_rec.$(OBJEXT)
-tens_rec.mod: tens_rec.$(OBJEXT)
-tensor_integrals.mod: tensor_integrals.$(OBJEXT)
-tool_lt_to_golem.mod: tool_lt_to_golem.$(OBJEXT)
-.mod.o:
-	@true
+tens_comb.mod: tens_comb.lo tens_rec.lo
+tens_rec.mod: tens_rec.lo
+tensor_integrals.mod: tensor_integrals.lo
+tool_lt_to_golem.mod: tool_lt_to_golem.lo
 
 # Tell versions [3.59,3.63) of GNU make to not export all variables.
 # Otherwise a system limit (for SysV at least) may be exceeded.

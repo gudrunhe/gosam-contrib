@@ -8,7 +8,6 @@ AM_FCFLAGS+=\
 	-I$(builddir)/../../../avh_olo-3.6
 
 libgolem95_integrals_one_point_la_SOURCES= generic_function_1p.f90
-libgolem95_integrals_one_point_la_FCFLAGS= $(AM_FCFLAGS)
 
 nodist_pkginclude_HEADERS= generic_function_1p.mod
 CLEANFILES=*.mod

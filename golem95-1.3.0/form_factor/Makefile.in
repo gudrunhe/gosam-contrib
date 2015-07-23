@@ -71,23 +71,15 @@ CONFIG_CLEAN_FILES =
 CONFIG_CLEAN_VPATH_FILES =
 LTLIBRARIES = $(noinst_LTLIBRARIES)
 libgolem95_formfactor_la_LIBADD =
-am_libgolem95_formfactor_la_OBJECTS =  \
-	libgolem95_formfactor_la-form_factor_1p.lo \
-	libgolem95_formfactor_la-form_factor_2p.lo \
-	libgolem95_formfactor_la-form_factor_3p.lo \
-	libgolem95_formfactor_la-form_factor_4p.lo \
-	libgolem95_formfactor_la-form_factor_5p.lo \
-	libgolem95_formfactor_la-form_factor_6p.lo
+am_libgolem95_formfactor_la_OBJECTS = form_factor_1p.lo \
+	form_factor_2p.lo form_factor_3p.lo form_factor_4p.lo \
+	form_factor_5p.lo form_factor_6p.lo
 libgolem95_formfactor_la_OBJECTS =  \
 	$(am_libgolem95_formfactor_la_OBJECTS)
 AM_V_lt = $(am__v_lt_@AM_V@)
 am__v_lt_ = $(am__v_lt_@AM_DEFAULT_V@)
 am__v_lt_0 = --silent
 am__v_lt_1 = 
-libgolem95_formfactor_la_LINK = $(LIBTOOL) $(AM_V_lt) --tag=FC \
-	$(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=link $(FCLD) \
-	$(libgolem95_formfactor_la_FCFLAGS) $(FCFLAGS) $(AM_LDFLAGS) \
-	$(LDFLAGS) -o $@
 AM_V_P = $(am__v_P_@AM_V@)
 am__v_P_ = $(am__v_P_@AM_DEFAULT_V@)
 am__v_P_0 = false
@@ -351,7 +343,6 @@ libgolem95_formfactor_la_SOURCES = form_factor_1p.f90 form_factor_2p.f90 \
 	form_factor_3p.f90 form_factor_4p.f90 form_factor_5p.f90 \
 	form_factor_6p.f90
 
-libgolem95_formfactor_la_FCFLAGS = $(AM_FCFLAGS)
 nodist_pkginclude_HEADERS = form_factor_5p.mod form_factor_6p.mod form_factor_4p.mod \
 	form_factor_3p.mod form_factor_2p.mod form_factor_1p.mod
 
@@ -359,7 +350,7 @@ CLEANFILES = *.mod
 all: all-am
 
 .SUFFIXES:
-.SUFFIXES: .f90 .lo .mod .o .obj
+.SUFFIXES: .f90 .lo .o .obj
 $(srcdir)/Makefile.in:  $(srcdir)/Makefile.am $(srcdir)/../MakefileCommon.am $(srcdir)/Makefile.dep $(am__configure_deps)
 	@for dep in $?; do \
 	  case '$(am__configure_deps)' in \
@@ -403,7 +394,7 @@ clean-noinstLTLIBRARIES:
 	  rm -f $${locs}; \
 	}
 libgolem95_formfactor.la: $(libgolem95_formfactor_la_OBJECTS) $(libgolem95_formfactor_la_DEPENDENCIES) $(EXTRA_libgolem95_formfactor_la_DEPENDENCIES) 
-	$(AM_V_FCLD)$(libgolem95_formfactor_la_LINK)  $(libgolem95_formfactor_la_OBJECTS) $(libgolem95_formfactor_la_LIBADD) $(LIBS)
+	$(AM_V_FCLD)$(FCLINK)  $(libgolem95_formfactor_la_OBJECTS) $(libgolem95_formfactor_la_LIBADD) $(LIBS)
 
 mostlyclean-compile:
 	-rm -f *.$(OBJEXT)
@@ -419,24 +410,6 @@ distclean-compile:
 
 .f90.lo:
 	$(AM_V_FC)$(LTFCCOMPILE) -c -o $@ $(FCFLAGS_f90) $<
-
-libgolem95_formfactor_la-form_factor_1p.lo: form_factor_1p.f90
-	$(AM_V_FC)$(LIBTOOL) $(AM_V_lt) --tag=FC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(FC) $(libgolem95_formfactor_la_FCFLAGS) $(FCFLAGS) -c -o libgolem95_formfactor_la-form_factor_1p.lo $(FCFLAGS_f90) `test -f 'form_factor_1p.f90' || echo '$(srcdir)/'`form_factor_1p.f90
-
-libgolem95_formfactor_la-form_factor_2p.lo: form_factor_2p.f90
-	$(AM_V_FC)$(LIBTOOL) $(AM_V_lt) --tag=FC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(FC) $(libgolem95_formfactor_la_FCFLAGS) $(FCFLAGS) -c -o libgolem95_formfactor_la-form_factor_2p.lo $(FCFLAGS_f90) `test -f 'form_factor_2p.f90' || echo '$(srcdir)/'`form_factor_2p.f90
-
-libgolem95_formfactor_la-form_factor_3p.lo: form_factor_3p.f90
-	$(AM_V_FC)$(LIBTOOL) $(AM_V_lt) --tag=FC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(FC) $(libgolem95_formfactor_la_FCFLAGS) $(FCFLAGS) -c -o libgolem95_formfactor_la-form_factor_3p.lo $(FCFLAGS_f90) `test -f 'form_factor_3p.f90' || echo '$(srcdir)/'`form_factor_3p.f90
-
-libgolem95_formfactor_la-form_factor_4p.lo: form_factor_4p.f90
-	$(AM_V_FC)$(LIBTOOL) $(AM_V_lt) --tag=FC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(FC) $(libgolem95_formfactor_la_FCFLAGS) $(FCFLAGS) -c -o libgolem95_formfactor_la-form_factor_4p.lo $(FCFLAGS_f90) `test -f 'form_factor_4p.f90' || echo '$(srcdir)/'`form_factor_4p.f90
-
-libgolem95_formfactor_la-form_factor_5p.lo: form_factor_5p.f90
-	$(AM_V_FC)$(LIBTOOL) $(AM_V_lt) --tag=FC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(FC) $(libgolem95_formfactor_la_FCFLAGS) $(FCFLAGS) -c -o libgolem95_formfactor_la-form_factor_5p.lo $(FCFLAGS_f90) `test -f 'form_factor_5p.f90' || echo '$(srcdir)/'`form_factor_5p.f90
-
-libgolem95_formfactor_la-form_factor_6p.lo: form_factor_6p.f90
-	$(AM_V_FC)$(LIBTOOL) $(AM_V_lt) --tag=FC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(FC) $(libgolem95_formfactor_la_FCFLAGS) $(FCFLAGS) -c -o libgolem95_formfactor_la-form_factor_6p.lo $(FCFLAGS_f90) `test -f 'form_factor_6p.f90' || echo '$(srcdir)/'`form_factor_6p.f90
 
 mostlyclean-libtool:
 	-rm -f *.lo
@@ -672,20 +645,14 @@ uninstall-am: uninstall-nodist_pkgincludeHEADERS
 	uninstall-nodist_pkgincludeHEADERS
 
 
-%.mod: %.o %.f90
-	@true
-
 # Module dependencies
-form_factor_1p.mod: form_factor_1p.$(OBJEXT)
-form_factor_2p.mod: form_factor_2p.$(OBJEXT)
-form_factor_3p.mod: form_factor_3p.$(OBJEXT)
-form_factor_4p.mod: form_factor_4p.$(OBJEXT)
-form_factor_5p.mod: form_factor_5p.$(OBJEXT)
+form_factor_1p.mod: form_factor_1p.lo
+form_factor_2p.mod: form_factor_2p.lo
+form_factor_3p.mod: form_factor_3p.lo
+form_factor_4p.mod: form_factor_4p.lo
+form_factor_5p.mod: form_factor_5p.lo
 form_factor_6p.lo: form_factor_5p.lo
-form_factor_6p.$(OBJEXT): form_factor_5p.$(OBJEXT)
-form_factor_6p.mod: form_factor_6p.$(OBJEXT) form_factor_5p.$(OBJEXT)
-.mod.o:
-	@true
+form_factor_6p.mod: form_factor_6p.lo form_factor_5p.lo
 
 # Tell versions [3.59,3.63) of GNU make to not export all variables.
 # Otherwise a system limit (for SysV at least) may be exceeded.

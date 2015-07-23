@@ -71,19 +71,13 @@ CONFIG_CLEAN_FILES =
 CONFIG_CLEAN_VPATH_FILES =
 LTLIBRARIES = $(noinst_LTLIBRARIES)
 libgolem95_numerical_la_LIBADD =
-am_libgolem95_numerical_la_OBJECTS =  \
-	libgolem95_numerical_la-mod_adapt_gauss.lo \
-	libgolem95_numerical_la-mod_numeric.lo
+am_libgolem95_numerical_la_OBJECTS = mod_adapt_gauss.lo mod_numeric.lo
 libgolem95_numerical_la_OBJECTS =  \
 	$(am_libgolem95_numerical_la_OBJECTS)
 AM_V_lt = $(am__v_lt_@AM_V@)
 am__v_lt_ = $(am__v_lt_@AM_DEFAULT_V@)
 am__v_lt_0 = --silent
 am__v_lt_1 = 
-libgolem95_numerical_la_LINK = $(LIBTOOL) $(AM_V_lt) --tag=FC \
-	$(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=link $(FCLD) \
-	$(libgolem95_numerical_la_FCFLAGS) $(FCFLAGS) $(AM_LDFLAGS) \
-	$(LDFLAGS) -o $@
 AM_V_P = $(am__v_P_@AM_V@)
 am__v_P_ = $(am__v_P_@AM_DEFAULT_V@)
 am__v_P_0 = false
@@ -338,7 +332,6 @@ noinst_LTLIBRARIES = libgolem95_numerical.la
 AM_FCFLAGS = -I$(top_builddir)/avh_olo-3.6 -I$(builddir)/../module \
 	-I$(builddir)/../../avh_olo-3.6
 libgolem95_numerical_la_SOURCES = mod_adapt_gauss.f90 mod_numeric.f90
-libgolem95_numerical_la_FCFLAGS = $(AM_FCFLAGS)
 nodist_pkginclude_HEADERS = adapt_gauss.mod numerical_evaluation.mod
 CLEANFILES = *.mod
 all: all-am
@@ -388,7 +381,7 @@ clean-noinstLTLIBRARIES:
 	  rm -f $${locs}; \
 	}
 libgolem95_numerical.la: $(libgolem95_numerical_la_OBJECTS) $(libgolem95_numerical_la_DEPENDENCIES) $(EXTRA_libgolem95_numerical_la_DEPENDENCIES) 
-	$(AM_V_FCLD)$(libgolem95_numerical_la_LINK)  $(libgolem95_numerical_la_OBJECTS) $(libgolem95_numerical_la_LIBADD) $(LIBS)
+	$(AM_V_FCLD)$(FCLINK)  $(libgolem95_numerical_la_OBJECTS) $(libgolem95_numerical_la_LIBADD) $(LIBS)
 
 mostlyclean-compile:
 	-rm -f *.$(OBJEXT)
@@ -404,12 +397,6 @@ distclean-compile:
 
 .f90.lo:
 	$(AM_V_FC)$(LTFCCOMPILE) -c -o $@ $(FCFLAGS_f90) $<
-
-libgolem95_numerical_la-mod_adapt_gauss.lo: mod_adapt_gauss.f90
-	$(AM_V_FC)$(LIBTOOL) $(AM_V_lt) --tag=FC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(FC) $(libgolem95_numerical_la_FCFLAGS) $(FCFLAGS) -c -o libgolem95_numerical_la-mod_adapt_gauss.lo $(FCFLAGS_f90) `test -f 'mod_adapt_gauss.f90' || echo '$(srcdir)/'`mod_adapt_gauss.f90
-
-libgolem95_numerical_la-mod_numeric.lo: mod_numeric.f90
-	$(AM_V_FC)$(LIBTOOL) $(AM_V_lt) --tag=FC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(FC) $(libgolem95_numerical_la_FCFLAGS) $(FCFLAGS) -c -o libgolem95_numerical_la-mod_numeric.lo $(FCFLAGS_f90) `test -f 'mod_numeric.f90' || echo '$(srcdir)/'`mod_numeric.f90
 
 mostlyclean-libtool:
 	-rm -f *.lo
@@ -645,18 +632,11 @@ uninstall-am: uninstall-nodist_pkgincludeHEADERS
 	uninstall-nodist_pkgincludeHEADERS
 
 
-%.mod: %.o %.f90
-	@true
-
 # Module dependencies
-adapt_gauss.mod: mod_adapt_gauss.$(OBJEXT)
+adapt_gauss.mod numerical_evaluation.mod: mod_adapt_gauss.lo
 mod_numeric.lo: mod_adapt_gauss.lo
-mod_numeric.$(OBJEXT): mod_adapt_gauss.$(OBJEXT)
-numerical_evaluation.mod: mod_numeric.$(OBJEXT) mod_adapt_gauss.$(OBJEXT)
-adapt_gauss.mod: mod_adapt_gauss.$(OBJEXT)
-	@true
-numerical_evaluation.mod: mod_adapt_gauss.$(OBJEXT)
-	@true
+numerical_evaluation.mod: mod_numeric.lo
+adapt_gauss.mod: mod_adapt_gauss.lo
 
 # Tell versions [3.59,3.63) of GNU make to not export all variables.
 # Otherwise a system limit (for SysV at least) may be exceeded.
