@@ -1,7 +1,6 @@
       double complex function qlI4(p1,p2,p3,p4,s12,s23,
      . m1,m2,m3,m4,mu2,ep)
       implicit none
-      include 'ff.h'
       double precision p1,p2,p3,p4,s12,s23,m1,m2,m3,m4,mu2,newmu2
       integer ep,j
 C     pi=p(i)^2, i=1,2,3,4 are momentum squared of the external lines

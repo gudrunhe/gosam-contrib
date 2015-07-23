@@ -109,7 +109,7 @@ C----deal with s .ne. (m2-m4)^2
 
  20   continue
       do iep=-2,0
-      Ires(iep)=Ires(iep)*dcmplx(fac)
+      Ires(iep)=Ires(iep)*fac
       enddo
       return
       end

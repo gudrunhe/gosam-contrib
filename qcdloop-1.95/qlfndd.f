@@ -19,10 +19,10 @@ C----  %%CITATION = NUPHA,B734,62;%%
       xm1=x-cone
       if (abs(x) .lt. 10d0) then
         if (qlzero(abs(x-cone))) then
-	  qlfndd=czip
-	else
+          qlfndd=czip
+        else
           qlfndd=(cone-dcmplx(x**(n+1)))*(cln(xm1,iep)-cln(x,iep))
-	endif
+        endif
         do j=0,n
           qlfndd=qlfndd-dcmplx(x**(n-j))/dfloat(j+1)
         enddo

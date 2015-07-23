@@ -57,17 +57,3 @@ c                  [     2           2          2                  ]
       end
 
 
-      double precision function integrand1(ga)
-      implicit none
-      double precision ga,omga,p2sq,p3sq,p4sq,msq,musq
-      double precision m4sqbar,si,tabar
-      common/trans1/m4sqbar,si,tabar,p2sq,p3sq,p4sq,musq
-      omga=1d0-ga
-      msq=m4sqbar+p4sq
-      integrand1=
-     .  (-(p2sq+tabar)/(omga*tabar-ga*p2sq)
-     .  +(m4sqbar-si)/(ga*si+omga*m4sqbar))
-     .  *log(1d0-ga*p3sq/msq)
-      return
-      end
-

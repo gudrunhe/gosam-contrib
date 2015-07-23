@@ -2,7 +2,7 @@
       implicit none
 
       write(*,*) '===================================================='
-      write(*,*) '  This is QCDLoop - version 1.9                     '
+      write(*,*) '  This is QCDLoop - version 1.95                    '
       write(*,*) '  Authors: Keith Ellis and Giulia Zanderighi        ' 
       write(*,*) '  (ellis@fnal.gov, g.zanderighi1@physics.ox.ac.uk)  '
       write(*,*) '  For details see FERMILAB-PUB-07-633-T,OUTP-07/16P '

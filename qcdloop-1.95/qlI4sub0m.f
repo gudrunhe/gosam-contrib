@@ -22,7 +22,7 @@ C Calculates the general box with qlzero masses
      .      2,3,4,1,6,7,8,5,10,9,11,13,12,
      .      1,2,3,4,5,6,7,8,9,10,11,12,13/
       data jsort/4,1,2,3/
-      save swap
+      save swap,jsort
 
       call qlxpicheck(xpi)
 

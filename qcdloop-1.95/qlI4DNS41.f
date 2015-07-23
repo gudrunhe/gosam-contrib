@@ -58,8 +58,8 @@ C-----z(2) comes with - i*ep*d
       iep=-dfloat(2*j-3)*iep
       Ival0=Ival0+dfloat(2*j-3)*(
      . -0.5d0*wlog(j)**2+wlog(j)*lnsum
-     . -qlLi2omprod(k(3,4),k(1,3),z(j),iep)
-     . -qlLi2omprod(k(2,4),k(1,2),z(j),iep))
+     . -qlLi2omprod(dble(k(3,4)),dble(k(1,3)),z(j),iep)
+     . -qlLi2omprod(dble(k(2,4)),dble(k(1,2)),z(j),iep))
 
       
       enddo

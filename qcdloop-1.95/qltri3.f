@@ -19,10 +19,10 @@
       Ival(-2)=czip
       if (abs(r) .lt. 1d-6) then
       Ival(-1)=dcmplx((1d0-r/2d0)/m2sqb)
-      Ival(0)=(wlogm-dcmplx((msq+p2sq)/p2sq*wlog2))
+      Ival(0)=wlogm-dcmplx((msq+p2sq)/p2sq*wlog2)
       Ival(0)=Ival(0)-chalf*r*((msq**2-2d0*p2sq*msq-p2sq**2)*wlog2
      .+p2sq*(dcmplx(msq+p2sq)+p2sq*wlogm))/p2sq**2
-      Ival(0)=Ival(0)/cmplx(m2sqb)
+      Ival(0)=Ival(0)/dcmplx(m2sqb)
       else
       fac=dcmplx(1d0/(p2sq-p3sq))
       Ival(-1)=fac*(wlog3-wlog2)

@@ -421,7 +421,7 @@ AC_CONFIG_FILES([\
         Makefile \
         ff-2.0/Makefile \
         ff-2.0/ffinit.f \
-        qcdloop-1.9/Makefile \
+        qcdloop-1.95/Makefile \
         avh_olo-3.6/Makefile \
         avh_olo-3.6/avh_olo_xkind.f90 \
         golem95-1.3.0/Makefile \

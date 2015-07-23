@@ -35,17 +35,17 @@
       rat=dcmplx(xx1/(4d0*xm*xmp))
 
       if (qlzero(dble(rat))) then
-	   cx(2) = -2d0*im*sqrt(rat)+2d0*rat
-	   cx(1) = cone-cx(2)
-	   cx(3) = ctwo-cx(2) 
+           cx(2) = -2d0*im*sqrt(rat)+2d0*rat
+           cx(1) = cone-cx(2)
+           cx(3) = ctwo-cx(2) 
       else
 
            root = sqrt((rat-cone)/rat)
-	   invopr = cone/(cone+root)
+           invopr = cone/(cone+root)
            cx(1) = -invopr**2/rat
            cx(2) = ctwo*invopr
            cx(3) = ctwo*root*invopr
-       endif	
+       endif
        ieps = 1d0
        return
        end

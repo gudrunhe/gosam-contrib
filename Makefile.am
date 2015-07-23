@@ -8,7 +8,7 @@ else
 endif
 
 if COMPILE_QL
-SUBDIRS+= qcdloop-1.9
+SUBDIRS+= qcdloop-1.95
 else
 # nop
 endif

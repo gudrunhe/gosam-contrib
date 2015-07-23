@@ -18,7 +18,7 @@ C     xpi(13) = +xpi(5)-xpi(6)+xpi(7)-xpi(8)+xpi(9)+xpi(10)
       integer ier
   
       If (qlnonzero(xpi(1)) .or. qlnonzero(xpi(3))) then
-      write(6,*) 'Error in qlI4sub2mo,qlnonzero m1sq or m3sq',xpi(1),xpi(3)
+      write(6,*)'Error in qlI4sub2mo,qlnonzero m1sq/m3sq',xpi(1),xpi(3)
       stop
       endif
 

@@ -117,10 +117,22 @@
 		           set version number 1.9
 	* qlbox15.f:  ---- corrected bug in implementation of limit when either
 	                   p2sq=m2sq or p3sq=m4sq. Formula in paper is correct
+
+2013-02-20  Keith Ellis  <ellis@fnal.gov>
+
+	* qlinit.f:
+		           set version number 1.95
+	* qlI4DNS41.f: ---- removed bug where qlLi2omprod was called with first 
+	                    two arguments double complex instead of double precision.
+	* qlI4sub2mo.f:---- Corrected erroneous overrun beyond line 72 in print statement
+	* qltri3.f:    ---- corrected cmplx --> dcmplx
+	* qlI4.f:      ---- removed superfluous include file ff.h
+	* qlbox10.f:   ---- removed superfluous function integrand1 
+	* qlbox15.f:   ---- removed superfluous dcmplx
+	
 	
 	
 
-	                   
                            
 		
 	

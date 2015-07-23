@@ -51,7 +51,7 @@ PRE_UNINSTALL = :
 POST_UNINSTALL = :
 build_triplet = @build@
 host_triplet = @host@
-@COMPILE_QL_TRUE@am__append_1 = -L$(top_builddir)/qcdloop-1.9 -lqcdloop \
+@COMPILE_QL_TRUE@am__append_1 = -L$(top_builddir)/qcdloop-1.95 -lqcdloop \
 @COMPILE_QL_TRUE@		      -L$(top_builddir)/ff-2.0 -lff
 
 # nop

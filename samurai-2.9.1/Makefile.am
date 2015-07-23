@@ -23,7 +23,7 @@ libsamurai_la_LIBADD=\
    $(LIBLOOPTOOLS)
 
 if COMPILE_QL
-libsamurai_la_LIBADD+=-L$(top_builddir)/qcdloop-1.9 -lqcdloop \
+libsamurai_la_LIBADD+=-L$(top_builddir)/qcdloop-1.95 -lqcdloop \
 		      -L$(top_builddir)/ff-2.0 -lff
 else
 # nop
