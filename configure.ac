@@ -1,4 +1,4 @@
-AC_INIT([GoSam Convenience Package],[1.0],[gosam@hepforge.org],[gosam-contrib],[http://projects.hepforge.org/golem/gosam-contrib/])
+AC_INIT([GoSam Convenience Package],[2.0],[gosam@hepforge.org],[gosam-contrib],[http://projects.hepforge.org/golem/gosam-contrib/])
 AC_PREREQ(2.65)
 
 AC_CONFIG_HEADERS([config.h ninja-1.0.0/ninja/ninja_config.h])
@@ -8,7 +8,7 @@ AC_CONFIG_AUX_DIR([config.aux])
 dnl -----------------------------------------------
 dnl Package name and version number (user defined)
 dnl -----------------------------------------------
-VERSION=1.0
+VERSION=2.0
 PACKAGE=gosam-contrib
 
 
