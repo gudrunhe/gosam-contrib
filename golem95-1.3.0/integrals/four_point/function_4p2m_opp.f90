@@ -31,6 +31,7 @@
 !  * sortie_erreur (src/module/sortie_erreur.f90)
 !  * generic_function_3p (src/integrals/three_point/generic_function_3p.f90)
 !  * translate (src/module/translate.f90)
+!  * matrice_s (src/kinematic/matrice_s.f90)
 !
 !*****
 module function_4p2m_opp
@@ -45,6 +46,7 @@ module function_4p2m_opp
   use sortie_erreur
   use generic_function_3p
   use translate
+  use matrice_s, only: find_plus_grand
   implicit none
   !
   private 
@@ -164,7 +166,7 @@ module function_4p2m_opp
       ! on redefinit la matrice S de telle facon a ce que ces elements
       ! soient entre -1 et 1
       !
-      plus_grand = maxval(array=abs(s_mat))
+      plus_grand = find_plus_grand(array=abs(s_mat))
       s_mat = s_mat/plus_grand
       !
       b(1) = (s_mat(3,4)-s_mat(2,4))/(s_mat(1,2)*s_mat(3,4)-s_mat(1,3)*s_mat(2,4))

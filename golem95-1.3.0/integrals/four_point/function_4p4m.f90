@@ -31,6 +31,7 @@
 !  * sortie_erreur (src/module/sortie_erreur.f90)
 !  * generic_function_3p (src/integrals/three_point/generic_function_3p.f90)
 !  * translate (src/module/translate.f90)
+!  * matrice_s (src/kinematic/matrice_s.f90)
 !
 !*****
 module function_4p4m
@@ -45,6 +46,7 @@ module function_4p4m
   use sortie_erreur
   use generic_function_3p
   use translate
+  use matrice_s, only: find_plus_grand
   implicit none
   !
   private 
@@ -149,7 +151,7 @@ module function_4p4m
       s_mat(4,:) = (/s14,s24,s34,0._ki/)
       ! on redefinit la matrice S de telle facon a ce que ses elements
       ! soient entre -1 et 1
-      plus_grand = maxval(array=abs(s_mat))
+      plus_grand = find_plus_grand(array=abs(s_mat))
       s_mat = s_mat/plus_grand
       !
       det_s = (-2._ki*s_mat(2,3)*s_mat(1,3)*s_mat(2,4)*s_mat(1,4)+s_mat(1,2&

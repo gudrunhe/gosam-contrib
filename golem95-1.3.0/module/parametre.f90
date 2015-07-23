@@ -124,6 +124,8 @@ module parametre
   ! added to include LT option Jan2011
   logical, save :: withlt = .false.  
 
+  integer :: computation_variant = 0  ! can be set to 1 or 2 for different "plus_grand" choosing (e.g. for precision test)
+
  interface assignment(=)
     module procedure assign_rat_or_tot_string
  end interface
@@ -268,6 +270,7 @@ module parametre
       write(unit,*) 'not_enough_accuracy_par : ',not_enough_accuracy_par
       write(unit,*) 'mu2_scale_par : ',mu2_scale_par
       write(unit,*) 'olo : ',olo
+      write(unit,*) 'computation_variant : ',computation_variant
       !
     end subroutine print_parameter
     !

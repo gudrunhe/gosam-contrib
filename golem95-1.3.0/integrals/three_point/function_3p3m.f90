@@ -36,6 +36,7 @@
 !  * generic_function_2p (src/integrals/two_point/generic_function_2p.f90)
 !  * multiply_div (src/module/multiply_div.f90)
 !  * s_matrix_type (src/module/s_matrix_type.f90)
+!  * matrice_s (src/kinematic/matrice_s.f90)
 !
 !*****
 module function_3p3m
@@ -51,7 +52,7 @@ module function_3p3m
   use generic_function_2p
   use multiply_div
   use s_matrix_type
-  use matrice_s, only : prepare_s_matrix_local
+  use matrice_s, only : prepare_s_matrix_local, find_plus_grand
   implicit none
   !
   private
@@ -162,7 +163,7 @@ module function_3p3m
       !
       if (rat_or_tot_par%tot_selected) then
         !
-        plus_grand = maxval(array=abs(s_mat_loc))
+        plus_grand = find_plus_grand(array=abs(s_mat_loc))
         !
       else !if (rat_or_tot_par%rat_selected) then
         !

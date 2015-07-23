@@ -35,6 +35,7 @@
 !         only : coupure_3p2m_1mi,rat_or_tot_par,tolerance,alpha_par,beta_par,lambda_par,mu2_scale_par
 !  * array (src/module/array.f90) only : packb
 !  * numerical_evaluation (src/numerical/mod_numeric.f90) only : generic_eval_numer
+!  * matrice_s (src/kinematics/matrice_s.f90)
 !
 !*****
 module function_3p2m_1mi
@@ -49,6 +50,7 @@ module function_3p2m_1mi
   use parametre, only : coupure_3p2m_1mi,rat_or_tot_par,tolerance,alpha_par,beta_par,lambda_par,mu2_scale_par
   use array, only : packb
   use numerical_evaluation, only : generic_eval_numer
+  use matrice_s, only: find_plus_grand
   implicit none
   !
   private
@@ -138,7 +140,7 @@ module function_3p2m_1mi
       !
       if (rat_or_tot_par%tot_selected) then
         !
-        plus_grand = max(abs(s13),abs(s23),abs(m3_sq))
+        plus_grand = find_plus_grand((/ abs(s13),abs(s23),abs(m3_sq)/))
         !
       else !if (rat_or_tot_par%rat_selected) then
         !
@@ -243,8 +245,8 @@ module function_3p2m_1mi
       !
       if (rat_or_tot_par%tot_selected) then
          !
-         plus_grand = max ( maxval ( abs( real( (/ s13, s23, m3_sq /), ki ) ) ), &
-              &              maxval ( abs( aimag( (/ s13, s23, m3_sq /) ) ) ) )
+         plus_grand = find_plus_grand(abs( (/ real( (/ s13, s23, m3_sq /), ki ) , &
+              &                              aimag( (/ s13, s23, m3_sq /) ) /))) 
          !
       else !if (rat_or_tot_par%rat_selected) then
         !

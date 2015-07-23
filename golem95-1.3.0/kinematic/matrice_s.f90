@@ -115,6 +115,13 @@ module matrice_s
      !
   end interface
   !
+
+  interface find_plus_grand
+          module procedure find_plus_grand_d2, find_plus_grand_d1
+  end interface
+
+  public :: find_plus_grand
+  !
   contains
     !
     !****f* src/kinematic/matrice_s/initgolem95
@@ -623,7 +630,7 @@ module matrice_s
       real(ki) :: plus_grand
       integer, dimension(6) :: pinch
       !
-      plus_grand = maxval(array=abs(s_mat_r))
+      plus_grand = find_plus_grand(array=abs(s_mat_r))
       b_ref = packb(set_ref)
       allocate(temp_mat_r(dim_s,dim_s),temp1_mat_r(dim_s,dim_s),stat=err)
       !
@@ -702,7 +709,7 @@ module matrice_s
       real(ki) :: plus_grand
       integer, dimension(6) :: pinch
       !
-      plus_grand = maxval(array=abs(s_mat_c))
+      plus_grand = find_plus_grand(array=abs(s_mat_c))
       b_ref = packb(set_ref)
       allocate(temp_mat_c(dim_s,dim_s),temp1_mat_c(dim_s,dim_s), stat=err)
       !
@@ -1369,4 +1376,143 @@ module matrice_s
         call catch_exception(0)
       end if
     end subroutine check_pin
+    !
+    !****f* src/kinematic/matrice_s/find_second_max
+    ! NAME
+    !
+    !  function find_second_max
+    !
+    ! USAGE
+    !
+    !  second_max = find_second_max(array)
+    !
+    ! DESCRIPTION
+    !
+    !   returns the maximum element in array which is smaller than maximum
+    !   entry*0.9, otherwise max*0.9
+    !
+    ! INPUTS
+    !
+    !   an array (two-dimensional)
+    !
+    ! SIDE EFFECTS
+    !
+    ! RETURN VALUE
+    !
+    !  returns the second maximum in array
+    !
+    ! EXAMPLE
+    !
+    !
+    !
+    !*****
+    !
+    pure function find_second_max_d2(array) result(second_max)
+      real(ki), intent(in) :: array(:,:)
+      integer :: i, j
+      real(ki) :: first_max
+      real(ki) :: second_max
+      logical :: second_max_unset
+
+      first_max= maxval(array=array)
+
+      second_max_unset=.true.
+      second_max=first_max*0.9
+      do i=lbound(array,dim=1),ubound(array,dim=1)
+        do j=lbound(array,dim=2),ubound(array,dim=2)
+              if (array(i,j).lt.first_max*0.9_ki .and. &
+                 & (array(i,j).gt.second_max .or. second_max_unset )) then
+                      second_max=array(i,j)
+                      second_max_unset=.false.
+              end if
+        end do
+      end do
+
+    end function
+    pure function find_second_max_d1(array) result(second_max)
+      real(ki), intent(in) :: array(:)
+      integer :: i, j
+      real(ki) :: first_max
+      real(ki) :: second_max
+      logical :: second_max_unset
+
+      first_max= maxval(array=array)
+
+      second_max_unset=.true.
+      second_max=first_max*0.9_ki
+      do i=lbound(array,dim=1),ubound(array,dim=1)
+              if (array(i).lt.first_max*0.9_ki .and. &
+                 & (array(i).gt.second_max .or. second_max_unset )) then
+                      second_max=array(i)
+                      second_max_unset=.false.
+              end if
+      end do
+
+    end function
+
+    !
+    !****f* src/kinematic/matrice_s/find_plus_grand
+    ! NAME
+    !
+    !  function find_plus_grand
+    !
+    ! USAGE
+    !
+    !  plus_grand = find_plus_grand(abs(array))
+    !
+    ! DESCRIPTION
+    !
+    !   finds the "plus_grand", which is used to normalize matrices.
+    !   Depending on the computation_variant variable, this is either the
+    !   maximum entry of array, the next-to-maximum entry or one.
+    !
+    ! INPUTS
+    !
+    !   an array (one or two-dimensional)
+    !
+    ! SIDE EFFECTS
+    !
+    ! RETURN VALUE
+    !
+    !  returns the "plus_grand"
+    !
+    ! EXAMPLE
+    !
+    !
+    !
+    !*****
+    !
+    function find_plus_grand_d2(array) result(plus_grand)
+      real(ki), intent(in) :: array(:,:)
+      real(ki) :: plus_grand
+
+      if (computation_variant.eq.0) then
+        plus_grand=maxval(array=array)
+      else if (computation_variant.eq.1) then
+        plus_grand=find_second_max_d2(array=array)
+      else if (computation_variant.eq.2) then
+        plus_grand=1.0_ki
+      end if
+      if (plus_grand .eq. 0._ki) then
+        plus_grand=1.0_ki
+      end if
+    end function
+
+    function find_plus_grand_d1(array) result(plus_grand)
+      real(ki), intent(in) :: array(:)
+      real(ki) :: plus_grand
+
+      if (computation_variant.eq.0) then
+        plus_grand=maxval(array=array)
+      else if (computation_variant.eq.1) then
+        plus_grand=find_second_max_d1(array=array)
+      else if (computation_variant.eq.2) then
+        plus_grand=1.0_ki
+      end if
+      if (plus_grand .eq. 0._ki) then
+        plus_grand=1.0_ki
+      end if
+    end function
+
+
 end module matrice_s
