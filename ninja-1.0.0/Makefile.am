@@ -46,3 +46,6 @@ libninja_la_LIBADD += $(AVHFLAGS) $(QUADRUPLEFLAGS)
 
 ACLOCAL_AMFLAGS = -I m4
 SUBDIRS = ninja
+CLEANFILES=$(nodist_pkginclude_HEADERS)
+
+include Makefile.dep
