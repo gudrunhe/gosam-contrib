@@ -438,13 +438,13 @@ AC_CONFIG_FILES([\
         golem95-1.3.0/numerical/Makefile \
         golem95-1.3.0/kinematic/Makefile \
         golem95-1.3.0/form_factor/Makefile \
-        samurai-2.9.0/Makefile \
-        samurai-2.9.0/mmisavholo.f90 \
-        samurai-2.9.0/mmisqcdloop.f90 \
-        samurai-2.9.0/mmisgolem.f90 \
-        samurai-2.9.0/mmislooptools.f90 \
-        samurai-2.9.0/mmasters.f90 \
-        samurai-2.9.0/precision.f90 \
+        samurai-2.9.1/Makefile \
+        samurai-2.9.1/mmisavholo.f90 \
+        samurai-2.9.1/mmisqcdloop.f90 \
+        samurai-2.9.1/mmisgolem.f90 \
+        samurai-2.9.1/mmislooptools.f90 \
+        samurai-2.9.1/mmasters.f90 \
+        samurai-2.9.1/precision.f90 \
         ninja-1.0.0/Makefile \
         ninja-1.0.0/ninja/Makefile \
 ])
