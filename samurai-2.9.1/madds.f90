@@ -131,7 +131,7 @@ subroutine add2(K11,K12,m,c2,MI2a,MI2b,MI2c,MI2d,MI2e,tot2,tot2r,MI2J111)
 		print *,'error in madds, add2: isca value not allowed'
 	end if
 	if (highrank) then
-		tot2(0) = tot2(0) + c2(13)*(K12**3)*MI2J111(0) + c2(10)*one/12.0_ki* K12 * &
+		tot2(0) = tot2(0) + c2(13)*(K12**3)*MI2J111(-1) + c2(10)*one/12.0_ki* K12 * &
 		& (K11 - two*m0-four*m1)
 		tot2(-1) = tot2(-1) + c2(13)*(K12**3)*MI2J111(-1)
 		tot2(-2) = tot2(-2) + c2(13)*(K12**3)*MI2J111(-2)
