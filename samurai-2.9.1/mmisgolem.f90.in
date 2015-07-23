@@ -366,9 +366,11 @@ module mmisgolem
 @case_with_golem@	m1=m(1)
 @case_with_golem@
 @case_with_golem@		do ep=-2,0
-@case_with_golem@			J001(ep) = gB0i("001",real(K11,ki_gol),&
-@case_with_golem@			& real(m0,ki_gol),real(m1,ki_gol),&
-@case_with_golem@			& real(scale2,ki_gol),ep)
+@case_with_golem@			if(present(J001)) then
+@case_with_golem@				J001(ep) = gB0i("001",real(K11,ki_gol),&
+@case_with_golem@				& real(m0,ki_gol),real(m1,ki_gol),&
+@case_with_golem@				& real(scale2,ki_gol),ep)
+@case_with_golem@			end if
 @case_with_golem@			J111(ep) = gB0i("111",real(K11,ki_gol),&
 @case_with_golem@			& real(m0,ki_gol),real(m1,ki_gol),&
 @case_with_golem@			& real(scale2,ki_gol),ep)
