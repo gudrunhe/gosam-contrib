@@ -370,7 +370,9 @@ subroutine getq2(nleg,irank,cut2,e1,e2,e3,e4,p0,k1,msq,q2,qt)
 	complex(ki), dimension(20) :: x1,x2
 	complex(ki), dimension(20) :: x3,x4
 	integer 		   :: j1,j2,j, ndiff
-	complex(ki) 		   :: A2,B2,D2,Ar,Br,Dr
+	!complex(ki) 		   :: A2,B2,D2,Ar,Br,Dr
+	complex(ki) 		   :: B2,D2,Br,Dr
+	real(ki)		   :: A2,Ar
 	complex(ki)		   :: C2,C2mu,Cr
 	integer 		   :: Fstep, nold
 	logical 		   :: mu2zero,mu2nonzero,samplex3,samplex4
@@ -383,7 +385,7 @@ subroutine getq2(nleg,irank,cut2,e1,e2,e3,e4,p0,k1,msq,q2,qt)
 	K1SQ    = sdot(k1,k1)
 	MP12(2) = sdot(e1,e2)
 	! Selecting mu2 dynamically
-	mu2g(2) = max(abs(msq(j1)),abs(msq(j2)),K1SQ)
+	mu2g(2) = max(abs(msq(j1)),abs(msq(j2)),abs(K1SQ))
 	if (abs(mu2g(2)) .lt. 1.0e-10_ki) mu2g(2)=one
 	! Defining some boolians to increase readibility:
 		mu2zero    = .false.
@@ -485,7 +487,7 @@ subroutine getq2(nleg,irank,cut2,e1,e2,e3,e4,p0,k1,msq,q2,qt)
 		C2mu = -(msq(j1)+mu2g(2))/two/MP12(2)
 	! Round the values close to zero:
 		Ar = A2; Br = B2; Cr = C2
-		if(abs(A2).lt. 1.0e-10_ki) Ar=czip
+		if(abs(A2).lt. 1.0e-10_ki) Ar=zip
 		if(abs(B2).lt. 1.0e-10_ki) Br=czip
 		if(abs(C2).lt. 1.0e-10_ki) Cr=czip
 	! Calculate the (always rounded) discriminant:
@@ -499,9 +501,10 @@ subroutine getq2(nleg,irank,cut2,e1,e2,e3,e4,p0,k1,msq,q2,qt)
 	! Three sampling values for x1: y1, y2, y3. 
 	! Notice that the following values are forbidden:
 	! y1 = y2, y1^2=y2^2, y=0, y^2=0, F(0,y)=0, Same for y2->y3
-		y1 = one+one/sqrt(seven)
-		y2 = two+one/sqrt(five)
-		y3 = three+one/sqrt(three)
+		y1 = one/sqrt(three)
+		y2 = one/sqrt(11.0_ki)
+		y3 = one/sqrt(29.0_ki)
+
 	! Sampling is in six steps, labeled by Fstep:
 	! x1=0; x1=x1s1 or y1; x1=x1s2 or y2; x1=y3; mu2=mu2,x1=0; mu2=mu2,x1=1
 	!---------------------------------------------------------------------------------------!
@@ -896,7 +899,9 @@ subroutine SampleL2(mu2nonzero,x1samplevalue,n,samplex3,nold,x1,x2,x3,x4,Fstep,A
 		complex(ki), intent(in   )   :: x1samplevalue !
 		integer,     intent(in   )   :: n	      !number of samplings
 		integer,     intent(in   )   :: Fstep	      !
-		complex(ki), intent(in   )   :: A2,B2	      !
+		!complex(ki), intent(in   )   :: A2,B2	      !
+		complex(ki), intent(in   )   :: B2	      !
+		real(ki),    intent(in   )   :: A2	      !
 		integer,     intent(inout)   :: nold	      !number of samplings before these
 		complex(ki), intent(inout)   :: x1(:), x2(:)  !
 		complex(ki), intent(inout)   :: x3(:), x4(:)  !
@@ -939,7 +944,8 @@ subroutine FillFL2(x1,A,B,C,Fstep)
 	implicit none
 	!external parameters
 	complex(ki), intent(in) :: x1
-	complex(ki), intent(in) :: A,B
+	complex(ki), intent(in) :: B
+	real(ki), intent(in)    :: A
 	complex(ki), intent(in) :: C
 	integer,  intent(in)    :: Fstep
 	FL2(Fstep) = A*x1**2 + B*x1 + C
