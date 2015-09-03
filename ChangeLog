@@ -32,7 +32,12 @@
 2014-05-21 Johann Felix v. Soden-Fraunhofen <jfsoden@mpp.mpg.de>
    * golem95c-1.3.0: Revert mod_gn.f90 back to latest golem95c-1.2.1 version
      and apply all fixes in function_3p_finite.f90.
-2015-07-23
+2015-07-23  Johann Felix v. Soden-Fraunhofen <jfsoden@mpp.mpg.de>
    * Update to QCDLoop-1.95
    * Update to avh_olo-3.6
-   * Update to samurai-2.9.1
+   * Update to samurai-2.9.1 (not yet released)
+2015-08-03  Johann Felix v. Soden-Fraunhofen <jfsoden@mpp.mpg.de>
+   * really update to samurai-2.9.1 (including higher rank fix)
+   * Rename golem95c-1.3.0 to golem95c-1.3.2
+     since  current golem95c version matches to golem95c-1.3.2 (plus 
+     patch for different find_grand_plus methods). Directory renamed.
