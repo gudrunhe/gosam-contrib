@@ -17,7 +17,7 @@ nodist_pkginclude_HEADERS=\
 AM_FCFLAGS= \
 	-I. \
 	-I$(top_builddir)/avh_olo-3.6 \
-	-I$(top_builddir)/golem95-1.3.0/module
+	-I$(top_builddir)/golem95-1.3.2/module
 
 libsamurai_la_LIBADD=\
    $(LIBLOOPTOOLS)
@@ -30,7 +30,7 @@ else
 endif
 
 if COMPILE_GOLEM95C
-libsamurai_la_LIBADD+=-L$(top_builddir)/golem95-1.3.0 -lgolem
+libsamurai_la_LIBADD+=-L$(top_builddir)/golem95-1.3.2 -lgolem
 else
 # nop
 endif

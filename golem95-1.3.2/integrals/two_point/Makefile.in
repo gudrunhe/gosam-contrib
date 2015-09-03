@@ -79,11 +79,9 @@ PRE_UNINSTALL = :
 POST_UNINSTALL = :
 build_triplet = @build@
 host_triplet = @host@
-DIST_COMMON = $(srcdir)/../MakefileCommon.am $(srcdir)/Makefile.dep \
+DIST_COMMON = $(srcdir)/../../MakefileCommon.am $(srcdir)/Makefile.dep \
 	$(srcdir)/Makefile.in $(srcdir)/Makefile.am
-@COMPILE_TENSREC_TRUE@am__append_1 = tens_rec.f90 tens_comb.f90
-@COMPILE_TENSREC_TRUE@am__append_2 = tens_rec.mod tens_comb.mod
-subdir = golem95-1.3.0/interface
+subdir = golem95-1.3.2/integrals/two_point
 ACLOCAL_M4 = $(top_srcdir)/aclocal.m4
 am__aclocal_m4_deps = $(top_srcdir)/m4/libtool.m4 \
 	$(top_srcdir)/m4/ltoptions.m4 $(top_srcdir)/m4/ltsugar.m4 \
@@ -100,16 +98,11 @@ CONFIG_HEADER = $(top_builddir)/config.h \
 CONFIG_CLEAN_FILES =
 CONFIG_CLEAN_VPATH_FILES =
 LTLIBRARIES = $(noinst_LTLIBRARIES)
-libgolem95_interface_la_LIBADD =
-am__libgolem95_interface_la_SOURCES_DIST = tool_lt_to_golem.f90 \
-	tensor_integrals.f90 gb0.f90 gc0.f90 gd0.f90 ge0.f90 gf0.f90 \
-	ga0.f90 tens_rec.f90 tens_comb.f90
-@COMPILE_TENSREC_TRUE@am__objects_1 = tens_rec.lo tens_comb.lo
-am_libgolem95_interface_la_OBJECTS = tool_lt_to_golem.lo \
-	tensor_integrals.lo gb0.lo gc0.lo gd0.lo ge0.lo gf0.lo ga0.lo \
-	$(am__objects_1)
-libgolem95_interface_la_OBJECTS =  \
-	$(am_libgolem95_interface_la_OBJECTS)
+libgolem95_integrals_two_point_la_LIBADD =
+am_libgolem95_integrals_two_point_la_OBJECTS = function_2p0m_1mi.lo \
+	function_2p_m1m2.lo generic_function_2p.lo
+libgolem95_integrals_two_point_la_OBJECTS =  \
+	$(am_libgolem95_integrals_two_point_la_OBJECTS)
 AM_V_lt = $(am__v_lt_@AM_V@)
 am__v_lt_ = $(am__v_lt_@AM_DEFAULT_V@)
 am__v_lt_0 = --silent
@@ -142,8 +135,8 @@ AM_V_FCLD = $(am__v_FCLD_@AM_V@)
 am__v_FCLD_ = $(am__v_FCLD_@AM_DEFAULT_V@)
 am__v_FCLD_0 = @echo "  FCLD    " $@;
 am__v_FCLD_1 = 
-SOURCES = $(libgolem95_interface_la_SOURCES)
-DIST_SOURCES = $(am__libgolem95_interface_la_SOURCES_DIST)
+SOURCES = $(libgolem95_integrals_two_point_la_SOURCES)
+DIST_SOURCES = $(libgolem95_integrals_two_point_la_SOURCES)
 am__can_run_installinfo = \
   case $$AM_UPDATE_INFO_DIR in \
     n|no|NO) false;; \
@@ -364,25 +357,22 @@ target_alias = @target_alias@
 top_build_prefix = @top_build_prefix@
 top_builddir = @top_builddir@
 top_srcdir = @top_srcdir@
-noinst_LTLIBRARIES = libgolem95_interface.la
-AM_FCFLAGS = -I$(top_builddir)/avh_olo-3.6 -I$(builddir)/../module \
-	-I$(builddir)/../kinematic -I$(builddir)/../form_factor \
-	-I$(builddir)/../integrals/one_point \
-	-I$(builddir)/../integrals/two_point \
-	-I$(builddir)/../integrals/three_point \
-	-I$(builddir)/../integrals/four_point \
-	-I$(builddir)/../higherrank -I$(builddir)/../numerical
-libgolem95_interface_la_SOURCES = tool_lt_to_golem.f90 \
-	tensor_integrals.f90 gb0.f90 gc0.f90 gd0.f90 ge0.f90 gf0.f90 \
-	ga0.f90 $(am__append_1)
-nodist_pkginclude_HEADERS = tool_lt_to_golem.mod tensor_integrals.mod \
-	$(am__append_2)
+noinst_LTLIBRARIES = libgolem95_integrals_two_point.la
+AM_FCFLAGS = -I$(top_builddir)/avh_olo-3.6 -I$(builddir)/../../module \
+	-I$(builddir)/../../kinematic -I$(builddir)/../../numerical \
+	-I$(builddir)/../one_point
+libgolem95_integrals_two_point_la_SOURCES = \
+	function_2p0m_1mi.f90 function_2p_m1m2.f90 generic_function_2p.f90
+
+nodist_pkginclude_HEADERS = function_2p_m1m2.mod function_2p0m_1mi.mod \
+	generic_function_2p.mod
+
 CLEANFILES = *.mod
 all: all-am
 
 .SUFFIXES:
 .SUFFIXES: .f90 .lo .o .obj
-$(srcdir)/Makefile.in:  $(srcdir)/Makefile.am $(srcdir)/../MakefileCommon.am $(srcdir)/Makefile.dep $(am__configure_deps)
+$(srcdir)/Makefile.in:  $(srcdir)/Makefile.am $(srcdir)/../../MakefileCommon.am $(srcdir)/Makefile.dep $(am__configure_deps)
 	@for dep in $?; do \
 	  case '$(am__configure_deps)' in \
 	    *$$dep*) \
@@ -391,9 +381,9 @@ $(srcdir)/Makefile.in:  $(srcdir)/Makefile.am $(srcdir)/../MakefileCommon.am $(s
 	      exit 1;; \
 	  esac; \
 	done; \
-	echo ' cd $(top_srcdir) && $(AUTOMAKE) --gnu golem95-1.3.0/interface/Makefile'; \
+	echo ' cd $(top_srcdir) && $(AUTOMAKE) --gnu golem95-1.3.2/integrals/two_point/Makefile'; \
 	$(am__cd) $(top_srcdir) && \
-	  $(AUTOMAKE) --gnu golem95-1.3.0/interface/Makefile
+	  $(AUTOMAKE) --gnu golem95-1.3.2/integrals/two_point/Makefile
 .PRECIOUS: Makefile
 Makefile: $(srcdir)/Makefile.in $(top_builddir)/config.status
 	@case '$?' in \
@@ -403,7 +393,7 @@ Makefile: $(srcdir)/Makefile.in $(top_builddir)/config.status
 	    echo ' cd $(top_builddir) && $(SHELL) ./config.status $(subdir)/$@ $(am__depfiles_maybe)'; \
 	    cd $(top_builddir) && $(SHELL) ./config.status $(subdir)/$@ $(am__depfiles_maybe);; \
 	esac;
-$(srcdir)/../MakefileCommon.am $(srcdir)/Makefile.dep:
+$(srcdir)/../../MakefileCommon.am $(srcdir)/Makefile.dep:
 
 $(top_builddir)/config.status: $(top_srcdir)/configure $(CONFIG_STATUS_DEPENDENCIES)
 	cd $(top_builddir) && $(MAKE) $(AM_MAKEFLAGS) am--refresh
@@ -425,8 +415,8 @@ clean-noinstLTLIBRARIES:
 	  rm -f $${locs}; \
 	}
 
-libgolem95_interface.la: $(libgolem95_interface_la_OBJECTS) $(libgolem95_interface_la_DEPENDENCIES) $(EXTRA_libgolem95_interface_la_DEPENDENCIES) 
-	$(AM_V_FCLD)$(FCLINK)  $(libgolem95_interface_la_OBJECTS) $(libgolem95_interface_la_LIBADD) $(LIBS)
+libgolem95_integrals_two_point.la: $(libgolem95_integrals_two_point_la_OBJECTS) $(libgolem95_integrals_two_point_la_DEPENDENCIES) $(EXTRA_libgolem95_integrals_two_point_la_DEPENDENCIES) 
+	$(AM_V_FCLD)$(FCLINK)  $(libgolem95_integrals_two_point_la_OBJECTS) $(libgolem95_integrals_two_point_la_LIBADD) $(LIBS)
 
 mostlyclean-compile:
 	-rm -f *.$(OBJEXT)
@@ -678,17 +668,12 @@ uninstall-am: uninstall-nodist_pkgincludeHEADERS
 
 
 # Module dependencies
-ga0.lo: tool_lt_to_golem.lo
-gb0.lo: tool_lt_to_golem.lo
-gc0.lo: tool_lt_to_golem.lo
-gd0.lo: tool_lt_to_golem.lo
-ge0.lo: tool_lt_to_golem.lo
-gf0.lo: tool_lt_to_golem.lo
-tens_comb.lo: tens_rec.lo
-tens_comb.mod: tens_comb.lo tens_rec.lo
-tens_rec.mod: tens_rec.lo
-tensor_integrals.mod: tensor_integrals.lo
-tool_lt_to_golem.mod: tool_lt_to_golem.lo
+function_2p0m_1mi.mod: function_2p0m_1mi.lo
+function_2p_m1m2.lo: function_2p0m_1mi.lo
+function_2p_m1m2.mod: function_2p_m1m2.lo function_2p0m_1mi.lo
+generic_function_2p.lo: function_2p0m_1mi.lo function_2p_m1m2.lo
+generic_function_2p.mod: generic_function_2p.lo function_2p0m_1mi.lo \
+	function_2p_m1m2.lo
 
 # Tell versions [3.59,3.63) of GNU make to not export all variables.
 # Otherwise a system limit (for SysV at least) may be exceeded.

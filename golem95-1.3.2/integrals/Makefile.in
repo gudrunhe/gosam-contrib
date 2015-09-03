@@ -13,8 +13,6 @@
 # PARTICULAR PURPOSE.
 
 @SET_MAKE@
-
-
 VPATH = @srcdir@
 am__is_gnu_make = test -n '$(MAKEFILE_LIST)' && test -n '$(MAKELEVEL)'
 am__make_running_with_option = \
@@ -79,10 +77,8 @@ PRE_UNINSTALL = :
 POST_UNINSTALL = :
 build_triplet = @build@
 host_triplet = @host@
-DIST_COMMON = $(srcdir)/../../MakefileCommon.am $(srcdir)/Makefile.dep \
-	$(srcdir)/Makefile.in $(srcdir)/Makefile.am \
-	$(srcdir)/generic_function_4p.f90.in
-subdir = golem95-1.3.0/integrals/four_point
+subdir = golem95-1.3.2/integrals
+DIST_COMMON = $(srcdir)/Makefile.in $(srcdir)/Makefile.am
 ACLOCAL_M4 = $(top_srcdir)/aclocal.m4
 am__aclocal_m4_deps = $(top_srcdir)/m4/libtool.m4 \
 	$(top_srcdir)/m4/ltoptions.m4 $(top_srcdir)/m4/ltsugar.m4 \
@@ -96,23 +92,8 @@ am__configure_deps = $(am__aclocal_m4_deps) $(CONFIGURE_DEPENDENCIES) \
 mkinstalldirs = $(install_sh) -d
 CONFIG_HEADER = $(top_builddir)/config.h \
 	$(top_builddir)/ninja-1.0.0/ninja/ninja_config.h
-CONFIG_CLEAN_FILES = generic_function_4p.f90
+CONFIG_CLEAN_FILES =
 CONFIG_CLEAN_VPATH_FILES =
-LTLIBRARIES = $(noinst_LTLIBRARIES)
-libgolem95_integrals_four_point_la_LIBADD =
-am_libgolem95_integrals_four_point_la_OBJECTS = function_4p1m.lo \
-	function_4p2m_3mi_onshell.lo function_4p2m_adj.lo \
-	function_4p2m_opp.lo function_4p3m.lo function_4p4m.lo \
-	function_4p_ql10.lo function_4p_ql11.lo function_4p_ql12.lo \
-	function_4p_ql13.lo function_4p_ql14.lo function_4p_ql15.lo \
-	function_4p_ql16.lo function_4p_ql6.lo function_4p_ql7.lo \
-	function_4p_ql8.lo function_4p_ql9.lo generic_function_4p.lo
-libgolem95_integrals_four_point_la_OBJECTS =  \
-	$(am_libgolem95_integrals_four_point_la_OBJECTS)
-AM_V_lt = $(am__v_lt_@AM_V@)
-am__v_lt_ = $(am__v_lt_@AM_DEFAULT_V@)
-am__v_lt_0 = --silent
-am__v_lt_1 = 
 AM_V_P = $(am__v_P_@AM_V@)
 am__v_P_ = $(am__v_P_@AM_DEFAULT_V@)
 am__v_P_0 = false
@@ -125,58 +106,29 @@ AM_V_at = $(am__v_at_@AM_V@)
 am__v_at_ = $(am__v_at_@AM_DEFAULT_V@)
 am__v_at_0 = @
 am__v_at_1 = 
-DEFAULT_INCLUDES = -I.@am__isrc@ -I$(top_builddir) -I$(top_builddir)/ninja-1.0.0/ninja
-FCCOMPILE = $(FC) $(AM_FCFLAGS) $(FCFLAGS)
-LTFCCOMPILE = $(LIBTOOL) $(AM_V_lt) --tag=FC $(AM_LIBTOOLFLAGS) \
-	$(LIBTOOLFLAGS) --mode=compile $(FC) $(AM_FCFLAGS) $(FCFLAGS)
-AM_V_FC = $(am__v_FC_@AM_V@)
-am__v_FC_ = $(am__v_FC_@AM_DEFAULT_V@)
-am__v_FC_0 = @echo "  FC      " $@;
-am__v_FC_1 = 
-FCLD = $(FC)
-FCLINK = $(LIBTOOL) $(AM_V_lt) --tag=FC $(AM_LIBTOOLFLAGS) \
-	$(LIBTOOLFLAGS) --mode=link $(FCLD) $(AM_FCFLAGS) $(FCFLAGS) \
-	$(AM_LDFLAGS) $(LDFLAGS) -o $@
-AM_V_FCLD = $(am__v_FCLD_@AM_V@)
-am__v_FCLD_ = $(am__v_FCLD_@AM_DEFAULT_V@)
-am__v_FCLD_0 = @echo "  FCLD    " $@;
-am__v_FCLD_1 = 
-SOURCES = $(libgolem95_integrals_four_point_la_SOURCES)
-DIST_SOURCES = $(libgolem95_integrals_four_point_la_SOURCES)
+SOURCES =
+DIST_SOURCES =
+RECURSIVE_TARGETS = all-recursive check-recursive cscopelist-recursive \
+	ctags-recursive dvi-recursive html-recursive info-recursive \
+	install-data-recursive install-dvi-recursive \
+	install-exec-recursive install-html-recursive \
+	install-info-recursive install-pdf-recursive \
+	install-ps-recursive install-recursive installcheck-recursive \
+	installdirs-recursive pdf-recursive ps-recursive \
+	tags-recursive uninstall-recursive
 am__can_run_installinfo = \
   case $$AM_UPDATE_INFO_DIR in \
     n|no|NO) false;; \
     *) (install-info --version) >/dev/null 2>&1;; \
   esac
-am__vpath_adj_setup = srcdirstrip=`echo "$(srcdir)" | sed 's|.|.|g'`;
-am__vpath_adj = case $$p in \
-    $(srcdir)/*) f=`echo "$$p" | sed "s|^$$srcdirstrip/||"`;; \
-    *) f=$$p;; \
-  esac;
-am__strip_dir = f=`echo $$p | sed -e 's|^.*/||'`;
-am__install_max = 40
-am__nobase_strip_setup = \
-  srcdirstrip=`echo "$(srcdir)" | sed 's/[].[^$$\\*|]/\\\\&/g'`
-am__nobase_strip = \
-  for p in $$list; do echo "$$p"; done | sed -e "s|$$srcdirstrip/||"
-am__nobase_list = $(am__nobase_strip_setup); \
-  for p in $$list; do echo "$$p $$p"; done | \
-  sed "s| $$srcdirstrip/| |;"' / .*\//!s/ .*/ ./; s,\( .*\)/[^/]*$$,\1,' | \
-  $(AWK) 'BEGIN { files["."] = "" } { files[$$2] = files[$$2] " " $$1; \
-    if (++n[$$2] == $(am__install_max)) \
-      { print $$2, files[$$2]; n[$$2] = 0; files[$$2] = "" } } \
-    END { for (dir in files) print dir, files[dir] }'
-am__base_list = \
-  sed '$$!N;$$!N;$$!N;$$!N;$$!N;$$!N;$$!N;s/\n/ /g' | \
-  sed '$$!N;$$!N;$$!N;$$!N;s/\n/ /g'
-am__uninstall_files_from_dir = { \
-  test -z "$$files" \
-    || { test ! -d "$$dir" && test ! -f "$$dir" && test ! -r "$$dir"; } \
-    || { echo " ( cd '$$dir' && rm -f" $$files ")"; \
-         $(am__cd) "$$dir" && rm -f $$files; }; \
-  }
-am__installdirs = "$(DESTDIR)$(pkgincludedir)"
-HEADERS = $(nodist_pkginclude_HEADERS)
+RECURSIVE_CLEAN_TARGETS = mostlyclean-recursive clean-recursive	\
+  distclean-recursive maintainer-clean-recursive
+am__recursive_targets = \
+  $(RECURSIVE_TARGETS) \
+  $(RECURSIVE_CLEAN_TARGETS) \
+  $(am__extra_recursive_targets)
+AM_RECURSIVE_TARGETS = $(am__recursive_targets:-recursive=) TAGS CTAGS \
+	distdir
 am__tagged_files = $(HEADERS) $(SOURCES) $(TAGS_FILES) $(LISP)
 # Read a list of newline-separated strings from the standard input,
 # and print each of them once, without duplicates.  Input order is
@@ -196,7 +148,33 @@ am__define_uniq_tagged_files = \
   done | $(am__uniquify_input)`
 ETAGS = etags
 CTAGS = ctags
+DIST_SUBDIRS = $(SUBDIRS)
 DISTFILES = $(DIST_COMMON) $(DIST_SOURCES) $(TEXINFOS) $(EXTRA_DIST)
+am__relativize = \
+  dir0=`pwd`; \
+  sed_first='s,^\([^/]*\)/.*$$,\1,'; \
+  sed_rest='s,^[^/]*/*,,'; \
+  sed_last='s,^.*/\([^/]*\)$$,\1,'; \
+  sed_butlast='s,/*[^/]*$$,,'; \
+  while test -n "$$dir1"; do \
+    first=`echo "$$dir1" | sed -e "$$sed_first"`; \
+    if test "$$first" != "."; then \
+      if test "$$first" = ".."; then \
+        dir2=`echo "$$dir0" | sed -e "$$sed_last"`/"$$dir2"; \
+        dir0=`echo "$$dir0" | sed -e "$$sed_butlast"`; \
+      else \
+        first2=`echo "$$dir2" | sed -e "$$sed_first"`; \
+        if test "$$first2" = "$$first"; then \
+          dir2=`echo "$$dir2" | sed -e "$$sed_rest"`; \
+        else \
+          dir2="../$$dir2"; \
+        fi; \
+        dir0="$$dir0"/"$$first"; \
+      fi; \
+    fi; \
+    dir1=`echo "$$dir1" | sed -e "$$sed_rest"`; \
+  done; \
+  reldir="$$dir2"
 ACLOCAL = @ACLOCAL@
 AMTAR = @AMTAR@
 AM_DEFAULT_VERBOSITY = @AM_DEFAULT_VERBOSITY@
@@ -363,33 +341,11 @@ target_alias = @target_alias@
 top_build_prefix = @top_build_prefix@
 top_builddir = @top_builddir@
 top_srcdir = @top_srcdir@
-noinst_LTLIBRARIES = libgolem95_integrals_four_point.la
-AM_FCFLAGS = -I$(top_builddir)/avh_olo-3.6 -I$(builddir)/../../module \
-	-I$(builddir)/../../kinematic -I$(builddir)/../../numerical \
-	-I$(builddir)/../one_point -I$(builddir)/../two_point \
-	-I$(builddir)/../three_point
-libgolem95_integrals_four_point_la_SOURCES = \
-	function_4p1m.f90 function_4p2m_3mi_onshell.f90 function_4p2m_adj.f90 \
-	function_4p2m_opp.f90 function_4p3m.f90 function_4p4m.f90 \
-	function_4p_ql10.f90  function_4p_ql11.f90 function_4p_ql12.f90 \
-	function_4p_ql13.f90 function_4p_ql14.f90 function_4p_ql15.f90 \
-	function_4p_ql16.f90 function_4p_ql6.f90 function_4p_ql7.f90 \
-	function_4p_ql8.f90 function_4p_ql9.f90	generic_function_4p.f90
-
-nodist_pkginclude_HEADERS = function_4p4m.mod function_4p_ql7.mod \
-	generic_function_4p.mod function_4p2m_adj.mod function_4p_ql14.mod \
-	function_4p_ql13.mod function_4p_ql15.mod function_4p_ql10.mod \
-	function_4p_ql9.mod function_4p_ql8.mod \
-	function_4p2m_3mi_onshell.mod function_4p_ql11.mod \
-	function_4p_ql12.mod function_4p2m_opp.mod function_4p3m.mod \
-	function_4p1m.mod function_4p_ql16.mod function_4p_ql6.mod
-
-CLEANFILES = *.mod 
-all: all-am
+SUBDIRS = one_point two_point three_point four_point
+all: all-recursive
 
 .SUFFIXES:
-.SUFFIXES: .f90 .lo .o .obj
-$(srcdir)/Makefile.in:  $(srcdir)/Makefile.am $(srcdir)/../../MakefileCommon.am $(srcdir)/Makefile.dep $(am__configure_deps)
+$(srcdir)/Makefile.in:  $(srcdir)/Makefile.am  $(am__configure_deps)
 	@for dep in $?; do \
 	  case '$(am__configure_deps)' in \
 	    *$$dep*) \
@@ -398,9 +354,9 @@ $(srcdir)/Makefile.in:  $(srcdir)/Makefile.am $(srcdir)/../../MakefileCommon.am 
 	      exit 1;; \
 	  esac; \
 	done; \
-	echo ' cd $(top_srcdir) && $(AUTOMAKE) --gnu golem95-1.3.0/integrals/four_point/Makefile'; \
+	echo ' cd $(top_srcdir) && $(AUTOMAKE) --gnu golem95-1.3.2/integrals/Makefile'; \
 	$(am__cd) $(top_srcdir) && \
-	  $(AUTOMAKE) --gnu golem95-1.3.0/integrals/four_point/Makefile
+	  $(AUTOMAKE) --gnu golem95-1.3.2/integrals/Makefile
 .PRECIOUS: Makefile
 Makefile: $(srcdir)/Makefile.in $(top_builddir)/config.status
 	@case '$?' in \
@@ -410,7 +366,6 @@ Makefile: $(srcdir)/Makefile.in $(top_builddir)/config.status
 	    echo ' cd $(top_builddir) && $(SHELL) ./config.status $(subdir)/$@ $(am__depfiles_maybe)'; \
 	    cd $(top_builddir) && $(SHELL) ./config.status $(subdir)/$@ $(am__depfiles_maybe);; \
 	esac;
-$(srcdir)/../../MakefileCommon.am $(srcdir)/Makefile.dep:
 
 $(top_builddir)/config.status: $(top_srcdir)/configure $(CONFIG_STATUS_DEPENDENCIES)
 	cd $(top_builddir) && $(MAKE) $(AM_MAKEFLAGS) am--refresh
@@ -420,73 +375,68 @@ $(top_srcdir)/configure:  $(am__configure_deps)
 $(ACLOCAL_M4):  $(am__aclocal_m4_deps)
 	cd $(top_builddir) && $(MAKE) $(AM_MAKEFLAGS) am--refresh
 $(am__aclocal_m4_deps):
-generic_function_4p.f90: $(top_builddir)/config.status $(srcdir)/generic_function_4p.f90.in
-	cd $(top_builddir) && $(SHELL) ./config.status $(subdir)/$@
-
-clean-noinstLTLIBRARIES:
-	-test -z "$(noinst_LTLIBRARIES)" || rm -f $(noinst_LTLIBRARIES)
-	@list='$(noinst_LTLIBRARIES)'; \
-	locs=`for p in $$list; do echo $$p; done | \
-	      sed 's|^[^/]*$$|.|; s|/[^/]*$$||; s|$$|/so_locations|' | \
-	      sort -u`; \
-	test -z "$$locs" || { \
-	  echo rm -f $${locs}; \
-	  rm -f $${locs}; \
-	}
-
-libgolem95_integrals_four_point.la: $(libgolem95_integrals_four_point_la_OBJECTS) $(libgolem95_integrals_four_point_la_DEPENDENCIES) $(EXTRA_libgolem95_integrals_four_point_la_DEPENDENCIES) 
-	$(AM_V_FCLD)$(FCLINK)  $(libgolem95_integrals_four_point_la_OBJECTS) $(libgolem95_integrals_four_point_la_LIBADD) $(LIBS)
-
-mostlyclean-compile:
-	-rm -f *.$(OBJEXT)
-
-distclean-compile:
-	-rm -f *.tab.c
-
-.f90.o:
-	$(AM_V_FC)$(FCCOMPILE) -c -o $@ $(FCFLAGS_f90) $<
-
-.f90.obj:
-	$(AM_V_FC)$(FCCOMPILE) -c -o $@ $(FCFLAGS_f90) `$(CYGPATH_W) '$<'`
-
-.f90.lo:
-	$(AM_V_FC)$(LTFCCOMPILE) -c -o $@ $(FCFLAGS_f90) $<
 
 mostlyclean-libtool:
 	-rm -f *.lo
 
 clean-libtool:
 	-rm -rf .libs _libs
-install-nodist_pkgincludeHEADERS: $(nodist_pkginclude_HEADERS)
-	@$(NORMAL_INSTALL)
-	@list='$(nodist_pkginclude_HEADERS)'; test -n "$(pkgincludedir)" || list=; \
-	if test -n "$$list"; then \
-	  echo " $(MKDIR_P) '$(DESTDIR)$(pkgincludedir)'"; \
-	  $(MKDIR_P) "$(DESTDIR)$(pkgincludedir)" || exit 1; \
-	fi; \
-	for p in $$list; do \
-	  if test -f "$$p"; then d=; else d="$(srcdir)/"; fi; \
-	  echo "$$d$$p"; \
-	done | $(am__base_list) | \
-	while read files; do \
-	  echo " $(INSTALL_HEADER) $$files '$(DESTDIR)$(pkgincludedir)'"; \
-	  $(INSTALL_HEADER) $$files "$(DESTDIR)$(pkgincludedir)" || exit $$?; \
-	done
 
-uninstall-nodist_pkgincludeHEADERS:
-	@$(NORMAL_UNINSTALL)
-	@list='$(nodist_pkginclude_HEADERS)'; test -n "$(pkgincludedir)" || list=; \
-	files=`for p in $$list; do echo $$p; done | sed -e 's|^.*/||'`; \
-	dir='$(DESTDIR)$(pkgincludedir)'; $(am__uninstall_files_from_dir)
+# This directory's subdirectories are mostly independent; you can cd
+# into them and run 'make' without going through this Makefile.
+# To change the values of 'make' variables: instead of editing Makefiles,
+# (1) if the variable is set in 'config.status', edit 'config.status'
+#     (which will cause the Makefiles to be regenerated when you run 'make');
+# (2) otherwise, pass the desired values on the 'make' command line.
+$(am__recursive_targets):
+	@fail=; \
+	if $(am__make_keepgoing); then \
+	  failcom='fail=yes'; \
+	else \
+	  failcom='exit 1'; \
+	fi; \
+	dot_seen=no; \
+	target=`echo $@ | sed s/-recursive//`; \
+	case "$@" in \
+	  distclean-* | maintainer-clean-*) list='$(DIST_SUBDIRS)' ;; \
+	  *) list='$(SUBDIRS)' ;; \
+	esac; \
+	for subdir in $$list; do \
+	  echo "Making $$target in $$subdir"; \
+	  if test "$$subdir" = "."; then \
+	    dot_seen=yes; \
+	    local_target="$$target-am"; \
+	  else \
+	    local_target="$$target"; \
+	  fi; \
+	  ($(am__cd) $$subdir && $(MAKE) $(AM_MAKEFLAGS) $$local_target) \
+	  || eval $$failcom; \
+	done; \
+	if test "$$dot_seen" = "no"; then \
+	  $(MAKE) $(AM_MAKEFLAGS) "$$target-am" || exit 1; \
+	fi; test -z "$$fail"
 
 ID: $(am__tagged_files)
 	$(am__define_uniq_tagged_files); mkid -fID $$unique
-tags: tags-am
+tags: tags-recursive
 TAGS: tags
 
 tags-am: $(TAGS_DEPENDENCIES) $(am__tagged_files)
 	set x; \
 	here=`pwd`; \
+	if ($(ETAGS) --etags-include --version) >/dev/null 2>&1; then \
+	  include_option=--etags-include; \
+	  empty_fix=.; \
+	else \
+	  include_option=--include; \
+	  empty_fix=; \
+	fi; \
+	list='$(SUBDIRS)'; for subdir in $$list; do \
+	  if test "$$subdir" = .; then :; else \
+	    test ! -f $$subdir/TAGS || \
+	      set "$$@" "$$include_option=$$here/$$subdir/TAGS"; \
+	  fi; \
+	done; \
 	$(am__define_uniq_tagged_files); \
 	shift; \
 	if test -z "$(ETAGS_ARGS)$$*$$unique"; then :; else \
@@ -499,7 +449,7 @@ tags-am: $(TAGS_DEPENDENCIES) $(am__tagged_files)
 	      $$unique; \
 	  fi; \
 	fi
-ctags: ctags-am
+ctags: ctags-recursive
 
 CTAGS: ctags
 ctags-am: $(TAGS_DEPENDENCIES) $(am__tagged_files)
@@ -512,7 +462,7 @@ GTAGS:
 	here=`$(am__cd) $(top_builddir) && pwd` \
 	  && $(am__cd) $(top_srcdir) \
 	  && gtags -i $(GTAGS_ARGS) "$$here"
-cscopelist: cscopelist-am
+cscopelist: cscopelist-recursive
 
 cscopelist-am: $(am__tagged_files)
 	list='$(am__tagged_files)'; \
@@ -561,22 +511,45 @@ distdir: $(DISTFILES)
 	    || exit 1; \
 	  fi; \
 	done
-check-am: all-am
-check: check-am
-all-am: Makefile $(LTLIBRARIES) $(HEADERS)
-installdirs:
-	for dir in "$(DESTDIR)$(pkgincludedir)"; do \
-	  test -z "$$dir" || $(MKDIR_P) "$$dir"; \
+	@list='$(DIST_SUBDIRS)'; for subdir in $$list; do \
+	  if test "$$subdir" = .; then :; else \
+	    $(am__make_dryrun) \
+	      || test -d "$(distdir)/$$subdir" \
+	      || $(MKDIR_P) "$(distdir)/$$subdir" \
+	      || exit 1; \
+	    dir1=$$subdir; dir2="$(distdir)/$$subdir"; \
+	    $(am__relativize); \
+	    new_distdir=$$reldir; \
+	    dir1=$$subdir; dir2="$(top_distdir)"; \
+	    $(am__relativize); \
+	    new_top_distdir=$$reldir; \
+	    echo " (cd $$subdir && $(MAKE) $(AM_MAKEFLAGS) top_distdir="$$new_top_distdir" distdir="$$new_distdir" \\"; \
+	    echo "     am__remove_distdir=: am__skip_length_check=: am__skip_mode_fix=: distdir)"; \
+	    ($(am__cd) $$subdir && \
+	      $(MAKE) $(AM_MAKEFLAGS) \
+	        top_distdir="$$new_top_distdir" \
+	        distdir="$$new_distdir" \
+		am__remove_distdir=: \
+		am__skip_length_check=: \
+		am__skip_mode_fix=: \
+	        distdir) \
+	      || exit 1; \
+	  fi; \
 	done
-install: install-am
-install-exec: install-exec-am
-install-data: install-data-am
-uninstall: uninstall-am
+check-am: all-am
+check: check-recursive
+all-am: Makefile
+installdirs: installdirs-recursive
+installdirs-am:
+install: install-recursive
+install-exec: install-exec-recursive
+install-data: install-data-recursive
+uninstall: uninstall-recursive
 
 install-am: all-am
 	@$(MAKE) $(AM_MAKEFLAGS) install-exec-am install-data-am
 
-installcheck: installcheck-am
+installcheck: installcheck-recursive
 install-strip:
 	if test -z '$(STRIP)'; then \
 	  $(MAKE) $(AM_MAKEFLAGS) INSTALL_PROGRAM="$(INSTALL_STRIP_PROGRAM)" \
@@ -590,7 +563,6 @@ install-strip:
 mostlyclean-generic:
 
 clean-generic:
-	-test -z "$(CLEANFILES)" || rm -f $(CLEANFILES)
 
 distclean-generic:
 	-test -z "$(CONFIG_CLEAN_FILES)" || rm -f $(CONFIG_CLEAN_FILES)
@@ -599,133 +571,87 @@ distclean-generic:
 maintainer-clean-generic:
 	@echo "This command is intended for maintainers to use"
 	@echo "it deletes files that may require special tools to rebuild."
-clean: clean-am
+clean: clean-recursive
 
-clean-am: clean-generic clean-libtool clean-noinstLTLIBRARIES \
-	mostlyclean-am
+clean-am: clean-generic clean-libtool mostlyclean-am
 
-distclean: distclean-am
+distclean: distclean-recursive
 	-rm -f Makefile
-distclean-am: clean-am distclean-compile distclean-generic \
-	distclean-tags
+distclean-am: clean-am distclean-generic distclean-tags
 
-dvi: dvi-am
+dvi: dvi-recursive
 
 dvi-am:
 
-html: html-am
+html: html-recursive
 
 html-am:
 
-info: info-am
+info: info-recursive
 
 info-am:
 
-install-data-am: install-nodist_pkgincludeHEADERS
+install-data-am:
 
-install-dvi: install-dvi-am
+install-dvi: install-dvi-recursive
 
 install-dvi-am:
 
 install-exec-am:
 
-install-html: install-html-am
+install-html: install-html-recursive
 
 install-html-am:
 
-install-info: install-info-am
+install-info: install-info-recursive
 
 install-info-am:
 
 install-man:
 
-install-pdf: install-pdf-am
+install-pdf: install-pdf-recursive
 
 install-pdf-am:
 
-install-ps: install-ps-am
+install-ps: install-ps-recursive
 
 install-ps-am:
 
 installcheck-am:
 
-maintainer-clean: maintainer-clean-am
+maintainer-clean: maintainer-clean-recursive
 	-rm -f Makefile
 maintainer-clean-am: distclean-am maintainer-clean-generic
 
-mostlyclean: mostlyclean-am
+mostlyclean: mostlyclean-recursive
 
-mostlyclean-am: mostlyclean-compile mostlyclean-generic \
-	mostlyclean-libtool
+mostlyclean-am: mostlyclean-generic mostlyclean-libtool
 
-pdf: pdf-am
+pdf: pdf-recursive
 
 pdf-am:
 
-ps: ps-am
+ps: ps-recursive
 
 ps-am:
 
-uninstall-am: uninstall-nodist_pkgincludeHEADERS
+uninstall-am:
 
-.MAKE: install-am install-strip
+.MAKE: $(am__recursive_targets) install-am install-strip
 
-.PHONY: CTAGS GTAGS TAGS all all-am check check-am clean clean-generic \
-	clean-libtool clean-noinstLTLIBRARIES cscopelist-am ctags \
-	ctags-am distclean distclean-compile distclean-generic \
-	distclean-libtool distclean-tags distdir dvi dvi-am html \
-	html-am info info-am install install-am install-data \
-	install-data-am install-dvi install-dvi-am install-exec \
-	install-exec-am install-html install-html-am install-info \
-	install-info-am install-man install-nodist_pkgincludeHEADERS \
+.PHONY: $(am__recursive_targets) CTAGS GTAGS TAGS all all-am check \
+	check-am clean clean-generic clean-libtool cscopelist-am ctags \
+	ctags-am distclean distclean-generic distclean-libtool \
+	distclean-tags distdir dvi dvi-am html html-am info info-am \
+	install install-am install-data install-data-am install-dvi \
+	install-dvi-am install-exec install-exec-am install-html \
+	install-html-am install-info install-info-am install-man \
 	install-pdf install-pdf-am install-ps install-ps-am \
 	install-strip installcheck installcheck-am installdirs \
-	maintainer-clean maintainer-clean-generic mostlyclean \
-	mostlyclean-compile mostlyclean-generic mostlyclean-libtool \
-	pdf pdf-am ps ps-am tags tags-am uninstall uninstall-am \
-	uninstall-nodist_pkgincludeHEADERS
+	installdirs-am maintainer-clean maintainer-clean-generic \
+	mostlyclean mostlyclean-generic mostlyclean-libtool pdf pdf-am \
+	ps ps-am tags tags-am uninstall uninstall-am
 
-
-# Module dependencies
-function_4p1m.mod: function_4p1m.lo
-function_4p2m_3mi_onshell.mod: function_4p2m_3mi_onshell.lo
-function_4p2m_adj.mod: function_4p2m_adj.lo
-function_4p2m_opp.mod: function_4p2m_opp.lo
-function_4p3m.mod: function_4p3m.lo
-function_4p4m.mod: function_4p4m.lo
-function_4p4m.mod: function_4p4m.lo
-function_4p_nonscalar_numerics.lo: function_4p1m.lo \
-	function_4p2m_3mi_onshell.lo function_4p2m_adj.lo \
-	function_4p2m_opp.lo function_4p3m.lo function_4p4m.lo
-function_4p_nonscalar_numerics.mod: function_4p_nonscalar_numerics.lo \
-	function_4p1m.lo function_4p2m_3mi_onshell.lo function_4p2m_adj.lo \
-	function_4p2m_opp.lo function_4p3m.lo function_4p4m.lo
-function_4p_ql10.mod: function_4p_ql10.lo
-function_4p_ql11.mod: function_4p_ql11.lo
-function_4p_ql12.mod: function_4p_ql12.lo
-function_4p_ql13.mod: function_4p_ql13.lo
-function_4p_ql14.mod: function_4p_ql14.lo
-function_4p_ql15.mod: function_4p_ql15.lo
-function_4p_ql16.mod: function_4p_ql16.lo
-function_4p_ql6.mod: function_4p_ql6.lo
-function_4p_ql7.mod: function_4p_ql7.lo
-function_4p_ql8.mod: function_4p_ql8.lo
-function_4p_ql9.mod: function_4p_ql9.lo
-
-generic_function_4p.lo: function_4p1m.lo function_4p2m_3mi_onshell.lo \
-	function_4p2m_adj.lo function_4p2m_opp.lo function_4p3m.lo \
-	function_4p4m.lo  \
-	function_4p_ql10.lo function_4p_ql11.lo function_4p_ql12.lo \
-	function_4p_ql13.lo function_4p_ql14.lo function_4p_ql15.lo \
-	function_4p_ql16.lo function_4p_ql6.lo function_4p_ql7.lo \
-	function_4p_ql8.lo function_4p_ql9.lo
-generic_function_4p.mod: generic_function_4p.lo function_4p1m.lo \
-	function_4p2m_3mi_onshell.lo function_4p2m_adj.lo function_4p2m_opp.lo \
-	function_4p3m.lo function_4p4m.lo \
-	function_4p_ql10.lo function_4p_ql11.lo function_4p_ql12.lo \
-	function_4p_ql13.lo function_4p_ql14.lo function_4p_ql15.lo \
-	function_4p_ql16.lo function_4p_ql6.lo function_4p_ql7.lo \
-	function_4p_ql8.lo function_4p_ql9.lo
 
 # Tell versions [3.59,3.63) of GNU make to not export all variables.
 # Otherwise a system limit (for SysV at least) may be exceeded.

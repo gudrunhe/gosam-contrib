@@ -83,7 +83,7 @@ host_triplet = @host@
 @COMPILE_QL_TRUE@		      -L$(top_builddir)/ff-2.0 -lff
 
 # nop
-@COMPILE_GOLEM95C_TRUE@am__append_2 = -L$(top_builddir)/golem95-1.3.0 -lgolem
+@COMPILE_GOLEM95C_TRUE@am__append_2 = -L$(top_builddir)/golem95-1.3.2 -lgolem
 DIST_COMMON = $(srcdir)/Makefile.dep $(srcdir)/Makefile.in \
 	$(srcdir)/Makefile.am $(srcdir)/mmisavholo.f90.in \
 	$(srcdir)/mmisqcdloop.f90.in $(srcdir)/mmisgolem.f90.in \
@@ -392,7 +392,7 @@ nodist_pkginclude_HEADERS = \
 AM_FCFLAGS = \
 	-I. \
 	-I$(top_builddir)/avh_olo-3.6 \
-	-I$(top_builddir)/golem95-1.3.0/module
+	-I$(top_builddir)/golem95-1.3.2/module
 
 # nop
 libsamurai_la_LIBADD = $(LIBLOOPTOOLS) $(am__append_1) $(am__append_2) \

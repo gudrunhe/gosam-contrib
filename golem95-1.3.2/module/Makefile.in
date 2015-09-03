@@ -79,9 +79,10 @@ PRE_UNINSTALL = :
 POST_UNINSTALL = :
 build_triplet = @build@
 host_triplet = @host@
-DIST_COMMON = $(srcdir)/../../MakefileCommon.am $(srcdir)/Makefile.dep \
-	$(srcdir)/Makefile.in $(srcdir)/Makefile.am
-subdir = golem95-1.3.0/integrals/one_point
+DIST_COMMON = $(srcdir)/../MakefileCommon.am $(srcdir)/Makefile.dep \
+	$(srcdir)/Makefile.in $(srcdir)/Makefile.am \
+	$(srcdir)/precision_golem.f90.in
+subdir = golem95-1.3.2/module
 ACLOCAL_M4 = $(top_srcdir)/aclocal.m4
 am__aclocal_m4_deps = $(top_srcdir)/m4/libtool.m4 \
 	$(top_srcdir)/m4/ltoptions.m4 $(top_srcdir)/m4/ltsugar.m4 \
@@ -95,13 +96,16 @@ am__configure_deps = $(am__aclocal_m4_deps) $(CONFIGURE_DEPENDENCIES) \
 mkinstalldirs = $(install_sh) -d
 CONFIG_HEADER = $(top_builddir)/config.h \
 	$(top_builddir)/ninja-1.0.0/ninja/ninja_config.h
-CONFIG_CLEAN_FILES =
+CONFIG_CLEAN_FILES = precision_golem.f90
 CONFIG_CLEAN_VPATH_FILES =
 LTLIBRARIES = $(noinst_LTLIBRARIES)
-libgolem95_integrals_one_point_la_LIBADD =
-am_libgolem95_integrals_one_point_la_OBJECTS = generic_function_1p.lo
-libgolem95_integrals_one_point_la_OBJECTS =  \
-	$(am_libgolem95_integrals_one_point_la_OBJECTS)
+libgolem95_module_la_LIBADD =
+am_libgolem95_module_la_OBJECTS = precision_golem.lo tri.lo array.lo \
+	parametre.lo constante.lo s_matrix_type.lo equal.lo \
+	multiply_div.lo sortie_erreur.lo cache.lo form_factor_type.lo \
+	kronecker.lo z_log.lo spinor.lo translate.lo zdilog.lo \
+	cache_generic.lo
+libgolem95_module_la_OBJECTS = $(am_libgolem95_module_la_OBJECTS)
 AM_V_lt = $(am__v_lt_@AM_V@)
 am__v_lt_ = $(am__v_lt_@AM_DEFAULT_V@)
 am__v_lt_0 = --silent
@@ -134,8 +138,8 @@ AM_V_FCLD = $(am__v_FCLD_@AM_V@)
 am__v_FCLD_ = $(am__v_FCLD_@AM_DEFAULT_V@)
 am__v_FCLD_0 = @echo "  FCLD    " $@;
 am__v_FCLD_1 = 
-SOURCES = $(libgolem95_integrals_one_point_la_SOURCES)
-DIST_SOURCES = $(libgolem95_integrals_one_point_la_SOURCES)
+SOURCES = $(libgolem95_module_la_SOURCES)
+DIST_SOURCES = $(libgolem95_module_la_SOURCES)
 am__can_run_installinfo = \
   case $$AM_UPDATE_INFO_DIR in \
     n|no|NO) false;; \
@@ -356,18 +360,28 @@ target_alias = @target_alias@
 top_build_prefix = @top_build_prefix@
 top_builddir = @top_builddir@
 top_srcdir = @top_srcdir@
-noinst_LTLIBRARIES = libgolem95_integrals_one_point.la
-AM_FCFLAGS = -I$(top_builddir)/avh_olo-3.6 -I$(builddir)/../../module \
-	-I$(builddir)/../../kinematic -I$(builddir)/../../numerical \
-	-I$(builddir)/../../../avh_olo-3.6
-libgolem95_integrals_one_point_la_SOURCES = generic_function_1p.f90
-nodist_pkginclude_HEADERS = generic_function_1p.mod
-CLEANFILES = *.mod
+noinst_LTLIBRARIES = libgolem95_module.la
+libgolem95_module_la_SOURCES = precision_golem.f90 \
+	tri.f90 array.f90 parametre.f90 constante.f90 \
+	s_matrix_type.f90 equal.f90 multiply_div.f90 \
+	sortie_erreur.f90 cache.f90 \
+	form_factor_type.f90 kronecker.f90 z_log.f90\
+	spinor.f90 translate.f90 zdilog.f90 cache_generic.f90
+
+nodist_pkginclude_HEADERS = precision_golem.mod \
+	tri_croissant.mod array.mod \
+	cache.mod constante.mod s_matrix_type.mod dilogarithme.mod \
+	equal.mod form_factor_type.mod kronecker.mod logarithme.mod \
+	multiply_div.mod parametre.mod \
+	sortie_erreur.mod spinor.mod translate.mod  cache_generic.mod 
+
+AM_FCFLAGS = -I$(top_builddir)/avh_olo-3.6
+CLEANFILES = $(nodist_pkginclude_HEADERS)
 all: all-am
 
 .SUFFIXES:
 .SUFFIXES: .f90 .lo .o .obj
-$(srcdir)/Makefile.in:  $(srcdir)/Makefile.am $(srcdir)/../../MakefileCommon.am $(srcdir)/Makefile.dep $(am__configure_deps)
+$(srcdir)/Makefile.in:  $(srcdir)/Makefile.am $(srcdir)/../MakefileCommon.am $(srcdir)/Makefile.dep $(am__configure_deps)
 	@for dep in $?; do \
 	  case '$(am__configure_deps)' in \
 	    *$$dep*) \
@@ -376,9 +390,9 @@ $(srcdir)/Makefile.in:  $(srcdir)/Makefile.am $(srcdir)/../../MakefileCommon.am 
 	      exit 1;; \
 	  esac; \
 	done; \
-	echo ' cd $(top_srcdir) && $(AUTOMAKE) --gnu golem95-1.3.0/integrals/one_point/Makefile'; \
+	echo ' cd $(top_srcdir) && $(AUTOMAKE) --gnu golem95-1.3.2/module/Makefile'; \
 	$(am__cd) $(top_srcdir) && \
-	  $(AUTOMAKE) --gnu golem95-1.3.0/integrals/one_point/Makefile
+	  $(AUTOMAKE) --gnu golem95-1.3.2/module/Makefile
 .PRECIOUS: Makefile
 Makefile: $(srcdir)/Makefile.in $(top_builddir)/config.status
 	@case '$?' in \
@@ -388,7 +402,7 @@ Makefile: $(srcdir)/Makefile.in $(top_builddir)/config.status
 	    echo ' cd $(top_builddir) && $(SHELL) ./config.status $(subdir)/$@ $(am__depfiles_maybe)'; \
 	    cd $(top_builddir) && $(SHELL) ./config.status $(subdir)/$@ $(am__depfiles_maybe);; \
 	esac;
-$(srcdir)/../../MakefileCommon.am $(srcdir)/Makefile.dep:
+$(srcdir)/../MakefileCommon.am $(srcdir)/Makefile.dep:
 
 $(top_builddir)/config.status: $(top_srcdir)/configure $(CONFIG_STATUS_DEPENDENCIES)
 	cd $(top_builddir) && $(MAKE) $(AM_MAKEFLAGS) am--refresh
@@ -398,6 +412,8 @@ $(top_srcdir)/configure:  $(am__configure_deps)
 $(ACLOCAL_M4):  $(am__aclocal_m4_deps)
 	cd $(top_builddir) && $(MAKE) $(AM_MAKEFLAGS) am--refresh
 $(am__aclocal_m4_deps):
+precision_golem.f90: $(top_builddir)/config.status $(srcdir)/precision_golem.f90.in
+	cd $(top_builddir) && $(SHELL) ./config.status $(subdir)/$@
 
 clean-noinstLTLIBRARIES:
 	-test -z "$(noinst_LTLIBRARIES)" || rm -f $(noinst_LTLIBRARIES)
@@ -410,8 +426,8 @@ clean-noinstLTLIBRARIES:
 	  rm -f $${locs}; \
 	}
 
-libgolem95_integrals_one_point.la: $(libgolem95_integrals_one_point_la_OBJECTS) $(libgolem95_integrals_one_point_la_DEPENDENCIES) $(EXTRA_libgolem95_integrals_one_point_la_DEPENDENCIES) 
-	$(AM_V_FCLD)$(FCLINK)  $(libgolem95_integrals_one_point_la_OBJECTS) $(libgolem95_integrals_one_point_la_LIBADD) $(LIBS)
+libgolem95_module.la: $(libgolem95_module_la_OBJECTS) $(libgolem95_module_la_DEPENDENCIES) $(EXTRA_libgolem95_module_la_DEPENDENCIES) 
+	$(AM_V_FCLD)$(FCLINK)  $(libgolem95_module_la_OBJECTS) $(libgolem95_module_la_LIBADD) $(LIBS)
 
 mostlyclean-compile:
 	-rm -f *.$(OBJEXT)
@@ -663,7 +679,47 @@ uninstall-am: uninstall-nodist_pkgincludeHEADERS
 
 
 # Module dependencies
-generic_function_1p.mod: generic_function_1p.lo
+array.mod: array.lo
+cache.lo: cache_generic.lo form_factor_type.lo precision_golem.lo \
+	sortie_erreur.lo
+cache.mod: cache.lo cache_generic.lo form_factor_type.lo precision_golem.lo \
+	sortie_erreur.lo
+cache_generic.lo: form_factor_type.lo precision_golem.lo sortie_erreur.lo
+cache_generic.mod: cache_generic.lo form_factor_type.lo precision_golem.lo \
+	sortie_erreur.lo
+constante.lo: precision_golem.lo
+constante.mod: constante.lo precision_golem.lo
+equal.lo: constante.lo parametre.lo precision_golem.lo sortie_erreur.lo
+equal.mod: equal.lo constante.lo parametre.lo precision_golem.lo sortie_erreur.lo
+form_factor_type.lo: constante.lo precision_golem.lo
+form_factor_type.mod: form_factor_type.lo constante.lo precision_golem.lo
+kronecker.mod: kronecker.lo
+multiply_div.lo: precision_golem.lo
+multiply_div.mod: multiply_div.lo precision_golem.lo
+parametre.lo: precision_golem.lo
+parametre.mod: parametre.lo precision_golem.lo
+precision_golem.mod: precision_golem.lo
+precision_golem.mod: precision_golem.lo
+s_matrix_type.lo: constante.lo equal.lo precision_golem.lo sortie_erreur.lo
+s_matrix_type.mod: s_matrix_type.lo constante.lo equal.lo precision_golem.lo \
+	sortie_erreur.lo
+sortie_erreur.lo: array.lo parametre.lo precision_golem.lo
+sortie_erreur.mod: sortie_erreur.lo array.lo parametre.lo precision_golem.lo
+spinor.lo: constante.lo precision_golem.lo
+spinor.mod: spinor.lo constante.lo precision_golem.lo
+translate.lo: precision_golem.lo sortie_erreur.lo
+translate.mod: translate.lo precision_golem.lo sortie_erreur.lo
+tri.lo: precision_golem.lo
+tri_croissant.mod: tri.lo precision_golem.lo
+z_log.lo: constante.lo equal.lo precision_golem.lo sortie_erreur.lo
+logarithme.mod: z_log.lo constante.lo equal.lo precision_golem.lo sortie_erreur.lo
+zdilog.lo: constante.lo equal.lo parametre.lo precision_golem.lo \
+	sortie_erreur.lo z_log.lo
+dilogarithme.mod: zdilog.lo constante.lo equal.lo parametre.lo precision_golem.lo \
+	sortie_erreur.lo z_log.lo
+dilogarithme.mod: zdilog.lo
+tri_croissant.mod: tri.lo
+logarithme.mod: z_log.lo
 
 # Tell versions [3.59,3.63) of GNU make to not export all variables.
 # Otherwise a system limit (for SysV at least) may be exceeded.

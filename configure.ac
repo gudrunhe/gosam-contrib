@@ -424,20 +424,20 @@ AC_CONFIG_FILES([\
         qcdloop-1.95/Makefile \
         avh_olo-3.6/Makefile \
         avh_olo-3.6/avh_olo_xkind.f90 \
-        golem95-1.3.0/Makefile \
-        golem95-1.3.0/module/Makefile \
-        golem95-1.3.0/module/precision_golem.f90 \
-        golem95-1.3.0/integrals/Makefile \
-        golem95-1.3.0/integrals/two_point/Makefile \
-        golem95-1.3.0/integrals/one_point/Makefile \
-        golem95-1.3.0/integrals/three_point/Makefile \
-        golem95-1.3.0/integrals/four_point/Makefile \
-        golem95-1.3.0/integrals/four_point/generic_function_4p.f90 \
-        golem95-1.3.0/higherrank/Makefile \
-        golem95-1.3.0/interface/Makefile \
-        golem95-1.3.0/numerical/Makefile \
-        golem95-1.3.0/kinematic/Makefile \
-        golem95-1.3.0/form_factor/Makefile \
+        golem95-1.3.2/Makefile \
+        golem95-1.3.2/module/Makefile \
+        golem95-1.3.2/module/precision_golem.f90 \
+        golem95-1.3.2/integrals/Makefile \
+        golem95-1.3.2/integrals/two_point/Makefile \
+        golem95-1.3.2/integrals/one_point/Makefile \
+        golem95-1.3.2/integrals/three_point/Makefile \
+        golem95-1.3.2/integrals/four_point/Makefile \
+        golem95-1.3.2/integrals/four_point/generic_function_4p.f90 \
+        golem95-1.3.2/higherrank/Makefile \
+        golem95-1.3.2/interface/Makefile \
+        golem95-1.3.2/numerical/Makefile \
+        golem95-1.3.2/kinematic/Makefile \
+        golem95-1.3.2/form_factor/Makefile \
         samurai-2.9.1/Makefile \
         samurai-2.9.1/mmisavholo.f90 \
         samurai-2.9.1/mmisqcdloop.f90 \

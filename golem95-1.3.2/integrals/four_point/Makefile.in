@@ -79,9 +79,10 @@ PRE_UNINSTALL = :
 POST_UNINSTALL = :
 build_triplet = @build@
 host_triplet = @host@
-DIST_COMMON = $(srcdir)/../MakefileCommon.am $(srcdir)/Makefile.dep \
-	$(srcdir)/Makefile.in $(srcdir)/Makefile.am
-subdir = golem95-1.3.0/numerical
+DIST_COMMON = $(srcdir)/../../MakefileCommon.am $(srcdir)/Makefile.dep \
+	$(srcdir)/Makefile.in $(srcdir)/Makefile.am \
+	$(srcdir)/generic_function_4p.f90.in
+subdir = golem95-1.3.2/integrals/four_point
 ACLOCAL_M4 = $(top_srcdir)/aclocal.m4
 am__aclocal_m4_deps = $(top_srcdir)/m4/libtool.m4 \
 	$(top_srcdir)/m4/ltoptions.m4 $(top_srcdir)/m4/ltsugar.m4 \
@@ -95,13 +96,19 @@ am__configure_deps = $(am__aclocal_m4_deps) $(CONFIGURE_DEPENDENCIES) \
 mkinstalldirs = $(install_sh) -d
 CONFIG_HEADER = $(top_builddir)/config.h \
 	$(top_builddir)/ninja-1.0.0/ninja/ninja_config.h
-CONFIG_CLEAN_FILES =
+CONFIG_CLEAN_FILES = generic_function_4p.f90
 CONFIG_CLEAN_VPATH_FILES =
 LTLIBRARIES = $(noinst_LTLIBRARIES)
-libgolem95_numerical_la_LIBADD =
-am_libgolem95_numerical_la_OBJECTS = mod_adapt_gauss.lo mod_numeric.lo
-libgolem95_numerical_la_OBJECTS =  \
-	$(am_libgolem95_numerical_la_OBJECTS)
+libgolem95_integrals_four_point_la_LIBADD =
+am_libgolem95_integrals_four_point_la_OBJECTS = function_4p1m.lo \
+	function_4p2m_3mi_onshell.lo function_4p2m_adj.lo \
+	function_4p2m_opp.lo function_4p3m.lo function_4p4m.lo \
+	function_4p_ql10.lo function_4p_ql11.lo function_4p_ql12.lo \
+	function_4p_ql13.lo function_4p_ql14.lo function_4p_ql15.lo \
+	function_4p_ql16.lo function_4p_ql6.lo function_4p_ql7.lo \
+	function_4p_ql8.lo function_4p_ql9.lo generic_function_4p.lo
+libgolem95_integrals_four_point_la_OBJECTS =  \
+	$(am_libgolem95_integrals_four_point_la_OBJECTS)
 AM_V_lt = $(am__v_lt_@AM_V@)
 am__v_lt_ = $(am__v_lt_@AM_DEFAULT_V@)
 am__v_lt_0 = --silent
@@ -134,8 +141,8 @@ AM_V_FCLD = $(am__v_FCLD_@AM_V@)
 am__v_FCLD_ = $(am__v_FCLD_@AM_DEFAULT_V@)
 am__v_FCLD_0 = @echo "  FCLD    " $@;
 am__v_FCLD_1 = 
-SOURCES = $(libgolem95_numerical_la_SOURCES)
-DIST_SOURCES = $(libgolem95_numerical_la_SOURCES)
+SOURCES = $(libgolem95_integrals_four_point_la_SOURCES)
+DIST_SOURCES = $(libgolem95_integrals_four_point_la_SOURCES)
 am__can_run_installinfo = \
   case $$AM_UPDATE_INFO_DIR in \
     n|no|NO) false;; \
@@ -356,17 +363,33 @@ target_alias = @target_alias@
 top_build_prefix = @top_build_prefix@
 top_builddir = @top_builddir@
 top_srcdir = @top_srcdir@
-noinst_LTLIBRARIES = libgolem95_numerical.la
-AM_FCFLAGS = -I$(top_builddir)/avh_olo-3.6 -I$(builddir)/../module \
-	-I$(builddir)/../../avh_olo-3.6
-libgolem95_numerical_la_SOURCES = mod_adapt_gauss.f90 mod_numeric.f90
-nodist_pkginclude_HEADERS = adapt_gauss.mod numerical_evaluation.mod
-CLEANFILES = *.mod
+noinst_LTLIBRARIES = libgolem95_integrals_four_point.la
+AM_FCFLAGS = -I$(top_builddir)/avh_olo-3.6 -I$(builddir)/../../module \
+	-I$(builddir)/../../kinematic -I$(builddir)/../../numerical \
+	-I$(builddir)/../one_point -I$(builddir)/../two_point \
+	-I$(builddir)/../three_point
+libgolem95_integrals_four_point_la_SOURCES = \
+	function_4p1m.f90 function_4p2m_3mi_onshell.f90 function_4p2m_adj.f90 \
+	function_4p2m_opp.f90 function_4p3m.f90 function_4p4m.f90 \
+	function_4p_ql10.f90  function_4p_ql11.f90 function_4p_ql12.f90 \
+	function_4p_ql13.f90 function_4p_ql14.f90 function_4p_ql15.f90 \
+	function_4p_ql16.f90 function_4p_ql6.f90 function_4p_ql7.f90 \
+	function_4p_ql8.f90 function_4p_ql9.f90	generic_function_4p.f90
+
+nodist_pkginclude_HEADERS = function_4p4m.mod function_4p_ql7.mod \
+	generic_function_4p.mod function_4p2m_adj.mod function_4p_ql14.mod \
+	function_4p_ql13.mod function_4p_ql15.mod function_4p_ql10.mod \
+	function_4p_ql9.mod function_4p_ql8.mod \
+	function_4p2m_3mi_onshell.mod function_4p_ql11.mod \
+	function_4p_ql12.mod function_4p2m_opp.mod function_4p3m.mod \
+	function_4p1m.mod function_4p_ql16.mod function_4p_ql6.mod
+
+CLEANFILES = *.mod 
 all: all-am
 
 .SUFFIXES:
 .SUFFIXES: .f90 .lo .o .obj
-$(srcdir)/Makefile.in:  $(srcdir)/Makefile.am $(srcdir)/../MakefileCommon.am $(srcdir)/Makefile.dep $(am__configure_deps)
+$(srcdir)/Makefile.in:  $(srcdir)/Makefile.am $(srcdir)/../../MakefileCommon.am $(srcdir)/Makefile.dep $(am__configure_deps)
 	@for dep in $?; do \
 	  case '$(am__configure_deps)' in \
 	    *$$dep*) \
@@ -375,9 +398,9 @@ $(srcdir)/Makefile.in:  $(srcdir)/Makefile.am $(srcdir)/../MakefileCommon.am $(s
 	      exit 1;; \
 	  esac; \
 	done; \
-	echo ' cd $(top_srcdir) && $(AUTOMAKE) --gnu golem95-1.3.0/numerical/Makefile'; \
+	echo ' cd $(top_srcdir) && $(AUTOMAKE) --gnu golem95-1.3.2/integrals/four_point/Makefile'; \
 	$(am__cd) $(top_srcdir) && \
-	  $(AUTOMAKE) --gnu golem95-1.3.0/numerical/Makefile
+	  $(AUTOMAKE) --gnu golem95-1.3.2/integrals/four_point/Makefile
 .PRECIOUS: Makefile
 Makefile: $(srcdir)/Makefile.in $(top_builddir)/config.status
 	@case '$?' in \
@@ -387,7 +410,7 @@ Makefile: $(srcdir)/Makefile.in $(top_builddir)/config.status
 	    echo ' cd $(top_builddir) && $(SHELL) ./config.status $(subdir)/$@ $(am__depfiles_maybe)'; \
 	    cd $(top_builddir) && $(SHELL) ./config.status $(subdir)/$@ $(am__depfiles_maybe);; \
 	esac;
-$(srcdir)/../MakefileCommon.am $(srcdir)/Makefile.dep:
+$(srcdir)/../../MakefileCommon.am $(srcdir)/Makefile.dep:
 
 $(top_builddir)/config.status: $(top_srcdir)/configure $(CONFIG_STATUS_DEPENDENCIES)
 	cd $(top_builddir) && $(MAKE) $(AM_MAKEFLAGS) am--refresh
@@ -397,6 +420,8 @@ $(top_srcdir)/configure:  $(am__configure_deps)
 $(ACLOCAL_M4):  $(am__aclocal_m4_deps)
 	cd $(top_builddir) && $(MAKE) $(AM_MAKEFLAGS) am--refresh
 $(am__aclocal_m4_deps):
+generic_function_4p.f90: $(top_builddir)/config.status $(srcdir)/generic_function_4p.f90.in
+	cd $(top_builddir) && $(SHELL) ./config.status $(subdir)/$@
 
 clean-noinstLTLIBRARIES:
 	-test -z "$(noinst_LTLIBRARIES)" || rm -f $(noinst_LTLIBRARIES)
@@ -409,8 +434,8 @@ clean-noinstLTLIBRARIES:
 	  rm -f $${locs}; \
 	}
 
-libgolem95_numerical.la: $(libgolem95_numerical_la_OBJECTS) $(libgolem95_numerical_la_DEPENDENCIES) $(EXTRA_libgolem95_numerical_la_DEPENDENCIES) 
-	$(AM_V_FCLD)$(FCLINK)  $(libgolem95_numerical_la_OBJECTS) $(libgolem95_numerical_la_LIBADD) $(LIBS)
+libgolem95_integrals_four_point.la: $(libgolem95_integrals_four_point_la_OBJECTS) $(libgolem95_integrals_four_point_la_DEPENDENCIES) $(EXTRA_libgolem95_integrals_four_point_la_DEPENDENCIES) 
+	$(AM_V_FCLD)$(FCLINK)  $(libgolem95_integrals_four_point_la_OBJECTS) $(libgolem95_integrals_four_point_la_LIBADD) $(LIBS)
 
 mostlyclean-compile:
 	-rm -f *.$(OBJEXT)
@@ -662,10 +687,45 @@ uninstall-am: uninstall-nodist_pkgincludeHEADERS
 
 
 # Module dependencies
-adapt_gauss.mod numerical_evaluation.mod: mod_adapt_gauss.lo
-mod_numeric.lo: mod_adapt_gauss.lo
-numerical_evaluation.mod: mod_numeric.lo
-adapt_gauss.mod: mod_adapt_gauss.lo
+function_4p1m.mod: function_4p1m.lo
+function_4p2m_3mi_onshell.mod: function_4p2m_3mi_onshell.lo
+function_4p2m_adj.mod: function_4p2m_adj.lo
+function_4p2m_opp.mod: function_4p2m_opp.lo
+function_4p3m.mod: function_4p3m.lo
+function_4p4m.mod: function_4p4m.lo
+function_4p4m.mod: function_4p4m.lo
+function_4p_nonscalar_numerics.lo: function_4p1m.lo \
+	function_4p2m_3mi_onshell.lo function_4p2m_adj.lo \
+	function_4p2m_opp.lo function_4p3m.lo function_4p4m.lo
+function_4p_nonscalar_numerics.mod: function_4p_nonscalar_numerics.lo \
+	function_4p1m.lo function_4p2m_3mi_onshell.lo function_4p2m_adj.lo \
+	function_4p2m_opp.lo function_4p3m.lo function_4p4m.lo
+function_4p_ql10.mod: function_4p_ql10.lo
+function_4p_ql11.mod: function_4p_ql11.lo
+function_4p_ql12.mod: function_4p_ql12.lo
+function_4p_ql13.mod: function_4p_ql13.lo
+function_4p_ql14.mod: function_4p_ql14.lo
+function_4p_ql15.mod: function_4p_ql15.lo
+function_4p_ql16.mod: function_4p_ql16.lo
+function_4p_ql6.mod: function_4p_ql6.lo
+function_4p_ql7.mod: function_4p_ql7.lo
+function_4p_ql8.mod: function_4p_ql8.lo
+function_4p_ql9.mod: function_4p_ql9.lo
+
+generic_function_4p.lo: function_4p1m.lo function_4p2m_3mi_onshell.lo \
+	function_4p2m_adj.lo function_4p2m_opp.lo function_4p3m.lo \
+	function_4p4m.lo  \
+	function_4p_ql10.lo function_4p_ql11.lo function_4p_ql12.lo \
+	function_4p_ql13.lo function_4p_ql14.lo function_4p_ql15.lo \
+	function_4p_ql16.lo function_4p_ql6.lo function_4p_ql7.lo \
+	function_4p_ql8.lo function_4p_ql9.lo
+generic_function_4p.mod: generic_function_4p.lo function_4p1m.lo \
+	function_4p2m_3mi_onshell.lo function_4p2m_adj.lo function_4p2m_opp.lo \
+	function_4p3m.lo function_4p4m.lo \
+	function_4p_ql10.lo function_4p_ql11.lo function_4p_ql12.lo \
+	function_4p_ql13.lo function_4p_ql14.lo function_4p_ql15.lo \
+	function_4p_ql16.lo function_4p_ql6.lo function_4p_ql7.lo \
+	function_4p_ql8.lo function_4p_ql9.lo
 
 # Tell versions [3.59,3.63) of GNU make to not export all variables.
 # Otherwise a system limit (for SysV at least) may be exceeded.

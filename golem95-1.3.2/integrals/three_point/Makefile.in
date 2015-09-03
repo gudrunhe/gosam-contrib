@@ -81,7 +81,7 @@ build_triplet = @build@
 host_triplet = @host@
 DIST_COMMON = $(srcdir)/../../MakefileCommon.am $(srcdir)/Makefile.dep \
 	$(srcdir)/Makefile.in $(srcdir)/Makefile.am
-subdir = golem95-1.3.0/integrals/two_point
+subdir = golem95-1.3.2/integrals/three_point
 ACLOCAL_M4 = $(top_srcdir)/aclocal.m4
 am__aclocal_m4_deps = $(top_srcdir)/m4/libtool.m4 \
 	$(top_srcdir)/m4/ltoptions.m4 $(top_srcdir)/m4/ltsugar.m4 \
@@ -98,11 +98,14 @@ CONFIG_HEADER = $(top_builddir)/config.h \
 CONFIG_CLEAN_FILES =
 CONFIG_CLEAN_VPATH_FILES =
 LTLIBRARIES = $(noinst_LTLIBRARIES)
-libgolem95_integrals_two_point_la_LIBADD =
-am_libgolem95_integrals_two_point_la_OBJECTS = function_2p0m_1mi.lo \
-	function_2p_m1m2.lo generic_function_2p.lo
-libgolem95_integrals_two_point_la_OBJECTS =  \
-	$(am_libgolem95_integrals_two_point_la_OBJECTS)
+libgolem95_integrals_three_point_la_LIBADD =
+am_libgolem95_integrals_three_point_la_OBJECTS = mod_gn.lo mod_h0.lo \
+	mod_he.lo mod_hf.lo function_3p0m_1mi.lo function_3p1m_1mi.lo \
+	function_3p1m_2mi.lo function_3p1m.lo function_3p2m_1mi.lo \
+	function_3p2m.lo function_3p3m.lo function_3p_finite.lo \
+	generic_function_3p.lo
+libgolem95_integrals_three_point_la_OBJECTS =  \
+	$(am_libgolem95_integrals_three_point_la_OBJECTS)
 AM_V_lt = $(am__v_lt_@AM_V@)
 am__v_lt_ = $(am__v_lt_@AM_DEFAULT_V@)
 am__v_lt_0 = --silent
@@ -135,8 +138,8 @@ AM_V_FCLD = $(am__v_FCLD_@AM_V@)
 am__v_FCLD_ = $(am__v_FCLD_@AM_DEFAULT_V@)
 am__v_FCLD_0 = @echo "  FCLD    " $@;
 am__v_FCLD_1 = 
-SOURCES = $(libgolem95_integrals_two_point_la_SOURCES)
-DIST_SOURCES = $(libgolem95_integrals_two_point_la_SOURCES)
+SOURCES = $(libgolem95_integrals_three_point_la_SOURCES)
+DIST_SOURCES = $(libgolem95_integrals_three_point_la_SOURCES)
 am__can_run_installinfo = \
   case $$AM_UPDATE_INFO_DIR in \
     n|no|NO) false;; \
@@ -357,15 +360,22 @@ target_alias = @target_alias@
 top_build_prefix = @top_build_prefix@
 top_builddir = @top_builddir@
 top_srcdir = @top_srcdir@
-noinst_LTLIBRARIES = libgolem95_integrals_two_point.la
+noinst_LTLIBRARIES = libgolem95_integrals_three_point.la
 AM_FCFLAGS = -I$(top_builddir)/avh_olo-3.6 -I$(builddir)/../../module \
 	-I$(builddir)/../../kinematic -I$(builddir)/../../numerical \
-	-I$(builddir)/../one_point
-libgolem95_integrals_two_point_la_SOURCES = \
-	function_2p0m_1mi.f90 function_2p_m1m2.f90 generic_function_2p.f90
+	-I$(builddir)/../one_point -I$(builddir)/../two_point
+libgolem95_integrals_three_point_la_SOURCES = \
+	mod_gn.f90 mod_h0.f90 mod_he.f90 mod_hf.f90 \
+	function_3p0m_1mi.f90 function_3p1m_1mi.f90 function_3p1m_2mi.f90 \
+	function_3p1m.f90 function_3p2m_1mi.f90 function_3p2m.f90 \
+	function_3p3m.f90 function_3p_finite.f90 \
+	generic_function_3p.f90 
 
-nodist_pkginclude_HEADERS = function_2p_m1m2.mod function_2p0m_1mi.mod \
-	generic_function_2p.mod
+nodist_pkginclude_HEADERS = function_3p3m.mod generic_function_3p.mod \
+	function_3p1m_2mi.mod func_h0.mod func_he.mod \
+	function_3p2m_1mi.mod func_hf.mod function_3p_finite.mod \
+	func_gn.mod function_3p0m_1mi.mod function_3p1m_1mi.mod \
+	function_3p2m.mod function_3p1m.mod
 
 CLEANFILES = *.mod
 all: all-am
@@ -381,9 +391,9 @@ $(srcdir)/Makefile.in:  $(srcdir)/Makefile.am $(srcdir)/../../MakefileCommon.am 
 	      exit 1;; \
 	  esac; \
 	done; \
-	echo ' cd $(top_srcdir) && $(AUTOMAKE) --gnu golem95-1.3.0/integrals/two_point/Makefile'; \
+	echo ' cd $(top_srcdir) && $(AUTOMAKE) --gnu golem95-1.3.2/integrals/three_point/Makefile'; \
 	$(am__cd) $(top_srcdir) && \
-	  $(AUTOMAKE) --gnu golem95-1.3.0/integrals/two_point/Makefile
+	  $(AUTOMAKE) --gnu golem95-1.3.2/integrals/three_point/Makefile
 .PRECIOUS: Makefile
 Makefile: $(srcdir)/Makefile.in $(top_builddir)/config.status
 	@case '$?' in \
@@ -415,8 +425,8 @@ clean-noinstLTLIBRARIES:
 	  rm -f $${locs}; \
 	}
 
-libgolem95_integrals_two_point.la: $(libgolem95_integrals_two_point_la_OBJECTS) $(libgolem95_integrals_two_point_la_DEPENDENCIES) $(EXTRA_libgolem95_integrals_two_point_la_DEPENDENCIES) 
-	$(AM_V_FCLD)$(FCLINK)  $(libgolem95_integrals_two_point_la_OBJECTS) $(libgolem95_integrals_two_point_la_LIBADD) $(LIBS)
+libgolem95_integrals_three_point.la: $(libgolem95_integrals_three_point_la_OBJECTS) $(libgolem95_integrals_three_point_la_DEPENDENCIES) $(EXTRA_libgolem95_integrals_three_point_la_DEPENDENCIES) 
+	$(AM_V_FCLD)$(FCLINK)  $(libgolem95_integrals_three_point_la_OBJECTS) $(libgolem95_integrals_three_point_la_LIBADD) $(LIBS)
 
 mostlyclean-compile:
 	-rm -f *.$(OBJEXT)
@@ -668,12 +678,34 @@ uninstall-am: uninstall-nodist_pkgincludeHEADERS
 
 
 # Module dependencies
-function_2p0m_1mi.mod: function_2p0m_1mi.lo
-function_2p_m1m2.lo: function_2p0m_1mi.lo
-function_2p_m1m2.mod: function_2p_m1m2.lo function_2p0m_1mi.lo
-generic_function_2p.lo: function_2p0m_1mi.lo function_2p_m1m2.lo
-generic_function_2p.mod: generic_function_2p.lo function_2p0m_1mi.lo \
-	function_2p_m1m2.lo
+function_3p0m_1mi.mod: function_3p0m_1mi.lo
+function_3p1m.lo: mod_h0.lo
+function_3p1m.mod: function_3p1m.lo mod_h0.lo
+function_3p1m_1mi.lo: mod_he.lo
+function_3p1m_1mi.mod: function_3p1m_1mi.lo mod_he.lo
+function_3p1m_2mi.lo: mod_gn.lo
+function_3p1m_2mi.mod: function_3p1m_2mi.lo mod_gn.lo
+function_3p2m.lo: mod_h0.lo mod_he.lo mod_hf.lo
+function_3p2m.mod: function_3p2m.lo mod_h0.lo mod_he.lo mod_hf.lo
+function_3p2m_1mi.lo: mod_he.lo mod_hf.lo
+function_3p2m_1mi.mod: function_3p2m_1mi.lo mod_he.lo mod_hf.lo
+function_3p3m.mod: function_3p3m.lo
+function_3p_finite.mod: function_3p_finite.lo
+generic_function_3p.lo: function_3p0m_1mi.lo function_3p1m.lo \
+	function_3p1m_1mi.lo function_3p1m_2mi.lo function_3p2m.lo \
+	function_3p2m_1mi.lo function_3p3m.lo function_3p_finite.lo
+generic_function_3p.mod: generic_function_3p.lo function_3p0m_1mi.lo \
+	function_3p1m.lo function_3p1m_1mi.lo function_3p1m_2mi.lo \
+	function_3p2m.lo function_3p2m_1mi.lo function_3p3m.lo \
+	function_3p_finite.lo
+func_gn.mod: mod_gn.lo
+func_h0.mod: mod_h0.lo
+func_he.mod: mod_he.lo
+func_hf.mod: mod_hf.lo
+func_gn.mod: mod_gn.lo
+func_hf.mod: mod_hf.lo
+func_h0.mod: mod_h0.lo
+func_he.mod: mod_he.lo
 
 # Tell versions [3.59,3.63) of GNU make to not export all variables.
 # Otherwise a system limit (for SysV at least) may be exceeded.
