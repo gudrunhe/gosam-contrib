@@ -15,6 +15,12 @@ please refer to the given URLs.
 # Installation
 #=============
 
+If you did NOT obtain this package from a distribution/tarball, you must have
+the GNU autotools (see http://www.gnu.org/software/autoconf/ and
+"Related Software" therein) installed on your system. In that case, first run
+
+    ./autogen.sh
+
 In order to install the libraries under a common path run
 
     ./configure --prefix=<your prefix>
