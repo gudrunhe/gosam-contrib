@@ -1,1 +1,1 @@
-AM_FCFLAGS=-I$(top_builddir)/avh_olo-3.6
+AM_FCFLAGS=-I$(top_builddir)/avh_olo-3.6.1

@@ -632,8 +632,8 @@ AC_CONFIG_FILES([\
         ff-2.0/Makefile \
         ff-2.0/ffinit.f \
         qcdloop-1.95/Makefile \
-        avh_olo-3.6/Makefile \
-        avh_olo-3.6/avh_olo_xkind.f90 \
+        avh_olo-3.6.1/Makefile \
+        avh_olo-3.6.1/avh_olo_xkind.f90 \
         golem95-1.3.2/Makefile \
         golem95-1.3.2/module/Makefile \
         golem95-1.3.2/module/precision_golem.f90 \

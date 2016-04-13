@@ -1,0 +1,8 @@
+module avh_olo_xkind
+  implicit none
+  private
+  public :: olo_xkind
+  !
+  integer ,parameter :: olo_xkind=@fortran_real_kind@
+  !
+end module
