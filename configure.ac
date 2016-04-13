@@ -566,45 +566,6 @@ AC_ARG_VAR([FCINCLUDE],[additional Fortran include flags, e.g. \
                         installed in a nonstandard directory <include dir>])
 
 
-# Choose whether compiling interfaces: f90 module
-AC_ARG_ENABLE([f90module],
-    AS_HELP_STRING([--disable-f90module], [do not include Fortran-90 interface]))
-AS_IF([test "x$enable_f90module" != xno], [f90module=true],
- [f90module=false]
-  )
-AM_CONDITIONAL(F90MODULE, test "x$f90module" == xtrue)
-
-AC_ARG_VAR([FCINCLUDE],[additional Fortran include flags, e.g. \
-                        -I<include dir> if you have fortran modules \
-                        installed in a nonstandard directory <include dir>])
-
-
-
-
-
-
-
-
-
-#  # Test quadruple precision.  Intermediate precision is not compatible
-#  # with Ninja.
-#  AS_IF(
-#  	[test "x$with_precision" == xquadruple],
-#  	AC_DEFINE([NINJA_QUADRUPLE], [1],
-#      [Define to 1 if Ninja is compiled in quadruple precision.])
-#      AC_SUBST([QUADRUPLEFLAGS], ["-lquadmath"])
-#      [quadruple=true],
-#  	[test "x$with_precision" == xquad],
-#  	AC_DEFINE([NINJA_QUADRUPLE], [1],
-#      [Define to 1 if Ninja is compiled in quadruple precision.])
-#      AC_SUBST([QUADRUPLEFLAGS], ["-lquadmath"])
-#      [quadruple=true],
-#      [test "x$with_precision" == xintermediate],
-#      AS_IF([test "x$enable_ninja" != xno],
-#      [AC_MSG_FAILURE([intermediate precision for Ninja is not available])]),
-#  	[quadruple=false])
-#  AM_CONDITIONAL(QUADRUPLE, test "x$quadruple" == xtrue)
-
 # These are always defined for the contrib
 AC_DEFINE([NINJA_CONFIG_H_INTERNAL], [1],
           [Define to 1 if this an internal is a source file.])
