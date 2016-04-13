@@ -20,7 +20,7 @@ else
 endif
 
 if COMPILE_GOLEM95C
-SUBDIRS+= golem95-1.3.2
+SUBDIRS+= golem95-1.3.3
 else
 # nop
 endif

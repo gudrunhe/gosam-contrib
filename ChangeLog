@@ -46,4 +46,5 @@
    * Update install instructions in README.
 2016-04-13  Johann Felix v. Soden-Fraunhofen <jfsoden@mpp.mpg.de>
    * Update to avh_olo-3.6.1
-   * Update to Ninja 1.1.0
+   * Update to ninja-1.1.0
+   * Update to golem95-1.3.3

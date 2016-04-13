@@ -5,7 +5,6 @@ function_4p2m_adj.mod: function_4p2m_adj.lo
 function_4p2m_opp.mod: function_4p2m_opp.lo
 function_4p3m.mod: function_4p3m.lo
 function_4p4m.mod: function_4p4m.lo
-function_4p4m.mod: function_4p4m.lo
 function_4p_nonscalar_numerics.lo: function_4p1m.lo \
 	function_4p2m_3mi_onshell.lo function_4p2m_adj.lo \
 	function_4p2m_opp.lo function_4p3m.lo function_4p4m.lo
@@ -23,18 +22,15 @@ function_4p_ql6.mod: function_4p_ql6.lo
 function_4p_ql7.mod: function_4p_ql7.lo
 function_4p_ql8.mod: function_4p_ql8.lo
 function_4p_ql9.mod: function_4p_ql9.lo
-
 generic_function_4p.lo: function_4p1m.lo function_4p2m_3mi_onshell.lo \
 	function_4p2m_adj.lo function_4p2m_opp.lo function_4p3m.lo \
-	function_4p4m.lo  \
-	function_4p_ql10.lo function_4p_ql11.lo function_4p_ql12.lo \
-	function_4p_ql13.lo function_4p_ql14.lo function_4p_ql15.lo \
-	function_4p_ql16.lo function_4p_ql6.lo function_4p_ql7.lo \
-	function_4p_ql8.lo function_4p_ql9.lo
+	function_4p4m.lo function_4p_ql10.lo function_4p_ql11.lo \
+	function_4p_ql12.lo function_4p_ql13.lo function_4p_ql14.lo \
+	function_4p_ql15.lo function_4p_ql16.lo function_4p_ql6.lo \
+	function_4p_ql7.lo function_4p_ql8.lo function_4p_ql9.lo
 generic_function_4p.mod: generic_function_4p.lo function_4p1m.lo \
 	function_4p2m_3mi_onshell.lo function_4p2m_adj.lo function_4p2m_opp.lo \
-	function_4p3m.lo function_4p4m.lo \
-	function_4p_ql10.lo function_4p_ql11.lo function_4p_ql12.lo \
-	function_4p_ql13.lo function_4p_ql14.lo function_4p_ql15.lo \
-	function_4p_ql16.lo function_4p_ql6.lo function_4p_ql7.lo \
-	function_4p_ql8.lo function_4p_ql9.lo
+	function_4p3m.lo function_4p4m.lo function_4p_ql10.lo function_4p_ql11.lo \
+	function_4p_ql12.lo function_4p_ql13.lo function_4p_ql14.lo \
+	function_4p_ql15.lo function_4p_ql16.lo function_4p_ql6.lo \
+	function_4p_ql7.lo function_4p_ql8.lo function_4p_ql9.lo

@@ -196,14 +196,14 @@ avh_olo_xkinds.f90.in was added and following patch applied
 # Golem95C
 #---------
 
-URL: http://projects.hepforge.org/~golem/95/
+URL: http://golem.hepforge.org/
 
 #--------
 # Samurai
 #--------
 
 URL: http://cern.ch/samurai/
-     http://projects.hepforge.org/~samurai/
+     http://samurai.hepforge.org/
 
   ********************************************************************
   ********************** SAMURAI - version 2.1.1

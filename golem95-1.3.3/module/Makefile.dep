@@ -19,7 +19,6 @@ multiply_div.mod: multiply_div.lo precision_golem.lo
 parametre.lo: precision_golem.lo
 parametre.mod: parametre.lo precision_golem.lo
 precision_golem.mod: precision_golem.lo
-precision_golem.mod: precision_golem.lo
 s_matrix_type.lo: constante.lo equal.lo precision_golem.lo sortie_erreur.lo
 s_matrix_type.mod: s_matrix_type.lo constante.lo equal.lo precision_golem.lo \
 	sortie_erreur.lo
