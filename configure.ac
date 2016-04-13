@@ -20,7 +20,7 @@ PACKAGE=gosam-contrib
 dnl -----------------------------------------------
 dnl ---#[ Checks for programs:
 dnl -----------------------------------------------
-AM_INIT_AUTOMAKE($PACKAGE, $VERSION, no-define, no-dependencies, subdir-objects)
+AM_INIT_AUTOMAKE([no-define no-dependencies subdir-objects ])
 
 AC_PROG_SED
 
@@ -364,15 +364,30 @@ AS_IF([test "x$enable_autoflags" != xno],
 
 # Choose whether the interface to the OneLoop library should be
 # compiled
-AC_ARG_WITH([avholo],
-    AS_HELP_STRING([--with-avholo@<:@=FLAGS@:>@],
-    [include an interface with the OneLoop integral library,\
-    specifying the corresponding flags for dynamic linking \
-    (if the Fortran module 'avh_olo' is not in a standard path, \
-    you should add its directory to the FCINCLUDE variable)]),
-    [],
-    [with_avholo=no])
-AS_IF([test "x$with_avholo" == xyes],
+#  AC_ARG_WITH([avholo],
+#      AS_HELP_STRING([--with-avholo@<:@=FLAGS@:>@],
+#      [include an interface with the OneLoop integral library,\
+#      specifying the corresponding flags for dynamic linking \
+#      (if the Fortran module 'avh_olo' is not in a standard path, \
+#      you should add its directory to the FCINCLUDE variable)]),
+#      [],
+#      [with_avholo=no])
+#  AS_IF([test "x$with_avholo" == xyes],
+#         [AC_SUBST([AVHFLAGS], ["-lavh_olo"])
+#          AC_DEFINE([NINJA_USE_ONELOOP], [1],
+#          [Define to 1 if you have OneLoop.])
+#          [avholo=true]
+#          ],
+#         [test "x$with_avholo" != xno],
+#         [AC_SUBST([AVHFLAGS], ["$with_avholo"])
+#          AC_DEFINE([NINJA_USE_ONELOOP], [1],
+#          [Define to 1 if you have OneLoop.])
+#          [avholo=true]
+#          ],
+#          [avholo=false])
+#  AM_CONDITIONAL(AVHOLO, test "x$avholo" == xtrue)
+
+AS_IF([test "x$enable_olo" != xno],
        [AC_SUBST([AVHFLAGS], ["-lavh_olo"])
         AC_DEFINE([NINJA_USE_ONELOOP], [1],
         [Define to 1 if you have OneLoop.])
@@ -385,7 +400,10 @@ AS_IF([test "x$with_avholo" == xyes],
         [avholo=true]
         ],
         [avholo=false])
-AM_CONDITIONAL(AVHOLO, test "x$avholo" == xtrue)
+
+AM_CONDITIONAL(AVHOLO, [test "x$enable_olo" != xno])
+
+
 
 # Choose whether an internal integral cache for the OneLoop library
 # should be used
@@ -440,6 +458,26 @@ AS_IF([test "x$enable_higher_rank" != xno],
       [AC_DEFINE([NINJA_X1RANK], [1],
       [Define to 1 if higher-rank support is enabled.])])
 
+
+# Test quadruple precision.  Intermediate precision is not compatible
+# with Ninja.
+AS_IF(
+        [test "x$with_precision" == xquadruple],
+        AC_DEFINE([NINJA_QUADRUPLE], [1],
+    [Define to 1 if Ninja is compiled in quadruple precision.])
+    AC_SUBST([QUADRUPLEFLAGS], ["-lquadmath"])
+    [quadruple=true],
+        [test "x$with_precision" == xquad],
+        AC_DEFINE([NINJA_QUADRUPLE], [1],
+    [Define to 1 if Ninja is compiled in quadruple precision.])
+    AC_SUBST([QUADRUPLEFLAGS], ["-lquadmath"])
+    [quadruple=true],
+    [test "x$with_precision" == xintermediate],
+    AS_IF([test "x$enable_ninja" != xno],
+    [AC_MSG_FAILURE([intermediate precision for Ninja is not available])]),
+        [quadruple=false])
+AM_CONDITIONAL(QUADRUPLE, test "x$quadruple" == xtrue)
+
 # Choose whether to compile in quadruple precision
 AC_ARG_WITH([quadruple],
     AS_HELP_STRING([--with-quadruple@<:@=FLAGS@:>@],
@@ -465,19 +503,19 @@ AS_IF([test "x$with_quadruple" != xno] || [test "x$enable_quadninja" != xno],
     [AX_CXX_COMPILE_STDCXX_11_FLOAT128_RANDOM]
 )
 
-# Quadruple precision
-AS_IF([test "x$with_quadruple" == xyes],
-       AC_SUBST([QUADRUPLEFLAGS], ["-lquadmath"])
-       AC_DEFINE([NINJA_QUADRUPLE], [1],
-       [Define to 1 if Ninja is compiled in quadruple precision.])
-       [quadruple=true],
-       [test "x$with_quadruple" != xno],
-       AC_SUBST([QUADRUPLEFLAGS], ["$with_quadruple"])
-       AC_DEFINE([NINJA_QUADRUPLE], [1],
-       [Define to 1 if Ninja is compiled in quadruple precision.])
-       [quadruple=true],
-       [quadruple=false])
-AM_CONDITIONAL(QUADRUPLE, test "x$quadruple" == xtrue)
+## Quadruple precision
+#AS_IF([test "x$with_quadruple" == xyes],
+#       AC_SUBST([QUADRUPLEFLAGS], ["-lquadmath"])
+#       AC_DEFINE([NINJA_QUADRUPLE], [1],
+#       [Define to 1 if Ninja is compiled in quadruple precision.])
+#       [quadruple=true],
+#       [test "x$with_quadruple" != xno],
+#       AC_SUBST([QUADRUPLEFLAGS], ["$with_quadruple"])
+#       AC_DEFINE([NINJA_QUADRUPLE], [1],
+#       [Define to 1 if Ninja is compiled in quadruple precision.])
+#       [quadruple=true],
+#       [quadruple=false])
+#AM_CONDITIONAL(QUADRUPLE, test "x$quadruple" == xtrue)
 
 # Quadninja
 AS_IF([test "x$enable_quadninja" == xyes],
@@ -574,6 +612,8 @@ AC_DEFINE([NINJA_CONFIG_H_INTERNAL], [1],
 #           [Define to 1 if higher-rank support is enabled.])
 AM_CONDITIONAL(GOSAM, true)
 AM_CONDITIONAL(NINJAGOSAMCONTRIB, true)
+
+AC_DEFINE([NINJA_GOSAM],[1],[Define to 1 if GoSam is used.])
 
 AC_DEFINE_UNQUOTED([VERSION],["$NINJAVERSION"],[Version of Ninja])
 

@@ -222,6 +222,35 @@ URL: http://cern.ch/samurai/
   *                                                                  *
   ********************************************************************
 
+#------------
+# Ninja 1.1.0
+#-----------
+URL: http://ninja.hepforge.org/
+     https://bitbucket.org/peraro/ninja/
+
+  +----------------------------------------------------------------+
+  |                                                                |
+  |  Ninja - version 1.1.0                                         |
+  |                                                                |
+  |  Author: Tiziano Peraro                                        |
+  |                                                                |
+  |  Based on:                                                     |
+  |                                                                |
+  |      P. Mastrolia, E. Mirabella and T. Peraro,                 |
+  |      "Integrand reduction of one-loop scattering amplitudes    |
+  |      through Laurent series expansion,"                        |
+  |      JHEP 1206 (2012) 095  [arXiv:1203.0291 [hep-ph]].         |
+  |                                                                |
+  |      T. Peraro,                                                |
+  |      "Ninja: Automated Integrand Reduction via Laurent         |
+  |      Expansion for One-Loop Amplitudes,"                       |
+  |      Comput.Phys.Commun. 185 (2014) [arXiv:1403.1229 [hep-ph]] |
+  |                                                                |
+  +----------------------------------------------------------------+
+
+
+
+
 #===========================
 # Notes on various compilers
 #===========================
