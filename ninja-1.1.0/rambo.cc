@@ -115,12 +115,12 @@ namespace ninja {
       m12 = m_[0]*m_[0];
       m22 = m_[1]*m_[1];
     }
-    Real sqrts = 2 * std::sqrt(s_);
+    Real sqrts = 2 * sqrt(s_);
     Real A = (s_ + m12 - m22) / sqrts;
     Real B = (s_ + m22 - m12) / sqrts;
-    
-    vecs[0] = RealMomentum(A,0,0, std::sqrt(A*A - m12));
-    vecs[1] = RealMomentum(B,0,0,-std::sqrt(B*B - m22));
+
+    vecs[0] = RealMomentum(A,0,0, sqrt(A*A - m12));
+    vecs[1] = RealMomentum(B,0,0,-sqrt(B*B - m22));
   }
 
   Real Rambo::rambo0_(RealMomentum u[], RealMomentum vecs[])
@@ -130,25 +130,25 @@ namespace ninja {
     Real cos_th, sin_th, phi;
     Real E;
     ScopedArray<RealMomentum> q(n_out);
-    
+
     for (int i=0; i<n_out; ++i) {
       uu = u[i];
 
       cos_th = 2*uu[0]-Real(1);
-      sin_th = Real(2)*std::sqrt(uu[0]*(Real(1)-uu[0]));
+      sin_th = Real(2)*sqrt(uu[0]*(Real(1)-uu[0]));
       phi = Real(2) * PI * uu[1];
-      E = -std::log(uu[2]*uu[3]);
-      q[i] = RealMomentum(Real(1), std::cos(phi)*sin_th,
-                          std::sin(phi)*sin_th, cos_th);
+      E = -log(uu[2]*uu[3]);
+      q[i] = RealMomentum(Real(1), cos(phi)*sin_th,
+                          sin(phi)*sin_th, cos_th);
       q[i] *= E;
       v += q[i];
     }
-    
+
     Real v2 = mp2(v);
-    RealMomentum b = -std::sqrt(Real(1)/v2) * v;  b[0] = Real();
-    Real gamma = std::sqrt(Real(1) - mp2(b));
+    RealMomentum b = -sqrt(Real(1)/v2) * v;  b[0] = Real();
+    Real gamma = sqrt(Real(1) - mp2(b));
     Real a = Real(1)/(Real(1)+gamma);
-    Real x = std::sqrt(s_/v2);
+    Real x = sqrt(s_/v2);
     Real bq;
 
     for (int i=0; i<n_out; ++i) {
@@ -157,8 +157,8 @@ namespace ninja {
       vecs[i][0] = gamma*q[i][0]+bq;
       vecs[i] *= x;
     }
-    
-    Real w0 = 0.5*std::pow(4*PI,3-2*n_out)*std::pow(s_,n_out-2);
+
+    Real w0 = 0.5*pow(4*PI,3-2*n_out)*pow(s_,n_out-2);
     for (int i=2; i<=n_out-2; ++i) {
       w0 = w0/i/i;
     }
@@ -172,13 +172,13 @@ namespace ninja {
     const Real eps = REAL_EPS;
 
     Real x = Real(0.5);
-    Real sqs = std::sqrt(s_);
+    Real sqs = sqrt(s_);
     Real fx = -sqs;
 
     Real x2, p0, p2, tmp, fpx;
     int limit = 1000;
 
-    while ((std::abs(fx)>eps) && (limit > 0)) {
+    while ((abs(fx)>eps) && (limit > 0)) {
       Real m = 0;
       --limit;
       fx = -sqs;
@@ -189,7 +189,7 @@ namespace ninja {
         p2 = p0*p0;
         if (m_)
           m = m_[i+2];
-        tmp = std::sqrt(m*m + x2*p2);
+        tmp = sqrt(m*m + x2*p2);
         fx += tmp;
         fpx += p2/tmp;
       }
@@ -222,7 +222,7 @@ namespace ninja {
     }
 
     ScopedArray<RealMomentum> u(n_out);
-    
+
     for (int i=0; i<n_out; ++i)
       for (int j=0; j<4; ++j)
         u[i][j] = (*rnd_)();
@@ -235,7 +235,7 @@ namespace ninja {
       Real m = 0;
       if (m_)
         m = m_[i];
-      vecs[i][0] = std::sqrt(m*m + x2*vecs[i][0]*vecs[i][0]);
+      vecs[i][0] = sqrt(m*m + x2*vecs[i][0]*vecs[i][0]);
       for (int j=1; j<4; ++j)
         vecs[i][j] *= x;
     }
@@ -243,21 +243,21 @@ namespace ninja {
     if (weight) {
 
       Real s1 = 0, s2 = 0;
-      Real p1 = wgt * std::pow(s_,2-n_out);
+      Real p1 = wgt * pow(s_,2-n_out);
 
       for (int i=2; i<n_; ++i) {
         Real k0 = vecs[i][0];
         Real k3 = vecs[i][1]*vecs[i][1] + vecs[i][2]*vecs[i][2]
           + vecs[i][3]*vecs[i][3];
 
-        s1 += std::sqrt(k3);
+        s1 += sqrt(k3);
         s2 += k3/k0;
-        p1 *= std::sqrt(k3)/k0;
+        p1 *= sqrt(k3)/k0;
       }
 
-      *weight = std::pow(s1,2*n_out-3) * p1 / s2;
+      *weight = pow(s1,2*n_out-3) * p1 / s2;
     }
-    
+
     return flag_;
   }
 

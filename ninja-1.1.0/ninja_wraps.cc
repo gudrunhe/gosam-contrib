@@ -211,6 +211,7 @@ extern "C" {
     setOutputStream(ninja_out);
 #if QUADNINJA
     quadninja::setOutputStream(ninja_out);
+    quadninja::setVerbosity(val);
 #endif
   }
 

@@ -24,9 +24,9 @@ namespace ninja {
     : e1(k1), e2(k2), e3(), e4(), r1(0.), r2(0.), mpee12()
   {
     Real k1q = mp2(k1), k2q = mp2(k2), k1k2=mp(k1,k2);
-    bool k1n = std::abs(k1q) < INFRARED_EPS;
-    bool k2n = std::abs(k2q) < INFRARED_EPS;
-    
+    bool k1n = abs(k1q) < INFRARED_EPS;
+    bool k2n = abs(k2q) < INFRARED_EPS;
+
     if (k1n && k2n) {
       mpee12 = k1k2;
     } else if (k1n) {
@@ -38,8 +38,8 @@ namespace ninja {
       e1 -= r1*k2;
       mpee12 = k1k2;
     } else {
-      //Real gamma = k1k2 * (ONE + std::sqrt(1 - (k1q/k1k2) * (k2q/k1k2)));
-      Real gamma = k1k2 + sign(ONE,k1k2)*std::sqrt(k1k2*k1k2-k1q*k2q);
+      //Real gamma = k1k2 * (ONE + sqrt(1 - (k1q/k1k2) * (k2q/k1k2)));
+      Real gamma = k1k2 + sign(ONE,k1k2)*sqrt(k1k2*k1k2-k1q*k2q);
       r1 = k1q/gamma;
       r2 = k2q/gamma;
       Real den = ONE - r1*r2;
@@ -61,7 +61,7 @@ namespace ninja {
     RealMomentum k2(  sign(ONE,k[0])     , -sign(INVSQRT3,k[1]),
                      -sign(INVSQRT3,k[2]), -sign(INVSQRT3,k[3])   );
     Real kq = mp2(k), k1k2=mp(k,k2);
-    bool kn = std::abs(kq) < INFRARED_EPS;
+    bool kn = abs(kq) < INFRARED_EPS;
     if (kn) {
       e2 = k2;
       mpee12 = k1k2;
@@ -97,7 +97,7 @@ namespace ninja {
     }
 
   } // namespace
-  
+
   Basis tadpole_basis(const RealMomentum v[], unsigned icut, unsigned n)
   {
     Basis e;
@@ -120,6 +120,6 @@ namespace ninja {
     e = Basis(ref1,ref2);
     return e;
   }
-  
+
 
 } // namespace ninja

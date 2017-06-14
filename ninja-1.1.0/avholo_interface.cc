@@ -48,7 +48,7 @@ namespace ninja {
     if (mur2_ != muRsq) {
       clearIntegralCache();
       mur2_ = muRsq;
-      mur_ = std::sqrt(muRsq);
+      mur_ = sqrt(muRsq);
     }
   }
 
@@ -107,7 +107,7 @@ namespace ninja {
 
     if (cache_->ht_4cm.empty())
       cache_->ht_4cm.resize(N_BOXES);
-  
+
     if (cache_->ht_4cm.find(args,val)) {
       result[0] = val->data[0];
       result[1] = val->data[1];
@@ -133,7 +133,7 @@ namespace ninja {
 
     if (cache_->ht_4rm.empty())
       cache_->ht_4rm.resize(N_BOXES);
-  
+
     if (cache_->ht_4rm.find(args,val)) {
       result[0] = val->data[0];
       result[1] = val->data[1];
@@ -157,7 +157,7 @@ namespace ninja {
 
     if (cache_->ht_4nm.empty())
       cache_->ht_4nm.resize(N_BOXES);
- 
+
     if (cache_->ht_4nm.find(args,val)) {
       result[0] = val->data[0];
       result[1] = val->data[1];
@@ -183,7 +183,7 @@ namespace ninja {
 
     if (cache_->ht_3cm.empty())
       cache_->ht_3cm.resize(N_TRIANGLES);
-  
+
     if (cache_->ht_3cm.find(args,val)) {
       result[0] = val->data[0];
       result[1] = val->data[1];
@@ -208,7 +208,7 @@ namespace ninja {
 
     if (cache_->ht_3rm.empty())
       cache_->ht_3rm.resize(N_TRIANGLES);
-  
+
     if (cache_->ht_3rm.find(args,val)) {
       result[0] = val->data[0];
       result[1] = val->data[1];
@@ -232,7 +232,7 @@ namespace ninja {
 
     if (cache_->ht_3nm.empty())
       cache_->ht_3nm.resize(N_TRIANGLES);
-  
+
     if (cache_->ht_3nm.find(args,val)) {
       result[0] = val->data[0];
       result[1] = val->data[1];
@@ -257,7 +257,7 @@ namespace ninja {
 
     if (cache_->ht_2cm.empty())
       cache_->ht_2cm.resize(N_BUBBLES);
-  
+
     if (cache_->ht_2cm.find(args,val)) {
       b11[0] = val->data11[0];
       b11[1] = val->data11[1];
@@ -294,7 +294,7 @@ namespace ninja {
 
     if (cache_->ht_2rm.empty())
       cache_->ht_2rm.resize(N_BUBBLES);
-  
+
     if (cache_->ht_2rm.find(args,val)) {
       b11[0] = val->data11[0];
       b11[1] = val->data11[1];
@@ -331,7 +331,7 @@ namespace ninja {
 
     if (cache_->ht_2nm.empty())
       cache_->ht_2nm.resize(N_BUBBLES);
-  
+
     if (cache_->ht_2nm.find(args,val)) {
       b11[0] = val->data11[0];
       b11[1] = val->data11[1];
@@ -366,7 +366,7 @@ namespace ninja {
 
     if (cache_->ht_1cm.empty())
       cache_->ht_1cm.resize(N_TADPOLES);
-  
+
     if (cache_->ht_1cm.find(args,val)) {
       result[0] = val->data[0];
       result[1] = val->data[1];
@@ -387,7 +387,7 @@ namespace ninja {
 
     if (cache_->ht_1rm.empty())
       cache_->ht_1rm.resize(N_TADPOLES);
-  
+
     if (cache_->ht_1rm.find(args,val)) {
       result[0] = val->data[0];
       result[1] = val->data[1];
@@ -566,7 +566,7 @@ namespace ninja {
 using namespace std;
 
 namespace {
-  
+
   void avh_olo_disabled()
   {
     cerr << "ERROR IN NINJA: "

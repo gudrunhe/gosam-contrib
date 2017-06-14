@@ -23,7 +23,7 @@ namespace ninja {
 
     // Default constructor
     SMatrix() : data_(0), n_rows_(0), owns_data_(false) {}
-    
+
     // Constructor from number of rows.  This is the only constructor
     // which allocates data.  The destructor will free the allocated
     // memory only if either this constructor or the allocate method
@@ -125,8 +125,8 @@ namespace ninja {
         (*this)(i,i) = Real();
         for (int j=i+1; j<n_rows_; ++j) {
           temp = mp2(pi[i]-pi[j]);
-          (*this)(i,j) = (*this)(j,i) =  std::abs(temp) < ir_threshold ? 0
-                                                          : temp;
+          (*this)(i,j) = (*this)(j,i) =  abs(temp) < ir_threshold ? 0
+                                                     : temp;
         }
       }
       return *this;

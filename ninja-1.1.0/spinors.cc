@@ -9,7 +9,7 @@
 using namespace ninja;
 
 namespace ninja {
-  
+
   Spinor::Spinor(const ComplexMomentum & p): ap(0.), ame(0.), bp(0.), bme(0.)
   {
     if (taxicab_norm(p[0] + p[3]) < INFRARED_EPS) {
@@ -37,12 +37,12 @@ namespace ninja {
   Spinor::Spinor(const RealMomentum & p): ap(0.), ame(0.), bp(0.), bme(0.)
   {
     if (taxicab_norm(p[0] - p[3]) < INFRARED_EPS) {
-      ap = bp = (p[0] < 0. ? I*std::sqrt(-TWO*p[0]) : std::sqrt(TWO*p[0]));
+      ap = bp = (p[0] < 0. ? I*sqrt(-TWO*p[0]) : sqrt(TWO*p[0]));
     } else if (taxicab_norm( p[0] + p[3]) < INFRARED_EPS) {
-      ame = bme = (p[0] < 0. ? I*std::sqrt(-TWO*p[0]) : std::sqrt(TWO*p[0]));
+      ame = bme = (p[0] < 0. ? I*sqrt(-TWO*p[0]) : sqrt(TWO*p[0]));
     } else {
       // sqrt(p^+)
-      ap = (p[0] < 0. ? I*std::sqrt(-p[0]-p[3])    : std::sqrt(p[0]+p[3]));
+      ap = (p[0]+p[3] < 0. ? I*sqrt(-p[0]-p[3])    : sqrt(p[0]+p[3]));
       ame = (p[1]+I*p[2])/ap;
       // sqrt(p^+)
       bp = ap;
