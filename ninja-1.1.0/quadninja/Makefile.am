@@ -1,6 +1,11 @@
 ACLOCAL_AMFLAGS = -I m4
 
+if NINJAGOSAMCONTRIB
+GENQUADSCRIPT=$(top_builddir)/ninja-1.1.0/quadsources/genquadsources.sed
+else
 GENQUADSCRIPT=$(top_builddir)/src/quadsources/genquadsources.sed
+endif
+#GENQUADSCRIPT=$(top_builddir)/src/quadsources/genquadsources.sed
 
 library_includedir=$(includedir)/quadninja
 QUADNINJAHEADERS = ninja.hh ninja_in.hh tensor_ninja.hh \

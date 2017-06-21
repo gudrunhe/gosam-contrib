@@ -1,7 +1,12 @@
 lib_LTLIBRARIES = libninja.la
 bin_PROGRAMS = ninja-config
 
+if NINJAGOSAMCONTRIB
+GENQUADSCRIPT=$(top_builddir)/ninja-1.1.0/quadsources/genquadsources.sed
+else
 GENQUADSCRIPT=$(top_builddir)/src/quadsources/genquadsources.sed
+endif
+#GENQUADSCRIPT=$(top_builddir)/src/quadsources/genquadsources.sed
 
 EXTRA_DIST = $(GENQUADSCRIPT)
 
@@ -38,6 +43,9 @@ libninja_la_SOURCES +=  looptools_interface.cc
 endif
 if GOSAM
 libninja_la_SOURCES +=  gosam_interface.cc  ninjago.F90
+if QUADNINJA
+nodist_libninja_la_SOURCES +=  quadsources/ninjago.F90
+endif
 endif
 if F90MODULE
 libninja_la_SOURCES +=  mninja.F90
@@ -60,8 +68,8 @@ nodist_noinst_HEADERS = quadsources/ninja_implem.cxx \
 	quadsources/ninja_scoped_array.hh  quadsources/cuts_vector.hh \
 	quadsources/integral_library_wrapper.hh \
 	quadsources/s_mat_wrapper.hh quadsources/avholo_decls.hh \
-	quadsources/ninja_hash_table.hh quadsources/integral_cache.hh
-#	quadsources/gosam_interface.hh
+	quadsources/ninja_hash_table.hh quadsources/integral_cache.hh \
+	quadsources/gosam_interface.hh
 endif
 
 library_includedir=$(includedir)
@@ -79,8 +87,14 @@ if GOSAM
 if NINJAGOSAMCONTRIB
 nodist_pkginclude_HEADERS += ninjago_module.mod
 libninja_la_LIBADD += -L$(top_builddir)/avh_olo-3.6.1 -lavh_olo
+if QUADNINJA
+nodist_pkginclude_HEADERS += ninjago_qp_module.mod
+endif
 else
 nodist_library_include_HEADERS += ninjago_module.mod
+if QUADNINJA
+nodist_library_include_HEADERS += ninjago_qp_module.mod
+endif
 endif
 endif
 

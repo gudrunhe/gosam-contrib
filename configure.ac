@@ -479,12 +479,12 @@ AS_IF(
 AM_CONDITIONAL(QUADRUPLE, test "x$quadruple" == xtrue)
 
 # Choose whether to compile in quadruple precision
-AC_ARG_WITH([quadruple],
-    AS_HELP_STRING([--with-quadruple@<:@=FLAGS@:>@],
-    [compile the library in quadruple precision (requires GCC libquadmath), \
-    specifying the corresponding flags for the linker]),
-    [],
-    [with_quadruple=no])
+# AC_ARG_WITH([quadruple],
+#     AS_HELP_STRING([--with-quadruple@<:@=FLAGS@:>@],
+#     [compile the library in quadruple precision (requires GCC libquadmath), \
+#     specifying the corresponding flags for the linker]),
+#     [],
+#     [with_quadruple=no])
 
 # Choose whether to compile quadninja
 AC_ARG_ENABLE([quadninja],
@@ -496,12 +496,14 @@ AC_ARG_ENABLE([quadninja],
     [enable_quadninja=no])
 
 # Check support for quadruple precision if needed
-AS_IF([test "x$with_quadruple" != xno] || [test "x$enable_quadninja" != xno],
-    [AX_CXX_COMPILE_LIBQUADMATH]
-)
-AS_IF([test "x$with_quadruple" != xno] || [test "x$enable_quadninja" != xno],
-    [AX_CXX_COMPILE_STDCXX_11_FLOAT128_RANDOM]
-)
+# AS_IF([test "x$with_quadruple" != xno] || [test "x$enable_quadninja" != xno],
+#     [AX_CXX_COMPILE_LIBQUADMATH]
+# )
+# AS_IF([test "x$with_quadruple" != xno] || [test "x$enable_quadninja" != xno],
+#     [AX_CXX_COMPILE_STDCXX_11_FLOAT128_RANDOM]
+# )
+AS_IF([test "x$enable_quadninja" != xno],[AX_CXX_COMPILE_LIBQUADMATH])
+AS_IF([test "x$enable_quadninja" != xno],[AX_CXX_COMPILE_STDCXX_11_FLOAT128_RANDOM])
 
 ## Quadruple precision
 #AS_IF([test "x$with_quadruple" == xyes],
@@ -533,8 +535,8 @@ AM_CONDITIONAL(QUADNINJA, test "x$quadninja" == xtrue)
 
 # Set up macros for QuadNinja
 AS_IF([test "x$enable_quadninja" != xno],
-    AS_IF([test "x$with_quadruple" != xno],
-    AC_MSG_ERROR(Option --with-quadruple is not compatible with option --enable-quadninja))
+    AS_IF([test "x$with_precision" == xquadruple],
+    AC_MSG_ERROR(Option --with-precision=quadruple is not compatible with option --enable-quadninja))
     AC_DEFINE([QUADNINJA_CONFIG_H_INTERNAL], [1],
               [Macro for QuadNinja])
     AS_IF([test "x$with_avholo" != xno],

@@ -10,6 +10,10 @@ s/ninjavholo_/quadninjavholo_/g
 s/ninja_tensor_evaluate/quadninja_tensor_evaluate/g
 s;//quadninja//;;g
 s;!!quadninja!!;;g
+s/ninjago_module/ninjago_qp_module/g
+s/name=\"ninjago/name=\"ninjago_qp/g
+s/name='ninjago/name='ninjago_qp/g
+s/# define KI_NIN c_double/# define KI_NIN 16/g
 
 # internal header files
 s;# *include *<ninja_implem.cxx>;#include <quadsources/ninja_implem.cxx>;g
