@@ -8,12 +8,12 @@ s/samurai::/quadsamurai::/g
 s/ NINJA_/ QUADNINJA_/g
 s/ninjavholo_/quadninjavholo_/g
 s/ninja_tensor_evaluate/quadninja_tensor_evaluate/g
+s/ninjago_/quadninjago_/g
+s/public :: ninja_/public :: quadninja_/g
+s/subroutine ninja_/subroutine quadninja_/g
+s/interface ninja_/interface quadninja_/g
 s;//quadninja//;;g
 s;!!quadninja!!;;g
-s/ninjago_module/ninjago_qp_module/g
-s/name=\"ninjago/name=\"ninjago_qp/g
-s/name='ninjago/name='ninjago_qp/g
-s/# define KI_NIN c_double/# define KI_NIN 16/g
 
 # internal header files
 s;# *include *<ninja_implem.cxx>;#include <quadsources/ninja_implem.cxx>;g

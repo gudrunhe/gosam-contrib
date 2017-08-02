@@ -1,7 +1,7 @@
 ACLOCAL_AMFLAGS = -I m4
 
 if NINJAGOSAMCONTRIB
-GENQUADSCRIPT=$(top_builddir)/ninja-1.1.0/quadsources/genquadsources.sed
+GENQUADSCRIPT=$(top_builddir)/ninja-1.2.0/quadsources/genquadsources.sed
 else
 GENQUADSCRIPT=$(top_builddir)/src/quadsources/genquadsources.sed
 endif

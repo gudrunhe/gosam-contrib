@@ -4,6 +4,13 @@
 #include <config.h>
 #endif
 
+!!quadninja!!#define NINJA_QUADRUPLE 1
+#ifndef NINJA_QUADRUPLE
+# define KI_NIN c_double
+#else
+# define KI_NIN 16
+#endif
+
 module ninjago_module
   use, intrinsic :: iso_c_binding
   implicit none
@@ -12,12 +19,19 @@ module ninjago_module
   public :: ki_nin
 
   ! subroutines
-  public :: ninja_diagram, ninja_diagram_rm, ninja_diagram_cm, ninja_diagram_nm
-  public :: ninja_clear_integral_cache, ninja_free_integral_cache
-  public :: ninja_set_test, ninja_set_test_tolerance
-  public :: ninja_set_verbosity, ninja_set_output_precision
+  public :: ninja_diagram
+  public :: ninja_diagram_rm
+  public :: ninja_diagram_cm
+  public :: ninja_diagram_nm
+  public :: ninja_clear_integral_cache
+  public :: ninja_free_integral_cache
+  public :: ninja_set_test
+  public :: ninja_set_test_tolerance
+  public :: ninja_set_verbosity
+  public :: ninja_set_output_precision
   public :: ninja_set_integral_library
-  public :: ninja_fp_check_default_threshold, ninja_fp_check_threshold
+  public :: ninja_fp_check_default_threshold
+  public :: ninja_fp_check_threshold
   public :: ninja_fp_check
 
   ! parameter flags
@@ -49,11 +63,6 @@ module ninjago_module
   public :: NINJA_OUTPUT_RESULT
   public :: NINJA_OUTPUT_INTEGRALS
 
-#ifndef NINJA_QUADRUPLE
-# define KI_NIN c_double
-#else
-# define KI_NIN 16
-#endif
   integer, parameter :: ki_nin = KI_NIN
 
   ! Return status parameters of ninja
@@ -102,7 +111,7 @@ module ninjago_module
   !
   ! S-matrix is a 2-dimensional array s_mat where S(i,j) =
   ! (Vi(i)-Vi(j))^2.
-  interface  ninja_diagram
+  interface ninja_diagram
 
      ! Interface for real masses
      subroutine ninja_diagram_rm(numerator, numerator_t3, numerator_t2,&
@@ -363,7 +372,7 @@ module ninjago_module
   end interface
 
   interface ninja_fp_check
-     
+
      subroutine ninja_fp_check_default_threshold() &
           bind (c,name='ninjago_fp_check_default_threshold')
        use, intrinsic :: iso_c_binding
@@ -374,7 +383,7 @@ module ninjago_module
        use, intrinsic :: iso_c_binding
        real(KI_NIN), intent(in) :: val
      end subroutine ninja_fp_check_threshold
-     
+
   end interface ninja_fp_check
 
 end module ninjago_module

@@ -1,10 +1,10 @@
 AC_INIT([GoSam Convenience Package],[2.0],[gosam@hepforge.org],[gosam-contrib],[http://projects.hepforge.org/golem/gosam-contrib/])
 AC_PREREQ(2.65)
 
-AC_CONFIG_HEADERS([config.h ninja-1.1.0/ninja/ninja_config.h])
+AC_CONFIG_HEADERS([config.h ninja-1.2.0/ninja/ninja_config.h])
 AC_CONFIG_MACRO_DIR([m4])
 AC_CONFIG_AUX_DIR([config.aux])
-AC_CONFIG_SRCDIR([ninja-1.1.0/ninja_implem.cxx])
+AC_CONFIG_SRCDIR([ninja-1.2.0/ninja_implem.cxx])
 m4_include([m4/m4_ax_cxx_compile_stdcxx_11.m4])
 m4_include([m4/m4_ax_cxx_tryandadd_flag.m4])
 m4_include([m4/m4_ax_cxx_quadmath.m4])
@@ -618,9 +618,9 @@ AC_CONFIG_FILES([\
         samurai-2.9.1/mmislooptools.f90 \
         samurai-2.9.1/mmasters.f90 \
         samurai-2.9.1/precision.f90 \
-        ninja-1.1.0/Makefile \
-        ninja-1.1.0/ninja/Makefile \
-	ninja-1.1.0/quadninja/Makefile
+        ninja-1.2.0/Makefile \
+        ninja-1.2.0/ninja/Makefile \
+	ninja-1.2.0/quadninja/Makefile
 ])
 AC_OUTPUT
 dnl ---------------------------------------------------------------------

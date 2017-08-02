@@ -32,7 +32,7 @@ else
 endif
 
 if COMPILE_NINJA
-SUBDIRS+= ninja-1.1.0
+SUBDIRS+= ninja-1.2.0
 else
 # nop
 endif
