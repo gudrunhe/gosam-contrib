@@ -33,7 +33,7 @@
 *	arguments
 *
 	DOUBLE COMPLEX cs4(175),cfac
-	integer ipi12(26),isoort(16),ier
+	integer ipi12(27),isoort(16),ier
 	logical ldel2s
 	DOUBLE PRECISION xpi(10),dpipj(10,10),piDpj(10,10),
      +		xqi(10),dqiqj(10,10),qiDqj(10,10),ai(4),daiaj(4,4)
