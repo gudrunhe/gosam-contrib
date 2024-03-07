@@ -154,7 +154,7 @@ module parametre
 
  contains
    !
-    pure subroutine assign_rat_or_tot_string(rot, ch)
+    subroutine assign_rat_or_tot_string(rot, ch)
        implicit none
        type(rat_or_tot_string), intent(out) :: rot
        character(len=3), intent(in) :: ch
@@ -164,7 +164,7 @@ module parametre
        rot%tot_selected = ch .eq. 'tot'
     end  subroutine assign_rat_or_tot_string
     !
-    pure function equals_rat_or_tot_string(rot, ch) result(test)
+    function equals_rat_or_tot_string(rot, ch) result(test)
        implicit none
        type(rat_or_tot_string), intent(in) :: rot
        character(len=3), intent(in) :: ch
@@ -173,7 +173,7 @@ module parametre
        test = rot%image .eq. ch
     end  function equals_rat_or_tot_string
     !
-    pure function equals_rat_or_tot_string_revd(ch, rot) result(test)
+    function equals_rat_or_tot_string_revd(ch, rot) result(test)
        implicit none
        character(len=3), intent(in) :: ch
        type(rat_or_tot_string), intent(in) :: rot
@@ -183,7 +183,7 @@ module parametre
     end  function equals_rat_or_tot_string_revd
     !
     !
-    pure subroutine assign_rmass_or_cmass_string(roc, ch)
+    subroutine assign_rmass_or_cmass_string(roc, ch)
       implicit none
       type(rmass_or_cmass_string), intent(out) :: roc
       character(len=5), intent(in) :: ch
@@ -193,7 +193,7 @@ module parametre
       roc%cmass_selected = ch .eq. 'cmass'
     end  subroutine assign_rmass_or_cmass_string
     !
-    pure function equals_rmass_or_cmass_string(roc, ch) result(test)
+    function equals_rmass_or_cmass_string(roc, ch) result(test)
       implicit none
       type(rmass_or_cmass_string), intent(in) :: roc
       character(len=5), intent(in) :: ch
@@ -202,7 +202,7 @@ module parametre
       test = roc%image .eq. ch
     end  function equals_rmass_or_cmass_string
     !
-    pure function equals_rmass_or_cmass_string_r(ch, roc) result(test)
+    function equals_rmass_or_cmass_string_r(ch, roc) result(test)
       implicit none
       character(len=5), intent(in) :: ch
       type(rmass_or_cmass_string), intent(in) :: roc

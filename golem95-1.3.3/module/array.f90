@@ -327,9 +327,6 @@ contains
   !
   !  * set -- a set of integer
   !
-  ! SIDE EFFECTS
-  !
-  !  No side effect (pure function)
   !
   ! RETURN VALUE
   !
@@ -342,7 +339,7 @@ contains
   !
   !*****
   !
-  pure function packb(set) result(bits)
+  function packb(set) result(bits)
     !
     integer, intent(in), dimension(:) :: set
     integer :: bits
@@ -371,9 +368,6 @@ contains
   !  * bits -- an integer
   !  * dim -- an integer, the dimension of the set obtained
   !
-  ! SIDE EFFECTS
-  !
-  !  No side effect (pure function)
   !
   ! RETURN VALUE
   !
@@ -386,7 +380,7 @@ contains
   !
   !*****
   !
-  pure function unpackb(bits,dim)
+  function unpackb(bits,dim)
     !
     integer, intent(in) :: bits
     integer, intent(in) :: dim
@@ -451,9 +445,6 @@ contains
   !  * bits1 -- an integer
   !  * bits2 -- an integer
   !
-  ! SIDE EFFECTS
-  !
-  !  No side effect (pure function)
   !
   ! RETURN VALUE
   !
@@ -468,7 +459,7 @@ contains
   !
   !*****
   !
-  pure function pminus(bits1, bits2) result(bits)
+  function pminus(bits1, bits2) result(bits)
     !
     integer, intent(in) :: bits1, bits2
     integer :: bits
@@ -518,9 +509,6 @@ contains
   !  * bits1 -- an integer
   !  * bits2 -- an integer
   !
-  ! SIDE EFFECTS
-  !
-  !  No side effect (pure function)
   !
   ! RETURN VALUE
   !
@@ -535,7 +523,7 @@ contains
   !
   !*****
   !
-  pure function punion(bits1, bits2) result(bits)
+  function punion(bits1, bits2) result(bits)
     !
     integer, intent(in) :: bits1, bits2
     integer :: bits
@@ -563,9 +551,6 @@ contains
   !
   !  * bits -- an integer
   !
-  ! SIDE EFFECTS
-  !
-  !  No side effect (pure function)
   !
   ! RETURN VALUE
   !
@@ -579,7 +564,7 @@ contains
   !
   !*****
   !
-  pure function countb(bits)
+  elemental function countb(bits)
     !
     integer, intent(in) :: bits
     integer :: countb

@@ -88,9 +88,6 @@ module spinor
     !  * p -- a real array (type ki) of rank 1, shape 4; a 4-momentum
     !  * i -- an integer, the value of the helicity (= 1,-1)
     !
-    ! SIDE EFFECTS
-    !
-    !  No side effect (pure function)
     !
     ! RETURN VALUE
     !
@@ -101,7 +98,7 @@ module spinor
     !
     !
     !*****
-    pure function ket(p,i)
+    function ket(p,i)
       !
       real(ki), dimension(4), intent(in) :: p
       integer, intent(in) :: i
@@ -178,10 +175,7 @@ module spinor
     !  * p -- a real array (type ki) of rank 1, shape 4; a 4-momentum
     !  * i -- an integer, the value of the helicity (= 1,-1)
     !
-    ! SIDE EFFECTS
-    !
-    !  No side effect (pure function)
-    !
+   !
     ! RETURN VALUE
     !
     !  It returns a complex array (type ki) of rank 2 and shape 1,4
@@ -191,7 +185,7 @@ module spinor
     !
     !
     !*****
-    pure function bra(p,i)
+    function bra(p,i)
       !
       real(ki), dimension(4), intent(in) :: p
       integer, intent(in) :: i
@@ -228,9 +222,6 @@ module spinor
     !
     !  * p -- a real array (type ki) of rank 1, shape 4; a 4-momentum
     !
-    ! SIDE EFFECTS
-    !
-    !  No side effect (pure function)
     !
     ! RETURN VALUE
     !
@@ -241,7 +232,7 @@ module spinor
     !
     !
     !*****
-    pure function pslash(p)
+    function pslash(p)
       !
       real(ki), dimension(4), intent(in) :: p
       complex(ki), dimension(4,4) :: pslash
@@ -297,9 +288,6 @@ module spinor
     !  * k9 -- a real array (type ki) of rank 1, shape 4; a 4-momentum optional
     !  * k10 -- a real array (type ki) of rank 1, shape 4; a 4-momentum optional
     !
-    ! SIDE EFFECTS
-    !
-    !  No side effect (pure function)
     !
     ! RETURN VALUE
     !
@@ -310,7 +298,7 @@ module spinor
     !
     !
     !*****
-    pure function bra_ket(p1,i1,p2,i2,k1,k2,k3,k4,k5,k6,k7,k8,k9,k10)
+    function bra_ket(p1,i1,p2,i2,k1,k2,k3,k4,k5,k6,k7,k8,k9,k10)
       !
       real(ki), dimension(4), intent(in) :: p1,p2
       real(ki), dimension(4), intent(in), optional :: k1,k2,k3,k4,k5,&
@@ -396,9 +384,6 @@ module spinor
     !  * p1 -- a real array (type ki) of rank 1, shape 4; the momentum of the spin 1
     !  * p2 -- a real array (type ki) of rank 1, shape 4; a 4-momentum
     !
-    ! SIDE EFFECTS
-    !
-    !  No side effect (pure function)
     !
     ! RETURN VALUE
     !
@@ -409,7 +394,7 @@ module spinor
     !
     !
     !*****
-    pure function eps_prod_sca(i,r1,p1,p2)
+    function eps_prod_sca(i,r1,p1,p2)
       !
       integer, intent(in) :: i
       real(ki), dimension(4), intent(in) :: r1,p1,p2
@@ -460,9 +445,6 @@ module spinor
     !  * r2 -- a real array (type ki) of rank 1, shape 4; the refrence momentum
     !  * p2 -- a real array (type ki) of rank 1, shape 4; the momentum of the spin 1
     !
-    ! SIDE EFFECTS
-    !
-    !  No side effect (pure function)
     !
     ! RETURN VALUE
     !
@@ -473,7 +455,7 @@ module spinor
     !
     !
     !*****
-    pure function eps_prod_eps(i1,r1,p1,i2,r2,p2)
+    function eps_prod_eps(i1,r1,p1,i2,r2,p2)
       !
       integer, intent(in) :: i1,i2
       real(ki), dimension(4), intent(in) :: r1,p1,r2,p2
@@ -532,9 +514,6 @@ module spinor
     !  * p1 -- a real array (type ki) of rank 1, shape 4; a 4-momentum
     !  * p2 -- a real array (type ki) of rank 1, shape 4; a 4-momentum
     !
-    ! SIDE EFFECTS
-    !
-    !  No side effect (pure function)
     !
     ! RETURN VALUE
     !
@@ -545,7 +524,7 @@ module spinor
     !
     !
     !*****
-    pure function scalar(p1,p2)
+    function scalar(p1,p2)
       !
       real(ki), intent (in), dimension(4) :: p1,p2
       real(ki) :: scalar
@@ -575,9 +554,6 @@ module spinor
     !  * k3 -- a real array (type ki) of rank 1, shape 4; a 4-momentum
     !  * k4 -- a real array (type ki) of rank 1, shape 4; a 4-momentum
     !
-    ! SIDE EFFECTS
-    !
-    !  No side effect (pure function)
     !
     ! RETURN VALUE
     !
@@ -588,7 +564,7 @@ module spinor
     !
     !
     !*****
-    pure function  e_(k1,k2,k3,k4)
+    function  e_(k1,k2,k3,k4)
       !
       real(ki), intent (in), dimension(4) :: k1, k2, k3, k4
       complex(ki) :: e_

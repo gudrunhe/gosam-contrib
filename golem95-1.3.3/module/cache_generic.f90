@@ -61,7 +61,8 @@ module cache_generic
           !
     end subroutine clear_cache_generic
 
-    pure integer(kind=8) function get_hash_value(leg_count,dim_nplus,b_pin,l_count,l) result(hash)
+!    pure integer(kind=8) function get_hash_value(leg_count,dim_nplus,b_pin,l_count,l) result(hash)
+     integer(kind=8) function get_hash_value(leg_count,dim_nplus,b_pin,l_count,l) result(hash)
        implicit none
        integer, intent(in) :: leg_count
        integer, intent(in) :: dim_nplus

@@ -82,7 +82,7 @@ module equal
     !
     !
     !*****
-    pure elemental function equal_real(xa,xb,echelle)
+    elemental function equal_real(xa,xb,echelle)
       implicit none
       !
       real(ki), intent(in) :: xa,xb

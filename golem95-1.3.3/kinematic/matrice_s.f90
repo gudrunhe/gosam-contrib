@@ -1407,7 +1407,7 @@ module matrice_s
     !
     !*****
     !
-    pure function find_second_max_d2(array) result(second_max)
+    function find_second_max_d2(array) result(second_max)
       real(ki), intent(in) :: array(:,:)
       integer :: i, j
       real(ki) :: first_max
@@ -1429,7 +1429,7 @@ module matrice_s
       end do
 
     end function
-    pure function find_second_max_d1(array) result(second_max)
+    function find_second_max_d1(array) result(second_max)
       real(ki), intent(in) :: array(:)
       integer :: i, j
       real(ki) :: first_max

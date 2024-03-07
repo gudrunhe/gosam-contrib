@@ -71,7 +71,7 @@ module tri_croissant
     ! on met le resultat dans t_out. On utilise les procedures 
     ! compare et exchange
 
-    pure subroutine tri_int2(t_in,t_out)
+    subroutine tri_int2(t_in,t_out)
        implicit none
        integer, intent(in), dimension(2) :: t_in
        integer, intent(out), dimension(2) :: t_out
@@ -87,7 +87,7 @@ module tri_croissant
        t_out(:) = tmp(:)
     end  subroutine tri_int2
 
-    pure subroutine tri_int3(t_in,t_out)
+    subroutine tri_int3(t_in,t_out)
        implicit none
        integer, intent(in), dimension(3) :: t_in
        integer, intent(out), dimension(3) :: t_out

@@ -223,7 +223,7 @@ module form_factor_type
    private :: pow_eps_int
 contains
 
-   pure elemental function mul_complex_ff(x, ff) result(r)
+   elemental function mul_complex_ff(x, ff) result(r)
       !
       complex(ki), intent(in) :: x
       type(form_factor), intent(in) :: ff
@@ -235,7 +235,7 @@ contains
       !
    end function mul_complex_ff
    !
-   pure elemental function mul_ff_complex(ff, x) result(r)
+   elemental function mul_ff_complex(ff, x) result(r)
       !
       complex(ki), intent(in) :: x
       type(form_factor), intent(in) :: ff
@@ -247,7 +247,7 @@ contains
       !
    end function mul_ff_complex
    !
-   pure elemental function mul_real_ff(x, ff) result(r)
+   elemental function mul_real_ff(x, ff) result(r)
       !
       real(ki), intent(in) :: x
       type(form_factor), intent(in) :: ff
@@ -262,7 +262,7 @@ contains
       !
    end function mul_real_ff
    !
-   pure elemental function mul_ff_real(ff, x) result(r)
+   elemental function mul_ff_real(ff, x) result(r)
       !
       real(ki), intent(in) :: x
       type(form_factor), intent(in) :: ff
@@ -277,7 +277,7 @@ contains
       !
    end function mul_ff_real
    !
-   pure elemental function mul_integer_ff(x, ff) result(r)
+   elemental function mul_integer_ff(x, ff) result(r)
       implicit none
       integer, intent(in) :: x
       type(form_factor), intent(in) :: ff
@@ -292,7 +292,7 @@ contains
       !
    end function mul_integer_ff
    !
-   pure elemental function mul_ff_integer(ff, x) result(r)
+   elemental function mul_ff_integer(ff, x) result(r)
       !
       integer, intent(in) :: x
       type(form_factor), intent(in) :: ff
@@ -307,7 +307,7 @@ contains
       !
    end function mul_ff_integer
    !
-   pure elemental function pow_eps_int(eps, power) result(r)
+   elemental function pow_eps_int(eps, power) result(r)
       !
       type(epsilon_type), intent(in) :: eps
       integer, intent(in) :: power
@@ -318,7 +318,7 @@ contains
       !
    end function pow_eps_int
 
-   pure elemental function mul_eps_ff(x, ff) result(r)
+   elemental function mul_eps_ff(x, ff) result(r)
       !
       type(epsilon_type), intent(in) :: x
       type(form_factor), intent(in) :: ff
@@ -346,7 +346,7 @@ contains
       !
    end function mul_eps_ff
    !
-   pure elemental function mul_ff_eps(ff, x) result(r)
+   elemental function mul_ff_eps(ff, x) result(r)
       !
       type(epsilon_type), intent(in) :: x
       type(form_factor), intent(in) :: ff
@@ -372,7 +372,7 @@ contains
       !
    end function mul_ff_eps
    !
-   pure elemental function mul_eps_eps(eps1, eps2) result(r)
+   elemental function mul_eps_eps(eps1, eps2) result(r)
       !
       type(epsilon_type), intent(in) :: eps1, eps2
       type(epsilon_type) :: r
@@ -382,7 +382,7 @@ contains
       !
    end function  mul_eps_eps
    !
-   pure elemental function mul_eps_complex(eps, x) result(r)
+   elemental function mul_eps_complex(eps, x) result(r)
       !
       type(epsilon_type), intent(in) :: eps
       complex(ki), intent(in) :: x
@@ -393,7 +393,7 @@ contains
       !
    end function  mul_eps_complex
    !
-   pure elemental function mul_complex_eps(x, eps) result(r)
+   elemental function mul_complex_eps(x, eps) result(r)
      !
       complex(ki), intent(in) :: x
       type(epsilon_type), intent(in) :: eps
@@ -404,7 +404,7 @@ contains
       !
    end function  mul_complex_eps
    !
-   pure elemental function mul_eps_real(eps, x) result(r)
+   elemental function mul_eps_real(eps, x) result(r)
       !
       type(epsilon_type), intent(in) :: eps
       real(ki), intent(in) :: x
@@ -415,7 +415,7 @@ contains
       !
    end function  mul_eps_real
    !
-   pure elemental function mul_real_eps(x, eps) result(r)
+   elemental function mul_real_eps(x, eps) result(r)
       !
       real(ki), intent(in) :: x
       type(epsilon_type), intent(in) :: eps
@@ -426,7 +426,7 @@ contains
       !
    end function  mul_real_eps
    !
-   pure elemental function mul_eps_integer(eps, x) result(r)
+   elemental function mul_eps_integer(eps, x) result(r)
       !
       type(epsilon_type), intent(in) :: eps
       integer, intent(in) :: x
@@ -437,7 +437,7 @@ contains
       !
    end function  mul_eps_integer
    !
-   pure elemental function mul_integer_eps(x, eps) result(r)
+   elemental function mul_integer_eps(x, eps) result(r)
       !
       integer, intent(in) :: x
       type(epsilon_type), intent(in) :: eps
@@ -448,7 +448,7 @@ contains
       !
    end function  mul_integer_eps
 
-   pure elemental function div_ff_complex(ff, x) result(r)
+   elemental function div_ff_complex(ff, x) result(r)
       !
       complex(ki), intent(in) :: x
       type(form_factor), intent(in) :: ff
@@ -460,7 +460,7 @@ contains
       !
    end function div_ff_complex
    !
-   pure elemental function div_ff_real(ff, x) result(r)
+   elemental function div_ff_real(ff, x) result(r)
       !
       real(ki), intent(in) :: x
       type(form_factor), intent(in) :: ff
@@ -475,7 +475,7 @@ contains
       !
    end function div_ff_real
    !
-   pure elemental function div_ff_integer(ff, x) result(r)
+   elemental function div_ff_integer(ff, x) result(r)
       !
       integer, intent(in) :: x
       type(form_factor), intent(in) :: ff
@@ -490,7 +490,7 @@ contains
       !
    end function div_ff_integer
    !
-   pure elemental function add_complex_ff(x, ff) result(r)
+   elemental function add_complex_ff(x, ff) result(r)
       !
       complex(ki), intent(in) :: x
       type(form_factor), intent(in) :: ff
@@ -502,7 +502,7 @@ contains
       !
    end function add_complex_ff
    !
-   pure elemental function add_ff_complex(ff, x) result(r)
+   elemental function add_ff_complex(ff, x) result(r)
       !
       complex(ki), intent(in) :: x
       type(form_factor), intent(in) :: ff
@@ -514,7 +514,7 @@ contains
       !
    end function add_ff_complex
    !
-   pure elemental function add_real_ff(x, ff) result(r)
+   elemental function add_real_ff(x, ff) result(r)
       !
       real(ki), intent(in) :: x
       type(form_factor), intent(in) :: ff
@@ -529,7 +529,7 @@ contains
       !
    end function add_real_ff
    !
-   pure elemental function add_ff_real(ff, x) result(r)
+   elemental function add_ff_real(ff, x) result(r)
       !
       real(ki), intent(in) :: x
       type(form_factor), intent(in) :: ff
@@ -544,7 +544,7 @@ contains
       !
    end function add_ff_real
    !
-   pure elemental function add_integer_ff(x, ff) result(r)
+   elemental function add_integer_ff(x, ff) result(r)
       !
       integer, intent(in) :: x
       type(form_factor), intent(in) :: ff
@@ -559,7 +559,7 @@ contains
       !
    end function add_integer_ff
    !
-   pure elemental function add_ff_integer(ff, x) result(r)
+   elemental function add_ff_integer(ff, x) result(r)
       !
       integer, intent(in) :: x
       type(form_factor), intent(in) :: ff
@@ -574,7 +574,7 @@ contains
       !
    end function add_ff_integer
    !
-   pure elemental function add_ff_ff(x, ff) result(r)
+   elemental function add_ff_ff(x, ff) result(r)
       !
       type(form_factor), intent(in) :: ff, x
       type(form_factor) :: r
@@ -585,7 +585,7 @@ contains
       !
    end function add_ff_ff
    !
-   pure elemental function plus_ff(ff) result(r)
+   elemental function plus_ff(ff) result(r)
       !
       type(form_factor), intent(in) :: ff
       type(form_factor) :: r
@@ -594,7 +594,7 @@ contains
       !
    end function plus_ff
    !
-   pure elemental function sub_complex_ff(x, ff) result(r)
+   elemental function sub_complex_ff(x, ff) result(r)
       !
       complex(ki), intent(in) :: x
       type(form_factor), intent(in) :: ff
@@ -606,7 +606,7 @@ contains
       !
    end function sub_complex_ff
    !
-   pure elemental function sub_ff_complex(ff, x) result(r)
+   elemental function sub_ff_complex(ff, x) result(r)
       !
       complex(ki), intent(in) :: x
       type(form_factor), intent(in) :: ff
@@ -618,7 +618,7 @@ contains
       !
    end function sub_ff_complex
    !
-   pure elemental function sub_real_ff(x, ff) result(r)
+   elemental function sub_real_ff(x, ff) result(r)
       !
       real(ki), intent(in) :: x
       type(form_factor), intent(in) :: ff
@@ -633,7 +633,7 @@ contains
       !
    end function sub_real_ff
    !
-   pure elemental function sub_ff_real(ff, x) result(r)
+   elemental function sub_ff_real(ff, x) result(r)
       !
       real(ki), intent(in) :: x
       type(form_factor), intent(in) :: ff
@@ -648,7 +648,7 @@ contains
       !
    end function sub_ff_real
    !
-   pure elemental function sub_integer_ff(x, ff) result(r)
+   elemental function sub_integer_ff(x, ff) result(r)
       !
       integer, intent(in) :: x
       type(form_factor), intent(in) :: ff
@@ -663,7 +663,7 @@ contains
       !
    end function sub_integer_ff
    !
-   pure elemental function sub_ff_integer(ff, x) result(r)
+   elemental function sub_ff_integer(ff, x) result(r)
       !
       integer, intent(in) :: x
       type(form_factor), intent(in) :: ff
@@ -678,7 +678,7 @@ contains
       !
    end function sub_ff_integer
    !
-   pure elemental function sub_ff_ff(ff, x) result(r)
+   elemental function sub_ff_ff(ff, x) result(r)
       !
       type(form_factor), intent(in) :: ff, x
       type(form_factor) :: r
@@ -689,7 +689,7 @@ contains
       !
    end function sub_ff_ff
    !
-   pure elemental function minus_ff(ff) result(r)
+   elemental function minus_ff(ff) result(r)
       !
       type(form_factor), intent(in) :: ff
       type(form_factor) :: r
