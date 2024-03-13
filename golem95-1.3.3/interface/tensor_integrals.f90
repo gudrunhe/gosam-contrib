@@ -186,7 +186,7 @@ public :: ti1, ti2, ti3, ti4, ti5, ti6, init_smat, done_smat
 
 contains
 
-pure elemental function chop(val,prec)
+  elemental function chop(val,prec)
    implicit none
    real(ki), intent(in) :: val
    real(ki), optional, intent(in) :: prec
@@ -1958,7 +1958,7 @@ end subroutine ti6r7
 
 !---#] Six point tensor integrals :
 !---#[ Symmetric A coefficients :
-pure subroutine symmetric_A_coeff1(tens,r1)
+  subroutine symmetric_A_coeff1(tens,r1)
    implicit none
    real(ki), dimension(4), intent(out) :: tens
    real(ki), dimension(4), intent(in) :: r1
@@ -1966,7 +1966,7 @@ pure subroutine symmetric_A_coeff1(tens,r1)
    tens(:) = r1(:)
 end subroutine symmetric_A_coeff1
 
-pure subroutine symmetric_A_coeff2(tens,r1,r2)
+  subroutine symmetric_A_coeff2(tens,r1,r2)
    implicit none
    real(ki), dimension(4,4), intent(out) :: tens
    real(ki), dimension(4), intent(in) :: r1,r2
@@ -1984,7 +1984,7 @@ pure subroutine symmetric_A_coeff2(tens,r1,r2)
    !$omp end parallel do
 end  subroutine symmetric_A_coeff2
 
-pure subroutine symmetric_A_coeff3(tens,r1,r2,r3)
+  subroutine symmetric_A_coeff3(tens,r1,r2,r3)
    implicit none
    real(ki), dimension(4,4,4), intent(out) :: tens
    real(ki), dimension(4), intent(in) :: r1,r2,r3
@@ -2002,7 +2002,7 @@ pure subroutine symmetric_A_coeff3(tens,r1,r2,r3)
    !$omp end parallel do
 end  subroutine symmetric_A_coeff3
 
-pure subroutine symmetric_A_coeff4(tens,r1,r2,r3,r4)
+  subroutine symmetric_A_coeff4(tens,r1,r2,r3,r4)
    implicit none
    real(ki), dimension(4), intent(in) :: r1,r2,r3,r4
    real(ki), dimension(4,4,4,4), intent(out) :: tens
@@ -2022,7 +2022,7 @@ pure subroutine symmetric_A_coeff4(tens,r1,r2,r3,r4)
    !$omp end parallel do
 end  subroutine symmetric_A_coeff4
 
-pure subroutine symmetric_A_coeff5(tens,r1,r2,r3,r4,r5)
+  subroutine symmetric_A_coeff5(tens,r1,r2,r3,r4,r5)
    implicit none
    real(ki), dimension(4), intent(in) :: r1,r2,r3,r4,r5
    real(ki), dimension(4,4,4,4,4), intent(out) :: tens
@@ -2044,7 +2044,7 @@ pure subroutine symmetric_A_coeff5(tens,r1,r2,r3,r4,r5)
    !$omp end parallel do
 end  subroutine symmetric_A_coeff5
 
-pure subroutine symmetric_A_coeff6(tens,r1,r2,r3,r4,r5,r6)
+  subroutine symmetric_A_coeff6(tens,r1,r2,r3,r4,r5,r6)
    implicit none
    real(ki), dimension(4), intent(in) :: r1,r2,r3,r4,r5,r6
    real(ki), dimension(4,4,4,4,4,4), intent(out) :: tens
@@ -2067,7 +2067,7 @@ pure subroutine symmetric_A_coeff6(tens,r1,r2,r3,r4,r5,r6)
    end do
    !$omp end parallel do
 end  subroutine symmetric_A_coeff6
-pure subroutine symmetric_A_coeff7(tens,r1,r2,r3,r4,r5,r6,r7)
+  subroutine symmetric_A_coeff7(tens,r1,r2,r3,r4,r5,r6,r7)
    implicit none
    real(ki), dimension(4), intent(in) :: r1,r2,r3,r4,r5,r6,r7
    real(ki), dimension(4,4,4,4,4,4,4), intent(out) :: tens
@@ -2096,7 +2096,7 @@ end  subroutine symmetric_A_coeff7
 
 !---#] Symmetric A coefficients :
 !---#[ Symmetric B coefficients :
-pure subroutine symmetric_B_coeff2(tens)
+  subroutine symmetric_B_coeff2(tens)
    implicit none
    real(ki), dimension(4,4), intent(out) :: tens
 
@@ -2107,7 +2107,7 @@ pure subroutine symmetric_B_coeff2(tens)
    tens(4,4) = -1.0_ki
 end  subroutine symmetric_B_coeff2
 
-pure subroutine symmetric_B_coeff3(tens,r1)
+  subroutine symmetric_B_coeff3(tens,r1)
    implicit none
    real(ki), dimension(4,4,4), intent(out) :: tens
    real(ki), dimension(4), intent(in) :: r1
@@ -2136,7 +2136,7 @@ pure subroutine symmetric_B_coeff3(tens,r1)
    !$omp end parallel do
 end  subroutine symmetric_B_coeff3
 
-pure subroutine symmetric_B_coeff4(tens,r1,r2)
+  subroutine symmetric_B_coeff4(tens,r1,r2)
    implicit none
    real(ki), dimension(4,4,4,4), intent(out) :: tens
    real(ki), dimension(4), intent(in) :: r1, r2
@@ -2171,7 +2171,7 @@ pure subroutine symmetric_B_coeff4(tens,r1,r2)
    !$omp end parallel do
 end  subroutine symmetric_B_coeff4
 
-pure subroutine symmetric_B_coeff5(tens,r1,r2,r3)
+  subroutine symmetric_B_coeff5(tens,r1,r2,r3)
    implicit none
    real(ki), dimension(4,4,4,4,4), intent(out) :: tens
    real(ki), dimension(4), intent(in) :: r1, r2, r3
@@ -2213,7 +2213,7 @@ pure subroutine symmetric_B_coeff5(tens,r1,r2,r3)
    !$omp end parallel do
 end  subroutine symmetric_B_coeff5
 !---#] Symmetric B coefficients :
-pure subroutine symmetric_B_coeff6(tens,r1,r2,r3,r4)
+  subroutine symmetric_B_coeff6(tens,r1,r2,r3,r4)
    implicit none
    real(ki), dimension(4,4,4,4,4,4), intent(out) :: tens
    real(ki), dimension(4), intent(in) :: r1, r2, r3,r4
@@ -2264,7 +2264,7 @@ pure subroutine symmetric_B_coeff6(tens,r1,r2,r3,r4)
 end  subroutine symmetric_B_coeff6
 
 !---#[ Symmetric C coefficients :
-pure subroutine symmetric_C_coeff4(tens)
+  subroutine symmetric_C_coeff4(tens)
    implicit none
    real(ki), dimension(4,4,4,4), intent(out) :: tens
 
@@ -2292,7 +2292,7 @@ pure subroutine symmetric_C_coeff4(tens)
    !$omp end parallel do
 end  subroutine symmetric_C_coeff4
 
-pure subroutine symmetric_C_coeff5(tens,r1)
+  subroutine symmetric_C_coeff5(tens,r1)
    implicit none
    real(ki), dimension(4,4,4,4,4), intent(out) :: tens
    real(ki), dimension(4), intent(in) :: r1
@@ -2338,7 +2338,7 @@ pure subroutine symmetric_C_coeff5(tens,r1)
    enddo
    !$omp end parallel do
 end  subroutine symmetric_C_coeff5
-pure subroutine symmetric_C_coeff6(tens,r1,r2)
+  subroutine symmetric_C_coeff6(tens,r1,r2)
    implicit none
    real(ki), dimension(4,4,4,4,4,4), intent(out) :: tens
    real(ki), dimension(4), intent(in) :: r1, r2
@@ -2419,7 +2419,7 @@ pure subroutine symmetric_C_coeff6(tens,r1,r2)
 end  subroutine symmetric_C_coeff6
 !---#] Symmetric C coefficients :
 !---#[ Symmetric D coefficients :
-pure subroutine symmetric_D_coeff6(tens)
+  subroutine symmetric_D_coeff6(tens)
    implicit none
    real(ki), dimension(4,4,4,4,4,4), intent(out) :: tens
 

@@ -701,7 +701,7 @@ contains
    end function minus_ff
    !
    !~ pure elemental subroutine assign_ff_complex(ff, x)
-   pure subroutine assign_ff_complex(ff, x)
+   subroutine assign_ff_complex(ff, x)
       !
       type(form_factor), intent(out) :: ff
       complex(ki), intent(in) :: x
@@ -713,7 +713,7 @@ contains
    end subroutine assign_ff_complex
    !
    !~ pure elemental subroutine assign_ff_real(ff, x)
-   pure subroutine assign_ff_real(ff, x)
+   subroutine assign_ff_real(ff, x)
       !
       type(form_factor), intent(out) :: ff
       real(ki), intent(in) :: x
@@ -725,7 +725,7 @@ contains
    end subroutine assign_ff_real
    !
    !~ pure elemental subroutine assign_ff_integer(ff, x)
-   pure subroutine assign_ff_integer(ff, x)
+   subroutine assign_ff_integer(ff, x)
       !
       type(form_factor), intent(out) :: ff
       integer, intent(in) :: x
@@ -736,7 +736,7 @@ contains
       !
    end subroutine assign_ff_integer
    !
-   pure subroutine assign_ff_complex_array3(ff, x)
+   subroutine assign_ff_complex_array3(ff, x)
       !
       type(form_factor), intent(out) :: ff
       complex(ki), dimension(1:3), intent(in) :: x
@@ -747,7 +747,7 @@ contains
       !
    end subroutine assign_ff_complex_array3
    !
-   pure subroutine assign_ff_real_array6(ff, x)
+   subroutine assign_ff_real_array6(ff, x)
       !
       type(form_factor), intent(out) :: ff
       real(ki), dimension(1:6), intent(in) :: x
